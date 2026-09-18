@@ -21,10 +21,10 @@ jobs:
     name: JavaScript and TypeScript
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-      - uses: github/codeql-action/init@311b4ee155dcdab395044f00946f664bd51ff173 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: github/codeql-action/init@1c5b675653bb5c22dbe9b12b556ec555138e09fd # v4
         with:
           languages: javascript-typescript
-      - uses: github/codeql-action/analyze@311b4ee155dcdab395044f00946f664bd51ff173 # v4
+      - uses: github/codeql-action/analyze@1c5b675653bb5c22dbe9b12b556ec555138e09fd # v4
         with:
           category: /language:javascript-typescript
