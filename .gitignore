@@ -1,0 +1,24 @@
+node_modules/
+dist/
+*.tgz
+.DS_Store
+.env
+.env.*
+!.env.example
+.npm/
+coverage/
+*.log
+/.apprenticeship/
+/apprenticeship-artifacts/
+/apprenticeship-drafts/
+
+# Private local planning and agent handoff material. Public AI contribution
+# policy belongs in AGENTS.md instead.
+/AGENT1_MASTER_PROMPT.md
+/AGENT2_RED_TEAM_ARCHITECTURE.md
+/FOUNDATION_HANDOFF.md
+/archive/protocol-1.0/AGENT1_MASTER_PROMPT.md
+/archive/protocol-1.0/AGENT2_RED_TEAM_ARCHITECTURE.md
+/archive/protocol-1.0/FOUNDATION_HANDOFF.md
+/AGENTS.local.md
+/CLAUDE.local.md

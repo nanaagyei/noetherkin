@@ -1,0 +1,35 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "ml-researcher",
+  "name": "Ml Researcher",
+  "description": "A curated ml researcher path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex ml researcher systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "python.language",
+    "math.probability-statistics",
+    "math.optimization",
+    "research.experimental-design",
+    "research.reproducibility",
+    "research.paper-implementation",
+    "ml.experimentation",
+    "ml.evaluation",
+    "ml.training"
+  ],
+  "recommended_projects": {
+    "early": [
+      "jupyterlab",
+      "scikit-learn"
+    ],
+    "intermediate": [
+      "pytorch",
+      "jax"
+    ],
+    "advanced": [
+      "huggingface-transformers",
+      "vllm"
+    ]
+  }
+}

@@ -1,0 +1,1066 @@
+{
+  "schema_version": "2.0",
+  "catalog_version": "3.0",
+  "competencies": [
+    {
+      "id": "core.codebase-navigation",
+      "domain": "core",
+      "name": "codebase navigation",
+      "observable_behavior": "Trace an unfamiliar request to source and explain component boundaries.",
+      "required_core": true
+    },
+    {
+      "id": "core.implementation",
+      "domain": "core",
+      "name": "implementation",
+      "observable_behavior": "Implement a scoped change and explain correctness and failure behavior.",
+      "required_core": true
+    },
+    {
+      "id": "core.debugging",
+      "domain": "core",
+      "name": "debugging",
+      "observable_behavior": "Form and test causal hypotheses against a reproducible failure.",
+      "required_core": true
+    },
+    {
+      "id": "core.testing",
+      "domain": "core",
+      "name": "testing",
+      "observable_behavior": "Choose tests that expose plausible defects and explain their limits.",
+      "required_core": true
+    },
+    {
+      "id": "core.technical-communication",
+      "domain": "core",
+      "name": "technical communication",
+      "observable_behavior": "Explain decisions with artifacts, audience context and unresolved uncertainty.",
+      "required_core": true
+    },
+    {
+      "id": "core.ownership",
+      "domain": "core",
+      "name": "ownership",
+      "observable_behavior": "Follow work through validation and communicate risks and unfinished obligations.",
+      "required_core": true
+    },
+    {
+      "id": "core.git",
+      "domain": "core",
+      "name": "git",
+      "observable_behavior": "Create reviewable history and safely resolve conflicting changes.",
+      "required_core": true
+    },
+    {
+      "id": "design.api-design",
+      "domain": "design",
+      "name": "api design",
+      "observable_behavior": "Define API behavior including errors and compatibility.",
+      "required_core": false
+    },
+    {
+      "id": "design.abstraction",
+      "domain": "design",
+      "name": "abstraction",
+      "observable_behavior": "Choose a boundary and defend its cost against a simpler alternative.",
+      "required_core": false
+    },
+    {
+      "id": "design.data-modeling",
+      "domain": "design",
+      "name": "data modeling",
+      "observable_behavior": "Model identity, constraints and evolution of persisted data.",
+      "required_core": false
+    },
+    {
+      "id": "design.system-design",
+      "domain": "design",
+      "name": "system design",
+      "observable_behavior": "Decompose a system using workload and failure assumptions.",
+      "required_core": false
+    },
+    {
+      "id": "design.architecture",
+      "domain": "design",
+      "name": "architecture",
+      "observable_behavior": "Explain system boundaries and plan changes across them.",
+      "required_core": false
+    },
+    {
+      "id": "design.tradeoff-analysis",
+      "domain": "design",
+      "name": "tradeoff analysis",
+      "observable_behavior": "Compare concrete alternatives against stated constraints.",
+      "required_core": false
+    },
+    {
+      "id": "backend.http-api",
+      "domain": "backend",
+      "name": "http api",
+      "observable_behavior": "Trace HTTP requests including status, headers and failure paths.",
+      "required_core": false
+    },
+    {
+      "id": "backend.databases",
+      "domain": "backend",
+      "name": "databases",
+      "observable_behavior": "Explain query behavior, indexes and transactional boundaries.",
+      "required_core": false
+    },
+    {
+      "id": "backend.caching",
+      "domain": "backend",
+      "name": "caching",
+      "observable_behavior": "Choose invalidation and freshness rules and test stale data behavior.",
+      "required_core": false
+    },
+    {
+      "id": "backend.authentication-authorization",
+      "domain": "backend",
+      "name": "authentication authorization",
+      "observable_behavior": "Distinguish identity verification from permission checks and test denial paths.",
+      "required_core": false
+    },
+    {
+      "id": "backend.concurrency",
+      "domain": "backend",
+      "name": "concurrency",
+      "observable_behavior": "Identify shared state and test ordering and race assumptions.",
+      "required_core": false
+    },
+    {
+      "id": "backend.queues-messaging",
+      "domain": "backend",
+      "name": "queues messaging",
+      "observable_behavior": "Handle message delivery, retries and poison messages.",
+      "required_core": false
+    },
+    {
+      "id": "backend.networking",
+      "domain": "backend",
+      "name": "networking",
+      "observable_behavior": "Diagnose connection, naming and timeout failures at service boundaries.",
+      "required_core": false
+    },
+    {
+      "id": "distributed.consistency",
+      "domain": "distributed",
+      "name": "consistency",
+      "observable_behavior": "State read/write guarantees and demonstrate an anomaly.",
+      "required_core": false
+    },
+    {
+      "id": "distributed.replication",
+      "domain": "distributed",
+      "name": "replication",
+      "observable_behavior": "Explain replica lag and recovery under node loss.",
+      "required_core": false
+    },
+    {
+      "id": "distributed.partitioning",
+      "domain": "distributed",
+      "name": "partitioning",
+      "observable_behavior": "Choose partition keys and diagnose skew.",
+      "required_core": false
+    },
+    {
+      "id": "distributed.transactions",
+      "domain": "distributed",
+      "name": "transactions",
+      "observable_behavior": "Define atomicity boundaries and test partial failure.",
+      "required_core": false
+    },
+    {
+      "id": "distributed.consensus",
+      "domain": "distributed",
+      "name": "consensus",
+      "observable_behavior": "Explain agreement and availability under failure assumptions.",
+      "required_core": false
+    },
+    {
+      "id": "distributed.idempotency",
+      "domain": "distributed",
+      "name": "idempotency",
+      "observable_behavior": "Demonstrate safe duplicate requests or messages.",
+      "required_core": false
+    },
+    {
+      "id": "distributed.failure-recovery",
+      "domain": "distributed",
+      "name": "failure recovery",
+      "observable_behavior": "Restore service after partial failure without hiding data loss.",
+      "required_core": false
+    },
+    {
+      "id": "distributed.backpressure",
+      "domain": "distributed",
+      "name": "backpressure",
+      "observable_behavior": "Bound queues and explain overload propagation.",
+      "required_core": false
+    },
+    {
+      "id": "production.logging",
+      "domain": "production",
+      "name": "logging",
+      "observable_behavior": "Record actionable context while excluding secrets.",
+      "required_core": false
+    },
+    {
+      "id": "production.metrics",
+      "domain": "production",
+      "name": "metrics",
+      "observable_behavior": "Choose measurements tied to behavior and explain aggregation limits.",
+      "required_core": false
+    },
+    {
+      "id": "production.tracing",
+      "domain": "production",
+      "name": "tracing",
+      "observable_behavior": "Connect spans to explain a request across boundaries.",
+      "required_core": false
+    },
+    {
+      "id": "production.observability",
+      "domain": "production",
+      "name": "observability",
+      "observable_behavior": "Combine signals to distinguish competing failure hypotheses.",
+      "required_core": false
+    },
+    {
+      "id": "production.reliability",
+      "domain": "production",
+      "name": "reliability",
+      "observable_behavior": "Define reliability targets and test a degradation scenario.",
+      "required_core": false
+    },
+    {
+      "id": "production.incident-response",
+      "domain": "production",
+      "name": "incident response",
+      "observable_behavior": "Triage impact, mitigate and document incident learning.",
+      "required_core": false
+    },
+    {
+      "id": "production.performance",
+      "domain": "production",
+      "name": "performance",
+      "observable_behavior": "Measure a bottleneck with reproducible workloads and uncertainty.",
+      "required_core": false
+    },
+    {
+      "id": "production.deployment",
+      "domain": "production",
+      "name": "deployment",
+      "observable_behavior": "Plan release verification and rollback.",
+      "required_core": false
+    },
+    {
+      "id": "production.ci-cd",
+      "domain": "production",
+      "name": "ci cd",
+      "observable_behavior": "Build checks that detect bad changes and preserve diagnostics.",
+      "required_core": false
+    },
+    {
+      "id": "platform.containers",
+      "domain": "platform",
+      "name": "containers",
+      "observable_behavior": "Explain isolation and resource limits of a containerized process.",
+      "required_core": false
+    },
+    {
+      "id": "platform.docker",
+      "domain": "platform",
+      "name": "docker",
+      "observable_behavior": "Build and inspect a reproducible image and diagnose startup failure.",
+      "required_core": false
+    },
+    {
+      "id": "platform.kubernetes",
+      "domain": "platform",
+      "name": "kubernetes",
+      "observable_behavior": "Explain workload reconciliation and diagnose scheduling or rollout failure.",
+      "required_core": false
+    },
+    {
+      "id": "platform.infrastructure-as-code",
+      "domain": "platform",
+      "name": "infrastructure as code",
+      "observable_behavior": "Review infrastructure plans and detect drift without unauthorized mutation.",
+      "required_core": false
+    },
+    {
+      "id": "platform.aws",
+      "domain": "platform",
+      "name": "aws",
+      "observable_behavior": "Explain AWS service boundaries, access and cost for a scoped design.",
+      "required_core": false
+    },
+    {
+      "id": "platform.azure",
+      "domain": "platform",
+      "name": "azure",
+      "observable_behavior": "Explain Azure service boundaries, access and cost for a scoped design.",
+      "required_core": false
+    },
+    {
+      "id": "platform.autoscaling",
+      "domain": "platform",
+      "name": "autoscaling",
+      "observable_behavior": "Choose a scaling signal and test lag or oscillation.",
+      "required_core": false
+    },
+    {
+      "id": "platform.networking",
+      "domain": "platform",
+      "name": "networking",
+      "observable_behavior": "Trace connectivity across platform routing and policy boundaries.",
+      "required_core": false
+    },
+    {
+      "id": "python.language",
+      "domain": "python",
+      "name": "language",
+      "observable_behavior": "Explain Python object and execution semantics in a change.",
+      "required_core": false
+    },
+    {
+      "id": "python.packaging",
+      "domain": "python",
+      "name": "packaging",
+      "observable_behavior": "Build a reproducible package with explicit dependencies.",
+      "required_core": false
+    },
+    {
+      "id": "python.typing",
+      "domain": "python",
+      "name": "typing",
+      "observable_behavior": "Use types to expose contract mistakes and explain runtime limits.",
+      "required_core": false
+    },
+    {
+      "id": "python.async",
+      "domain": "python",
+      "name": "async",
+      "observable_behavior": "Reason about cancellation and blocking in asynchronous execution.",
+      "required_core": false
+    },
+    {
+      "id": "python.testing",
+      "domain": "python",
+      "name": "testing",
+      "observable_behavior": "Design Python tests with controlled fixtures and meaningful failure cases.",
+      "required_core": false
+    },
+    {
+      "id": "python.performance",
+      "domain": "python",
+      "name": "performance",
+      "observable_behavior": "Profile Python work before changing algorithms or execution strategy.",
+      "required_core": false
+    },
+    {
+      "id": "java.language",
+      "domain": "java",
+      "name": "language",
+      "observable_behavior": "Explain Java types and control flow in a scoped change.",
+      "required_core": false
+    },
+    {
+      "id": "java.jvm",
+      "domain": "java",
+      "name": "jvm",
+      "observable_behavior": "Relate runtime behavior to JVM memory, compilation or garbage collection.",
+      "required_core": false
+    },
+    {
+      "id": "java.concurrency",
+      "domain": "java",
+      "name": "concurrency",
+      "observable_behavior": "Diagnose shared-state and executor behavior.",
+      "required_core": false
+    },
+    {
+      "id": "java.spring",
+      "domain": "java",
+      "name": "spring",
+      "observable_behavior": "Explain Spring dependency wiring and lifecycle.",
+      "required_core": false
+    },
+    {
+      "id": "java.spring-boot",
+      "domain": "java",
+      "name": "spring boot",
+      "observable_behavior": "Trace Spring Boot configuration and startup behavior.",
+      "required_core": false
+    },
+    {
+      "id": "java.persistence",
+      "domain": "java",
+      "name": "persistence",
+      "observable_behavior": "Explain ORM queries and transaction boundaries.",
+      "required_core": false
+    },
+    {
+      "id": "cpp.memory",
+      "domain": "cpp",
+      "name": "memory",
+      "observable_behavior": "Trace allocation, lifetime and invalid access.",
+      "required_core": false
+    },
+    {
+      "id": "cpp.raii",
+      "domain": "cpp",
+      "name": "raii",
+      "observable_behavior": "Use ownership and destructors to manage resources on failure paths.",
+      "required_core": false
+    },
+    {
+      "id": "cpp.templates",
+      "domain": "cpp",
+      "name": "templates",
+      "observable_behavior": "Explain template constraints and instantiation errors.",
+      "required_core": false
+    },
+    {
+      "id": "cpp.concurrency",
+      "domain": "cpp",
+      "name": "concurrency",
+      "observable_behavior": "Reason about synchronization and memory ordering.",
+      "required_core": false
+    },
+    {
+      "id": "cpp.build-tooling",
+      "domain": "cpp",
+      "name": "build tooling",
+      "observable_behavior": "Diagnose compilation, linking and dependency configuration.",
+      "required_core": false
+    },
+    {
+      "id": "cpp.performance",
+      "domain": "cpp",
+      "name": "performance",
+      "observable_behavior": "Profile C++ workloads and verify optimization correctness.",
+      "required_core": false
+    },
+    {
+      "id": "go.idioms",
+      "domain": "go",
+      "name": "idioms",
+      "observable_behavior": "Explain Go interfaces, errors and composition choices.",
+      "required_core": false
+    },
+    {
+      "id": "go.concurrency",
+      "domain": "go",
+      "name": "concurrency",
+      "observable_behavior": "Bound goroutine lifetime and diagnose channel or synchronization failures.",
+      "required_core": false
+    },
+    {
+      "id": "go.networking",
+      "domain": "go",
+      "name": "networking",
+      "observable_behavior": "Handle connection lifetime, deadlines and cancellation.",
+      "required_core": false
+    },
+    {
+      "id": "go.services",
+      "domain": "go",
+      "name": "services",
+      "observable_behavior": "Build service boundaries with explicit failure handling.",
+      "required_core": false
+    },
+    {
+      "id": "go.controllers-operators",
+      "domain": "go",
+      "name": "controllers operators",
+      "observable_behavior": "Explain reconciliation and repeated execution under partial failure.",
+      "required_core": false
+    },
+    {
+      "id": "ml.data-pipelines",
+      "domain": "ml",
+      "name": "data pipelines",
+      "observable_behavior": "Inspect data distribution, leakage and lineage before transformation.",
+      "required_core": false
+    },
+    {
+      "id": "ml.experimentation",
+      "domain": "ml",
+      "name": "experimentation",
+      "observable_behavior": "Compare a hypothesis against a credible baseline with controlled variables.",
+      "required_core": false
+    },
+    {
+      "id": "ml.evaluation",
+      "domain": "ml",
+      "name": "evaluation",
+      "observable_behavior": "Choose metrics tied to decisions and probe misleading aggregate results.",
+      "required_core": false
+    },
+    {
+      "id": "ml.training",
+      "domain": "ml",
+      "name": "training",
+      "observable_behavior": "Justify objective and optimization choices using observed training behavior.",
+      "required_core": false
+    },
+    {
+      "id": "ml.experiment-tracking",
+      "domain": "ml",
+      "name": "experiment tracking",
+      "observable_behavior": "Record configurations and artifacts needed to reproduce an experiment.",
+      "required_core": false
+    },
+    {
+      "id": "ml.model-lifecycle",
+      "domain": "ml",
+      "name": "model lifecycle",
+      "observable_behavior": "Manage model versions and detect degradation across release stages.",
+      "required_core": false
+    },
+    {
+      "id": "ml.serving",
+      "domain": "ml",
+      "name": "serving",
+      "observable_behavior": "Measure prediction behavior under realistic serving constraints.",
+      "required_core": false
+    },
+    {
+      "id": "llm.transformer-inference",
+      "domain": "llm",
+      "name": "transformer inference",
+      "observable_behavior": "Explain transformer inference compute and memory costs.",
+      "required_core": false
+    },
+    {
+      "id": "llm.batching",
+      "domain": "llm",
+      "name": "batching",
+      "observable_behavior": "Measure batch policy effects on latency and utilization.",
+      "required_core": false
+    },
+    {
+      "id": "llm.kv-caching",
+      "domain": "llm",
+      "name": "kv caching",
+      "observable_behavior": "Explain cache growth, reuse and eviction correctness.",
+      "required_core": false
+    },
+    {
+      "id": "llm.scheduling",
+      "domain": "llm",
+      "name": "scheduling",
+      "observable_behavior": "Compare request scheduling under mixed workloads.",
+      "required_core": false
+    },
+    {
+      "id": "llm.model-loading",
+      "domain": "llm",
+      "name": "model loading",
+      "observable_behavior": "Diagnose model weight loading and memory constraints.",
+      "required_core": false
+    },
+    {
+      "id": "llm.latency-throughput",
+      "domain": "llm",
+      "name": "latency throughput",
+      "observable_behavior": "Measure latency distributions and throughput under stated load.",
+      "required_core": false
+    },
+    {
+      "id": "llm.distributed-inference",
+      "domain": "llm",
+      "name": "distributed inference",
+      "observable_behavior": "Explain communication and partitioning costs across inference workers.",
+      "required_core": false
+    },
+    {
+      "id": "gpu.architecture",
+      "domain": "gpu",
+      "name": "architecture",
+      "observable_behavior": "Relate execution behavior to GPU compute organization.",
+      "required_core": false
+    },
+    {
+      "id": "gpu.memory-hierarchy",
+      "domain": "gpu",
+      "name": "memory hierarchy",
+      "observable_behavior": "Measure memory access effects across the GPU hierarchy.",
+      "required_core": false
+    },
+    {
+      "id": "gpu.cuda",
+      "domain": "gpu",
+      "name": "cuda",
+      "observable_behavior": "Explain CUDA execution, synchronization and error behavior.",
+      "required_core": false
+    },
+    {
+      "id": "gpu.kernel-design",
+      "domain": "gpu",
+      "name": "kernel design",
+      "observable_behavior": "Design a kernel with explicit indexing and correctness checks.",
+      "required_core": false
+    },
+    {
+      "id": "gpu.profiling",
+      "domain": "gpu",
+      "name": "profiling",
+      "observable_behavior": "Use profiler evidence to isolate GPU bottlenecks.",
+      "required_core": false
+    },
+    {
+      "id": "gpu.optimization",
+      "domain": "gpu",
+      "name": "optimization",
+      "observable_behavior": "Validate speed changes against numerical correctness and workload coverage.",
+      "required_core": false
+    },
+    {
+      "id": "data.sql",
+      "domain": "data",
+      "name": "SQL",
+      "observable_behavior": "Write and validate queries whose joins, aggregation and null handling match the analytical question.",
+      "required_core": false
+    },
+    {
+      "id": "data.analytics",
+      "domain": "data",
+      "name": "analytics",
+      "observable_behavior": "Translate a decision question into defensible measures, slices and limitations.",
+      "required_core": false
+    },
+    {
+      "id": "data.visualization",
+      "domain": "data",
+      "name": "visualization",
+      "observable_behavior": "Choose visual encodings that communicate the result without hiding uncertainty or scale.",
+      "required_core": false
+    },
+    {
+      "id": "data.quality",
+      "domain": "data",
+      "name": "data quality",
+      "observable_behavior": "Detect and explain missing, inconsistent, duplicated or drifting data before relying on it.",
+      "required_core": false
+    },
+    {
+      "id": "research.reproducibility",
+      "domain": "research",
+      "name": "reproducibility",
+      "observable_behavior": "Make an experiment repeatable from pinned inputs, code, configuration and reported conditions.",
+      "required_core": false
+    },
+    {
+      "id": "research.experimental-design",
+      "domain": "research",
+      "name": "experimental design",
+      "observable_behavior": "Design a comparison that controls plausible confounders and can falsify the stated hypothesis.",
+      "required_core": false
+    },
+    {
+      "id": "research.paper-implementation",
+      "domain": "research",
+      "name": "paper implementation",
+      "observable_behavior": "Translate a published method into code while identifying underspecified assumptions and deviations.",
+      "required_core": false
+    },
+    {
+      "id": "math.probability-statistics",
+      "domain": "math",
+      "name": "probability and statistics",
+      "observable_behavior": "Choose and justify probabilistic assumptions and quantify uncertainty in a result.",
+      "required_core": false
+    },
+    {
+      "id": "math.numerical-methods",
+      "domain": "math",
+      "name": "numerical methods",
+      "observable_behavior": "Analyze approximation error, stability and convergence for a numerical computation.",
+      "required_core": false
+    },
+    {
+      "id": "math.optimization",
+      "domain": "math",
+      "name": "optimization",
+      "observable_behavior": "Formulate an objective and constraints and diagnose when the chosen optimization method fails.",
+      "required_core": false
+    },
+    {
+      "id": "math.formal-reasoning",
+      "domain": "math",
+      "name": "formal reasoning",
+      "observable_behavior": "State assumptions and construct or check a logically valid argument or proof.",
+      "required_core": false
+    },
+    {
+      "id": "ai.retrieval-augmentation",
+      "domain": "ai",
+      "name": "retrieval augmentation",
+      "observable_behavior": "Design and evaluate retrieval, grounding and citation behavior against realistic queries.",
+      "required_core": false
+    },
+    {
+      "id": "ai.agent-design",
+      "domain": "ai",
+      "name": "agent design",
+      "observable_behavior": "Bound an agent loop with explicit tools, state, termination and failure behavior.",
+      "required_core": false
+    },
+    {
+      "id": "ai.safety-evaluation",
+      "domain": "ai",
+      "name": "AI safety evaluation",
+      "observable_behavior": "Test an AI system for concrete misuse, unsafe output and control failures relevant to its deployment.",
+      "required_core": false
+    },
+    {
+      "id": "product.requirements-discovery",
+      "domain": "product",
+      "name": "requirements discovery",
+      "observable_behavior": "Turn stakeholder workflows and constraints into testable requirements while preserving unresolved questions.",
+      "required_core": false
+    },
+    {
+      "id": "product.integration-delivery",
+      "domain": "product",
+      "name": "integration delivery",
+      "observable_behavior": "Integrate a solution into an existing environment with explicit ownership, compatibility and rollout boundaries.",
+      "required_core": false
+    },
+    {
+      "id": "product.outcome-validation",
+      "domain": "product",
+      "name": "outcome validation",
+      "observable_behavior": "Measure whether delivered behavior improves the decision or workflow it was intended to support.",
+      "required_core": false
+    },
+    {
+      "id": "quant.market-data",
+      "domain": "quant",
+      "name": "market data",
+      "observable_behavior": "Model market data timing, adjustments and quality without introducing look-ahead bias.",
+      "required_core": false
+    },
+    {
+      "id": "quant.backtesting",
+      "domain": "quant",
+      "name": "backtesting",
+      "observable_behavior": "Build a backtest that accounts for leakage, execution assumptions, costs and unstable regimes.",
+      "required_core": false
+    },
+    {
+      "id": "quant.portfolio-modeling",
+      "domain": "quant",
+      "name": "portfolio modeling",
+      "observable_behavior": "Explain portfolio construction and risk behavior under stated assumptions and constraints.",
+      "required_core": false
+    },
+    {
+      "id": "quant.execution-systems",
+      "domain": "quant",
+      "name": "execution systems",
+      "observable_behavior": "Design order and execution handling with explicit latency, idempotency and failure semantics.",
+      "required_core": false
+    },
+    {
+      "id": "ml.feature-engineering",
+      "domain": "ml",
+      "name": "feature engineering",
+      "observable_behavior": "Build reproducible features while preventing train-serving skew and target leakage.",
+      "required_core": false
+    },
+    {
+      "id": "ml.distributed-training",
+      "domain": "ml",
+      "name": "distributed training",
+      "observable_behavior": "Explain and measure synchronization, partitioning and recovery behavior in a multi-worker training run.",
+      "required_core": false
+    },
+    {
+      "id": "frontend.web-platform",
+      "domain": "frontend",
+      "name": "web platform",
+      "observable_behavior": "Implement browser behavior using documented platform semantics and verify compatibility boundaries.",
+      "required_core": false
+    },
+    {
+      "id": "frontend.accessibility",
+      "domain": "frontend",
+      "name": "accessibility",
+      "observable_behavior": "Test keyboard, semantic, and assistive-technology behavior against an explicit accessibility requirement.",
+      "required_core": false
+    },
+    {
+      "id": "frontend.state-management",
+      "domain": "frontend",
+      "name": "state management",
+      "observable_behavior": "Model client state ownership and demonstrate correct transitions under asynchronous updates.",
+      "required_core": false
+    },
+    {
+      "id": "frontend.performance",
+      "domain": "frontend",
+      "name": "frontend performance",
+      "observable_behavior": "Measure a user-facing performance bottleneck and validate a targeted improvement.",
+      "required_core": false
+    },
+    {
+      "id": "fullstack.end-to-end-delivery",
+      "domain": "fullstack",
+      "name": "end-to-end delivery",
+      "observable_behavior": "Trace and deliver one behavior across interface, service, and persistence boundaries.",
+      "required_core": false
+    },
+    {
+      "id": "data.orchestration",
+      "domain": "data",
+      "name": "data orchestration",
+      "observable_behavior": "Design and operate retryable data workflows with observable dependencies and failure recovery.",
+      "required_core": false
+    },
+    {
+      "id": "data.batch-streaming",
+      "domain": "data",
+      "name": "batch and streaming",
+      "observable_behavior": "Choose batch or streaming semantics and test lateness, replay, and ordering assumptions.",
+      "required_core": false
+    },
+    {
+      "id": "database.query-planning",
+      "domain": "database",
+      "name": "query planning",
+      "observable_behavior": "Explain a query plan and validate an index or rewrite against measured behavior.",
+      "required_core": false
+    },
+    {
+      "id": "database.storage-engines",
+      "domain": "database",
+      "name": "storage engines",
+      "observable_behavior": "Trace persistence, caching, and recovery behavior through a storage engine.",
+      "required_core": false
+    },
+    {
+      "id": "sre.slo-error-budgets",
+      "domain": "sre",
+      "name": "SLOs and error budgets",
+      "observable_behavior": "Define a measurable service objective and use its error budget to justify an operational decision.",
+      "required_core": false
+    },
+    {
+      "id": "sre.capacity-planning",
+      "domain": "sre",
+      "name": "capacity planning",
+      "observable_behavior": "Estimate capacity from workload evidence and test the first saturation assumption.",
+      "required_core": false
+    },
+    {
+      "id": "sre.incident-management",
+      "domain": "sre",
+      "name": "incident management",
+      "observable_behavior": "Coordinate diagnosis, mitigation, and follow-up using a timestamped incident record.",
+      "required_core": false
+    },
+    {
+      "id": "observability.instrumentation",
+      "domain": "observability",
+      "name": "instrumentation",
+      "observable_behavior": "Add telemetry that answers a stated operational question without misleading cardinality or sampling.",
+      "required_core": false
+    },
+    {
+      "id": "observability.telemetry-pipelines",
+      "domain": "observability",
+      "name": "telemetry pipelines",
+      "observable_behavior": "Trace collection, processing, export, and loss behavior across a telemetry pipeline.",
+      "required_core": false
+    },
+    {
+      "id": "security.threat-modeling",
+      "domain": "security",
+      "name": "threat modeling",
+      "observable_behavior": "Identify assets, trust boundaries, abuse paths, and testable mitigations for a concrete change.",
+      "required_core": false
+    },
+    {
+      "id": "security.secure-development",
+      "domain": "security",
+      "name": "secure development",
+      "observable_behavior": "Implement and test secure defaults at an identified trust boundary.",
+      "required_core": false
+    },
+    {
+      "id": "security.vulnerability-management",
+      "domain": "security",
+      "name": "vulnerability management",
+      "observable_behavior": "Triage a finding using reachability, impact, fix evidence, and residual risk.",
+      "required_core": false
+    },
+    {
+      "id": "appsec.static-dynamic-analysis",
+      "domain": "appsec",
+      "name": "static and dynamic analysis",
+      "observable_behavior": "Configure and validate analysis findings while documenting false-positive and coverage limits.",
+      "required_core": false
+    },
+    {
+      "id": "appsec.web-security",
+      "domain": "appsec",
+      "name": "web security",
+      "observable_behavior": "Reproduce and remediate a web vulnerability with regression evidence.",
+      "required_core": false
+    },
+    {
+      "id": "tooling.cli-design",
+      "domain": "tooling",
+      "name": "CLI design",
+      "observable_behavior": "Design stable command behavior including diagnostics, exit status, and automation-safe output.",
+      "required_core": false
+    },
+    {
+      "id": "tooling.static-analysis",
+      "domain": "tooling",
+      "name": "static analysis",
+      "observable_behavior": "Implement or tune a deterministic rule and validate precision on positive and negative cases.",
+      "required_core": false
+    },
+    {
+      "id": "tooling.build-systems",
+      "domain": "tooling",
+      "name": "build systems",
+      "observable_behavior": "Trace dependency and cache behavior through a reproducible build.",
+      "required_core": false
+    },
+    {
+      "id": "compiler.parsing-lowering",
+      "domain": "compiler",
+      "name": "parsing and lowering",
+      "observable_behavior": "Trace source syntax into an intermediate representation and test invalid input behavior.",
+      "required_core": false
+    },
+    {
+      "id": "compiler.optimization",
+      "domain": "compiler",
+      "name": "compiler optimization",
+      "observable_behavior": "Implement or analyze a semantics-preserving optimization with counterexamples.",
+      "required_core": false
+    },
+    {
+      "id": "compiler.codegen",
+      "domain": "compiler",
+      "name": "code generation",
+      "observable_behavior": "Trace an intermediate representation into target code and validate target-specific behavior.",
+      "required_core": false
+    },
+    {
+      "id": "quality.test-strategy",
+      "domain": "quality",
+      "name": "test strategy",
+      "observable_behavior": "Select test layers from failure risk and state what each layer cannot prove.",
+      "required_core": false
+    },
+    {
+      "id": "quality.automation",
+      "domain": "quality",
+      "name": "quality automation",
+      "observable_behavior": "Build a deterministic quality check with actionable failure output.",
+      "required_core": false
+    },
+    {
+      "id": "quality.reliability",
+      "domain": "quality",
+      "name": "reliability testing",
+      "observable_behavior": "Design repeatable tests for concurrency, recovery, or environmental failure.",
+      "required_core": false
+    },
+    {
+      "id": "mobile.platform-integration",
+      "domain": "mobile",
+      "name": "platform integration",
+      "observable_behavior": "Implement and test behavior across shared code and a native platform boundary.",
+      "required_core": false
+    },
+    {
+      "id": "mobile.performance",
+      "domain": "mobile",
+      "name": "mobile performance",
+      "observable_behavior": "Measure and improve startup, rendering, memory, or network behavior on a target device profile.",
+      "required_core": false
+    },
+    {
+      "id": "mobile.release",
+      "domain": "mobile",
+      "name": "mobile release",
+      "observable_behavior": "Produce a reproducible signed release candidate and document rollout and rollback constraints.",
+      "required_core": false
+    },
+    {
+      "id": "embedded.real-time",
+      "domain": "embedded",
+      "name": "real-time behavior",
+      "observable_behavior": "Measure timing behavior and validate a deadline or scheduling assumption.",
+      "required_core": false
+    },
+    {
+      "id": "embedded.hardware-interfaces",
+      "domain": "embedded",
+      "name": "hardware interfaces",
+      "observable_behavior": "Implement and test a device interface with explicit electrical or protocol assumptions.",
+      "required_core": false
+    },
+    {
+      "id": "embedded.resource-constraints",
+      "domain": "embedded",
+      "name": "resource constraints",
+      "observable_behavior": "Measure memory, power, or compute use and validate operation within a fixed budget.",
+      "required_core": false
+    },
+    {
+      "id": "network.protocols",
+      "domain": "network",
+      "name": "network protocols",
+      "observable_behavior": "Trace protocol state and reproduce timeout, retry, or malformed-message behavior.",
+      "required_core": false
+    },
+    {
+      "id": "network.routing-proxying",
+      "domain": "network",
+      "name": "routing and proxying",
+      "observable_behavior": "Configure and diagnose routing across naming, proxy, and load-balancing boundaries.",
+      "required_core": false
+    },
+    {
+      "id": "network.tls",
+      "domain": "network",
+      "name": "TLS",
+      "observable_behavior": "Explain and test certificate, identity, negotiation, and failure behavior for a secured connection.",
+      "required_core": false
+    },
+    {
+      "id": "game.engine-architecture",
+      "domain": "game",
+      "name": "game engine architecture",
+      "observable_behavior": "Trace frame, scene, asset, and system ownership through an engine change.",
+      "required_core": false
+    },
+    {
+      "id": "game.rendering",
+      "domain": "game",
+      "name": "rendering",
+      "observable_behavior": "Implement or diagnose a rendering path using measurable frame and visual evidence.",
+      "required_core": false
+    },
+    {
+      "id": "game.performance",
+      "domain": "game",
+      "name": "game performance",
+      "observable_behavior": "Profile frame time or resource use and validate a targeted optimization.",
+      "required_core": false
+    }
+  ],
+  "last_awarded_level": "E0",
+  "standing": "current",
+  "stale_record_ids": []
+}

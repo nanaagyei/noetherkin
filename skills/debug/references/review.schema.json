@@ -1,0 +1,666 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://engineering-apprenticeship.example/schemas/3.0/review.schema.json",
+  "title": "review",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": ["2.0", "3.0"]
+    },
+    "data_class": {
+      "enum": [
+        "live",
+        "fixture"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "author": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "learner",
+            "onboarding-coordinator",
+            "project-curator",
+            "peer-engineer",
+            "team-lead",
+            "manager",
+            "user-agent",
+            "promotion-reviewer"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "role"
+      ],
+      "additionalProperties": false
+    },
+    "kind": {
+      "enum": [
+        "code",
+        "task",
+        "performance",
+        "promotion"
+      ]
+    },
+    "subject_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "assessment_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "period": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "additionalProperties": false
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "outcome": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supersedes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "change": {
+      "type": "object",
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "uri",
+        "description",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "from_level": {
+      "enum": [
+        "E0",
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5"
+      ]
+    },
+    "target_level": {
+      "enum": [
+        "E0",
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5"
+      ]
+    },
+    "previous_promotion_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "technical_reviewer_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorization": {
+      "type": "object",
+      "properties": {
+        "learner_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "artifact": {
+          "type": "object",
+          "properties": {
+            "uri": {
+              "type": "string",
+              "format": "uri"
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "uri",
+            "description",
+            "revision"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "learner_id",
+        "at",
+        "artifact"
+      ],
+      "additionalProperties": false
+    },
+    "dimension_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dimension": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "judgment": {
+            "enum": [
+              "meets",
+              "does-not-meet",
+              "unknown"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "dimension",
+          "evidence_ids",
+          "judgment",
+          "rationale"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "quality_analysis": {
+      "type": "object",
+      "properties": {
+        "repetition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recency": {
+          "type": "string",
+          "minLength": 1
+        },
+        "diversity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "independence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contrary_evidence": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "repetition",
+        "recency",
+        "diversity",
+        "scope",
+        "independence",
+        "contrary_evidence"
+      ],
+      "additionalProperties": false
+    },
+    "evaluation_scope": {
+      "type": "object",
+      "properties": {
+        "core_competencies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "specialization_competencies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "competency_catalog_version": {
+          "enum": ["2.0", "3.0"]
+        },
+        "level_catalog_version": {
+          "const": "2.0"
+        },
+        "scope_agreement": {
+          "type": "object",
+          "properties": {
+            "uri": {
+              "type": "string",
+              "format": "uri"
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "uri",
+            "description",
+            "revision"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "core_competencies",
+        "specialization_competencies",
+        "competency_catalog_version",
+        "level_catalog_version",
+        "scope_agreement"
+      ],
+      "additionalProperties": false
+    },
+    "recommendation_review_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "readiness_assessment_id": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "data_class",
+    "id",
+    "created_at",
+    "author",
+    "kind",
+    "subject_id",
+    "evidence_ids",
+    "assessment_ids",
+    "period",
+    "findings",
+    "outcome",
+    "supersedes"
+  ],
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "properties": {
+        "kind": {
+          "const": "code"
+        },
+        "evidence_ids": {
+          "minItems": 1
+        },
+        "outcome": {
+          "enum": [
+            "approve",
+            "changes-requested",
+            "insufficient-evidence"
+          ]
+        },
+        "author": {
+          "properties": {
+            "role": {
+              "const": "peer-engineer"
+            }
+          }
+        }
+      },
+      "required": [
+        "change"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "dimension_findings"
+            ]
+          },
+          {
+            "required": [
+              "target_level"
+            ]
+          },
+          {
+            "required": [
+              "from_level"
+            ]
+          },
+          {
+            "required": [
+              "quality_analysis"
+            ]
+          },
+          {
+            "required": [
+              "authorization"
+            ]
+          },
+          {
+            "required": [
+              "technical_reviewer_id"
+            ]
+          },
+          {
+            "required": [
+              "previous_promotion_id"
+            ]
+          },
+          {
+            "required": [
+              "evaluation_scope"
+            ]
+          },
+          {
+            "required": [
+              "recommendation_review_id"
+            ]
+          },
+          {
+            "required": [
+              "readiness_assessment_id"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "properties": {
+        "kind": {
+          "const": "task"
+        },
+        "evidence_ids": {
+          "minItems": 1
+        },
+        "outcome": {
+          "enum": [
+            "accepted",
+            "rework",
+            "insufficient-evidence"
+          ]
+        },
+        "author": {
+          "properties": {
+            "role": {
+              "const": "team-lead"
+            }
+          }
+        }
+      },
+      "required": [
+        "change"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "dimension_findings"
+            ]
+          },
+          {
+            "required": [
+              "target_level"
+            ]
+          },
+          {
+            "required": [
+              "from_level"
+            ]
+          },
+          {
+            "required": [
+              "quality_analysis"
+            ]
+          },
+          {
+            "required": [
+              "authorization"
+            ]
+          },
+          {
+            "required": [
+              "technical_reviewer_id"
+            ]
+          },
+          {
+            "required": [
+              "previous_promotion_id"
+            ]
+          },
+          {
+            "required": [
+              "evaluation_scope"
+            ]
+          },
+          {
+            "required": [
+              "recommendation_review_id"
+            ]
+          },
+          {
+            "required": [
+              "readiness_assessment_id"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "properties": {
+        "kind": {
+          "const": "performance"
+        },
+        "outcome": {
+          "enum": [
+            "continue",
+            "adjust-scope",
+            "recommend-promotion-review",
+            "insufficient-evidence"
+          ]
+        },
+        "author": {
+          "properties": {
+            "role": {
+              "const": "manager"
+            }
+          }
+        }
+      },
+      "required": [
+        "evaluation_scope"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "change"
+            ]
+          },
+          {
+            "required": [
+              "dimension_findings"
+            ]
+          },
+          {
+            "required": [
+              "target_level"
+            ]
+          },
+          {
+            "required": [
+              "from_level"
+            ]
+          },
+          {
+            "required": [
+              "quality_analysis"
+            ]
+          },
+          {
+            "required": [
+              "authorization"
+            ]
+          },
+          {
+            "required": [
+              "technical_reviewer_id"
+            ]
+          },
+          {
+            "required": [
+              "previous_promotion_id"
+            ]
+          },
+          {
+            "required": [
+              "recommendation_review_id"
+            ]
+          },
+          {
+            "required": [
+              "readiness_assessment_id"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "properties": {
+        "kind": {
+          "const": "promotion"
+        },
+        "evidence_ids": {
+          "minItems": 1
+        },
+        "outcome": {
+          "enum": [
+            "PROMOTE",
+            "NOT YET",
+            "INSUFFICIENT EVIDENCE"
+          ]
+        },
+        "author": {
+          "properties": {
+            "role": {
+              "const": "promotion-reviewer"
+            }
+          }
+        }
+      },
+      "required": [
+        "from_level",
+        "target_level",
+        "previous_promotion_id",
+        "technical_reviewer_id",
+        "authorization",
+        "dimension_findings",
+        "quality_analysis",
+        "evaluation_scope",
+        "recommendation_review_id",
+        "readiness_assessment_id"
+      ],
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "change"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

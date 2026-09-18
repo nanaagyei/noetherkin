@@ -1,0 +1,27 @@
+{
+  "schema_version": "2.0",
+  "data_class": "fixture",
+  "id": "ASM-baseline-demo",
+  "created_at": "2026-09-10T08:10:00Z",
+  "author": {
+    "id": "ACTOR-demo-team-lead",
+    "role": "team-lead"
+  },
+  "kind": "baseline",
+  "learner_id": "LEARNER-demo",
+  "project_id": null,
+  "evidence_ids": [],
+  "findings": [
+    {
+      "competency_id": "core.codebase-navigation",
+      "status": "unassessed",
+      "demonstrated_level": null,
+      "evidence_ids": [],
+      "rationale": "Only self-report is available at baseline."
+    }
+  ],
+  "supersedes": null,
+  "scope": "longitudinal",
+  "task_id": null,
+  "design": null
+}

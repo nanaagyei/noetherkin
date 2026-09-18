@@ -1,0 +1,32 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "mathematician",
+  "name": "Mathematician",
+  "description": "A curated mathematician path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex mathematician systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "math.formal-reasoning",
+    "math.probability-statistics",
+    "math.numerical-methods",
+    "math.optimization",
+    "research.reproducibility",
+    "research.paper-implementation"
+  ],
+  "recommended_projects": {
+    "early": [
+      "sympy",
+      "scipy"
+    ],
+    "intermediate": [
+      "mathlib4",
+      "scikit-learn"
+    ],
+    "advanced": [
+      "jax",
+      "pytorch"
+    ]
+  }
+}

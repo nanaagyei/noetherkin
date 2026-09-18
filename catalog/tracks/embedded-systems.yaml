@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "embedded-systems",
+  "name": "Embedded Systems",
+  "description": "A curated embedded systems path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex embedded systems systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "embedded.real-time",
+    "embedded.hardware-interfaces",
+    "embedded.resource-constraints",
+    "cpp.memory"
+  ],
+  "recommended_projects": {
+    "early": [
+      "micropython",
+      "zephyr"
+    ],
+    "intermediate": [
+      "cuda-samples",
+      "raylib"
+    ],
+    "advanced": [
+      "llvm-project",
+      "cutlass"
+    ]
+  }
+}

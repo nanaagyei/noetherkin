@@ -1,0 +1,25 @@
+# Skill contract conventions
+
+The first eight documents retain the frozen workflow responsibilities. Protocol 3.0 revises onboarding and projects for explicit tracks and generic attachment without changing skill ownership, roles or evidence authority. Phase 7's derived skill-layer contracts remain narrower capabilities. Contracts are not the final `SKILL.md` entrypoints.
+
+- onboarding (repository context: `contracts/onboarding.md`; Related skill contract; omitted from this focused bundle.): workspace introduction and profile readiness.
+- projects (repository context: `contracts/projects.md`; Related skill contract; omitted from this focused bundle.): catalog discovery and learner-approved selection.
+- task-assignment (repository context: `contracts/task-assignment.md`; Related skill contract; omitted from this focused bundle.): bounded assignment creation.
+- [teach](contract-teach.md): conceptual help and teach-back.
+- [peer-engineer](contract-peer-engineer.md): collaborative investigation.
+- [code-review](contract-code-review.md): review of an identified change.
+- [team-lead](contract-team-lead.md): technical assessment and task acceptance.
+- manager (repository context: `contracts/manager.md`; Related skill contract; omitted from this focused bundle.): patterns, work scope and performance review.
+- `codebase-map`, `debug`, `architecture`, `design-review`, and `benchmarks`: focused engineering capabilities.
+- `user-agent`, `production-readiness`, and `incident-response`: validation workflows.
+- `performance-review`, `promotion-review`, `performance-improvement-plan`, `resume-evidence`, and `retrospective`: career and progression workflows.
+
+Every invocation receives an identified registered actor, operation ID, workspace location, expected state digests and explicit request. Read-only invocations need no write authorization. Writes obey the role allowlist and transactional state rules. Return an outcome (`completed`, `needs-input`, `blocked`, `no-change`), concise rationale, referenced inputs, proposed or published record IDs, assistance events if any, unresolved gaps and next learner action. These are contract outputs, not a new persisted schema. `completed` describes the invocation, not task completion.
+
+For retries, the caller retains operation ID and prior output IDs in the transaction receipt described by the state model. The same operation with identical inputs returns prior outputs without new records. Same ID with changed inputs is a conflict; a new logical action needs a new ID. If receipt recovery is unavailable, return blocked rather than guessing whether a write succeeded. Identical review input with no new evidence returns the existing current review. New evidence/revisions warrant a new operation and explicit supersession when correcting a prior judgment.
+
+All contracts inherit progressive assistance, attribution, no fabricated evidence, safe path handling and role boundaries from FOUNDATION_V1. They do not restate the full global policy. Missing inputs produce a focused learner question or read-only investigation; malformed state is blocked without repair by guesswork. No contract authorizes remote/destructive actions. The Examples sections are conformance targets, not transcripts of work performed.
+
+## Retained protocol requirements
+
+All contracts inherit the trusted invoker binding, retained grants, assistance recorder/provider rules, full assignment freeze, immutable workspace project snapshots, checkpoint/longitudinal distinction and judgment-validity repair procedure. Pending staleness is a readable valid state, not malformed state. Durable operation lookup belongs to the workspace receipt store and survives loss of caller memory. Review reuse must match author, role, task/period, artifact revision, frozen assignment/scope, evidence, assessments and effective assistance inputs; a retired actor cannot publish a retry as new work.

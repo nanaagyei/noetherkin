@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://engineering-apprenticeship.example/schemas/3.0/apprenticeship-config.schema.json",
+  "title": "apprenticeship-config",
+  "type": "object",
+  "properties": {
+    "schema_version": { "enum": ["2.0", "3.0"] },
+    "data_class": {
+      "enum": [
+        "live",
+        "fixture"
+      ]
+    },
+    "workspace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mode": {
+      "enum": [
+        "active",
+        "paused",
+        "archived"
+      ]
+    },
+    "competency_catalog_version": { "enum": ["2.0", "3.0"] },
+    "track_catalog_version": { "enum": ["1.0", "1.1"] },
+    "level_catalog_version": {
+      "const": "2.0"
+    },
+    "assistance_default_max": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 7
+    },
+    "principals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "learner",
+              "onboarding-coordinator",
+              "project-curator",
+              "peer-engineer",
+              "team-lead",
+              "manager",
+              "user-agent",
+              "promotion-reviewer"
+            ]
+          },
+          "granted_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "retired_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "authorization": {
+            "type": "object",
+            "properties": {
+              "uri": {
+                "type": "string",
+                "format": "uri"
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "uri",
+              "description",
+              "revision"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "role",
+          "granted_at",
+          "retired_at",
+          "authorization"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "learner_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "learner_principal_id": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "data_class",
+    "workspace_id",
+    "created_at",
+    "mode",
+    "competency_catalog_version",
+    "level_catalog_version",
+    "assistance_default_max",
+    "principals",
+    "learner_id",
+    "learner_principal_id"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": "2.0",
+  "data_class": "fixture",
+  "id": "TASK-failure-demo",
+  "created_at": "2026-09-10T10:20:00Z",
+  "author": {
+    "id": "ACTOR-demo-team-lead",
+    "role": "team-lead"
+  },
+  "title": "Investigate a request failure using a learner hypothesis",
+  "project_id": "spring-petclinic-microservices",
+  "type": "TRAINING",
+  "status": "assigned",
+  "problem": "Determine how a selected request failure propagates across a boundary.",
+  "context": "Unexecuted synthetic assignment, not an upstream bug report.",
+  "impact": "Practice causal investigation.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-failure",
+      "criterion": "Record a hypothesis, actual observation and one rejected alternative."
+    }
+  ],
+  "constraints": [
+    "Local authorized environment only; no production traffic."
+  ],
+  "primary_competencies": [
+    "core.debugging"
+  ],
+  "secondary_competencies": [
+    "production.tracing"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "cross-component",
+    "components": [
+      "gateway",
+      "customers-service"
+    ],
+    "description": "Synthetic navigation exercise across two boundaries; no production claim."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "Select a safe failure and inspect its propagation."
+  ],
+  "testing_expectations": [
+    "Predict the failure before running a bounded experiment."
+  ],
+  "documentation_requirements": [
+    "Record actual versus predicted results."
+  ],
+  "assigned_by": {
+    "id": "ACTOR-demo-team-lead",
+    "role": "team-lead"
+  },
+  "assistance_history": [],
+  "design_required": true,
+  "code_review_required": true,
+  "blocked_reason": null,
+  "completion_evidence_ids": [],
+  "validation": [],
+  "transitions": [
+    {
+      "from": "absent",
+      "to": "backlog",
+      "at": "2026-09-10T10:20:00Z",
+      "actor": {
+        "id": "ACTOR-demo-team-lead",
+        "role": "team-lead"
+      },
+      "reason": "New synthetic training assignment."
+    },
+    {
+      "from": "backlog",
+      "to": "assigned",
+      "at": "2026-09-10T10:21:00Z",
+      "actor": {
+        "id": "ACTOR-demo-team-lead",
+        "role": "team-lead"
+      },
+      "reason": "Learner agreed to investigate; no result yet."
+    }
+  ],
+  "work_artifact": null,
+  "design_artifact": null,
+  "design_assessment_id": null
+}

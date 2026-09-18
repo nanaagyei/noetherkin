@@ -1,0 +1,33 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "data-analyst",
+  "name": "Data Analyst",
+  "description": "A curated data analyst path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex data analyst systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "data.sql",
+    "data.analytics",
+    "data.visualization",
+    "data.quality",
+    "design.data-modeling",
+    "product.requirements-discovery",
+    "product.outcome-validation"
+  ],
+  "recommended_projects": {
+    "early": [
+      "duckdb",
+      "pandas"
+    ],
+    "intermediate": [
+      "dbt-core",
+      "apache-superset"
+    ],
+    "advanced": [
+      "airbyte",
+      "openmetadata"
+    ]
+  }
+}

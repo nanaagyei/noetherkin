@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "security-engineering",
+  "name": "Security Engineering",
+  "description": "A curated security engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex security engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "security.threat-modeling",
+    "security.secure-development",
+    "security.vulnerability-management",
+    "network.tls"
+  ],
+  "recommended_projects": {
+    "early": [
+      "trivy",
+      "sops"
+    ],
+    "intermediate": [
+      "semgrep",
+      "zaproxy"
+    ],
+    "advanced": [
+      "envoy",
+      "kubernetes"
+    ]
+  }
+}

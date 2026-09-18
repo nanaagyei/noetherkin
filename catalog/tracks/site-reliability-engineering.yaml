@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "site-reliability-engineering",
+  "name": "Site Reliability Engineering",
+  "description": "A curated site reliability engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex site reliability engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "sre.slo-error-budgets",
+    "sre.capacity-planning",
+    "sre.incident-management",
+    "production.observability"
+  ],
+  "recommended_projects": {
+    "early": [
+      "prometheus",
+      "opentelemetry-demo"
+    ],
+    "intermediate": [
+      "grafana",
+      "loki"
+    ],
+    "advanced": [
+      "kubernetes",
+      "opentelemetry-collector"
+    ]
+  }
+}

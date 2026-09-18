@@ -1,0 +1,36 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "devops-engineering",
+  "name": "Devops Engineering",
+  "description": "A curated devops engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex devops engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "production.logging",
+    "production.metrics",
+    "production.tracing",
+    "production.observability",
+    "production.reliability",
+    "production.incident-response",
+    "production.deployment",
+    "production.ci-cd",
+    "platform.containers",
+    "platform.infrastructure-as-code"
+  ],
+  "recommended_projects": {
+    "early": [
+      "prometheus",
+      "opentofu"
+    ],
+    "intermediate": [
+      "argocd",
+      "opentelemetry-demo"
+    ],
+    "advanced": [
+      "kubernetes",
+      "crossplane"
+    ]
+  }
+}

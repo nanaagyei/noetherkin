@@ -1,0 +1,31 @@
+name: Feature request
+description: Propose a bounded capability or protocol improvement.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and learner outcome
+      description: What learner or maintainer decision should improve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and trade-offs
+    validations:
+      required: true
+  - type: textarea
+    id: protocol
+    attributes:
+      label: Protocol impact
+      description: Identify affected schemas, permissions, lifecycle gates, evidence, levels, or skill contracts.
+    validations:
+      required: true

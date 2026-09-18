@@ -1,0 +1,33 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "backend-engineering",
+  "name": "Backend Engineering",
+  "description": "A curated backend engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex backend engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "design.api-design",
+    "design.data-modeling",
+    "backend.http-api",
+    "backend.databases",
+    "backend.authentication-authorization",
+    "backend.concurrency",
+    "production.observability"
+  ],
+  "recommended_projects": {
+    "early": [
+      "fastapi",
+      "spring-petclinic-microservices"
+    ],
+    "intermediate": [
+      "django",
+      "opentelemetry-demo"
+    ],
+    "advanced": [
+      "redis",
+      "cockroachdb"
+    ]
+  }
+}

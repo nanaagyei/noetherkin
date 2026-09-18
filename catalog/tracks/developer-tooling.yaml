@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "developer-tooling",
+  "name": "Developer Tooling",
+  "description": "A curated developer tooling path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex developer tooling systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "tooling.cli-design",
+    "tooling.static-analysis",
+    "tooling.build-systems",
+    "quality.automation"
+  ],
+  "recommended_projects": {
+    "early": [
+      "textlint",
+      "vitest"
+    ],
+    "intermediate": [
+      "ruff",
+      "biome"
+    ],
+    "advanced": [
+      "uv",
+      "rust-clippy"
+    ]
+  }
+}

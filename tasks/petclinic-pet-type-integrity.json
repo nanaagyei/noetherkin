@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "pet-type-integrity",
+  "project_id": "spring-petclinic-microservices",
+  "type": "TRAINING",
+  "title": "Preserve pet-type integrity for customer-service writes",
+  "problem": "A pet create or update request can name a pet-type identifier that the service cannot resolve. The write must not leave or persist a pet with incomplete type information.",
+  "context": "This is a learner-local TRAINING exercise against the selected PetClinic revision, not an upstream issue or contribution request.",
+  "impact": "Invalid relationships should fail predictably without persisting incomplete domain state.",
+  "acceptance_criteria": [
+    { "id": "AC-invalid-type", "criterion": "An unknown pet-type identifier is rejected and no incomplete pet is persisted." },
+    { "id": "AC-valid-type", "criterion": "Existing valid create and update behavior remains supported." },
+    { "id": "AC-tests", "criterion": "Focused automated tests cover the invalid and valid paths and pass at the submitted revision." },
+    { "id": "AC-explanation", "criterion": "The learner explains the chosen failure contract, one rejected alternative, and the first likely failure case." }
+  ],
+  "constraints": [
+    "Keep the change inside spring-petclinic-customers-service.",
+    "Do not change database schemas, service boundaries, or remote infrastructure.",
+    "Do not push or open an upstream pull request as part of this task."
+  ],
+  "primary_competencies": ["core.implementation", "core.testing", "java.spring-boot"],
+  "secondary_competencies": ["core.codebase-navigation", "core.technical-communication"],
+  "recommended_level": "E1",
+  "scope": { "classification": "component", "components": ["spring-petclinic-customers-service"], "description": "One domain-write boundary and its focused tests." },
+  "difficulty": "bounded",
+  "investigation_areas": ["Pet creation and update request path", "Pet-type lookup behavior", "Existing customer-service web and repository tests"],
+  "testing_expectations": ["Run ./mvnw -pl spring-petclinic-customers-service test from the repository root."],
+  "documentation_requirements": ["Record the failure contract, rejected alternative, and first likely failure case in the learner design."],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [
+      "pom.xml",
+      "mvnw",
+      "spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/web/PetResource.java"
+    ],
+    "required_fragments": ["findPetTypeById", "spring-petclinic-customers-service"]
+  },
+  "next_task_preview": {
+    "title": "Trace the pet-write failure contract through the API gateway",
+    "summary": "Map how the customer-service error is represented at the gateway boundary and propose a focused compatibility check without changing TASK-001."
+  }
+}

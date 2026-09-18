@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "application-security",
+  "name": "Application Security",
+  "description": "A curated application security path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex application security systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "appsec.static-dynamic-analysis",
+    "appsec.web-security",
+    "security.threat-modeling",
+    "security.secure-development"
+  ],
+  "recommended_projects": {
+    "early": [
+      "owasp-juice-shop",
+      "semgrep"
+    ],
+    "intermediate": [
+      "trivy",
+      "zaproxy"
+    ],
+    "advanced": [
+      "envoy",
+      "kubernetes"
+    ]
+  }
+}

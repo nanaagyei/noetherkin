@@ -1,0 +1,33 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "ai-engineering",
+  "name": "Ai Engineering",
+  "description": "A curated ai engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex ai engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "python.language",
+    "ml.evaluation",
+    "ml.serving",
+    "ai.retrieval-augmentation",
+    "ai.agent-design",
+    "ai.safety-evaluation",
+    "production.observability"
+  ],
+  "recommended_projects": {
+    "early": [
+      "langchain",
+      "llama-index"
+    ],
+    "intermediate": [
+      "huggingface-transformers",
+      "kserve"
+    ],
+    "advanced": [
+      "vllm",
+      "sample-eks-inference-platform"
+    ]
+  }
+}

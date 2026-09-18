@@ -1,0 +1,87 @@
+{
+  "schema_version": "3.0",
+  "data_class": "live",
+  "id": "zephyr",
+  "name": "Zephyr",
+  "repository_url": "https://github.com/zephyrproject-rtos/zephyr",
+  "upstream_organization": "zephyrproject-rtos",
+  "description": "Upstream Zephyr repository recorded as an advisory learning candidate. Entry metadata is editorial guidance and does not imply upstream endorsement.",
+  "primary_languages": [
+    "C"
+  ],
+  "technologies": [
+    "Repository-specific"
+  ],
+  "engineering_domains": [
+    "embedded"
+  ],
+  "competencies": [
+    "core.codebase-navigation",
+    "core.testing",
+    "embedded.real-time",
+    "embedded.hardware-interfaces"
+  ],
+  "recommended_minimum_level": "E2",
+  "ideal_level": "E3",
+  "prerequisites": [
+    "Ability to follow the repository build instructions and run a focused validation loop"
+  ],
+  "difficulty": "complex",
+  "onboarding_cost": "specialized",
+  "feedback_loop": "specialized",
+  "contribution_readiness": {
+    "status": "verified",
+    "signals": [
+      "The upstream contribution page publishes good-first issues; hardware needs still vary by task."
+    ],
+    "limitations": [
+      "Issue suitability and maintainer availability can change after the catalog check."
+    ]
+  },
+  "onboarding_areas": [
+    "Repository documentation",
+    "Source layout",
+    "Tests and contribution workflow"
+  ],
+  "learning_paths": [
+    {
+      "name": "Repository investigation",
+      "competencies": [
+        "core.codebase-navigation",
+        "embedded.real-time"
+      ],
+      "activities": [
+        "Map one behavior using source citations.",
+        "Identify and run the narrowest documented validation loop."
+      ]
+    }
+  ],
+  "deployment": null,
+  "contribution": null,
+  "status": "candidate",
+  "caveats": [
+    "Difficulty, onboarding cost, feedback loop, and level fit are editorial guidance, not upstream endorsements or E-level gates.",
+    "Candidate metadata does not claim task-pack support or live simulator task support."
+  ],
+  "sources": [
+    {
+      "uri": "https://github.com/zephyrproject-rtos/zephyr",
+      "description": "Repository identity and upstream provenance.",
+      "revision": "catalog-observation-2026-09-17"
+    },
+    {
+      "uri": "https://github.com/zephyrproject-rtos/zephyr/contribute",
+      "description": "The upstream contribution page publishes good-first issues; hardware needs still vary by task.",
+      "revision": "catalog-observation-2026-09-17"
+    }
+  ],
+  "checked_at": "2026-09-17T12:00:00Z",
+  "metadata_gaps": [
+    "deployment",
+    "contribution"
+  ],
+  "support": {
+    "attachable": true,
+    "task_packs": []
+  }
+}

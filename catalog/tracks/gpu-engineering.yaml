@@ -1,0 +1,34 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "gpu-engineering",
+  "name": "Gpu Engineering",
+  "description": "A curated gpu engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex gpu engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "cpp.memory",
+    "cpp.performance",
+    "gpu.architecture",
+    "gpu.memory-hierarchy",
+    "gpu.cuda",
+    "gpu.kernel-design",
+    "gpu.profiling",
+    "gpu.optimization"
+  ],
+  "recommended_projects": {
+    "early": [
+      "cuda-samples",
+      "triton"
+    ],
+    "intermediate": [
+      "cutlass",
+      "llama-cpp"
+    ],
+    "advanced": [
+      "vllm",
+      "pytorch"
+    ]
+  }
+}

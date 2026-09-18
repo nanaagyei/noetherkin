@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://engineering-apprenticeship.example/schemas/1.0/apprenticeship-config.schema.json",
+  "title": "apprenticeship-config",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "data_class": {
+      "enum": [
+        "live",
+        "fixture"
+      ]
+    },
+    "workspace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mode": {
+      "enum": [
+        "active",
+        "paused",
+        "archived"
+      ]
+    },
+    "competency_catalog_version": {
+      "const": "1.0"
+    },
+    "level_catalog_version": {
+      "const": "1.0"
+    },
+    "assistance_default_max": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 7
+    },
+    "principals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "learner",
+              "onboarding-coordinator",
+              "project-curator",
+              "peer-engineer",
+              "team-lead",
+              "manager",
+              "user-agent",
+              "promotion-reviewer"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "role"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "data_class",
+    "workspace_id",
+    "created_at",
+    "mode",
+    "competency_catalog_version",
+    "level_catalog_version",
+    "assistance_default_max",
+    "principals"
+  ],
+  "additionalProperties": false
+}

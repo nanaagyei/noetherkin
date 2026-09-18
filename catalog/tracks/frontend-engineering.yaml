@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "frontend-engineering",
+  "name": "Frontend Engineering",
+  "description": "A curated frontend engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex frontend engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "frontend.web-platform",
+    "frontend.accessibility",
+    "frontend.state-management",
+    "frontend.performance"
+  ],
+  "recommended_projects": {
+    "early": [
+      "textual",
+      "textlint"
+    ],
+    "intermediate": [
+      "astro",
+      "biome"
+    ],
+    "advanced": [
+      "playwright",
+      "backstage"
+    ]
+  }
+}

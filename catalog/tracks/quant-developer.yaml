@@ -1,0 +1,34 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "quant-developer",
+  "name": "Quant Developer",
+  "description": "A curated quant developer path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex quant developer systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "design.system-design",
+    "backend.concurrency",
+    "distributed.idempotency",
+    "production.performance",
+    "quant.market-data",
+    "quant.backtesting",
+    "quant.execution-systems",
+    "cpp.performance"
+  ],
+  "recommended_projects": {
+    "early": [
+      "quantlib",
+      "quickfix"
+    ],
+    "intermediate": [
+      "nautilus-trader",
+      "redis"
+    ],
+    "advanced": [
+      "cockroachdb",
+      "llvm-project"
+    ]
+  }
+}

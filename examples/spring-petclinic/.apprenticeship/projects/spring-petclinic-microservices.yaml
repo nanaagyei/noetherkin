@@ -1,0 +1,79 @@
+{
+  "schema_version": "2.0",
+  "data_class": "fixture",
+  "id": "spring-petclinic-microservices",
+  "name": "Spring PetClinic Microservices",
+  "repository_url": "https://github.com/spring-petclinic/spring-petclinic-microservices",
+  "upstream_organization": "spring-petclinic",
+  "description": "Distributed Spring sample used here for synthetic apprenticeship examples.",
+  "primary_languages": [
+    "Java"
+  ],
+  "technologies": [
+    "Spring Boot",
+    "Spring Cloud",
+    "Docker"
+  ],
+  "engineering_domains": [
+    "backend",
+    "production"
+  ],
+  "competencies": [
+    "core.codebase-navigation",
+    "core.testing",
+    "java.spring-boot",
+    "production.tracing"
+  ],
+  "recommended_minimum_level": "E1",
+  "ideal_level": "E2",
+  "prerequisites": [
+    "Basic Java and HTTP; guided navigation can begin at E0."
+  ],
+  "difficulty": "moderate",
+  "onboarding_areas": [
+    "Service boundaries",
+    "Configuration and startup",
+    "Tests and request paths"
+  ],
+  "learning_paths": [
+    {
+      "name": "Request-path investigation",
+      "competencies": [
+        "core.codebase-navigation",
+        "production.tracing"
+      ],
+      "activities": [
+        "Map a request using source citations.",
+        "Investigate a failure with recorded observations."
+      ]
+    }
+  ],
+  "deployment": {
+    "environments": [
+      "local development"
+    ],
+    "requirements": [
+      "Inspect the selected revision README for Java, build and container requirements."
+    ],
+    "caveats": [
+      "A local exercise does not demonstrate production operation."
+    ]
+  },
+  "contribution": {
+    "guide_url": "https://github.com/spring-petclinic/spring-petclinic-microservices/blob/main/CONTRIBUTING.md",
+    "policy": "Read current upstream guidance; any PR submission requires learner authorization."
+  },
+  "status": "candidate",
+  "caveats": [
+    "Learning level recommendations are provisional simulator judgments.",
+    "The example pins a synthetic revision and contains no checkout."
+  ],
+  "sources": [
+    {
+      "uri": "https://github.com/spring-petclinic/spring-petclinic-microservices",
+      "revision": "web-observation-2026-09-12",
+      "description": "Upstream project description and README; recheck at selected revision."
+    }
+  ],
+  "checked_at": "2026-09-12T20:00:00Z"
+}

@@ -1,0 +1,60 @@
+schema_version: '1.0'
+data_class: fixture
+id: EVID-map-demo
+created_at: '2026-09-10T09:20:00Z'
+author:
+  id: ACTOR-demo-team-lead
+  role: team-lead
+project_id: spring-petclinic-microservices
+task_id: TASK-map-demo
+competency_id: core.codebase-navigation
+fact:
+  observation: Within this fictional scenario the learner explains a request boundary
+    after a documentation pointer.
+  observed_at: '2026-09-10T09:15:00Z'
+  artifacts:
+  - uri: workspace:/.apprenticeship/knowledge/demo-artifacts.md#map
+    revision: fixture-v1
+    description: Synthetic map; not an actual learner run.
+scope:
+  classification: cross-component
+  components:
+  - gateway
+  - customers-service
+  description: Synthetic navigation exercise across two boundaries; no production
+    claim.
+difficulty: bounded
+assistance:
+  known: true
+  highest_level: 1
+  events:
+  - at: '2026-09-10T08:40:00Z'
+    actor:
+      id: ACTOR-demo-peer-engineer
+      role: peer-engineer
+    level: 1
+    competencies:
+    - core.codebase-navigation
+    description: Synthetic peer points learner toward the upstream README; does not
+      supply the map.
+    artifact:
+      uri: workspace:/.apprenticeship/knowledge/demo-artifacts.md#assistance
+      revision: fixture-v1
+      description: Synthetic assistance; not an actual learner run.
+verification:
+  status: verified
+  method: Synthetic reviewer compares the synthetic map and transcript; no real checkout
+    inspected.
+  reviewer:
+    id: ACTOR-demo-team-lead
+    role: team-lead
+  checked_at: '2026-09-10T09:19:00Z'
+interpretation:
+  independence: guided
+  direction: supporting
+  target_level: E0
+  strength: moderate
+  rationale: A guided navigation explanation supports E0 in the fixture only; it does
+    not establish independent cross-component engineering.
+supersedes: null
+notes: DEMO DATA. This learner, observation and verification did not occur.

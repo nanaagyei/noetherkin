@@ -1,0 +1,25 @@
+schema_version: '1.0'
+data_class: fixture
+workspace_id: WS-demo
+created_at: '2026-09-10T08:00:00Z'
+mode: active
+competency_catalog_version: '1.0'
+level_catalog_version: '1.0'
+assistance_default_max: 3
+principals:
+- id: ACTOR-demo-learner
+  role: learner
+- id: ACTOR-demo-onboarding-coordinator
+  role: onboarding-coordinator
+- id: ACTOR-demo-project-curator
+  role: project-curator
+- id: ACTOR-demo-peer-engineer
+  role: peer-engineer
+- id: ACTOR-demo-team-lead
+  role: team-lead
+- id: ACTOR-demo-manager
+  role: manager
+- id: ACTOR-demo-user-agent
+  role: user-agent
+- id: ACTOR-demo-promotion-reviewer
+  role: promotion-reviewer

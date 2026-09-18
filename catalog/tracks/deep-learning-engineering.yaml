@@ -1,0 +1,34 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "deep-learning-engineering",
+  "name": "Deep Learning Engineering",
+  "description": "A curated deep learning engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex deep learning engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "python.language",
+    "ml.training",
+    "ml.evaluation",
+    "ml.distributed-training",
+    "ml.serving",
+    "gpu.architecture",
+    "gpu.profiling",
+    "research.reproducibility"
+  ],
+  "recommended_projects": {
+    "early": [
+      "pytorch-examples",
+      "pytorch-lightning"
+    ],
+    "intermediate": [
+      "pytorch",
+      "huggingface-transformers"
+    ],
+    "advanced": [
+      "vllm",
+      "triton"
+    ]
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": "3.0",
+  "data_class": "live",
+  "id": "owasp-juice-shop",
+  "name": "OWASP Juice Shop",
+  "repository_url": "https://github.com/juice-shop/juice-shop",
+  "upstream_organization": "juice-shop",
+  "description": "Upstream OWASP Juice Shop repository recorded as an advisory learning candidate. Entry metadata is editorial guidance and does not imply upstream endorsement.",
+  "primary_languages": [
+    "TypeScript"
+  ],
+  "technologies": [
+    "Repository-specific"
+  ],
+  "engineering_domains": [
+    "appsec"
+  ],
+  "competencies": [
+    "core.codebase-navigation",
+    "core.testing",
+    "appsec.web-security",
+    "security.threat-modeling"
+  ],
+  "recommended_minimum_level": "E0",
+  "ideal_level": "E1",
+  "prerequisites": [
+    "Ability to follow the repository build instructions and run a focused validation loop"
+  ],
+  "difficulty": "bounded",
+  "onboarding_cost": "low",
+  "feedback_loop": "fast",
+  "contribution_readiness": {
+    "status": "verified",
+    "signals": [
+      "The upstream repository publishes a contributor guide and intentionally vulnerable learning surface."
+    ],
+    "limitations": [
+      "Issue suitability and maintainer availability can change after the catalog check."
+    ]
+  },
+  "onboarding_areas": [
+    "Repository documentation",
+    "Source layout",
+    "Tests and contribution workflow"
+  ],
+  "learning_paths": [
+    {
+      "name": "Repository investigation",
+      "competencies": [
+        "core.codebase-navigation",
+        "appsec.web-security"
+      ],
+      "activities": [
+        "Map one behavior using source citations.",
+        "Identify and run the narrowest documented validation loop."
+      ]
+    }
+  ],
+  "deployment": null,
+  "contribution": null,
+  "status": "candidate",
+  "caveats": [
+    "Difficulty, onboarding cost, feedback loop, and level fit are editorial guidance, not upstream endorsements or E-level gates.",
+    "Candidate metadata does not claim task-pack support or live simulator task support."
+  ],
+  "sources": [
+    {
+      "uri": "https://github.com/juice-shop/juice-shop",
+      "description": "Repository identity and upstream provenance.",
+      "revision": "catalog-observation-2026-09-17"
+    },
+    {
+      "uri": "https://github.com/juice-shop/juice-shop/blob/master/CONTRIBUTING.md",
+      "description": "The upstream repository publishes a contributor guide and intentionally vulnerable learning surface.",
+      "revision": "catalog-observation-2026-09-17"
+    }
+  ],
+  "checked_at": "2026-09-17T12:00:00Z",
+  "metadata_gaps": [
+    "deployment",
+    "contribution"
+  ],
+  "support": {
+    "attachable": true,
+    "task_packs": []
+  }
+}

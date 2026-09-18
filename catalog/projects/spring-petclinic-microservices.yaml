@@ -1,0 +1,99 @@
+{
+  "schema_version": "3.0",
+  "data_class": "live",
+  "id": "spring-petclinic-microservices",
+  "name": "Spring PetClinic Microservices",
+  "repository_url": "https://github.com/spring-petclinic/spring-petclinic-microservices",
+  "upstream_organization": "spring-petclinic",
+  "description": "Distributed Spring sample used here for synthetic apprenticeship examples.",
+  "primary_languages": [
+    "Java"
+  ],
+  "technologies": [
+    "Spring Boot",
+    "Spring Cloud",
+    "Docker"
+  ],
+  "engineering_domains": [
+    "backend",
+    "production"
+  ],
+  "competencies": [
+    "core.codebase-navigation",
+    "core.testing",
+    "java.spring-boot",
+    "production.tracing"
+  ],
+  "recommended_minimum_level": "E1",
+  "ideal_level": "E2",
+  "prerequisites": [
+    "Ability to follow the repository build instructions and run a focused validation loop"
+  ],
+  "difficulty": "moderate",
+  "onboarding_areas": [
+    "Service boundaries",
+    "Configuration and startup",
+    "Tests and request paths"
+  ],
+  "learning_paths": [
+    {
+      "name": "Request-path investigation",
+      "competencies": [
+        "core.codebase-navigation",
+        "production.tracing"
+      ],
+      "activities": [
+        "Map a request using source citations.",
+        "Investigate a failure with recorded observations."
+      ]
+    }
+  ],
+  "deployment": {
+    "environments": [
+      "local development"
+    ],
+    "requirements": [
+      "Inspect the selected revision README for Java, build and container requirements."
+    ],
+    "caveats": [
+      "A local exercise does not demonstrate production operation."
+    ]
+  },
+  "contribution": {
+    "guide_url": "https://github.com/spring-petclinic/spring-petclinic-microservices/blob/main/CONTRIBUTING.md",
+    "policy": "Read current upstream guidance; any PR submission requires learner authorization."
+  },
+  "status": "supported",
+  "caveats": [
+    "Learning level recommendations are provisional simulator judgments.",
+    "Selection still requires an inspected local checkout and an immutable commit revision.",
+    "The Phase 6 task pack is offered only when its source compatibility probes pass.",
+    "Difficulty, onboarding cost, feedback loop, and level fit are editorial guidance, not upstream endorsements or E-level gates."
+  ],
+  "sources": [
+    {
+      "uri": "https://github.com/spring-petclinic/spring-petclinic-microservices",
+      "revision": "v3.4.1-and-main-observation-2026-09-15",
+      "description": "Upstream repository, v3.4.1 release, README and current source layout inspected for the Phase 6 catalog entry; selection rechecks the learner's exact revision."
+    }
+  ],
+  "checked_at": "2026-09-15T12:00:00Z",
+  "metadata_gaps": [],
+  "support": {
+    "attachable": true,
+    "task_packs": [
+      "pet-type-integrity"
+    ]
+  },
+  "onboarding_cost": "medium",
+  "feedback_loop": "moderate",
+  "contribution_readiness": {
+    "status": "verified",
+    "signals": [
+      "Bundled project-specific task pack provides a checked local entry surface."
+    ],
+    "limitations": [
+      "Upstream issue availability can change independently of the bundled task pack."
+    ]
+  }
+}

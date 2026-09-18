@@ -1,0 +1,34 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "quant-researcher",
+  "name": "Quant Researcher",
+  "description": "A curated quant researcher path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex quant researcher systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "python.language",
+    "math.probability-statistics",
+    "math.optimization",
+    "research.experimental-design",
+    "research.reproducibility",
+    "quant.market-data",
+    "quant.backtesting",
+    "quant.portfolio-modeling"
+  ],
+  "recommended_projects": {
+    "early": [
+      "pandas",
+      "duckdb"
+    ],
+    "intermediate": [
+      "vectorbt",
+      "qlib"
+    ],
+    "advanced": [
+      "jax",
+      "pytorch"
+    ]
+  }
+}

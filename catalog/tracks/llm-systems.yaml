@@ -1,0 +1,35 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "llm-systems",
+  "name": "Llm Systems",
+  "description": "A curated llm systems path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex llm systems systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "python.language",
+    "ml.evaluation",
+    "ml.serving",
+    "llm.transformer-inference",
+    "llm.batching",
+    "llm.kv-caching",
+    "llm.scheduling",
+    "llm.latency-throughput",
+    "llm.distributed-inference"
+  ],
+  "recommended_projects": {
+    "early": [
+      "llama-cpp",
+      "huggingface-transformers"
+    ],
+    "intermediate": [
+      "vllm",
+      "triton"
+    ],
+    "advanced": [
+      "kserve",
+      "sample-eks-inference-platform"
+    ]
+  }
+}

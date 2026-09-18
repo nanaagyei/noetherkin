@@ -1,0 +1,48 @@
+{
+  "schema_version": "2.0",
+  "data_class": "fixture",
+  "id": "REV-performance-demo",
+  "created_at": "2026-09-10T11:00:00Z",
+  "author": {
+    "id": "ACTOR-demo-manager",
+    "role": "manager"
+  },
+  "kind": "performance",
+  "subject_id": "LEARNER-demo",
+  "evidence_ids": [
+    "EVID-map-demo"
+  ],
+  "assessment_ids": [
+    "ASM-navigation-demo"
+  ],
+  "period": {
+    "start": "2026-09-10T08:30:00Z",
+    "end": "2026-09-10T11:00:00Z"
+  },
+  "findings": [
+    "Synthetic guided navigation is bounded evidence; it does not prove independent implementation or production operation."
+  ],
+  "outcome": "insufficient-evidence",
+  "supersedes": null,
+  "evaluation_scope": {
+    "core_competencies": [
+      "core.codebase-navigation",
+      "core.implementation",
+      "core.debugging",
+      "core.testing",
+      "core.technical-communication",
+      "core.ownership",
+      "core.git"
+    ],
+    "specialization_competencies": [
+      "java.spring-boot"
+    ],
+    "competency_catalog_version": "2.0",
+    "level_catalog_version": "2.0",
+    "scope_agreement": {
+      "uri": "fixture:scope-agreement",
+      "revision": "fixture-v2",
+      "description": "Synthetic learner and team-lead scope agreement before review period."
+    }
+  }
+}

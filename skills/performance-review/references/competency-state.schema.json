@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://engineering-apprenticeship.example/schemas/3.0/competency-state.schema.json",
+  "title": "competency-state",
+  "type": "object",
+  "properties": {
+    "schema_version": { "enum": ["2.0", "3.0"] },
+    "data_class": {
+      "enum": [
+        "live",
+        "fixture"
+      ]
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_assessment_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "source_review_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "effective_level": {
+      "enum": [
+        null,
+        "E0",
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5"
+      ]
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "competency_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "unassessed",
+              "developing",
+              "demonstrated",
+              "contested"
+            ]
+          },
+          "demonstrated_level": {
+            "enum": [
+              null,
+              "E0",
+              "E1",
+              "E2",
+              "E3",
+              "E4",
+              "E5"
+            ]
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "assessment_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "competency_id",
+          "status",
+          "demonstrated_level",
+          "evidence_ids",
+          "assessment_ids"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "last_awarded_level": {
+      "enum": [
+        "E0",
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5"
+      ]
+    },
+    "standing": {
+      "enum": [
+        "current",
+        "unresolved"
+      ]
+    },
+    "stale_record_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "data_class",
+    "generated_at",
+    "source_assessment_ids",
+    "source_review_ids",
+    "effective_level",
+    "entries",
+    "last_awarded_level",
+    "standing",
+    "stale_record_ids"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "standing": {
+            "const": "unresolved"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "effective_level": {
+            "type": "null"
+          },
+          "stale_record_ids": {
+            "minItems": 1
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "effective_level": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ]
+}

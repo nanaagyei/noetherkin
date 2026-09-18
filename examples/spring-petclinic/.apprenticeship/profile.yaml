@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0",
+  "data_class": "fixture",
+  "learner_id": "LEARNER-demo",
+  "display_name": "Demo learner (fictional)",
+  "goals": [
+    "Explain a service request path and validate claims against source."
+  ],
+  "specialization_competencies": [
+    "java.spring-boot"
+  ],
+  "onboarding": "complete",
+  "baseline_assessment_id": "ASM-baseline-demo",
+  "self_report": [
+    "Fixture learner reports basic Java study; not verified proficiency."
+  ]
+}

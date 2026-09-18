@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "observability-engineering",
+  "name": "Observability Engineering",
+  "description": "A curated observability engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex observability engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "observability.instrumentation",
+    "observability.telemetry-pipelines",
+    "production.observability",
+    "production.tracing"
+  ],
+  "recommended_projects": {
+    "early": [
+      "opentelemetry-demo",
+      "prometheus"
+    ],
+    "intermediate": [
+      "grafana",
+      "opentelemetry-collector"
+    ],
+    "advanced": [
+      "loki",
+      "kubernetes"
+    ]
+  }
+}

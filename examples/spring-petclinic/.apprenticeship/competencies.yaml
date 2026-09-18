@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0",
+  "data_class": "fixture",
+  "generated_at": "2026-09-10T11:01:00Z",
+  "source_assessment_ids": [
+    "ASM-baseline-demo",
+    "ASM-navigation-demo"
+  ],
+  "source_review_ids": [
+    "REV-code-demo",
+    "REV-task-demo",
+    "REV-performance-demo"
+  ],
+  "effective_level": "E0",
+  "entries": [
+    {
+      "competency_id": "core.codebase-navigation",
+      "status": "demonstrated",
+      "demonstrated_level": "E0",
+      "evidence_ids": [
+        "EVID-map-demo"
+      ],
+      "assessment_ids": [
+        "ASM-navigation-demo"
+      ]
+    }
+  ],
+  "last_awarded_level": "E0",
+  "standing": "current",
+  "stale_record_ids": []
+}

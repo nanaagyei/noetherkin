@@ -1,0 +1,32 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "software-engineering",
+  "name": "Software Engineering",
+  "description": "A curated software engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex software engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "design.api-design",
+    "design.abstraction",
+    "design.architecture",
+    "design.tradeoff-analysis",
+    "production.ci-cd",
+    "production.reliability"
+  ],
+  "recommended_projects": {
+    "early": [
+      "pytest",
+      "fastapi"
+    ],
+    "intermediate": [
+      "django",
+      "opentelemetry-demo"
+    ],
+    "advanced": [
+      "kubernetes",
+      "llvm-project"
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "3.0",
+  "data_class": "live",
+  "id": "micropython",
+  "name": "MicroPython",
+  "repository_url": "https://github.com/micropython/micropython",
+  "upstream_organization": "micropython",
+  "description": "Upstream MicroPython repository recorded as an advisory learning candidate. Entry metadata is editorial guidance and does not imply upstream endorsement.",
+  "primary_languages": [
+    "C",
+    "Python"
+  ],
+  "technologies": [
+    "Repository-specific"
+  ],
+  "engineering_domains": [
+    "embedded"
+  ],
+  "competencies": [
+    "core.codebase-navigation",
+    "core.testing",
+    "embedded.hardware-interfaces",
+    "embedded.resource-constraints"
+  ],
+  "recommended_minimum_level": "E1",
+  "ideal_level": "E2",
+  "prerequisites": [
+    "Ability to follow the repository build instructions and run a focused validation loop"
+  ],
+  "difficulty": "moderate",
+  "onboarding_cost": "specialized",
+  "feedback_loop": "specialized",
+  "contribution_readiness": {
+    "status": "unverified",
+    "signals": [
+      "Contribution entry points and hardware needs were not independently verified for this catalog release."
+    ],
+    "limitations": [
+      "Contribution entry points and hardware needs were not independently verified for this catalog release."
+    ]
+  },
+  "onboarding_areas": [
+    "Repository documentation",
+    "Source layout",
+    "Tests and contribution workflow"
+  ],
+  "learning_paths": [
+    {
+      "name": "Repository investigation",
+      "competencies": [
+        "core.codebase-navigation",
+        "embedded.hardware-interfaces"
+      ],
+      "activities": [
+        "Map one behavior using source citations.",
+        "Identify and run the narrowest documented validation loop."
+      ]
+    }
+  ],
+  "deployment": null,
+  "contribution": null,
+  "status": "candidate",
+  "caveats": [
+    "Difficulty, onboarding cost, feedback loop, and level fit are editorial guidance, not upstream endorsements or E-level gates.",
+    "Candidate metadata does not claim task-pack support or live simulator task support."
+  ],
+  "sources": [
+    {
+      "uri": "https://github.com/micropython/micropython",
+      "description": "Repository identity and upstream provenance.",
+      "revision": "catalog-observation-2026-09-17"
+    }
+  ],
+  "checked_at": "2026-09-17T12:00:00Z",
+  "metadata_gaps": [
+    "contribution_readiness",
+    "deployment",
+    "contribution"
+  ],
+  "support": {
+    "attachable": true,
+    "task_packs": []
+  }
+}

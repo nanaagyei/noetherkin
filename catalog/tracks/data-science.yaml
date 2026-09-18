@@ -1,0 +1,33 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "data-science",
+  "name": "Data Science",
+  "description": "A curated data science path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex data science systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "python.language",
+    "data.analytics",
+    "data.visualization",
+    "math.probability-statistics",
+    "research.experimental-design",
+    "research.reproducibility",
+    "ml.evaluation"
+  ],
+  "recommended_projects": {
+    "early": [
+      "pandas",
+      "jupyterlab"
+    ],
+    "intermediate": [
+      "scikit-learn",
+      "mlflow"
+    ],
+    "advanced": [
+      "pytorch",
+      "jax"
+    ]
+  }
+}

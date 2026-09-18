@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://engineering-apprenticeship.example/schemas/1.0/learner-profile.schema.json",
+  "title": "learner-profile",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "data_class": {
+      "enum": [
+        "live",
+        "fixture"
+      ]
+    },
+    "learner_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "goals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "specialization_competencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "onboarding": {
+      "enum": [
+        "pending",
+        "complete"
+      ]
+    },
+    "baseline_assessment_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "self_report": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "data_class",
+    "learner_id",
+    "display_name",
+    "goals",
+    "specialization_competencies",
+    "onboarding",
+    "baseline_assessment_id",
+    "self_report"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,146 @@
+schema_version: '1.0'
+data_class: fixture
+id: TASK-map-demo
+created_at: '2026-09-10T08:30:00Z'
+author:
+  id: ACTOR-demo-team-lead
+  role: team-lead
+title: Map a request boundary with source citations
+project_id: spring-petclinic-microservices
+type: TRAINING
+status: completed
+problem: A new contributor needs an explainable map of a request boundary.
+context: Synthetic exercise; artifacts illustrate protocol fields and are not actual
+  repository investigation.
+impact: Practice source-backed explanations.
+acceptance_criteria:
+- id: AC-map
+  criterion: Identify two components and explain a boundary with inspectable citations.
+constraints:
+- No service behavior change.
+- Design waived because this is bounded documentation-only investigation.
+primary_competencies:
+- core.codebase-navigation
+secondary_competencies:
+- core.technical-communication
+recommended_level: E0
+scope:
+  classification: cross-component
+  components:
+  - gateway
+  - customers-service
+  description: Synthetic navigation exercise across two boundaries; no production
+    claim.
+difficulty: bounded
+investigation_areas:
+- Find entry points and boundary ownership without assuming README is exhaustive.
+testing_expectations:
+- Inspect citations and challenge one boundary assumption.
+documentation_requirements:
+- Learner-authored map and uncertainty note.
+assigned_by:
+  id: ACTOR-demo-team-lead
+  role: team-lead
+assistance_history:
+- at: '2026-09-10T08:40:00Z'
+  actor:
+    id: ACTOR-demo-peer-engineer
+    role: peer-engineer
+  level: 1
+  competencies:
+  - core.codebase-navigation
+  description: Synthetic peer points learner toward the upstream README; does not
+    supply the map.
+  artifact:
+    uri: workspace:/.apprenticeship/knowledge/demo-artifacts.md#assistance
+    revision: fixture-v1
+    description: Synthetic assistance; not an actual learner run.
+design_required: false
+code_review_required: true
+blocked_reason: null
+completion_evidence_ids:
+- EVID-map-demo
+validation:
+- criterion_id: AC-map
+  result: pass
+  artifact:
+    uri: workspace:/.apprenticeship/knowledge/demo-artifacts.md#validation
+    revision: fixture-v1
+    description: Synthetic validation; not an actual learner run.
+  checked_at: '2026-09-10T09:45:00Z'
+  work_revision: fixture-v1
+transitions:
+- from: absent
+  to: backlog
+  at: '2026-09-10T08:30:00Z'
+  actor:
+    id: ACTOR-demo-team-lead
+    role: team-lead
+  reason: Synthetic protocol progression; see demo artifacts.
+- from: backlog
+  to: assigned
+  at: '2026-09-10T08:31:00Z'
+  actor:
+    id: ACTOR-demo-team-lead
+    role: team-lead
+  reason: Synthetic protocol progression; see demo artifacts.
+- from: assigned
+  to: investigating
+  at: '2026-09-10T08:35:00Z'
+  actor:
+    id: ACTOR-demo-learner
+    role: learner
+  reason: Synthetic protocol progression; see demo artifacts.
+- from: investigating
+  to: implementing
+  at: '2026-09-10T09:00:00Z'
+  actor:
+    id: ACTOR-demo-learner
+    role: learner
+  reason: Documentation design waived as declared in constraints.
+- from: implementing
+  to: testing
+  at: '2026-09-10T09:15:00Z'
+  actor:
+    id: ACTOR-demo-learner
+    role: learner
+  reason: Synthetic protocol progression; see demo artifacts.
+- from: testing
+  to: code-review
+  at: '2026-09-10T09:25:00Z'
+  actor:
+    id: ACTOR-demo-team-lead
+    role: team-lead
+  reason: Synthetic protocol progression; see demo artifacts.
+- from: code-review
+  to: validating
+  at: '2026-09-10T09:40:00Z'
+  actor:
+    id: ACTOR-demo-team-lead
+    role: team-lead
+  reason: Synthetic protocol progression; see demo artifacts.
+- from: validating
+  to: task-review
+  at: '2026-09-10T09:50:00Z'
+  actor:
+    id: ACTOR-demo-team-lead
+    role: team-lead
+  reason: Synthetic protocol progression; see demo artifacts.
+- from: task-review
+  to: evidence-recording
+  at: '2026-09-10T10:00:00Z'
+  actor:
+    id: ACTOR-demo-team-lead
+    role: team-lead
+  reason: Synthetic protocol progression; see demo artifacts.
+- from: evidence-recording
+  to: completed
+  at: '2026-09-10T10:10:00Z'
+  actor:
+    id: ACTOR-demo-team-lead
+    role: team-lead
+  reason: Synthetic protocol progression; see demo artifacts.
+work_artifact:
+  uri: workspace:/.apprenticeship/knowledge/demo-artifacts.md#map
+  revision: fixture-v1
+  description: Synthetic map; not an actual learner run.

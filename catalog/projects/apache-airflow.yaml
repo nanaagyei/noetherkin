@@ -1,0 +1,83 @@
+{
+  "schema_version": "3.0",
+  "data_class": "live",
+  "id": "apache-airflow",
+  "name": "Apache Airflow",
+  "repository_url": "https://github.com/apache/airflow",
+  "upstream_organization": "apache",
+  "description": "Upstream Apache Airflow repository recorded as an advisory learning candidate. Entry metadata is editorial guidance and does not imply upstream endorsement.",
+  "primary_languages": [
+    "Python"
+  ],
+  "technologies": [
+    "Repository-specific"
+  ],
+  "engineering_domains": [
+    "data"
+  ],
+  "competencies": [
+    "core.codebase-navigation",
+    "core.testing",
+    "data.orchestration",
+    "data.batch-streaming"
+  ],
+  "recommended_minimum_level": "E2",
+  "ideal_level": "E3",
+  "prerequisites": [
+    "Ability to follow the repository build instructions and run a focused validation loop"
+  ],
+  "difficulty": "complex",
+  "onboarding_cost": "high",
+  "feedback_loop": "slow",
+  "contribution_readiness": {
+    "status": "unverified",
+    "signals": [
+      "Contribution entry points were not independently verified for this catalog release."
+    ],
+    "limitations": [
+      "Contribution entry points were not independently verified for this catalog release."
+    ]
+  },
+  "onboarding_areas": [
+    "Repository documentation",
+    "Source layout",
+    "Tests and contribution workflow"
+  ],
+  "learning_paths": [
+    {
+      "name": "Repository investigation",
+      "competencies": [
+        "core.codebase-navigation",
+        "data.orchestration"
+      ],
+      "activities": [
+        "Map one behavior using source citations.",
+        "Identify and run the narrowest documented validation loop."
+      ]
+    }
+  ],
+  "deployment": null,
+  "contribution": null,
+  "status": "candidate",
+  "caveats": [
+    "Difficulty, onboarding cost, feedback loop, and level fit are editorial guidance, not upstream endorsements or E-level gates.",
+    "Candidate metadata does not claim task-pack support or live simulator task support."
+  ],
+  "sources": [
+    {
+      "uri": "https://github.com/apache/airflow",
+      "description": "Repository identity and upstream provenance.",
+      "revision": "catalog-observation-2026-09-17"
+    }
+  ],
+  "checked_at": "2026-09-17T12:00:00Z",
+  "metadata_gaps": [
+    "contribution_readiness",
+    "deployment",
+    "contribution"
+  ],
+  "support": {
+    "attachable": true,
+    "task_packs": []
+  }
+}

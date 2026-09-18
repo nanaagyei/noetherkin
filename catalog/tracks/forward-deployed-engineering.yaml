@@ -1,0 +1,33 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "forward-deployed-engineering",
+  "name": "Forward Deployed Engineering",
+  "description": "A curated forward deployed engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex forward deployed engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "product.requirements-discovery",
+    "product.integration-delivery",
+    "product.outcome-validation",
+    "design.api-design",
+    "data.quality",
+    "production.deployment",
+    "production.observability"
+  ],
+  "recommended_projects": {
+    "early": [
+      "opentelemetry-demo",
+      "airbyte"
+    ],
+    "intermediate": [
+      "backstage",
+      "apache-superset"
+    ],
+    "advanced": [
+      "kserve",
+      "sample-eks-inference-platform"
+    ]
+  }
+}

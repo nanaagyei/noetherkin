@@ -1,0 +1,21 @@
+schema_version: '1.0'
+data_class: fixture
+id: REV-performance-demo
+created_at: '2026-09-10T11:00:00Z'
+author:
+  id: ACTOR-demo-manager
+  role: manager
+kind: performance
+subject_id: LEARNER-demo
+evidence_ids:
+- EVID-map-demo
+assessment_ids:
+- ASM-navigation-demo
+period:
+  start: '2026-09-10T08:30:00Z'
+  end: '2026-09-10T11:00:00Z'
+findings:
+- Synthetic guided navigation is bounded evidence; it does not prove independent implementation
+  or production operation.
+outcome: insufficient-evidence
+supersedes: null

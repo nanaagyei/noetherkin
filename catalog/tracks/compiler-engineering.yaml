@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "compiler-engineering",
+  "name": "Compiler Engineering",
+  "description": "A curated compiler engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex compiler engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "compiler.parsing-lowering",
+    "compiler.optimization",
+    "compiler.codegen",
+    "cpp.memory"
+  ],
+  "recommended_projects": {
+    "early": [
+      "rust-clippy",
+      "ruff"
+    ],
+    "intermediate": [
+      "triton",
+      "jax"
+    ],
+    "advanced": [
+      "llvm-project",
+      "pytorch"
+    ]
+  }
+}

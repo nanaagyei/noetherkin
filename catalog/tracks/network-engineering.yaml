@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "network-engineering",
+  "name": "Network Engineering",
+  "description": "A curated network engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex network engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "network.protocols",
+    "network.routing-proxying",
+    "network.tls",
+    "backend.networking"
+  ],
+  "recommended_projects": {
+    "early": [
+      "caddy",
+      "coredns"
+    ],
+    "intermediate": [
+      "opentelemetry-demo",
+      "envoy"
+    ],
+    "advanced": [
+      "kubernetes",
+      "etcd"
+    ]
+  }
+}

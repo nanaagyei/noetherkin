@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "full-stack-engineering",
+  "name": "Full-Stack Engineering",
+  "description": "A curated full-stack engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex full-stack engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "fullstack.end-to-end-delivery",
+    "frontend.web-platform",
+    "backend.http-api",
+    "backend.databases"
+  ],
+  "recommended_projects": {
+    "early": [
+      "fastapi",
+      "astro"
+    ],
+    "intermediate": [
+      "django",
+      "opentelemetry-demo"
+    ],
+    "advanced": [
+      "cockroachdb",
+      "kubernetes"
+    ]
+  }
+}

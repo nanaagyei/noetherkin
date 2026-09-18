@@ -1,0 +1,470 @@
+schema_version: '1.0'
+catalog_version: '1.0'
+competencies:
+- id: core.codebase-navigation
+  domain: core
+  name: codebase navigation
+  observable_behavior: Trace an unfamiliar request to source and explain component
+    boundaries.
+  required_core: true
+- id: core.implementation
+  domain: core
+  name: implementation
+  observable_behavior: Implement a scoped change and explain correctness and failure
+    behavior.
+  required_core: true
+- id: core.debugging
+  domain: core
+  name: debugging
+  observable_behavior: Form and test causal hypotheses against a reproducible failure.
+  required_core: true
+- id: core.testing
+  domain: core
+  name: testing
+  observable_behavior: Choose tests that expose plausible defects and explain their
+    limits.
+  required_core: true
+- id: core.technical-communication
+  domain: core
+  name: technical communication
+  observable_behavior: Explain decisions with artifacts, audience context and unresolved
+    uncertainty.
+  required_core: true
+- id: core.ownership
+  domain: core
+  name: ownership
+  observable_behavior: Follow work through validation and communicate risks and unfinished
+    obligations.
+  required_core: true
+- id: core.git
+  domain: core
+  name: git
+  observable_behavior: Create reviewable history and safely resolve conflicting changes.
+  required_core: true
+- id: design.api-design
+  domain: design
+  name: api design
+  observable_behavior: Define API behavior including errors and compatibility.
+  required_core: false
+- id: design.abstraction
+  domain: design
+  name: abstraction
+  observable_behavior: Choose a boundary and defend its cost against a simpler alternative.
+  required_core: false
+- id: design.data-modeling
+  domain: design
+  name: data modeling
+  observable_behavior: Model identity, constraints and evolution of persisted data.
+  required_core: false
+- id: design.system-design
+  domain: design
+  name: system design
+  observable_behavior: Decompose a system using workload and failure assumptions.
+  required_core: false
+- id: design.architecture
+  domain: design
+  name: architecture
+  observable_behavior: Explain system boundaries and plan changes across them.
+  required_core: false
+- id: design.tradeoff-analysis
+  domain: design
+  name: tradeoff analysis
+  observable_behavior: Compare concrete alternatives against stated constraints.
+  required_core: false
+- id: backend.http-api
+  domain: backend
+  name: http api
+  observable_behavior: Trace HTTP requests including status, headers and failure paths.
+  required_core: false
+- id: backend.databases
+  domain: backend
+  name: databases
+  observable_behavior: Explain query behavior, indexes and transactional boundaries.
+  required_core: false
+- id: backend.caching
+  domain: backend
+  name: caching
+  observable_behavior: Choose invalidation and freshness rules and test stale data
+    behavior.
+  required_core: false
+- id: backend.authentication-authorization
+  domain: backend
+  name: authentication authorization
+  observable_behavior: Distinguish identity verification from permission checks and
+    test denial paths.
+  required_core: false
+- id: backend.concurrency
+  domain: backend
+  name: concurrency
+  observable_behavior: Identify shared state and test ordering and race assumptions.
+  required_core: false
+- id: backend.queues-messaging
+  domain: backend
+  name: queues messaging
+  observable_behavior: Handle message delivery, retries and poison messages.
+  required_core: false
+- id: backend.networking
+  domain: backend
+  name: networking
+  observable_behavior: Diagnose connection, naming and timeout failures at service
+    boundaries.
+  required_core: false
+- id: distributed.consistency
+  domain: distributed
+  name: consistency
+  observable_behavior: State read/write guarantees and demonstrate an anomaly.
+  required_core: false
+- id: distributed.replication
+  domain: distributed
+  name: replication
+  observable_behavior: Explain replica lag and recovery under node loss.
+  required_core: false
+- id: distributed.partitioning
+  domain: distributed
+  name: partitioning
+  observable_behavior: Choose partition keys and diagnose skew.
+  required_core: false
+- id: distributed.transactions
+  domain: distributed
+  name: transactions
+  observable_behavior: Define atomicity boundaries and test partial failure.
+  required_core: false
+- id: distributed.consensus
+  domain: distributed
+  name: consensus
+  observable_behavior: Explain agreement and availability under failure assumptions.
+  required_core: false
+- id: distributed.idempotency
+  domain: distributed
+  name: idempotency
+  observable_behavior: Demonstrate safe duplicate requests or messages.
+  required_core: false
+- id: distributed.failure-recovery
+  domain: distributed
+  name: failure recovery
+  observable_behavior: Restore service after partial failure without hiding data loss.
+  required_core: false
+- id: distributed.backpressure
+  domain: distributed
+  name: backpressure
+  observable_behavior: Bound queues and explain overload propagation.
+  required_core: false
+- id: production.logging
+  domain: production
+  name: logging
+  observable_behavior: Record actionable context while excluding secrets.
+  required_core: false
+- id: production.metrics
+  domain: production
+  name: metrics
+  observable_behavior: Choose measurements tied to behavior and explain aggregation
+    limits.
+  required_core: false
+- id: production.tracing
+  domain: production
+  name: tracing
+  observable_behavior: Connect spans to explain a request across boundaries.
+  required_core: false
+- id: production.observability
+  domain: production
+  name: observability
+  observable_behavior: Combine signals to distinguish competing failure hypotheses.
+  required_core: false
+- id: production.reliability
+  domain: production
+  name: reliability
+  observable_behavior: Define reliability targets and test a degradation scenario.
+  required_core: false
+- id: production.incident-response
+  domain: production
+  name: incident response
+  observable_behavior: Triage impact, mitigate and document incident learning.
+  required_core: false
+- id: production.performance
+  domain: production
+  name: performance
+  observable_behavior: Measure a bottleneck with reproducible workloads and uncertainty.
+  required_core: false
+- id: production.deployment
+  domain: production
+  name: deployment
+  observable_behavior: Plan release verification and rollback.
+  required_core: false
+- id: production.ci-cd
+  domain: production
+  name: ci cd
+  observable_behavior: Build checks that detect bad changes and preserve diagnostics.
+  required_core: false
+- id: platform.containers
+  domain: platform
+  name: containers
+  observable_behavior: Explain isolation and resource limits of a containerized process.
+  required_core: false
+- id: platform.docker
+  domain: platform
+  name: docker
+  observable_behavior: Build and inspect a reproducible image and diagnose startup
+    failure.
+  required_core: false
+- id: platform.kubernetes
+  domain: platform
+  name: kubernetes
+  observable_behavior: Explain workload reconciliation and diagnose scheduling or
+    rollout failure.
+  required_core: false
+- id: platform.infrastructure-as-code
+  domain: platform
+  name: infrastructure as code
+  observable_behavior: Review infrastructure plans and detect drift without unauthorized
+    mutation.
+  required_core: false
+- id: platform.aws
+  domain: platform
+  name: aws
+  observable_behavior: Explain AWS service boundaries, access and cost for a scoped
+    design.
+  required_core: false
+- id: platform.azure
+  domain: platform
+  name: azure
+  observable_behavior: Explain Azure service boundaries, access and cost for a scoped
+    design.
+  required_core: false
+- id: platform.autoscaling
+  domain: platform
+  name: autoscaling
+  observable_behavior: Choose a scaling signal and test lag or oscillation.
+  required_core: false
+- id: platform.networking
+  domain: platform
+  name: networking
+  observable_behavior: Trace connectivity across platform routing and policy boundaries.
+  required_core: false
+- id: python.language
+  domain: python
+  name: language
+  observable_behavior: Explain Python object and execution semantics in a change.
+  required_core: false
+- id: python.packaging
+  domain: python
+  name: packaging
+  observable_behavior: Build a reproducible package with explicit dependencies.
+  required_core: false
+- id: python.typing
+  domain: python
+  name: typing
+  observable_behavior: Use types to expose contract mistakes and explain runtime limits.
+  required_core: false
+- id: python.async
+  domain: python
+  name: async
+  observable_behavior: Reason about cancellation and blocking in asynchronous execution.
+  required_core: false
+- id: python.testing
+  domain: python
+  name: testing
+  observable_behavior: Design Python tests with controlled fixtures and meaningful
+    failure cases.
+  required_core: false
+- id: python.performance
+  domain: python
+  name: performance
+  observable_behavior: Profile Python work before changing algorithms or execution
+    strategy.
+  required_core: false
+- id: java.language
+  domain: java
+  name: language
+  observable_behavior: Explain Java types and control flow in a scoped change.
+  required_core: false
+- id: java.jvm
+  domain: java
+  name: jvm
+  observable_behavior: Relate runtime behavior to JVM memory, compilation or garbage
+    collection.
+  required_core: false
+- id: java.concurrency
+  domain: java
+  name: concurrency
+  observable_behavior: Diagnose shared-state and executor behavior.
+  required_core: false
+- id: java.spring
+  domain: java
+  name: spring
+  observable_behavior: Explain Spring dependency wiring and lifecycle.
+  required_core: false
+- id: java.spring-boot
+  domain: java
+  name: spring boot
+  observable_behavior: Trace Spring Boot configuration and startup behavior.
+  required_core: false
+- id: java.persistence
+  domain: java
+  name: persistence
+  observable_behavior: Explain ORM queries and transaction boundaries.
+  required_core: false
+- id: cpp.memory
+  domain: cpp
+  name: memory
+  observable_behavior: Trace allocation, lifetime and invalid access.
+  required_core: false
+- id: cpp.raii
+  domain: cpp
+  name: raii
+  observable_behavior: Use ownership and destructors to manage resources on failure
+    paths.
+  required_core: false
+- id: cpp.templates
+  domain: cpp
+  name: templates
+  observable_behavior: Explain template constraints and instantiation errors.
+  required_core: false
+- id: cpp.concurrency
+  domain: cpp
+  name: concurrency
+  observable_behavior: Reason about synchronization and memory ordering.
+  required_core: false
+- id: cpp.build-tooling
+  domain: cpp
+  name: build tooling
+  observable_behavior: Diagnose compilation, linking and dependency configuration.
+  required_core: false
+- id: cpp.performance
+  domain: cpp
+  name: performance
+  observable_behavior: Profile C++ workloads and verify optimization correctness.
+  required_core: false
+- id: go.idioms
+  domain: go
+  name: idioms
+  observable_behavior: Explain Go interfaces, errors and composition choices.
+  required_core: false
+- id: go.concurrency
+  domain: go
+  name: concurrency
+  observable_behavior: Bound goroutine lifetime and diagnose channel or synchronization
+    failures.
+  required_core: false
+- id: go.networking
+  domain: go
+  name: networking
+  observable_behavior: Handle connection lifetime, deadlines and cancellation.
+  required_core: false
+- id: go.services
+  domain: go
+  name: services
+  observable_behavior: Build service boundaries with explicit failure handling.
+  required_core: false
+- id: go.controllers-operators
+  domain: go
+  name: controllers operators
+  observable_behavior: Explain reconciliation and repeated execution under partial
+    failure.
+  required_core: false
+- id: ml.data-pipelines
+  domain: ml
+  name: data pipelines
+  observable_behavior: Inspect data distribution, leakage and lineage before transformation.
+  required_core: false
+- id: ml.experimentation
+  domain: ml
+  name: experimentation
+  observable_behavior: Compare a hypothesis against a credible baseline with controlled
+    variables.
+  required_core: false
+- id: ml.evaluation
+  domain: ml
+  name: evaluation
+  observable_behavior: Choose metrics tied to decisions and probe misleading aggregate
+    results.
+  required_core: false
+- id: ml.training
+  domain: ml
+  name: training
+  observable_behavior: Justify objective and optimization choices using observed training
+    behavior.
+  required_core: false
+- id: ml.experiment-tracking
+  domain: ml
+  name: experiment tracking
+  observable_behavior: Record configurations and artifacts needed to reproduce an
+    experiment.
+  required_core: false
+- id: ml.model-lifecycle
+  domain: ml
+  name: model lifecycle
+  observable_behavior: Manage model versions and detect degradation across release
+    stages.
+  required_core: false
+- id: ml.serving
+  domain: ml
+  name: serving
+  observable_behavior: Measure prediction behavior under realistic serving constraints.
+  required_core: false
+- id: llm.transformer-inference
+  domain: llm
+  name: transformer inference
+  observable_behavior: Explain transformer inference compute and memory costs.
+  required_core: false
+- id: llm.batching
+  domain: llm
+  name: batching
+  observable_behavior: Measure batch policy effects on latency and utilization.
+  required_core: false
+- id: llm.kv-caching
+  domain: llm
+  name: kv caching
+  observable_behavior: Explain cache growth, reuse and eviction correctness.
+  required_core: false
+- id: llm.scheduling
+  domain: llm
+  name: scheduling
+  observable_behavior: Compare request scheduling under mixed workloads.
+  required_core: false
+- id: llm.model-loading
+  domain: llm
+  name: model loading
+  observable_behavior: Diagnose model weight loading and memory constraints.
+  required_core: false
+- id: llm.latency-throughput
+  domain: llm
+  name: latency throughput
+  observable_behavior: Measure latency distributions and throughput under stated load.
+  required_core: false
+- id: llm.distributed-inference
+  domain: llm
+  name: distributed inference
+  observable_behavior: Explain communication and partitioning costs across inference
+    workers.
+  required_core: false
+- id: gpu.architecture
+  domain: gpu
+  name: architecture
+  observable_behavior: Relate execution behavior to GPU compute organization.
+  required_core: false
+- id: gpu.memory-hierarchy
+  domain: gpu
+  name: memory hierarchy
+  observable_behavior: Measure memory access effects across the GPU hierarchy.
+  required_core: false
+- id: gpu.cuda
+  domain: gpu
+  name: cuda
+  observable_behavior: Explain CUDA execution, synchronization and error behavior.
+  required_core: false
+- id: gpu.kernel-design
+  domain: gpu
+  name: kernel design
+  observable_behavior: Design a kernel with explicit indexing and correctness checks.
+  required_core: false
+- id: gpu.profiling
+  domain: gpu
+  name: profiling
+  observable_behavior: Use profiler evidence to isolate GPU bottlenecks.
+  required_core: false
+- id: gpu.optimization
+  domain: gpu
+  name: optimization
+  observable_behavior: Validate speed changes against numerical correctness and workload
+    coverage.
+  required_core: false

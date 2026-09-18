@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "mobile-engineering",
+  "name": "Mobile Engineering",
+  "description": "A curated mobile engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex mobile engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "mobile.platform-integration",
+    "mobile.performance",
+    "mobile.release",
+    "frontend.state-management"
+  ],
+  "recommended_projects": {
+    "early": [
+      "expo",
+      "react-native"
+    ],
+    "intermediate": [
+      "flutter",
+      "playwright"
+    ],
+    "advanced": [
+      "react-native",
+      "flutter"
+    ]
+  }
+}

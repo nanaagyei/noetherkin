@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "data-engineering",
+  "name": "Data Engineering",
+  "description": "A curated data engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex data engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "data.sql",
+    "data.quality",
+    "data.orchestration",
+    "data.batch-streaming"
+  ],
+  "recommended_projects": {
+    "early": [
+      "duckdb",
+      "dbt-core"
+    ],
+    "intermediate": [
+      "dagster",
+      "airbyte"
+    ],
+    "advanced": [
+      "apache-airflow",
+      "openmetadata"
+    ]
+  }
+}

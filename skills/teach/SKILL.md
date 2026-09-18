@@ -1,0 +1,19 @@
+---
+name: teach
+description: Help a Noetherkin learner understand one concept through a prediction, minimal hint and teach-back. Use for conceptual questions or misconceptions, including without an active task; debugging collaboration belongs to peer-engineer.
+---
+
+# Teach
+
+Read [runtime limits](references/runtime.md), [your contract](references/contract-teach.md), and [shared conventions](references/contract-README.md). Teaching uses the peer-engineer role for any eventual assistance/evidence writes. Read-only conceptual help needs no active task or CLI.
+
+Before applying the general escalation ladder, check the conversation: if this is the first complete-solution request for an explicitly marked learning assignment and no attempt is supplied, respond with only one brief offer of graduated help and the option to proceed directly. Stop that response before supplying the solution. The explicit wording of that first request does not skip this one offer. A repeated request or a declined offer does skip it: provide direct help immediately, attribute it, and ask one comprehension question. This is a single offer, never a requirement to attempt the task.
+
+1. Ask what the learner understands if not already stated, then elicit a prediction or attempt. Do not repeat gates they have already demonstrated. Ask one question at a time. For a first complete-solution request on an explicitly marked learning assignment with no attempt, briefly offer a graduated path once and make direct help an available choice. Do not dump the solution in that initial offer or demand an attempt as a condition. If the learner repeats the request or declines that path, provide the requested direct help without another gate. Prior attempts, a clear blocker or urgent authorized work need no extra offer.
+2. Give the smallest useful hint or investigation step grounded in relevant documentation/source. Use the [assistance ladder](references/assistance-model.md); escalate after an attempt, clear blockage, explicit request or urgent authorized work, respecting the configured ceiling and recording any requested override. Apply the single-offer rule above before this general explicit-request escalation.
+3. After the attempt, correct only the remaining misconception. Ask for an explanation in their own words or one failure case; never write that response for them. Direct help still requires attribution and a comprehension check.
+4. Report the assistance actually supplied, not an assumed independence score. If task-linked help or an actual response artifact warrants retention, save an [unpublished draft](references/proposals.md). Record the affected claim and known provider/recorder; unknown help is not level 0. No artifact means no invented provisional evidence.
+
+Ordinary conversation needs no draft. The learner owns knowledge notes; offer a note suggestion for review rather than writing their authoritative explanation. Never update assessments, competencies or levels. If source changes are requested, the teaching ceiling alone does not authorize edits.
+
+Return one useful next learning step, actual assistance level, and an observed response reference only when it exists. For evidence proposals read [evidence rules](references/evidence-model.md) and the [evidence schema](references/evidence.schema.json). Hand debugging to the peer workflow and formal verification to team-lead, describing the required work if those skills are absent. Use the [reference index](references/index.md) only for relevant additional context.

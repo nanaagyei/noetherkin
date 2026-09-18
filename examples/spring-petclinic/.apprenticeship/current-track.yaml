@@ -1,0 +1,12 @@
+{
+  "schema_version": "3.0",
+  "data_class": "fixture",
+  "track_id": null,
+  "track_catalog_version": null,
+  "definition_digest": null,
+  "selected_at": null,
+  "alignment_status": "unselected",
+  "adopted_competencies": [],
+  "scope_agreement": null,
+  "aligned_at": null
+}

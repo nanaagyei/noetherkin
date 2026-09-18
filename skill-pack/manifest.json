@@ -1,0 +1,50 @@
+{
+  "format_version": 2,
+  "protocol_version": "3.0",
+  "shared_sources": [
+    "FOUNDATION_V1.md", "PROJECT_CHARTER.md", "OPEN_QUESTIONS.md",
+    "docs/cli.md",
+    "docs/architecture/overview.md", "docs/architecture/assistance-model.md",
+    "docs/architecture/permissions-model.md", "docs/architecture/state-model.md",
+    "docs/architecture/simulation-lifecycle.md", "docs/architecture/evidence-model.md",
+    "docs/architecture/competency-model.md", "docs/architecture/leveling-framework.md",
+    "docs/architecture/review-model.md", "docs/architecture/judgment-validity.md",
+    "docs/architecture/architectural-invariants.md", "docs/architecture/conformance.md",
+    "contracts/README.md",
+    "schemas/apprenticeship-config.schema.json", "schemas/learner-profile.schema.json",
+    "schemas/current-project.schema.json", "schemas/current-track.schema.json", "schemas/track.schema.json", "schemas/project.schema.json", "schemas/task.schema.json",
+    "schemas/evidence.schema.json", "schemas/assessment.schema.json", "schemas/review.schema.json",
+    "schemas/competency-state.schema.json", "catalog/competencies.yaml", "catalog/levels.yaml",
+    "skill-pack/runtime.md", "skill-pack/proposals.md", "skill-pack/proposal.md"
+  ],
+  "skills": [
+    {"name":"onboarding","sources":["contracts/onboarding.md","contracts/team-lead.md"]},
+    {"name":"projects","sources":["contracts/projects.md","contracts/onboarding.md","contracts/task-assignment.md"]},
+    {"name":"task-assignment","sources":["contracts/task-assignment.md","contracts/manager.md","contracts/team-lead.md"]},
+    {"name":"teach","sources":["contracts/teach.md","contracts/peer-engineer.md","contracts/team-lead.md"]},
+    {"name":"peer-engineer","sources":["contracts/peer-engineer.md","contracts/teach.md","contracts/code-review.md","contracts/team-lead.md"]},
+    {"name":"code-review","sources":["contracts/code-review.md","contracts/peer-engineer.md","contracts/team-lead.md"]},
+    {"name":"team-lead","sources":["contracts/team-lead.md","contracts/task-assignment.md","contracts/code-review.md","contracts/manager.md"]},
+    {"name":"manager","sources":["contracts/manager.md","contracts/performance-review.md","contracts/team-lead.md","contracts/task-assignment.md","contracts/promotion-review.md"]},
+    {"name":"codebase-map","sources":["contracts/codebase-map.md","contracts/peer-engineer.md","contracts/architecture.md","contracts/debug.md"]},
+    {"name":"debug","sources":["contracts/debug.md","contracts/peer-engineer.md","contracts/teach.md","contracts/code-review.md"]},
+    {"name":"architecture","sources":["contracts/architecture.md","contracts/codebase-map.md","contracts/design-review.md"]},
+    {"name":"design-review","sources":["contracts/design-review.md","contracts/architecture.md","contracts/team-lead.md"]},
+    {"name":"benchmarks","sources":["contracts/benchmarks.md","contracts/debug.md","contracts/team-lead.md"]},
+    {"name":"user-agent","sources":["contracts/user-agent.md","contracts/task-assignment.md","contracts/production-readiness.md"]},
+    {"name":"production-readiness","sources":["contracts/production-readiness.md","contracts/team-lead.md","contracts/incident-response.md"]},
+    {"name":"incident-response","sources":["contracts/incident-response.md","contracts/debug.md","contracts/production-readiness.md","contracts/team-lead.md"]},
+    {"name":"performance-review","sources":["contracts/performance-review.md","contracts/manager.md","contracts/team-lead.md","contracts/promotion-review.md","contracts/performance-improvement-plan.md"]},
+    {"name":"promotion-review","sources":["contracts/promotion-review.md","contracts/performance-review.md","contracts/manager.md","contracts/team-lead.md"]},
+    {"name":"performance-improvement-plan","sources":["contracts/performance-improvement-plan.md","contracts/performance-review.md","contracts/task-assignment.md"]},
+    {"name":"resume-evidence","sources":["contracts/resume-evidence.md","contracts/performance-review.md","contracts/team-lead.md"]},
+    {"name":"retrospective","sources":["contracts/retrospective.md","contracts/performance-review.md","contracts/peer-engineer.md"]}
+  ],
+  "context_only_links": {
+    "SPEC.md": "Repository index; required protocol documents are bundled directly.",
+    "archive/protocol-1.0/FOUNDATION_V1.md": "Historical protocol 1.0, not current authority.",
+    "archive/protocol-1.0/REDACTION_NOTICE.md": "Public archive boundary note; not required at skill runtime.",
+    "FOUNDATION_CHANGELOG.md": "Freeze decision history; adopted semantics are in the bundled architecture documents.",
+    "evaluations/VALIDATION_REPORT.md": "Historical specification validation report, not a runtime capability."
+  }
+}

@@ -1,0 +1,21 @@
+schema_version: '1.0'
+data_class: fixture
+id: ASM-navigation-demo
+created_at: '2026-09-10T10:15:00Z'
+author:
+  id: ACTOR-demo-team-lead
+  role: team-lead
+kind: technical
+learner_id: LEARNER-demo
+project_id: spring-petclinic-microservices
+evidence_ids:
+- EVID-map-demo
+findings:
+- competency_id: core.codebase-navigation
+  status: demonstrated
+  demonstrated_level: E0
+  evidence_ids:
+  - EVID-map-demo
+  rationale: A guided boundary explanation matches the E0 navigation expectation in
+    this fixture.
+supersedes: null

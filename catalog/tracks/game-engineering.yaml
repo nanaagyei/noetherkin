@@ -1,0 +1,30 @@
+{
+  "schema_version": "3.0",
+  "catalog_version": "1.1",
+  "id": "game-engineering",
+  "name": "Game Engineering",
+  "description": "A curated game engineering path that guides competency scope and project discovery without granting capability.",
+  "outcomes": [
+    "Build and explain increasingly complex game engineering systems using attributable evidence."
+  ],
+  "required_competencies": [
+    "game.engine-architecture",
+    "game.rendering",
+    "game.performance",
+    "cpp.memory"
+  ],
+  "recommended_projects": {
+    "early": [
+      "pygame",
+      "raylib"
+    ],
+    "intermediate": [
+      "bevy",
+      "godot"
+    ],
+    "advanced": [
+      "llvm-project",
+      "cuda-samples"
+    ]
+  }
+}

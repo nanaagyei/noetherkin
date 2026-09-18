@@ -1,0 +1,87 @@
+{
+  "schema_version": "3.0",
+  "data_class": "live",
+  "id": "textlint",
+  "name": "textlint",
+  "repository_url": "https://github.com/textlint/textlint",
+  "upstream_organization": "textlint",
+  "description": "Upstream textlint repository recorded as an advisory learning candidate. Entry metadata is editorial guidance and does not imply upstream endorsement.",
+  "primary_languages": [
+    "TypeScript"
+  ],
+  "technologies": [
+    "Repository-specific"
+  ],
+  "engineering_domains": [
+    "tooling"
+  ],
+  "competencies": [
+    "core.codebase-navigation",
+    "core.testing",
+    "tooling.static-analysis",
+    "quality.automation"
+  ],
+  "recommended_minimum_level": "E0",
+  "ideal_level": "E1",
+  "prerequisites": [
+    "Ability to follow the repository build instructions and run a focused validation loop"
+  ],
+  "difficulty": "bounded",
+  "onboarding_cost": "low",
+  "feedback_loop": "fast",
+  "contribution_readiness": {
+    "status": "verified",
+    "signals": [
+      "The upstream contribution guide recommends good-first issues to new contributors."
+    ],
+    "limitations": [
+      "Issue suitability and maintainer availability can change after the catalog check."
+    ]
+  },
+  "onboarding_areas": [
+    "Repository documentation",
+    "Source layout",
+    "Tests and contribution workflow"
+  ],
+  "learning_paths": [
+    {
+      "name": "Repository investigation",
+      "competencies": [
+        "core.codebase-navigation",
+        "tooling.static-analysis"
+      ],
+      "activities": [
+        "Map one behavior using source citations.",
+        "Identify and run the narrowest documented validation loop."
+      ]
+    }
+  ],
+  "deployment": null,
+  "contribution": null,
+  "status": "candidate",
+  "caveats": [
+    "Difficulty, onboarding cost, feedback loop, and level fit are editorial guidance, not upstream endorsements or E-level gates.",
+    "Candidate metadata does not claim task-pack support or live simulator task support."
+  ],
+  "sources": [
+    {
+      "uri": "https://github.com/textlint/textlint",
+      "description": "Repository identity and upstream provenance.",
+      "revision": "catalog-observation-2026-09-17"
+    },
+    {
+      "uri": "https://github.com/textlint/textlint/blob/master/docs/CONTRIBUTING.md",
+      "description": "The upstream contribution guide recommends good-first issues to new contributors.",
+      "revision": "catalog-observation-2026-09-17"
+    }
+  ],
+  "checked_at": "2026-09-17T12:00:00Z",
+  "metadata_gaps": [
+    "deployment",
+    "contribution"
+  ],
+  "support": {
+    "attachable": true,
+    "task_packs": []
+  }
+}

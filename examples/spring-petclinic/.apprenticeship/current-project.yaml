@@ -1,0 +1,8 @@
+{
+  "schema_version": "2.0",
+  "data_class": "fixture",
+  "project_id": "spring-petclinic-microservices",
+  "source_path": "source",
+  "source_revision": "fixture-v1-no-checkout",
+  "selected_at": "2026-09-10T08:20:00Z"
+}

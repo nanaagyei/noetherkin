@@ -1,0 +1,82 @@
+{
+  "schema_version": "3.0",
+  "data_class": "live",
+  "id": "jax",
+  "name": "Jax",
+  "repository_url": "https://github.com/jax-ml/jax",
+  "upstream_organization": "jax-ml",
+  "description": "Upstream Jax repository recorded as a track candidate; detailed simulator fit remains subject to maintainer verification.",
+  "primary_languages": [
+    "Python"
+  ],
+  "technologies": [
+    "Repository-specific"
+  ],
+  "engineering_domains": [
+    "ml"
+  ],
+  "competencies": [
+    "core.codebase-navigation",
+    "core.testing",
+    "ml.training"
+  ],
+  "recommended_minimum_level": "E2",
+  "ideal_level": "E3",
+  "prerequisites": [
+    "Ability to follow the repository build instructions and run a focused validation loop"
+  ],
+  "difficulty": "complex",
+  "onboarding_areas": [
+    "Repository documentation",
+    "Source layout",
+    "Tests and contribution workflow"
+  ],
+  "learning_paths": [
+    {
+      "name": "Repository investigation",
+      "competencies": [
+        "core.codebase-navigation",
+        "ml.training"
+      ],
+      "activities": [
+        "Map one behavior using source citations.",
+        "Identify and run the narrowest documented validation loop."
+      ]
+    }
+  ],
+  "deployment": null,
+  "contribution": null,
+  "status": "candidate",
+  "caveats": [
+    "Candidate metadata does not claim task-pack support, deployment readiness, or upstream endorsement.",
+    "Difficulty, onboarding cost, feedback loop, and level fit are editorial guidance, not upstream endorsements or E-level gates."
+  ],
+  "sources": [
+    {
+      "uri": "https://github.com/jax-ml/jax",
+      "description": "Repository identity recorded; detailed learning metadata remains explicitly unverified.",
+      "revision": "catalog-observation-2026-09-17"
+    }
+  ],
+  "checked_at": "2026-09-17T12:00:00Z",
+  "metadata_gaps": [
+    "contribution_readiness",
+    "deployment",
+    "contribution"
+  ],
+  "support": {
+    "attachable": true,
+    "task_packs": []
+  },
+  "onboarding_cost": "high",
+  "feedback_loop": "slow",
+  "contribution_readiness": {
+    "status": "unverified",
+    "signals": [
+      "Repository identity is recorded and the checkout is attachable."
+    ],
+    "limitations": [
+      "Upstream contribution entry points were not independently verified for this catalog release."
+    ]
+  }
+}

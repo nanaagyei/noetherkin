@@ -1,0 +1,136 @@
+{
+  "schema_version": "2.0",
+  "catalog_version": "2.0",
+  "scope": "Internal simulator levels; no employer or credential equivalence.",
+  "dimensions": [
+    "independence",
+    "scope",
+    "ambiguity",
+    "codebase_navigation",
+    "implementation",
+    "debugging",
+    "testing",
+    "design",
+    "systems_thinking",
+    "production_engineering",
+    "ownership",
+    "technical_communication",
+    "collaboration"
+  ],
+  "levels": [
+    {
+      "id": "E0",
+      "name": "Apprentice",
+      "expectations": {
+        "independence": "Works through a bounded step with guidance and explains it back.",
+        "scope": "Changes one small function or document with clear boundaries.",
+        "ambiguity": "Identifies missing information in an explicit assignment.",
+        "codebase_navigation": "Locates an entry point using documentation and guided search.",
+        "implementation": "Makes a small change and explains each affected line.",
+        "debugging": "Reads errors and logs with guidance and reproduces a symptom.",
+        "testing": "Runs a provided test and explains the expected assertion.",
+        "design": "Explains an existing design choice and one alternative with help.",
+        "systems_thinking": "Draws a basic input-to-output path.",
+        "production_engineering": "Runs locally with guidance and distinguishes simulation from production.",
+        "ownership": "Reports a blocker and preserves investigation notes.",
+        "technical_communication": "Describes an observation separately from a guess.",
+        "collaboration": "Asks focused questions and responds to review feedback."
+      }
+    },
+    {
+      "id": "E1",
+      "name": "Junior Engineer",
+      "expectations": {
+        "independence": "Completes bounded work independently and asks for help at identified limits.",
+        "scope": "Owns a localized component change.",
+        "ambiguity": "Clarifies acceptance criteria before coding.",
+        "codebase_navigation": "Traces a local call path and finds related tests independently.",
+        "implementation": "Implements localized behavior with errors and edge cases.",
+        "debugging": "Diagnoses localized defects independently.",
+        "testing": "Adds regression tests that fail for the original defect.",
+        "design": "Chooses a local interface and explains a concrete alternative.",
+        "systems_thinking": "Explains dependencies and local failure propagation.",
+        "production_engineering": "Uses logs and follows a documented nonproduction release procedure.",
+        "ownership": "Follows a small task through review and verification.",
+        "technical_communication": "Writes a reproducible bug report and clear change rationale.",
+        "collaboration": "Incorporates feedback and reviews a bounded change constructively."
+      }
+    },
+    {
+      "id": "E2",
+      "name": "Independent Engineer",
+      "expectations": {
+        "independence": "Plans unfamiliar work and uses limited targeted assistance.",
+        "scope": "Owns a change across multiple components.",
+        "ambiguity": "Turns an underspecified problem into testable requirements.",
+        "codebase_navigation": "Maps unfamiliar component interactions from source.",
+        "implementation": "Integrates cross-component changes with compatibility handling.",
+        "debugging": "Tests hypotheses for unfamiliar cross-component failures.",
+        "testing": "Chooses unit and integration coverage based on failure boundaries.",
+        "design": "Defends API and data choices using constraints and alternatives.",
+        "systems_thinking": "Explains consistency and dependency failure effects in the affected path.",
+        "production_engineering": "Validates release readiness, rollback and useful telemetry in a safe environment.",
+        "ownership": "Closes cross-component work and identifies remaining operational risks.",
+        "technical_communication": "Explains tradeoffs and uncertainty to technical and nontechnical readers.",
+        "collaboration": "Coordinates dependencies and provides evidence-based peer review."
+      }
+    },
+    {
+      "id": "E3",
+      "name": "Product Engineer",
+      "expectations": {
+        "independence": "Drives product outcomes and identifies when specialist input is needed.",
+        "scope": "Owns a product, library, model or tool capability through sustained use.",
+        "ambiguity": "Reconciles competing user needs into a scoped delivery plan.",
+        "codebase_navigation": "Maps component boundaries and ownership across a complete capability.",
+        "implementation": "Delivers integrated behavior with compatibility, reproducibility and operational controls.",
+        "debugging": "Diagnoses interacting correctness, concurrency or performance failures across component boundaries.",
+        "testing": "Validates end-to-end behavior including degraded dependencies.",
+        "design": "Balances user needs, reliability and delivery cost in capability design.",
+        "systems_thinking": "Analyzes resource limits, recovery and data flow across interacting components.",
+        "production_engineering": "Handles a safely scoped incident exercise and verifies mitigation effects.",
+        "ownership": "Tracks impact after delivery and follows up on defects.",
+        "technical_communication": "Communicates incident impact and decisions with explicit evidence limits.",
+        "collaboration": "Coordinates reviews and negotiates component interfaces and usage contracts with peers."
+      }
+    },
+    {
+      "id": "E4",
+      "name": "Senior / Systems Engineer",
+      "expectations": {
+        "independence": "Leads ambiguous work while creating space for others to decide.",
+        "scope": "Owns systemic changes across interacting subsystems or engineering workflows.",
+        "ambiguity": "Frames an unclear systemic problem and tests competing explanations.",
+        "codebase_navigation": "Finds architectural contributors across unfamiliar subsystems.",
+        "implementation": "Stages risky systemic changes with rollback and compatibility strategy.",
+        "debugging": "Leads ambiguous investigations and identifies architectural contributors.",
+        "testing": "Designs failure experiments that expose systemic risks.",
+        "design": "Designs evolutionary architecture and defends long-term tradeoffs.",
+        "systems_thinking": "Models capacity, failure domains and coupled system behavior.",
+        "production_engineering": "Improves reliability using incident and measurement evidence.",
+        "ownership": "Owns systemic risk reduction and verifies sustained improvement.",
+        "technical_communication": "Writes architecture proposals with alternatives, risks and evidence.",
+        "collaboration": "Mentors independent decision-making and resolves technical disagreement."
+      }
+    },
+    {
+      "id": "E5",
+      "name": "Lead Engineer",
+      "expectations": {
+        "independence": "Enables independent engineering decisions across teams.",
+        "scope": "Improves engineering practices spanning multiple teams.",
+        "ambiguity": "Aligns conflicting system and organizational constraints.",
+        "codebase_navigation": "Creates shared maps and practices that let others navigate systems.",
+        "implementation": "Guides multi-team execution with explicit contracts and verifies outcomes.",
+        "debugging": "Improves shared debugging, observability and incident-learning practices.",
+        "testing": "Establishes risk-based validation practices and checks their effectiveness.",
+        "design": "Guides architectural direction through explicit decision principles.",
+        "systems_thinking": "Anticipates cross-team systemic risks and coordinates mitigation.",
+        "production_engineering": "Improves operational readiness across teams with observable outcomes.",
+        "ownership": "Sustains cross-team technical stewardship and develops new owners.",
+        "technical_communication": "Builds shared understanding of strategy and its measurable limits.",
+        "collaboration": "Develops reviewers and facilitates accountable cross-team decisions."
+      }
+    }
+  ]
+}
