@@ -29,7 +29,9 @@ if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(pkg.version ?? '')) failures.pus
 const readmePath = path.join(root, 'README.md');
 if (fs.existsSync(readmePath)) {
   const readme = fs.readFileSync(readmePath, 'utf8');
-  if (!readme.includes('noetherkin-logo.png')) failures.push('README.md does not display the Noetherkin logo.');
+  if (!readme.includes('noetherkin-logo.png') || !readme.includes('noetherkin-logo-light.png')) {
+    failures.push('README.md must display both dark- and light-mode Noetherkin logos.');
+  }
   if (readme.includes('<repository-url>')) failures.push('README.md still contains the repository URL placeholder.');
 }
 if (failures.length) {
