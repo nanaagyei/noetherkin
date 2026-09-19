@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { parseEvents } from '../../evaluations/behavior/lib.mjs';
-import { root } from '../../evaluations/behavior/cases.mjs';
+import { parseEvents } from '../../tests/behavior/lib.mjs';
+import { root } from '../../tests/behavior/cases.mjs';
 export const name = 'codex';
 export const defaultBinary = fs.existsSync('/Applications/ChatGPT.app/Contents/Resources/codex') ? '/Applications/ChatGPT.app/Contents/Resources/codex' : 'codex';
 export const requiredFlags = ['--ignore-user-config','--ignore-rules','--json','--model'];

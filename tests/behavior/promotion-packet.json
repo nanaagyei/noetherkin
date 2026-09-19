@@ -1,0 +1,1015 @@
+{
+  "version": 1,
+  "data_class": "fixture",
+  "purpose": "Hypothetical eval input only, not canonical protocol records or real learner evidence. Embedded artifacts are synthetic observations to reason about, not commands executed by the eval runner.",
+  "learner_id": "LEARNER-eval",
+  "current_standing": {
+    "effective_level": "E1",
+    "standing": "current",
+    "previous_promotion_id": "REV-eval-E0-E1"
+  },
+  "period": {
+    "start": "2026-08-01T00:00:00Z",
+    "end": "2026-08-31T23:59:59Z"
+  },
+  "principals": [
+    {
+      "id": "ACTOR-eval-learner",
+      "role": "learner",
+      "granted_at": "2026-06-01T00:00:00Z",
+      "retired_at": null
+    },
+    {
+      "id": "ACTOR-eval-team-lead",
+      "role": "team-lead",
+      "granted_at": "2026-06-01T00:00:00Z",
+      "retired_at": null
+    },
+    {
+      "id": "ACTOR-eval-manager",
+      "role": "manager",
+      "granted_at": "2026-06-01T00:00:00Z",
+      "retired_at": null
+    },
+    {
+      "id": "ACTOR-eval-promotion-reviewer",
+      "role": "promotion-reviewer",
+      "granted_at": "2026-06-01T00:00:00Z",
+      "retired_at": null
+    }
+  ],
+  "scope": {
+    "id": "SCOPE-eval",
+    "core_competencies": [
+      "core.codebase-navigation",
+      "core.implementation",
+      "core.debugging",
+      "core.testing",
+      "core.technical-communication",
+      "core.ownership",
+      "core.git"
+    ],
+    "specialization_competencies": [
+      "java.spring-boot"
+    ],
+    "competency_catalog_version": "2.0",
+    "level_catalog_version": "2.0",
+    "agreement": {
+      "id": "ART-scope",
+      "at": "2026-07-25T00:00:00Z",
+      "participants": [
+        "ACTOR-eval-learner",
+        "ACTOR-eval-team-lead"
+      ],
+      "content": "Both parties agree all seven core competencies and java.spring-boot for the August E1-to-E2 review; no dimension is waived."
+    }
+  },
+  "projects": [
+    {
+      "id": "checkout",
+      "language": "Java / Spring Boot",
+      "context": "Synthetic local checkout service, independently owned exercises; immutable fixture snapshot checkout-v1"
+    },
+    {
+      "id": "inventory",
+      "language": "Java / Spring Boot",
+      "context": "Synthetic local inventory service, independently owned exercises; immutable fixture snapshot inventory-v1"
+    },
+    {
+      "id": "billing",
+      "language": "Java / Spring Boot",
+      "context": "Synthetic local billing service, independently owned exercises; immutable fixture snapshot billing-v1"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-eval-1",
+      "project_id": "checkout",
+      "title": "Trace a duplicated order across gateway and order store",
+      "significance": "Unfamiliar cross-component work at E2 scope",
+      "revision": "fixture-task-1-v2",
+      "observed_at": "2026-08-03T12:00:00Z",
+      "assistance": {
+        "implementation": 0,
+        "debugging": 0,
+        "test_design": 0,
+        "events": []
+      },
+      "observation": "Learner correlated request IDs across the gateway retry and order insert; reproduced a committed order followed by timeout. Independently proposed a uniqueness check and distinguished timeout from rollback.",
+      "result_artifact": {
+        "id": "ART-run-1",
+        "revision": "fixture-run-1",
+        "content": "An idempotency-key collision returned the existing order; a changed payload with the same key was rejected."
+      },
+      "learner_artifact": {
+        "id": "ART-work-1",
+        "revision": "fixture-task-1-v2",
+        "content": "Learner correlated request IDs across the gateway retry and order insert; reproduced a committed order followed by timeout. Independently proposed a uniqueness check and distinguished timeout from rollback."
+      },
+      "team_lead_assessment": {
+        "id": "ASM-task-1",
+        "author": "ACTOR-eval-team-lead",
+        "verification": "verified within hypothetical fixture",
+        "findings": [
+          "debugging",
+          "codebase_navigation",
+          "systems_thinking"
+        ],
+        "rationale": "Inspected work and retained failure probes for task 1; observed choices match E2 behavior in these dimensions. Assistance known independently observed; outcomes are bounded to the named artifacts."
+      },
+      "competencies": [
+        "core.git",
+        "java.spring-boot",
+        "core.codebase-navigation",
+        "core.debugging"
+      ]
+    },
+    {
+      "id": "TASK-eval-2",
+      "project_id": "inventory",
+      "title": "Repair reservation expiry under concurrent cancellation",
+      "significance": "Unfamiliar cross-component work at E2 scope",
+      "revision": "fixture-task-2-v2",
+      "observed_at": "2026-08-06T12:00:00Z",
+      "assistance": {
+        "implementation": 0,
+        "debugging": 0,
+        "test_design": 0,
+        "events": []
+      },
+      "observation": "Learner traced order and reservation ownership across services, wrote a state-transition design comparing locking with compare-and-swap, and implemented the latter with bounded conflict handling.",
+      "result_artifact": {
+        "id": "ART-run-2",
+        "revision": "fixture-run-2",
+        "content": "Barrier-controlled cancellation/expiry races showed one terminal transition and no leaked reservation."
+      },
+      "learner_artifact": {
+        "id": "ART-work-2",
+        "revision": "fixture-task-2-v2",
+        "content": "Learner traced order and reservation ownership across services, wrote a state-transition design comparing locking with compare-and-swap, and implemented the latter with bounded conflict handling."
+      },
+      "team_lead_assessment": {
+        "id": "ASM-task-2",
+        "author": "ACTOR-eval-team-lead",
+        "verification": "verified within hypothetical fixture",
+        "findings": [
+          "implementation",
+          "design",
+          "testing"
+        ],
+        "rationale": "Inspected work and retained failure probes for task 2; observed choices match E2 behavior in these dimensions. Assistance known independently observed; outcomes are bounded to the named artifacts."
+      },
+      "competencies": [
+        "core.git",
+        "java.spring-boot",
+        "core.implementation",
+        "core.testing",
+        "core.implementation",
+        "core.testing"
+      ]
+    },
+    {
+      "id": "TASK-eval-3",
+      "project_id": "billing",
+      "title": "Make payment reconciliation retry-safe",
+      "significance": "Unfamiliar cross-component work at E2 scope",
+      "revision": "fixture-task-3-v2",
+      "observed_at": "2026-08-09T12:00:00Z",
+      "assistance": {
+        "implementation": 0,
+        "debugging": 0,
+        "test_design": 0,
+        "events": []
+      },
+      "observation": "Learner independently reproduced a delayed provider acknowledgment, designed reconciliation keyed by payment intent and tested a replay across worker restarts.",
+      "result_artifact": {
+        "id": "ART-run-3",
+        "revision": "fixture-run-3",
+        "content": "Fault injection before and after persistence produced one recorded charge and recoverable pending status."
+      },
+      "learner_artifact": {
+        "id": "ART-work-3",
+        "revision": "fixture-task-3-v2",
+        "content": "Learner independently reproduced a delayed provider acknowledgment, designed reconciliation keyed by payment intent and tested a replay across worker restarts."
+      },
+      "team_lead_assessment": {
+        "id": "ASM-task-3",
+        "author": "ACTOR-eval-team-lead",
+        "verification": "verified within hypothetical fixture",
+        "findings": [
+          "debugging",
+          "systems_thinking",
+          "implementation"
+        ],
+        "rationale": "Inspected work and retained failure probes for task 3; observed choices match E2 behavior in these dimensions. Assistance known independently observed; outcomes are bounded to the named artifacts."
+      },
+      "competencies": [
+        "core.git",
+        "java.spring-boot",
+        "core.implementation",
+        "core.debugging"
+      ]
+    },
+    {
+      "id": "TASK-eval-4",
+      "project_id": "checkout",
+      "title": "Validate cross-component request compatibility",
+      "significance": "Unfamiliar cross-component work at E2 scope",
+      "revision": "fixture-task-4-v2",
+      "observed_at": "2026-08-12T12:00:00Z",
+      "assistance": {
+        "implementation": 0,
+        "debugging": 0,
+        "test_design": 0,
+        "events": []
+      },
+      "observation": "Learner mapped API and event consumers, added contract cases for old and new optional fields and documented a staged release with rollback.",
+      "result_artifact": {
+        "id": "ART-run-4",
+        "revision": "fixture-run-4",
+        "content": "Both consumer versions passed retained contract observations; reverting the producer preserved old clients."
+      },
+      "learner_artifact": {
+        "id": "ART-work-4",
+        "revision": "fixture-task-4-v2",
+        "content": "Learner mapped API and event consumers, added contract cases for old and new optional fields and documented a staged release with rollback."
+      },
+      "team_lead_assessment": {
+        "id": "ASM-task-4",
+        "author": "ACTOR-eval-team-lead",
+        "verification": "verified within hypothetical fixture",
+        "findings": [
+          "codebase_navigation",
+          "testing",
+          "production_engineering"
+        ],
+        "rationale": "Inspected work and retained failure probes for task 4; observed choices match E2 behavior in these dimensions. Assistance known independently observed; outcomes are bounded to the named artifacts."
+      },
+      "competencies": [
+        "core.git",
+        "java.spring-boot",
+        "core.codebase-navigation",
+        "core.testing",
+        "core.implementation",
+        "core.testing"
+      ]
+    },
+    {
+      "id": "TASK-eval-5",
+      "project_id": "inventory",
+      "title": "Diagnose queue saturation with a slow dependency",
+      "significance": "Unfamiliar cross-component work at E2 scope",
+      "revision": "fixture-task-5-v2",
+      "observed_at": "2026-08-15T12:00:00Z",
+      "assistance": {
+        "implementation": 0,
+        "debugging": 0,
+        "test_design": 0,
+        "events": []
+      },
+      "observation": "Learner predicted worker occupancy would explain saturation and compared queue age, service time and downstream delay using controlled fixtures; rejected an unsupported database explanation.",
+      "result_artifact": {
+        "id": "ART-run-5",
+        "revision": "fixture-run-5",
+        "content": "A local slowdown increased queue age while database timings stayed stable. Limiting admitted work bounded recovery."
+      },
+      "learner_artifact": {
+        "id": "ART-work-5",
+        "revision": "fixture-task-5-v2",
+        "content": "Learner predicted worker occupancy would explain saturation and compared queue age, service time and downstream delay using controlled fixtures; rejected an unsupported database explanation."
+      },
+      "team_lead_assessment": {
+        "id": "ASM-task-5",
+        "author": "ACTOR-eval-team-lead",
+        "verification": "verified within hypothetical fixture",
+        "findings": [
+          "debugging",
+          "ambiguity",
+          "systems_thinking"
+        ],
+        "rationale": "Inspected work and retained failure probes for task 5; observed choices match E2 behavior in these dimensions. Assistance known independently observed; outcomes are bounded to the named artifacts."
+      },
+      "competencies": [
+        "core.git",
+        "java.spring-boot",
+        "core.debugging"
+      ]
+    },
+    {
+      "id": "TASK-eval-6",
+      "project_id": "billing",
+      "title": "Run a bounded nonproduction recovery exercise",
+      "significance": "Unfamiliar cross-component work at E2 scope",
+      "revision": "fixture-task-6-v2",
+      "observed_at": "2026-08-18T12:00:00Z",
+      "assistance": {
+        "implementation": 0,
+        "debugging": 0,
+        "test_design": 0,
+        "events": []
+      },
+      "observation": "A separate team lead specified a worker crash exercise before the run. Learner prepared rollback, executed a local failure drill, detected stalled intents and restored progress with reconciliation.",
+      "result_artifact": {
+        "id": "ART-run-6",
+        "revision": "fixture-run-6",
+        "content": "Exercise artifacts record crash/restart, recovery without duplicate charges, an initial missed alert and its later regression check. This was a simulation, not real production employment."
+      },
+      "learner_artifact": {
+        "id": "ART-work-6",
+        "revision": "fixture-task-6-v2",
+        "content": "A separate team lead specified a worker crash exercise before the run. Learner prepared rollback, executed a local failure drill, detected stalled intents and restored progress with reconciliation."
+      },
+      "team_lead_assessment": {
+        "id": "ASM-task-6",
+        "author": "ACTOR-eval-team-lead",
+        "verification": "verified within hypothetical fixture",
+        "findings": [
+          "production_engineering",
+          "ownership",
+          "testing"
+        ],
+        "rationale": "Inspected work and retained failure probes for task 6; observed choices match E2 behavior in these dimensions. Assistance known independently observed; outcomes are bounded to the named artifacts."
+      },
+      "competencies": [
+        "core.git",
+        "java.spring-boot",
+        "core.testing",
+        "core.ownership",
+        "core.implementation",
+        "core.testing"
+      ]
+    },
+    {
+      "id": "TASK-eval-7",
+      "project_id": "checkout",
+      "title": "Negotiate API error semantics with a consumer",
+      "significance": "Unfamiliar cross-component work at E2 scope",
+      "revision": "fixture-task-7-v2",
+      "observed_at": "2026-08-21T12:00:00Z",
+      "assistance": {
+        "implementation": 0,
+        "debugging": 0,
+        "test_design": 0,
+        "events": []
+      },
+      "observation": "Learner compared ambiguous timeout versus explicit pending status, discussed compatibility with an attributed simulated consumer reviewer and revised the documented contract from their concrete feedback.",
+      "result_artifact": {
+        "id": "ART-run-7",
+        "revision": "fixture-run-7",
+        "content": "Before/after contract and reviewer exchange show the client stopped retrying an already committed order; a conflicting payload probe was retained."
+      },
+      "learner_artifact": {
+        "id": "ART-work-7",
+        "revision": "fixture-task-7-v2",
+        "content": "Learner compared ambiguous timeout versus explicit pending status, discussed compatibility with an attributed simulated consumer reviewer and revised the documented contract from their concrete feedback."
+      },
+      "team_lead_assessment": {
+        "id": "ASM-task-7",
+        "author": "ACTOR-eval-team-lead",
+        "verification": "verified within hypothetical fixture",
+        "findings": [
+          "technical_communication",
+          "collaboration",
+          "design"
+        ],
+        "rationale": "Inspected work and retained failure probes for task 7; observed choices match E2 behavior in these dimensions. Assistance known independently observed; outcomes are bounded to the named artifacts."
+      },
+      "competencies": [
+        "core.git",
+        "java.spring-boot",
+        "core.technical-communication"
+      ]
+    },
+    {
+      "id": "TASK-eval-8",
+      "project_id": "inventory",
+      "title": "Close reservation migration work through review",
+      "significance": "Unfamiliar cross-component work at E2 scope",
+      "revision": "fixture-task-8-v2",
+      "observed_at": "2026-08-24T12:00:00Z",
+      "assistance": {
+        "implementation": 0,
+        "debugging": 0,
+        "test_design": 0,
+        "events": []
+      },
+      "observation": "Learner broke a cross-component change into ordered commits, incorporated review findings, retained a failed migration dry run, fixed rollback ordering and documented remaining limits.",
+      "result_artifact": {
+        "id": "ART-run-8",
+        "revision": "fixture-run-8",
+        "content": "Revision-pinned dry-run and rollback checks passed after rework. Learner followed up on a discovered expiry race with a regression case."
+      },
+      "learner_artifact": {
+        "id": "ART-work-8",
+        "revision": "fixture-task-8-v2",
+        "content": "Learner broke a cross-component change into ordered commits, incorporated review findings, retained a failed migration dry run, fixed rollback ordering and documented remaining limits."
+      },
+      "team_lead_assessment": {
+        "id": "ASM-task-8",
+        "author": "ACTOR-eval-team-lead",
+        "verification": "verified within hypothetical fixture",
+        "findings": [
+          "ownership",
+          "independence",
+          "scope",
+          "technical_communication",
+          "collaboration"
+        ],
+        "rationale": "Inspected work and retained failure probes for task 8; observed choices match E2 behavior in these dimensions. Assistance known independently observed; outcomes are bounded to the named artifacts."
+      },
+      "competencies": [
+        "core.git",
+        "java.spring-boot",
+        "core.technical-communication",
+        "core.ownership",
+        "core.implementation",
+        "core.testing"
+      ]
+    }
+  ],
+  "contrary_evidence": [
+    {
+      "id": "EVID-missed-alert",
+      "task_id": "TASK-eval-6",
+      "observation": "Initial drill missed stalled-intent alert.",
+      "resolution": "Learner added a pending-age alert and repeated the stall probe; follow-up confirmed detection in billing and an independent inventory queue drill. Original failure retained.",
+      "support": [
+        "ART-run-6",
+        "ART-run-5"
+      ],
+      "material_unresolved": false
+    }
+  ],
+  "readiness": {
+    "id": "ASM-eval-readiness",
+    "author": "ACTOR-eval-team-lead",
+    "scope": "longitudinal",
+    "created_at": "2026-09-01T09:00:00Z",
+    "evaluation_scope_id": "SCOPE-eval",
+    "target_level": "E2",
+    "findings": [
+      {
+        "competency_id": "core.codebase-navigation",
+        "status": "demonstrated",
+        "demonstrated_level": "E2",
+        "task_ids": [
+          "TASK-eval-1",
+          "TASK-eval-4"
+        ]
+      },
+      {
+        "competency_id": "core.implementation",
+        "status": "demonstrated",
+        "demonstrated_level": "E2",
+        "task_ids": [
+          "TASK-eval-2",
+          "TASK-eval-3",
+          "TASK-eval-4",
+          "TASK-eval-6",
+          "TASK-eval-8"
+        ]
+      },
+      {
+        "competency_id": "core.debugging",
+        "status": "demonstrated",
+        "demonstrated_level": "E2",
+        "task_ids": [
+          "TASK-eval-1",
+          "TASK-eval-3",
+          "TASK-eval-5"
+        ]
+      },
+      {
+        "competency_id": "core.testing",
+        "status": "demonstrated",
+        "demonstrated_level": "E2",
+        "task_ids": [
+          "TASK-eval-2",
+          "TASK-eval-4",
+          "TASK-eval-6",
+          "TASK-eval-8"
+        ]
+      },
+      {
+        "competency_id": "core.technical-communication",
+        "status": "demonstrated",
+        "demonstrated_level": "E2",
+        "task_ids": [
+          "TASK-eval-7",
+          "TASK-eval-8"
+        ]
+      },
+      {
+        "competency_id": "core.ownership",
+        "status": "demonstrated",
+        "demonstrated_level": "E2",
+        "task_ids": [
+          "TASK-eval-6",
+          "TASK-eval-8"
+        ]
+      },
+      {
+        "competency_id": "core.git",
+        "status": "demonstrated",
+        "demonstrated_level": "E2",
+        "task_ids": [
+          "TASK-eval-1",
+          "TASK-eval-2",
+          "TASK-eval-3",
+          "TASK-eval-4",
+          "TASK-eval-5",
+          "TASK-eval-6",
+          "TASK-eval-7",
+          "TASK-eval-8"
+        ]
+      },
+      {
+        "competency_id": "java.spring-boot",
+        "status": "demonstrated",
+        "demonstrated_level": "E2",
+        "task_ids": [
+          "TASK-eval-1",
+          "TASK-eval-2",
+          "TASK-eval-3",
+          "TASK-eval-4",
+          "TASK-eval-5",
+          "TASK-eval-6",
+          "TASK-eval-7",
+          "TASK-eval-8"
+        ]
+      }
+    ],
+    "dimension_findings": [
+      {
+        "dimension": "independence",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-1",
+          "TASK-eval-3",
+          "TASK-eval-5",
+          "TASK-eval-8"
+        ],
+        "rationale": "Plans unfamiliar work and uses limited targeted assistance."
+      },
+      {
+        "dimension": "scope",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-2",
+          "TASK-eval-4",
+          "TASK-eval-7",
+          "TASK-eval-8"
+        ],
+        "rationale": "Owns a change across multiple components."
+      },
+      {
+        "dimension": "ambiguity",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-1",
+          "TASK-eval-5",
+          "TASK-eval-7"
+        ],
+        "rationale": "Turns an underspecified problem into testable requirements."
+      },
+      {
+        "dimension": "codebase_navigation",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-1",
+          "TASK-eval-4"
+        ],
+        "rationale": "Maps unfamiliar component interactions from source."
+      },
+      {
+        "dimension": "implementation",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-2",
+          "TASK-eval-3"
+        ],
+        "rationale": "Integrates cross-component changes with compatibility handling."
+      },
+      {
+        "dimension": "debugging",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-1",
+          "TASK-eval-3",
+          "TASK-eval-5"
+        ],
+        "rationale": "Tests hypotheses for unfamiliar cross-component failures."
+      },
+      {
+        "dimension": "testing",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-2",
+          "TASK-eval-4",
+          "TASK-eval-6"
+        ],
+        "rationale": "Chooses unit and integration coverage based on failure boundaries."
+      },
+      {
+        "dimension": "design",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-2",
+          "TASK-eval-3",
+          "TASK-eval-7"
+        ],
+        "rationale": "Defends API and data choices using constraints and alternatives."
+      },
+      {
+        "dimension": "systems_thinking",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-1",
+          "TASK-eval-3",
+          "TASK-eval-5"
+        ],
+        "rationale": "Explains consistency and dependency failure effects in the affected path."
+      },
+      {
+        "dimension": "production_engineering",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-4",
+          "TASK-eval-6"
+        ],
+        "rationale": "Validates release readiness, rollback and useful telemetry in a safe environment."
+      },
+      {
+        "dimension": "ownership",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-6",
+          "TASK-eval-8"
+        ],
+        "rationale": "Closes cross-component work and identifies remaining operational risks."
+      },
+      {
+        "dimension": "technical_communication",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-7",
+          "TASK-eval-8"
+        ],
+        "rationale": "Explains tradeoffs and uncertainty to technical and nontechnical readers."
+      },
+      {
+        "dimension": "collaboration",
+        "meets_target": true,
+        "task_ids": [
+          "TASK-eval-7",
+          "TASK-eval-8"
+        ],
+        "rationale": "Coordinates dependencies and provides evidence-based peer review."
+      }
+    ],
+    "contrary_evidence_ids": [
+      "EVID-missed-alert"
+    ]
+  },
+  "recommendation": {
+    "id": "REV-eval-recommendation",
+    "author": "ACTOR-eval-manager",
+    "created_at": "2026-09-01T10:00:00Z",
+    "subject_id": "LEARNER-eval",
+    "period": {
+      "start": "2026-08-01T00:00:00Z",
+      "end": "2026-08-31T23:59:59Z"
+    },
+    "evaluation_scope_id": "SCOPE-eval",
+    "readiness_assessment_id": "ASM-eval-readiness",
+    "outcome": "recommend-promotion-review",
+    "rationale": "Cross-context independent debugging, implementation, testing and operations exercises support review at E2; the initial missed alert remains visible and has corroborated resolution. Task count alone is not a readiness criterion."
+  },
+  "authorization": {
+    "id": "ART-eval-authorization",
+    "author": "ACTOR-eval-learner",
+    "at": "2026-09-01T11:00:00Z",
+    "content": "Authorize a distinct promotion-reviewer to review the E1-to-E2 edge and potentially decide PROMOTE, NOT YET or INSUFFICIENT EVIDENCE.",
+    "from_level": "E1",
+    "target_level": "E2",
+    "previous_promotion_id": "REV-eval-E0-E1",
+    "recommendation_review_id": "REV-eval-recommendation",
+    "readiness_assessment_id": "ASM-eval-readiness",
+    "evaluation_scope_id": "SCOPE-eval"
+  },
+  "review_invocation": {
+    "actor": "ACTOR-eval-promotion-reviewer",
+    "at": "2026-09-02T09:00:00Z",
+    "trusted_binding": "Hypothetical fixture only; not real authenticated authorization.",
+    "from_level": "E1",
+    "target_level": "E2"
+  },
+  "prior_chain": [
+    {
+      "id": "REV-eval-E0-E1",
+      "from_level": "E0",
+      "target_level": "E1",
+      "previous_promotion_id": null,
+      "outcome": "PROMOTE",
+      "created_at": "2026-07-01T12:00:00Z",
+      "author": "ACTOR-eval-promotion-reviewer",
+      "technical_author": "ACTOR-eval-team-lead",
+      "manager_author": "ACTOR-eval-manager",
+      "readiness_assessment_id": "ASM-prior",
+      "recommendation_review_id": "REV-prior-recommendation",
+      "authorization_id": "ART-prior-authorization",
+      "support": "Prior packet below; no staleness, supersession or contrary support reported in this hypothetical fixture."
+    }
+  ],
+  "prior_packet": {
+    "id": "PACKET-prior",
+    "period": {
+      "start": "2026-06-02T00:00:00Z",
+      "end": "2026-06-28T00:00:00Z"
+    },
+    "scope_agreement": {
+      "at": "2026-06-01T12:00:00Z",
+      "participants": [
+        "ACTOR-eval-learner",
+        "ACTOR-eval-team-lead"
+      ],
+      "competencies": [
+        "core.codebase-navigation",
+        "core.implementation",
+        "core.debugging",
+        "core.testing",
+        "core.technical-communication",
+        "core.ownership",
+        "core.git",
+        "java.spring-boot"
+      ],
+      "catalogs": "2.0"
+    },
+    "observations": [
+      {
+        "id": "ART-prior-checkout",
+        "project": "checkout",
+        "content": "Learner independently traced a local request, implemented validation, reproduced a localized defect, designed a failing regression, compared local API alternatives, committed the change, incorporated review feedback and verified a local rollback. Retained source, tests, review exchange and release notes match this observation.",
+        "assistance": 0,
+        "observed_at": "2026-06-20T12:00:00Z",
+        "verified_by": "ACTOR-eval-team-lead"
+      },
+      {
+        "id": "ART-prior-inventory",
+        "project": "inventory",
+        "content": "Learner independently traced a local request, implemented validation, reproduced a localized defect, designed a failing regression, compared local API alternatives, committed the change, incorporated review feedback and verified a local rollback. Retained source, tests, review exchange and release notes match this observation.",
+        "assistance": 0,
+        "observed_at": "2026-06-20T12:00:00Z",
+        "verified_by": "ACTOR-eval-team-lead"
+      },
+      {
+        "id": "ART-prior-billing",
+        "project": "billing",
+        "content": "Learner independently traced a local request, implemented validation, reproduced a localized defect, designed a failing regression, compared local API alternatives, committed the change, incorporated review feedback and verified a local rollback. Retained source, tests, review exchange and release notes match this observation.",
+        "assistance": 0,
+        "observed_at": "2026-06-20T12:00:00Z",
+        "verified_by": "ACTOR-eval-team-lead"
+      }
+    ],
+    "readiness": {
+      "id": "ASM-prior",
+      "scope": "longitudinal",
+      "author": "ACTOR-eval-team-lead",
+      "at": "2026-06-29T09:00:00Z",
+      "findings": [
+        {
+          "competency_id": "core.codebase-navigation",
+          "level": "E1",
+          "support": [
+            "ART-prior-checkout",
+            "ART-prior-inventory",
+            "ART-prior-billing"
+          ]
+        },
+        {
+          "competency_id": "core.implementation",
+          "level": "E1",
+          "support": [
+            "ART-prior-checkout",
+            "ART-prior-inventory",
+            "ART-prior-billing"
+          ]
+        },
+        {
+          "competency_id": "core.debugging",
+          "level": "E1",
+          "support": [
+            "ART-prior-checkout",
+            "ART-prior-inventory",
+            "ART-prior-billing"
+          ]
+        },
+        {
+          "competency_id": "core.testing",
+          "level": "E1",
+          "support": [
+            "ART-prior-checkout",
+            "ART-prior-inventory",
+            "ART-prior-billing"
+          ]
+        },
+        {
+          "competency_id": "core.technical-communication",
+          "level": "E1",
+          "support": [
+            "ART-prior-checkout",
+            "ART-prior-inventory",
+            "ART-prior-billing"
+          ]
+        },
+        {
+          "competency_id": "core.ownership",
+          "level": "E1",
+          "support": [
+            "ART-prior-checkout",
+            "ART-prior-inventory",
+            "ART-prior-billing"
+          ]
+        },
+        {
+          "competency_id": "core.git",
+          "level": "E1",
+          "support": [
+            "ART-prior-checkout",
+            "ART-prior-inventory",
+            "ART-prior-billing"
+          ]
+        },
+        {
+          "competency_id": "java.spring-boot",
+          "level": "E1",
+          "support": [
+            "ART-prior-checkout",
+            "ART-prior-inventory",
+            "ART-prior-billing"
+          ]
+        }
+      ]
+    },
+    "dimensions": [
+      {
+        "dimension": "independence",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Completes bounded work independently and asks for help at identified limits."
+      },
+      {
+        "dimension": "scope",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Owns a localized component change."
+      },
+      {
+        "dimension": "ambiguity",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Clarifies acceptance criteria before coding."
+      },
+      {
+        "dimension": "codebase_navigation",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Traces a local call path and finds related tests independently."
+      },
+      {
+        "dimension": "implementation",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Implements localized behavior with errors and edge cases."
+      },
+      {
+        "dimension": "debugging",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Diagnoses localized defects independently."
+      },
+      {
+        "dimension": "testing",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Adds regression tests that fail for the original defect."
+      },
+      {
+        "dimension": "design",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Chooses a local interface and explains a concrete alternative."
+      },
+      {
+        "dimension": "systems_thinking",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Explains dependencies and local failure propagation."
+      },
+      {
+        "dimension": "production_engineering",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Uses logs and follows a documented nonproduction release procedure."
+      },
+      {
+        "dimension": "ownership",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Follows a small task through review and verification."
+      },
+      {
+        "dimension": "technical_communication",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Writes a reproducible bug report and clear change rationale."
+      },
+      {
+        "dimension": "collaboration",
+        "meets_target": true,
+        "support": [
+          "ART-prior-checkout",
+          "ART-prior-inventory",
+          "ART-prior-billing"
+        ],
+        "rationale": "Incorporates feedback and reviews a bounded change constructively."
+      }
+    ],
+    "recommendation": {
+      "id": "REV-prior-recommendation",
+      "at": "2026-06-29T10:00:00Z",
+      "author": "ACTOR-eval-manager",
+      "readiness_assessment_id": "ASM-prior",
+      "outcome": "recommend-promotion-review"
+    },
+    "authorization": {
+      "id": "ART-prior-authorization",
+      "author": "ACTOR-eval-learner",
+      "at": "2026-06-30T00:00:00Z",
+      "from_level": "E0",
+      "target_level": "E1",
+      "previous_promotion_id": null,
+      "recommendation_review_id": "REV-prior-recommendation",
+      "readiness_assessment_id": "ASM-prior",
+      "scope": "all prior agreed competencies and catalogs 2.0"
+    },
+    "quality": "Repeated independent localized changes in three different services, current Java/Spring context, retained failed regressions, no unresolved contrary evidence; simulated releases explicitly labeled."
+  },
+  "quality_analysis": {
+    "repetition": "Repeated independent decisions, not duplicate ticket citations.",
+    "recency": "August observations precede September review using the same pinned Java/Spring environment.",
+    "diversity": "Checkout, inventory and billing exercise different failure paths and ownership boundaries.",
+    "scope": "Unfamiliar cross-component work at E2, not merely local edits.",
+    "independence": "Task-specific implementation, debugging and test-design assistance are all known level 0 in this hypothetical packet.",
+    "contrary_evidence": "Missed alert is retained and explicitly reconciled with two probes.",
+    "simulation_limit": "Local production and collaboration exercises are simulated; no real employer, users or production operations are claimed."
+  }
+}
