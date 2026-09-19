@@ -10,15 +10,16 @@ Foundational specification phase: complete. Phase 6 PetClinic vertical runtime: 
 - [x] Added pinned CodeQL and dependency-review workflows plus grouped npm and GitHub Actions Dependabot updates.
 - [x] Added an npm release workflow using a protected GitHub environment, OIDC trusted publishing, provenance configuration and publication of the exact verified tarball.
 - [x] Added a fail-closed release metadata check and a sequenced publication checklist covering legal identity, GitHub controls, npm setup, release review and post-publication verification.
-- [x] Local verification: 106 Node tests, all 21 skill bundles, 11 schemas, 135 fixture/catalog documents, 151 competencies, 34 tracks, 87 projects, 34 negative cases and all 22 frozen conformance cases pass. `npm audit` reports zero known vulnerabilities. The Noetherkin dry-run tarball contains 1,009 files (6,357,787 unpacked bytes), includes Apache-2.0, the logo, every reference host adapter and required public document, and excludes source tests, local state, drafts, artifacts and environment files.
+- [x] Local verification: 106 Node tests, all 21 skill bundles, 11 schemas, 135 fixture/catalog documents, 151 competencies, 34 tracks, 87 projects, 34 negative cases and all 22 frozen conformance cases pass. `npm audit` reports zero known vulnerabilities. The Noetherkin dry-run tarball contains 1,010 files (6,837,182 unpacked bytes), includes Apache-2.0, both theme-aware logo variants, every reference host adapter and required public document, and excludes source tests, local state, drafts, artifacts and environment files.
 - [x] Adopted Apache-2.0 and connected the SPDX package metadata, license file and README badge.
 - [ ] Complete legal clearance for the Noetherkin name and confirm distribution rights for the generated logo. Preliminary exact-name web, USPTO, npm, GitHub and domain checks found no direct collision; this is not a legal opinion or reservation.
 - [x] Bound clone, homepage, issue, CI badge and npm metadata to the intended `https://github.com/nanaagyei/noetherkin` repository identity.
 - [x] Adopted `Noetherkin` as the public product name and `noetherkin` as the pre-release npm package and executable. Versioned schema `$id` namespaces, archived protocol snapshots and retained behavioral transcripts remain unchanged historical/protocol identifiers.
-- [ ] Rename the GitHub repository to `noetherkin`, update the local `origin` from `nanaagyei/devstride`, push the reviewed initial history, and verify the documented branch and security settings under the new repository identity.
+- [x] Published the reviewed initial history to `main`, created `release/dev`, updated `origin` to `nanaagyei/noetherkin`, and owner-confirmed branch protection and security settings.
+- [x] Rechecked the unscoped `noetherkin` npm name after publication of the repository; the name remains apparently available but is not reserved.
 - [ ] Establish npm ownership, a protected `npm` environment and the trusted-publisher relationship; complete the manual checklist before publishing a GitHub release.
 
-Limits: package and documentation metadata now target `nanaagyei/noetherkin`, but the local Git remote still points to the pre-rebrand `nanaagyei/devstride` URL. No package was reserved or published, and no live GitHub workflow ran. Legal clearance, logo distribution rights and external release controls remain publication gates.
+Limits: the repository identity, `main`, `release/dev`, branch protection and security settings are owner-confirmed. No npm package was reserved or published. Legal clearance, logo distribution rights, trusted publishing and release-environment approval remain publication gates.
 
 ## Phase 10 portable capability adapter layer (2026-09-17)
 

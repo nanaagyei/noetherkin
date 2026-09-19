@@ -8,14 +8,14 @@ This is the release gate for Noetherkin's first public repository and npm packag
 | --- | --- | --- |
 | Runtime and protocol | Ready for review | `npm run verify` exercises runtime tests, skill packaging, foundation validation, and frozen conformance cases. |
 | Package contents | Ready for review | CI creates and retains the npm tarball for inspection. |
-| Security automation | Configured locally | CI audit, dependency review, CodeQL, Dependabot, pinned actions, and private-reporting policy are present. They become effective after GitHub publication and repository settings are enabled. |
+| Security automation | Enabled (owner-confirmed) | CI audit, dependency review, CodeQL, Dependabot, pinned actions, private vulnerability reporting, and protected-branch settings are configured. |
 | npm name | Apparently available | `noetherkin` returned `E404` during the preliminary screen on 2026-09-18. This is not a reservation; check again immediately before publishing. |
 | License | Complete | Apache-2.0 is declared in `package.json`, linked from the README, and included as `LICENSE`. |
-| GitHub publication | **Blocked** | Package and README metadata target `github.com/nanaagyei/noetherkin`, while local `origin` still points to the pre-rebrand `github.com/nanaagyei/devstride.git`. Rename the repository, update `origin`, then push and verify protection under the new identity. |
+| GitHub publication | Complete (owner-confirmed) | Initial history is on `main`; `release/dev`, the renamed `origin`, branch protection, and repository security settings are in place. |
 | Release identity | **Blocked** | The npm owner, trusted publisher, GitHub `npm` environment, and approval policy require maintainer setup. |
-| Brand rights | Needs confirmation | Preliminary exact-name checks found no direct collision, but legal clearance and the right to distribute `noetherkin-logo.png` still require owner confirmation. |
+| Brand rights | Needs confirmation | Preliminary exact-name checks found no direct collision, but legal clearance and the right to distribute the Noetherkin logo assets still require owner confirmation. |
 
-The project is technically close, but it is not ready to call open source or publish to npm until every blocking row is resolved.
+The source repository is published under Apache-2.0. npm publication remains blocked until every remaining release-identity and legal gate is resolved.
 
 ## 1. Legal and project identity
 
@@ -24,37 +24,37 @@ The project is technically close, but it is not ready to call open source or pub
 - [x] Declare the `Apache-2.0` SPDX identifier in `package.json`.
 - [x] Link the README badge and license section to the selected license.
 - [ ] Confirm the copyright holder and year used by the license, if required.
-- [ ] Complete an appropriate trademark/common-law clearance for Noetherkin and confirm the rights to publish `noetherkin-logo.png`, examples, catalogs, and all bundled prose.
+- [ ] Complete an appropriate trademark/common-law clearance for Noetherkin and confirm the rights to publish `noetherkin-logo.png`, `noetherkin-logo-light.png`, examples, catalogs, and all bundled prose.
 - [ ] Decide whether a `NOTICE` file is required, especially if Apache-2.0 or third-party notices apply.
 - [ ] Adopt a contributor license agreement or developer certificate of origin only if project governance actually needs one; do not add process theater by default.
 - [ ] Select a dependency-license policy, then configure `deny-licenses` in dependency review if the policy requires it.
 
 ## 2. Create and configure the GitHub repository
 
-- [ ] Rename or create the repository at `https://github.com/nanaagyei/noetherkin` with the intended visibility and ownership.
+- [x] Publish the repository at `https://github.com/nanaagyei/noetherkin` with the intended visibility and ownership.
 - [x] Configure package metadata for `git+https://github.com/nanaagyei/noetherkin.git`.
-- [ ] After the GitHub rename, run `git remote set-url origin https://github.com/nanaagyei/noetherkin.git` and verify with `git remote -v`.
-- [ ] Commit and push the reviewed initial history to `main`.
-- [ ] Create `release/dev` immediately after the initial push. CI and CodeQL validate pushes to both `main` and `release/dev`; Dependabot targets `release/dev`; release publication remains gated separately.
-- [ ] Confirm the clone, repository, homepage, issue, and badge URLs resolve after the GitHub rename.
+- [x] Update local `origin` to `https://github.com/nanaagyei/noetherkin.git` and verify it.
+- [x] Commit and push the reviewed initial history to `main`.
+- [x] Create `release/dev`. CI and CodeQL validate pushes to both `main` and `release/dev`; Dependabot targets `release/dev`; release publication remains gated separately.
+- [x] Confirm the clone, repository, homepage, issue, and badge URLs after the GitHub rename.
 - [x] Add repository-backed CI and CodeQL badges. Confirm they resolve after the initial push.
 - [ ] Add npm version and release badges after the first successful publication.
 - [ ] Add a concise GitHub description, topics, and social preview image.
 - [ ] Enable Issues and Discussions only if maintainers intend to support them.
-- [ ] Enable private vulnerability reporting under **Settings → Security → Code security**.
-- [ ] Enable the dependency graph, Dependabot alerts, and Dependabot security updates.
-- [ ] Enable code scanning with the checked-in CodeQL workflow.
-- [ ] Review the default `GITHUB_TOKEN` setting and keep permissions read-only unless a job grants a narrower explicit permission.
+- [x] Enable private vulnerability reporting under **Settings → Security → Code security** (owner-confirmed).
+- [x] Enable the dependency graph, Dependabot alerts, and Dependabot security updates (owner-confirmed).
+- [x] Enable code scanning with the checked-in CodeQL workflow (owner-confirmed).
+- [x] Review the default `GITHUB_TOKEN` setting and keep permissions read-only unless a job grants a narrower explicit permission (owner-confirmed).
 - [ ] Add `CODEOWNERS` after the maintainer identity is known; require its review only when that rule is sustainable.
-- [ ] Disable force pushes and branch deletion on `main`.
-- [ ] Protect `main` with pull requests, conversation resolution, and required checks: both runtime matrix jobs, frozen protocol validation, dependency audit, dependency review, package inspection, and CodeQL.
+- [x] Disable force pushes and branch deletion on `main` (owner-confirmed).
+- [x] Protect `main` with pull requests, conversation resolution, and required checks: both runtime matrix jobs, frozen protocol validation, dependency audit, dependency review, package inspection, and CodeQL (owner-confirmed).
 - [ ] Require at least one approving review once a second trusted maintainer exists. Do not create an impossible solo-maintainer rule.
 - [ ] Require signed commits or signed tags only after documenting a workable maintainer process.
 
 ## 3. Configure npm ownership and trusted publishing
 
 - [ ] Create or select the npm owner or organization and require two-factor authentication for maintainers.
-- [ ] Recheck `npm view noetherkin`; an earlier `E404` does not reserve the name.
+- [x] Recheck `npm view noetherkin`; the owner reports the name remains apparently available. This does not reserve it.
 - [ ] Decide whether the unscoped name is appropriate. If not, update the package name, binary documentation, tests, workflow tarball glob, and examples together.
 - [ ] Create a protected GitHub environment named `npm` and add required reviewers for production publication.
 - [ ] Configure npm trusted publishing for the exact GitHub owner, repository, and `.github/workflows/release.yml` workflow, using the `npm` environment when npm exposes that option.

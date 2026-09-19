@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="./noetherkin-logo.png" alt="Noetherkin: Practice, Build, Belong" width="760">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./noetherkin-logo.png">
+    <source media="(prefers-color-scheme: light)" srcset="./noetherkin-logo-light.png">
+    <img src="./noetherkin-logo.png" alt="Noetherkin: Practice, Build, Belong" width="760">
+  </picture>
 </p>
 
 <h1 align="center">Noetherkin</h1>
@@ -18,8 +22,8 @@
   <a href="./LICENSE"><img alt="Apache License 2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue"></a>
 </p>
 
-> [!IMPORTANT]
-> Noetherkin is preparing for its first public release. The package is not yet published. See the [publishing checklist](docs/PUBLISHING_CHECKLIST.md).
+> [!NOTE]
+> Noetherkin is currently in pre-release.
 
 ## What is Noetherkin?
 
@@ -38,7 +42,6 @@ Noetherkin currently includes:
 - 21 portable [Agent Skills](docs/skills.md);
 - 34 versioned learning tracks and 87 project catalog entries;
 - generic, Codex, and Claude Code onboarding adapters;
-- one complete curated runtime journey for Spring PetClinic;
 - evidence, assistance, review, and promotion semantics designed to resist fabricated progress.
 
 ## Why it exists
@@ -52,28 +55,41 @@ READ → MAP → BUILD → RUN → TRACE → BREAK → DEBUG
 
 Progress is based on attributable evidence, not points, streaks, task counts, or conversational impressions. Self-report can guide onboarding, but it cannot establish demonstrated capability or grant promotion.
 
-## Quick start
+## Install
 
-### Requirements
+Noetherkin has two portable parts: capabilities for your AI agent and a trusted local CLI for workspace state.
 
-- macOS or Linux
-- Node.js 24 or newer
-- Git
-- Python 3 with PyYAML and jsonschema for specification validation
+### 1. Install the capabilities
 
-### Build locally
+Run this inside the project where you want to use Noetherkin:
 
 ```sh
-git clone https://github.com/nanaagyei/noetherkin.git
-cd noetherkin
-npm ci
-npm run build
-node dist/cli/main.js --help
+npx skills add nanaagyei/noetherkin
 ```
 
-### Start an apprenticeship workspace
+The [Skills CLI](https://github.com/vercel-labs/skills) discovers the bundled capabilities and lets you choose the target agent and skills. To install only onboarding:
 
-Create an empty workspace directory, then run initialization from a learner-controlled terminal:
+```sh
+npx skills add nanaagyei/noetherkin --skill onboarding
+```
+
+### 2. Install the CLI
+
+The npm command becomes available with the first package release:
+
+```sh
+npm install --global noetherkin
+```
+
+Or run the CLI without a global installation:
+
+```sh
+npx noetherkin --help
+```
+
+`npx skills add` installs instructions that teach an agent how to participate. The `noetherkin` CLI is the trusted controller for validation, consent, transactions, and canonical state. Installing one does not silently install or authorize the other.
+
+## Start a workspace
 
 ```sh
 mkdir -p /absolute/path/to/workspace
@@ -85,9 +101,17 @@ noetherkin onboard --workspace /absolute/path/to/workspace
 noetherkin next --workspace /absolute/path/to/workspace
 ```
 
-Initialization requires explicit review of the six-role registry. It creates administrative E0, pending onboarding, and no competency evidence. Track selection remains advisory: tracks guide project discovery but never own skills, evidence, or promotion decisions.
+Initialization requires direct terminal review and consent. Track selection guides project discovery but never owns skills, evidence, or promotion decisions. All CLI commands support `--json`; see the [CLI and recovery guide](docs/cli.md).
 
-All CLI commands support `--json`. See the complete [CLI and recovery guide](docs/cli.md).
+## Use with an AI agent
+
+Open the learner workspace in your agent and ask naturally:
+
+> Use the installed Noetherkin onboarding capability for this workspace. Ask for missing information one question at a time. When terminal consent is required, give me the exact handoff command and wait for its result.
+
+Agents with native Agent Skills support can discover the installed capability automatically. For an agent without native discovery, provide the complete installed skill folder and direct it to follow `SKILL.md`; keep its `references/` and `assets/` directories beside it. The capability is still `onboarding` regardless of whether the host exposes it through natural language, a slash command, a palette action, or another interface.
+
+The agent may inspect state, gather inputs, prepare proposals, and resume after a terminal handoff. Chat text and model output never count as consent: canonical writes remain in the learner-controlled CLI.
 
 ## Portable capabilities
 
@@ -141,19 +165,6 @@ npm run verify
 That command builds the TypeScript sources, runs 106 runtime and packaging tests, checks all 21 portable skill bundles, validates the current foundation artifacts, and executes the 22 frozen conformance cases.
 
 These checks establish bounded structural and runtime properties. They do not prove learner authorship, reviewer quality, model obedience, or educational effectiveness. Detailed claims and deferred evaluations live in [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md) and [deferred validation](docs/deferred-validation.md).
-
-## Project status
-
-Spring PetClinic is the only bundled curated task pack. Other catalog projects support safe attachment and portable task-assignment handoff, but do not inherit PetClinic-specific runtime operations. Promotion execution remains proposal-only.
-
-The project is approaching an initial public release, but is not publish-ready until the remaining human-owned gates are complete:
-
-- rename the GitHub repository and local origin to `noetherkin`, then publish the reviewed initial history;
-- reserve the npm package and configure trusted publishing;
-- enable branch protection, private vulnerability reporting, and required checks;
-- complete the release dry run and review the packed artifact.
-
-Track the exact sequence in [docs/PUBLISHING_CHECKLIST.md](docs/PUBLISHING_CHECKLIST.md).
 
 ## Documentation
 

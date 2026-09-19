@@ -30,14 +30,26 @@ Roles are not created by skill installation. The reviewed CLI initialization reg
 
 ## Install a skill
 
-From your chosen agent workspace, use the Skills CLI with the local repository path:
+From the project where you want to use Noetherkin, install from the public GitHub repository:
 
 ```sh
-npx skills add /absolute/path/to/noetherkin --list
-npx skills add /absolute/path/to/noetherkin --skill onboarding --copy
+npx skills add nanaagyei/noetherkin
 ```
 
-Select the intended agent in the installer. Repeat with another skill name as needed. This uses the documented local-source, skill-selection and copy options in the [Skills CLI](https://github.com/vercel-labs/skills). The directory/frontmatter format follows the [Agent Skills specification](https://agentskills.io/specification). Documentation checked 2026-09-13; external installer behavior is not exercised by the repository tests.
+The installer discovers the available skills and lets you choose the target agent. You can list or select skills explicitly:
+
+```sh
+npx skills add nanaagyei/noetherkin --list
+npx skills add nanaagyei/noetherkin --skill onboarding
+```
+
+For a global installation or an explicit agent target, use the Skills CLI flags:
+
+```sh
+npx skills add nanaagyei/noetherkin --skill onboarding --global --agent codex
+```
+
+This uses the documented GitHub-source, skill-selection, scope and agent-targeting options in the [Skills CLI](https://github.com/vercel-labs/skills). The directory/frontmatter format follows the [Agent Skills specification](https://agentskills.io/specification). Documentation checked 2026-09-13; external installer behavior is not exercised by the repository tests.
 
 Alternatively, copy one entire skill folder to the skills directory supported by your harness. Keep `SKILL.md`, `references/` and `assets/` together. No sibling skill, original checkout or model vendor is required to read the bundle. Invocation/discovery conventions still depend on the harness. The runtime includes only a local Codex role adapter plus the vendor-neutral adapter contract. Avoid overwriting an unrelated installed skill with the same short name.
 

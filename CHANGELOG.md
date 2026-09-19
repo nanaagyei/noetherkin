@@ -12,7 +12,10 @@ All notable changes will be documented in this file. The format follows [Keep a 
 ### Changed
 
 - Adopted Noetherkin as the product, npm package, CLI executable, adapter handoff, and portable-skill-facing name before the first public release.
+- Added theme-aware GitHub README logos with dark, light, and accessible fallback rendering.
+- Simplified the public README and documented the separate one-command agent-capability and CLI installation paths.
 - Excluded private architecture prompts and agent handoff notes from the public repository root.
+- Migrated GitHub Actions dependencies from Node.js 20-backed releases to immutable Node.js 24-backed releases.
 
 ## [0.1.0] - Unreleased
 

@@ -43,6 +43,7 @@ const requiredFiles = [
   'CHANGELOG.md',
   'SECURITY.md',
   'noetherkin-logo.png',
+  'noetherkin-logo-light.png',
   'dist/cli/main.js',
   'dist/adapters/hosts/generic/index.js',
   'dist/adapters/hosts/codex/index.js',
