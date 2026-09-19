@@ -8,11 +8,11 @@ This is the release gate for Noetherkin's first public repository and npm packag
 | --- | --- | --- |
 | Runtime and protocol | Ready for review | `npm run verify` exercises runtime tests, skill packaging, foundation validation, and frozen conformance cases. |
 | Package contents | Ready for review | CI creates and retains the npm tarball for inspection. |
-| Security automation | Enabled (owner-confirmed) | CI audit, dependency review, CodeQL, Dependabot, pinned actions, private vulnerability reporting, and protected-branch settings are configured. |
+| Security automation | Pre-publication verified | The main ruleset and CI are active. Public CodeQL, dependency review, secret scanning, and push protection require the later visibility change and another verification pass. |
 | npm name | Apparently available | `noetherkin` returned `E404` during the preliminary screen on 2026-09-18. This is not a reservation; check again immediately before publishing. |
 | License | Complete | Apache-2.0 is declared in `package.json`, linked from the README, and included as `LICENSE`. |
-| GitHub publication | Complete (owner-confirmed) | Initial history is on `main`; `release/dev`, the renamed `origin`, branch protection, and repository security settings are in place. |
-| Release identity | **Blocked** | The npm owner, trusted publisher, GitHub `npm` environment, and approval policy require maintainer setup. |
+| GitHub publication | **Blocked** | Cleaned history is on `main` and `release/dev`, but the repository must remain private until GitHub Support purges three historical pull-request refs and cached views. |
+| Release identity | **Blocked** | The GitHub `npm` environment exists. The npm owner, trusted publisher, and environment approval policy still require setup. |
 | Brand rights | Needs confirmation | Preliminary exact-name checks found no direct collision, but legal clearance and the right to distribute the Noetherkin logo assets still require owner confirmation. |
 
 The source repository is published under Apache-2.0. npm publication remains blocked until every remaining release-identity and legal gate is resolved.
@@ -31,7 +31,8 @@ The source repository is published under Apache-2.0. npm publication remains blo
 
 ## 2. Create and configure the GitHub repository
 
-- [x] Publish the repository at `https://github.com/nanaagyei/noetherkin` with the intended visibility and ownership.
+- [ ] Ask [GitHub Support](https://support.github.com/) to dereference affected pull requests 1-3, remove cached views, and garbage-collect the old objects.
+- [ ] Make the repository public only after GitHub Support confirms that purge is complete.
 - [x] Configure package metadata for `git+https://github.com/nanaagyei/noetherkin.git`.
 - [x] Update local `origin` to `https://github.com/nanaagyei/noetherkin.git` and verify it.
 - [x] Commit and push the reviewed initial history to `main`.
@@ -39,7 +40,8 @@ The source repository is published under Apache-2.0. npm publication remains blo
 - [x] Confirm the clone, repository, homepage, issue, and badge URLs after the GitHub rename.
 - [x] Add repository-backed CI and CodeQL badges. Confirm they resolve after the initial push.
 - [ ] Add npm version and release badges after the first successful publication.
-- [ ] Add a concise GitHub description, topics, and social preview image.
+- [x] Add a concise GitHub description and topics.
+- [ ] Add a social preview image.
 - [ ] Enable Issues and Discussions only if maintainers intend to support them.
 - [x] Enable private vulnerability reporting under **Settings → Security → Code security** (owner-confirmed).
 - [x] Enable the dependency graph, Dependabot alerts, and Dependabot security updates (owner-confirmed).
@@ -56,11 +58,12 @@ The source repository is published under Apache-2.0. npm publication remains blo
 - [ ] Create or select the npm owner or organization and require two-factor authentication for maintainers.
 - [x] Recheck `npm view noetherkin`; the owner reports the name remains apparently available. This does not reserve it.
 - [ ] Decide whether the unscoped name is appropriate. If not, update the package name, binary documentation, tests, workflow tarball glob, and examples together.
-- [ ] Create a protected GitHub environment named `npm` and add required reviewers for production publication.
+- [x] Create a GitHub environment named `npm`.
+- [ ] After the repository is public, add the maintainer as a required reviewer for production publication and keep self-review available while there is only one maintainer.
 - [ ] Configure npm trusted publishing for the exact GitHub owner, repository, and `.github/workflows/release.yml` workflow, using the `npm` environment when npm exposes that option.
 - [ ] If npm cannot configure a trusted publisher until the package exists, perform the one-time bootstrap publish manually from the already inspected tarball with a narrowly scoped credential and 2FA. Immediately configure trusted publishing and revoke the bootstrap credential. Never commit or persist the token in Actions.
 - [ ] Confirm that publication uses a GitHub-hosted runner, Node.js 24+, npm 11.5.1+, and `id-token: write`. The workflow currently pins npm 11.9.0.
-- [ ] Run the release workflow with `workflow_dispatch` before the first release. It must verify and package, but its publish job must remain skipped.
+- [x] Run the release workflow with `workflow_dispatch`. Run 35420969697 verified and packaged the release candidate; the publish job was skipped.
 
 ## 4. Prepare a release candidate
 
