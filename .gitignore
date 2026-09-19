@@ -22,3 +22,7 @@ coverage/
 /archive/protocol-1.0/FOUNDATION_HANDOFF.md
 /AGENTS.local.md
 /CLAUDE.local.md
+
+# Behavioral harness output may contain host paths, session identifiers, and
+# raw model transcripts. Keep it outside version control.
+/tests/behavior/observed/

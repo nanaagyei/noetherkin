@@ -1,6 +1,6 @@
 # Skill behavioral acceptance cases
 
-Status: **executable suite expanded to Phase 7; focused smoke execution and full-matrix acceptance are not yet established**. The [runner and grading guide](behavior/README.md) expands the shared and skill-specific scenarios into 115 active cases across 21 skills. The [observed report](behavior/observed/REPORT.md) records historical completed, failed and account-blocked executions and must not be treated as results for changed bundles. These are maintainer-authored synthetic scenarios, not learner accomplishments. Automated bundle tests alone establish structural properties only.
+Status: **executable suite expanded to Phase 7; focused smoke execution and full-matrix acceptance are not yet established**. The [runner and grading guide](../tests/behavior/README.md) expands the shared and skill-specific scenarios into 115 active cases across 21 skills. Historical development runs included completed, failed and account-blocked executions and must not be treated as results for changed bundles. Raw outputs are intentionally excluded from version control. These are maintainer-authored synthetic scenarios, not learner accomplishments. Automated bundle tests alone establish structural properties only.
 
 ## Evaluation procedure
 

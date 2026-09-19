@@ -41,7 +41,7 @@ Use a new output directory whenever implementation, bundles, model selection or 
 
 ## Deferred: complete dual-harness behavioral suite
 
-The Phase 7 suite contains 115 active cases. Five retained high-risk cases run three times, producing 125 executions per harness and 250 across Codex and Claude. It requires retained raw transcripts, deterministic integrity checks and completed independent review records for every required result. Partial or harness-only runs do not establish full acceptance. The earlier 118-execution schedule remains historical evidence for the older eight-skill bundles and cannot be combined with Phase 7 results.
+The Phase 7 suite contains 115 active cases. Five retained high-risk cases run three times, producing 125 executions per harness and 250 across Codex and Claude. It requires privately retained raw transcripts, deterministic integrity checks and completed independent review records for every required result. Partial or harness-only runs do not establish full acceptance. The earlier 118-execution schedule remains historical evidence for the older eight-skill bundles and cannot be combined with Phase 7 results.
 
 Before that full matrix, the bounded Phase 7 smoke schedule runs `P08,A08,P13,A10,P18,A14` once on each harness (12 executions). It is useful integration evidence but cannot establish full behavioral acceptance.
 

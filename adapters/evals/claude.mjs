@@ -1,4 +1,4 @@
-import { parseEvents } from '../../evaluations/behavior/lib.mjs';
+import { parseEvents } from '../../tests/behavior/lib.mjs';
 export const name = 'claude';
 export const defaultBinary = 'claude';
 export const requiredFlags = ['--safe-mode','--restricted','--strict-mcp-config','--tools','--resume','--model','--disable-slash-commands'];
