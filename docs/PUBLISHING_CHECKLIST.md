@@ -1,6 +1,6 @@
 # Publishing checklist
 
-This is the release gate for Noetherkin's first public repository and npm package. Complete the sections in order. Do not publish a GitHub release until npm publishing is configured: a published GitHub release activates `.github/workflows/release.yml`.
+This is the release gate for Noetherkin's public repository. Complete the sections in order. There is no npm package: ACP-012 retired registry publication, so a published GitHub release only triggers verification.
 
 ## Current readiness
 
@@ -9,13 +9,13 @@ This is the release gate for Noetherkin's first public repository and npm packag
 | Runtime and protocol | Ready for review | `npm run verify` exercises runtime tests, skill packaging, foundation validation, and frozen conformance cases. |
 | Package contents | Ready for review | CI creates and retains the npm tarball for inspection. |
 | Security automation | Pre-publication verified | The main ruleset and CI are active. Public CodeQL, dependency review, secret scanning, and push protection require the later visibility change and another verification pass. |
-| npm name | Apparently available | `noetherkin` returned `E404` during the preliminary screen on 2026-09-18. This is not a reservation; check again immediately before publishing. |
+| npm name | Not applicable | ACP-012 retired registry publication. The name is deliberately unclaimed. |
 | License | Complete | Apache-2.0 is declared in `package.json`, linked from the README, and included as `LICENSE`. |
 | GitHub publication | **Blocked** | Cleaned history is on `main` and `release/dev`. `refs/pull/1`, `/2` and `/3` are no longer advertised by the remote and the pull requests no longer list, so the ref half appears complete. Awaiting GitHub Support confirmation that cached views are also purged. |
-| Release identity | **Blocked** | The GitHub `npm` environment exists. The npm owner, trusted publisher, and environment approval policy still require setup. |
+| Release identity | Not applicable | No registry publication, so no npm owner, trusted publisher or release-environment approval is required. |
 | Brand rights | Confirmed | Owner completed name clearance and confirmed the right to distribute the Noetherkin logo assets. |
 
-The source repository is published under Apache-2.0. npm publication remains blocked until every remaining release-identity and legal gate is resolved.
+The source repository is published under Apache-2.0. There is no npm publication to gate.
 
 ## 1. Legal and project identity
 
@@ -53,77 +53,21 @@ The source repository is published under Apache-2.0. npm publication remains blo
 - [ ] Require at least one approving review once a second trusted maintainer exists. Do not create an impossible solo-maintainer rule.
 - [ ] Require signed commits or signed tags only after documenting a workable maintainer process.
 
-## 3. Configure npm ownership and trusted publishing
+## 3. Distribution
 
-- [ ] Create or select the npm owner or organization and require two-factor authentication for maintainers.
-- [x] Recheck `npm view noetherkin`; the owner reports the name remains apparently available. This does not reserve it.
-- [ ] Decide whether the unscoped name is appropriate. If not, update the package name, binary documentation, tests, workflow tarball glob, and examples together.
-- [x] Create a GitHub environment named `npm`.
-- [ ] After the repository is public, add the maintainer as a required reviewer for production publication and keep self-review available while there is only one maintainer.
-- [ ] Configure npm trusted publishing for the exact GitHub owner, repository, and `.github/workflows/release.yml` workflow, using the `npm` environment when npm exposes that option.
-- [ ] If npm cannot configure a trusted publisher until the package exists, perform the one-time bootstrap publish manually from the already inspected tarball with a narrowly scoped credential and 2FA. Immediately configure trusted publishing and revoke the bootstrap credential. Never commit or persist the token in Actions.
-- [ ] Confirm that publication uses a GitHub-hosted runner, Node.js 24+, npm 11.5.1+, and `id-token: write`. The workflow currently pins npm 11.9.0.
-- [x] Run the release workflow with `workflow_dispatch`. Run 35420969697 verified and packaged the release candidate; the publish job was skipped.
+ACP-012 is adopted: Noetherkin is **not published to a package registry**, and no npm ownership, trusted
+publisher or release environment is required. The previous sections on npm setup, release candidates,
+publication and post-publication verification are removed rather than left as unreachable steps.
 
-## 4. Prepare a release candidate
+- [x] Retire registry publication. `package.json` is `private`, `publishConfig` and `prepublishOnly` are gone,
+      and `.github/workflows/release.yml` keeps only its verification job.
+- [ ] Cut a GitHub release when a version is worth marking. Tag exactly `v<package-version>` from a reviewed
+      commit and use the changelog entry as release notes. The workflow verifies and retains a release
+      candidate for inspection; nothing is uploaded anywhere.
+- [ ] Keep `npm pack` green. The tarball is retained as a portability check, exercised by the package test,
+      and is not a release artifact.
 
-- [ ] Ensure the working tree contains only intended release changes.
-- [ ] Update `CHANGELOG.md`, replace `Unreleased` for the target version with the release date, and retain a fresh Unreleased section.
-- [ ] Set one semantic version in `package.json` and `package-lock.json`.
-- [ ] Install from the lockfile and run the complete checks:
-
-  ```sh
-  npm ci --ignore-scripts
-  python3 -m pip install --requirement requirements-validation.txt
-  npm run verify
-  npm audit --audit-level=high
-  npm run release:check
-  ```
-
-- [ ] Inspect the generated tarball rather than trusting the manifest summary:
-
-  ```sh
-  npm run prepack
-  npm pack --ignore-scripts --json
-  npm run package:check
-  tar -tf noetherkin-<version>.tgz
-  ```
-
-- [ ] Confirm the tarball contains the CLI, generic/Codex/Claude onboarding adapters, schemas, catalogs, skills, README, changelog, security policy, and normative documentation.
-- [ ] Confirm it excludes source tests, local state, drafts, artifacts, credentials, environment files, caches, and unrelated working files.
-- [ ] Install the tarball into a fresh temporary directory and smoke-test `noetherkin --help`, `init`, `validate`, and an onboarding no-change cycle.
-- [ ] Review the GitHub Actions logs and downloaded `release-candidate` artifact.
-- [ ] Re-run the documented Codex and Claude capability probes if either host version or adapter behavior changed.
-- [ ] Obtain the maintainer approval required by the `npm` environment.
-
-## 5. Publish
-
-- [ ] Merge the release commit through the protected branch.
-- [ ] Create a GitHub release tagged exactly `v<package-version>` from the reviewed commit and include the changelog entry as release notes.
-- [ ] Publish the GitHub release only when the npm environment and trusted publisher are ready. Publication triggers verification and, after environment approval, publishes the exact verified tarball.
-- [ ] Do not add `NPM_TOKEN` to the workflow when trusted publishing is working.
-- [ ] If any verification job fails, fix forward with a reviewed change. Do not bypass or weaken the check to make the release pass.
-
-## 6. Verify after publication
-
-- [ ] Confirm the registry version and metadata:
-
-  ```sh
-  npm view noetherkin version dist.integrity repository
-  npm view noetherkin --json
-  ```
-
-- [ ] Verify the npm page displays provenance for the published version.
-- [ ] Install by version in a clean directory and repeat the CLI smoke test.
-- [ ] Confirm the GitHub release points to the same commit and has successful release checks.
-- [ ] Confirm README Actions, npm version, license, and release badges resolve correctly.
-- [ ] Announce the release only after the registry and install checks pass.
-- [ ] Update `SECURITY.md` with a supported-version table.
-- [ ] Record any deviation or manual bootstrap step in the release notes and project decisions.
-
-## Recovery rules
-
-- Prefer a corrected patch release over unpublishing. npm unpublish affects downstream users and package-name reuse.
-- Deprecate a compromised or unusable version with an actionable message while preparing the corrected release.
-- If credentials were exposed, revoke them first, preserve evidence, rotate affected access, and follow `SECURITY.md`.
-- If provenance, repository identity, or the packed contents do not match expectations, stop publication and investigate. Do not treat a successful registry upload as proof of release integrity.
+Capabilities install with `npx skills add nanaagyei/noetherkin`. The CLI is built from a checkout, as the
+README describes. Bundling the CLI into the skill packages was proposed in ACP-012 section 3.7 and deferred:
+with `yaml` retained under FR-21, it would mean vendoring a third-party parser into the repository and losing
+dependency updates on it.

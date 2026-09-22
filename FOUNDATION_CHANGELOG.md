@@ -1,5 +1,39 @@
 # Foundation changelog
 
+## Phase 11 distribution and capability routing, 2026-09-22 (America/Chicago)
+
+### ACP-012: skills-first distribution, adopted in part
+
+Noetherkin is distributed as agent capabilities and is not published to a package registry. `package.json` is
+private, `publishConfig` and `prepublishOnly` are removed, and the release workflow keeps only its verification
+job. Capabilities install with the Skills CLI; the controller is built from a checkout. This changes packaging
+and documentation only. No schema, catalog, contract semantics, lifecycle state, permission, evidence rule or
+leveling behavior changes, and no protocol or catalog version moves.
+
+The adopted routing requirement is that every skill description state both its selecting condition and a
+boundary: the adjacent work it does not own, or the sibling capability that owns it. A harness chooses a
+capability from the description alone, so a description that only says what a skill does cannot be ruled out,
+and the learner lands in the wrong workflow. `validateInstalled` enforces this structurally; all twenty-one
+descriptions already satisfied it. Noetherkin still implements no dispatch, because selection belongs to the
+host and implementing it would put harness-specific behavior in the core against the charter's
+agent-independence principle. Roles remain uncreated by skill installation, and naming a successor remains no
+evidence that the successor acted.
+
+Two parts of the proposal are **deliberately not adopted**. Bundling the controller into the skill packages
+(sections 3.1 and 3.7) assumed a dependency-free runtime, which section 3.3 then contradicted by retaining
+`yaml` under frozen conformance case FR-21. Bundling would therefore vendor roughly 293KB of third-party
+parser, sixty percent of the artifact, and end dependency updates on code that reads workspace state. The
+one-step install it was meant to buy is not worth owning a parser's vulnerabilities. A collected handoff table
+(section 3.5) is also not adopted: thirteen of the twenty-one contracts have no `Interaction With Other Skills`
+section, and a second table would duplicate contract prose against INV-009's requirement of one canonical
+source per critical fact. Both remain open for a future proposal.
+
+Conformance: FR-29 and FR-31 are adopted and covered, by `tests/bootstrap.test.ts` for non-terminal invocation
+returning a proposal with exit 3, and by `scripts/package-skills.mjs` for the description boundary. FR-30 is
+covered by the strict-parser cases added with the validator replacement. CF-33, CF-34, CF-50, CF-51, FR-52 and
+FR-53 describe the deferred bundling and are not claimed. Migration: none. No workspace, record, receipt or
+published artifact is read or written differently.
+
 ## Phase 9 additive project catalog expansion, 2026-09-17 (America/Chicago)
 
 Phase 9 adds Google Online Boutique, OpenTelemetry C++, and NVIDIA Triton Inference Server as attachable project candidates, raising the global project catalog from 84 to 87 records. OpenAI Triton remains a separate compiler project. The additions carry explicit unverified contribution, deployment, and contribution-policy metadata gaps and provide no curated task packs.

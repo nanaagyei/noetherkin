@@ -1,5 +1,7 @@
-name: Release npm package
+name: Release candidate verification
 
+# No publish job. ACP-012 retired registry publication; this workflow only verifies and retains a
+# release candidate for inspection.
 on:
   release:
     types: [published]
@@ -42,24 +44,3 @@ jobs:
             package-output.json
           if-no-files-found: error
           retention-days: 30
-
-  publish:
-    name: Publish to npm
-    if: github.event_name == 'release'
-    needs: verify
-    runs-on: ubuntu-latest
-    environment: npm
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: release-candidate
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org
-          package-manager-cache: false
-      - run: npm install --global npm@11.9.0
-      - run: npm publish noetherkin-*.tgz --access public

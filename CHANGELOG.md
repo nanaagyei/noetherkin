@@ -20,6 +20,8 @@ All notable changes will be documented in this file. The format follows [Keep a 
 - Simplified the public README and documented the separate one-command agent-capability and CLI installation paths.
 - Excluded private architecture prompts and agent handoff notes from the public repository root.
 - Migrated GitHub Actions dependencies from Node.js 20-backed releases to immutable Node.js 24-backed releases.
+- Adopted ACP-012 in part: Noetherkin is no longer published to a package registry. `package.json` is private, `publishConfig` and `prepublishOnly` are removed, and the release workflow keeps only its verification job. Capabilities install with the Skills CLI; the controller is built from a checkout. Bundling the controller into skill packages was **not** adopted, because retaining `yaml` under FR-21 would mean vendoring a third-party parser and losing dependency updates on it.
+- Every skill description must now state a boundary as well as a selecting condition, enforced by `validateInstalled`. All twenty-one already complied.
 - Replaced `ajv` and `ajv-formats` in the runtime with the first-party validator and moved both to devDependencies, where they now serve only as the parity oracle. A production install resolves 2 packages rather than 8. Validation verdicts and reported errors are unchanged; error emission order is not reproduced and is not guaranteed.
 
 ## [0.1.0] - Unreleased

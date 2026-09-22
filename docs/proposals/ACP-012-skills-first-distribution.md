@@ -2,11 +2,22 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `PROPOSED` |
+| Status | `ADOPTED` in part, 2026-09-22 |
 | Date | 2026-09-21 (America/Chicago) |
 | Depends on | none |
 | Blocks | none |
 | Supersedes | none |
+
+> **Adoption note, 2026-09-22.** Adopted in part. The authority is the Phase 11 entry in
+> [FOUNDATION_CHANGELOG.md](../../FOUNDATION_CHANGELOG.md), not this file.
+>
+> **Adopted:** retirement of registry publication, and the capability-routing requirement in section 3.5.
+> **Not adopted:** bundling the controller into skill packages (sections 3.1 and 3.7), and the collected
+> handoff table (section 3.5). Section 3.1 assumed a dependency-free runtime and section 3.3 then retained
+> `yaml` under FR-21, so bundling would vendor a third-party parser and end dependency updates on it. The
+> handoff table would duplicate contract prose against INV-009. Both need a fresh proposal; the reasoning in
+> those sections is retained below for whoever writes it, including the now-incorrect cost figure in 3.7,
+> which omits `yaml` and understates the artifact by roughly 2.2x.
 
 Noetherkin should be installed as a set of agent capabilities and nothing else. The npm package is retired. The
 transactional writer that the protocol requires survives as a pre-built, dependency-free script inside the
