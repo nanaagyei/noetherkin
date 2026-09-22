@@ -1,6 +1,6 @@
 # Protocol 3.0 CLI
 
-The executable is `noetherkin`, requiring Node.js 24+. Build with `npm ci` and `npm run build`, then run `node dist/cli/main.js` from the repository. A locally packed and installed package also exposes the executable through npm's `.bin` directory. This repository has not published the package to the npm registry.
+The executable requires Node.js 24+. Build with `npm ci` and `npm run build`, then run `node dist/cli/main.js` from the repository. Noetherkin is not published to a package registry and, under ACP-012, will not be: the capabilities install into an agent, and the controller is built from source.
 
 ## Commands
 

@@ -20,6 +20,23 @@ For retries, the caller retains operation ID and prior output IDs in the transac
 
 All contracts inherit progressive assistance, attribution, no fabricated evidence, safe path handling and role boundaries from FOUNDATION_V1. They do not restate the full global policy. Missing inputs produce a focused learner question or read-only investigation; malformed state is blocked without repair by guesswork. No contract authorizes remote/destructive actions. The Examples sections are conformance targets, not transcripts of work performed.
 
+## Capability routing
+
+A harness selects a capability from its `SKILL.md` description alone. Noetherkin does not implement selection
+and must not: dispatch belongs to the host, and implementing it would require harness-specific behavior in the
+core, against the charter's agent-independence principle. What this project controls is the routing signal.
+
+Every skill description MUST state both the condition that selects it and a boundary: the adjacent work it does
+not own, or the sibling capability that owns it. A description that only says what a skill does gives a harness
+no way to rule it out, which is how a learner ends up in `promotion-review` when they wanted `teach`. The
+boundary is enforced structurally by `validateInstalled` in `scripts/package-skills.mjs`; a description without
+one fails packaging.
+
+A skill's declared handoffs remain prose inside its own contract. They are deliberately not collected into a
+second table here, because a duplicate would drift from the contracts and INV-009 requires one canonical source
+per critical fact. Naming a successor is not evidence that the successor acted, and a handoff never transfers
+authority: roles are not created by skill installation.
+
 ## Retained protocol requirements
 
 All contracts inherit the trusted invoker binding, retained grants, assistance recorder/provider rules, full assignment freeze, immutable workspace project snapshots, checkpoint/longitudinal distinction and judgment-validity repair procedure. Pending staleness is a readable valid state, not malformed state. Durable operation lookup belongs to the workspace receipt store and survives loss of caller memory. Review reuse must match author, role, task/period, artifact revision, frozen assignment/scope, evidence, assessments and effective assistance inputs; a retired actor cannot publish a retry as new work.
