@@ -1,24 +1,21 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Ajv2020 } from 'ajv/dist/2020.js';
-import addFormatsImport from 'ajv-formats';
 import { parse } from './parsing.js';
 import { canonical, diagnostic, encode, requireThat, sha256, validId, type Diagnostic, type ObjectValue } from './common.js';
 import { exists, read, runtime, safePath, statePath, type Runtime } from './storage.js';
+import { compileSchema, errorsText } from './schema.js';
 
 const assets = fileURLToPath(new URL('../../', import.meta.url));
-const ajv = new Ajv2020({ allErrors: true, strict: false, validateFormats: true, coerceTypes: false, useDefaults: false, removeAdditional: false });
-const addFormats = addFormatsImport as unknown as (instance: Ajv2020) => void;
-addFormats(ajv);
 const validators = new Map(fs.readdirSync(path.join(assets, 'schemas')).filter(f => f.endsWith('.schema.json')).map(file => {
   const schema = JSON.parse(fs.readFileSync(path.join(assets, 'schemas', file), 'utf8'));
-  return [file.replace('.schema.json', ''), ajv.compile(schema)];
+  return [file.replace('.schema.json', ''), compileSchema(schema)];
 }));
 export function validateDocument(value: ObjectValue, schema: string, file: string): void {
   const validator = validators.get(schema);
   requireThat(validator, 'UNKNOWN_RECORD', file, 'No protocol schema exists for this record location.');
-  requireThat(validator(value), 'SCHEMA_INVALID', file, ajv.errorsText(validator.errors, { separator: '; ' }));
+  const errors = validator(value);
+  requireThat(errors.length === 0, 'SCHEMA_INVALID', file, errorsText(errors));
 }
 export function catalogs(): { projects: ObjectValue[]; tracks: ObjectValue[]; competencyIds: Set<string>; coreCompetencyIds: Set<string> } {
   const competencies = parse(fs.readFileSync(path.join(assets, 'catalog/competencies.yaml')), 'catalog/competencies.yaml');

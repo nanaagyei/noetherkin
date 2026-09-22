@@ -19,6 +19,6 @@ Start with [the foundation authority](FOUNDATION_V1.md) and [the charter](PROJEC
 | Object structure | [Schema inventory](schemas/README.md) |
 | Conformance | [Scenarios and validation](docs/architecture/conformance.md) |
 
-[Decisions](DECISIONS.md) record alternatives. [Open questions](OPEN_QUESTIONS.md) distinguish deferrals from V1 rules. [Example guide](examples/spring-petclinic/README.md) identifies synthetic data. [Implementation status](IMPLEMENTATION_STATUS.md) delimits completed work and verified limits.
+[Proposals](docs/proposals/README.md) hold architecture change proposals under review; they are explicitly **not normative** until adopted into the changelog. [Decisions](DECISIONS.md) record alternatives. [Open questions](OPEN_QUESTIONS.md) distinguish deferrals from V1 rules. [Example guide](examples/spring-petclinic/README.md) identifies synthetic data. [Implementation status](IMPLEMENTATION_STATUS.md) delimits completed work and verified limits.
 
 Freeze documents: [changelog and adopted proposals](FOUNDATION_CHANGELOG.md), [judgment validity and reconciliation](docs/architecture/judgment-validity.md). Current workspaces use protocol 3.0 under ACP-10; immutable 2.0 history retains its original schema and meaning. The archived reviewed 1.0 draft is not current authority.
