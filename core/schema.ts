@@ -22,7 +22,10 @@ export interface SchemaError { path: string; message: string }
  * Semantics deliberately match ajv-formats in its default "full" mode, including real calendar
  * day checks and the leap-second allowance, so that swapping validators cannot change which
  * documents are accepted. The URI pattern is the RFC 3986 Appendix A grammar as expressed by
- * ajv-formats (MIT, Evgeny Poberezkin), which in turn credits is-my-json-valid (MIT, Mathias Buus).
+ * ajv-formats v3.0.1 (MIT, Copyright (c) 2020 Evgeny Poberezkin), which in turn credits is-my-json-valid.
+ * That regex is copied verbatim and is redistributed, so its notice is carried in NOTICE at the repository
+ * root. Reproducing it rather than rewriting it keeps `format: "uri"` accepting and rejecting exactly what the
+ * previous validator did; a reimplementation could diverge on inputs outside the test corpus.
  */
 const DATE = /^(\d\d\d\d)-(\d\d)-(\d\d)$/;
 const TIME = /^(\d\d):(\d\d):(\d\d(?:\.\d+)?)(z|([+-])(\d\d)(?::?(\d\d))?)?$/i;
