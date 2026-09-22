@@ -104,13 +104,25 @@ test('nested inspection discovers the nearest workspace; explicit path takes pre
   assert.equal(explicit.status, 1);
 });
 
-for (const [name, specimen] of Object.entries({ duplicate: 'a: 1\na: 2', alias: 'a: &a hello\nb: *a', tag: 'a: !!str hello', infinity: 'a: .inf', nan: 'a: .nan', key: '1: value', complexKey: '? [a, b]\n: value', multidoc: 'a: 1\n---\nb: 2', invalidUtf8: Buffer.from([0xff]) })) {
-  test(`strict parser rejects ${name}`, () => assert.throws(() => parse(specimen, name)));
+for (const [name, specimen] of Object.entries({
+  // Reinterpretation and aliasing hazards.
+  duplicate: 'a: 1\na: 2', flowDuplicate: '{"a": 1, "a": 2}', nestedDuplicate: '{"o": {"a": 1, "a": 2}}',
+  alias: 'a: &a hello\nb: *a', tag: 'a: !!str hello', key: '1: value', complexKey: '? [a, b]\n: value',
+  multidoc: 'a: 1\n---\nb: 2', invalidUtf8: Buffer.from([0xff]),
+  // Numbers outside the JSON syntax and exact-integer range the state model permits.
+  infinity: 'a: .inf', nan: 'a: .nan', unsafeInteger: 'a: 123456789012345678901234567890',
+  hexNumber: 'a: 0x1F', octalNumber: 'a: 0o17',
+  // A record is a mapping; every other document shape is refused rather than coerced.
+  sequenceRoot: '[1, 2, 3]', scalarRoot: '"just a string"', nullRoot: 'null', emptyDocument: '',
+})) {
+  test(`strict parser rejects ${name}`, () => assert.throws(() => parse(specimen, name), { code: 'YAML_INVALID' }));
 }
 test('YAML 1.2 and canonical JSON preserve strings, Unicode, booleans and timestamps', () => {
   const value = { on: 'on', off: 'off', number: '012', timestamp: '2026-09-13T00:00:00Z', enabled: true, unknown: null, learner: 'Agyei 日本' };
   assert.deepEqual(parse(encode(value), 'canonical'), value);
   assert.deepEqual(parse('on: on\noff: off\n"012": "012"\ntimestamp: 2026-09-13T00:00:00Z\nflag: true', 'yaml'), { on: 'on', off: 'off', '012': '012', timestamp: '2026-09-13T00:00:00Z', flag: true });
+  // 1.2 core schema leaves an underscored digit group a string; a 1.1 loader would read it as the integer 1000.
+  assert.deepEqual(parse('grouped: 1_000', 'yaml'), { grouped: '1_000' });
 });
 
 test('all workspace schemas reject unknown fields and unsupported versions without coercion', () => {
