@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "An agent-agnostic engineering apprenticeship simulator with portable mentoring skills and evidence-based progression",
   "license": "Apache-2.0",
+  "author": "Prince Agyei Tuffour",
   "repository": { "type": "git", "url": "git+https://github.com/nanaagyei/noetherkin.git" },
   "homepage": "https://github.com/nanaagyei/noetherkin#readme",
   "bugs": { "url": "https://github.com/nanaagyei/noetherkin/issues" },
