@@ -19,3 +19,7 @@ jobs:
         if: github.event.repository.private == false
         with:
           fail-on-severity: moderate
+          # Apache-2.0 is the outbound license. Strong copyleft in the dependency
+          # graph would make redistribution of the packaged tool inconsistent with
+          # that grant, so it fails the review rather than being discovered later.
+          deny-licenses: AGPL-1.0-only, AGPL-1.0-or-later, AGPL-3.0-only, AGPL-3.0-or-later, GPL-2.0-only, GPL-2.0-or-later, GPL-3.0-only, GPL-3.0-or-later, SSPL-1.0

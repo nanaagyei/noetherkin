@@ -57,7 +57,7 @@ Progress is based on attributable evidence, not points, streaks, task counts, or
 
 ## Install
 
-Noetherkin has two portable parts: capabilities for your AI agent and a trusted local CLI for workspace state.
+Noetherkin has two portable parts: capabilities for your AI agent, and a trusted local CLI that owns workspace state. They install separately and neither authorizes the other.
 
 ### 1. Install the capabilities
 
@@ -73,21 +73,24 @@ The [Skills CLI](https://github.com/vercel-labs/skills) discovers the bundled ca
 npx skills add nanaagyei/noetherkin --skill onboarding
 ```
 
-### 2. Install the CLI
+### 2. Build the CLI
 
-The npm command becomes available with the first package release:
-
-```sh
-npm install --global noetherkin
-```
-
-Or run the CLI without a global installation:
+The CLI is not published to a package registry. Build it from a checkout, which needs Node.js 24 or newer:
 
 ```sh
-npx noetherkin --help
+git clone https://github.com/nanaagyei/noetherkin.git
+cd noetherkin
+npm ci
+npm run build
 ```
 
-`npx skills add` installs instructions that teach an agent how to participate. The `noetherkin` CLI is the trusted controller for validation, consent, transactions, and canonical state. Installing one does not silently install or authorize the other.
+That produces the executable at `dist/cli/main.js`. The examples below assume a shell alias:
+
+```sh
+alias noetherkin="node $PWD/dist/cli/main.js"
+```
+
+`npx skills add` installs instructions that teach an agent how to participate. The CLI is what actually writes state: it owns validation, consent, transactions, and every canonical record. An agent proposes; the CLI publishes.
 
 ## Start a workspace
 

@@ -11,9 +11,9 @@ This is the release gate for Noetherkin's first public repository and npm packag
 | Security automation | Pre-publication verified | The main ruleset and CI are active. Public CodeQL, dependency review, secret scanning, and push protection require the later visibility change and another verification pass. |
 | npm name | Apparently available | `noetherkin` returned `E404` during the preliminary screen on 2026-09-18. This is not a reservation; check again immediately before publishing. |
 | License | Complete | Apache-2.0 is declared in `package.json`, linked from the README, and included as `LICENSE`. |
-| GitHub publication | **Blocked** | Cleaned history is on `main` and `release/dev`, but the repository must remain private until GitHub Support purges three historical pull-request refs and cached views. |
+| GitHub publication | **Blocked** | Cleaned history is on `main` and `release/dev`. `refs/pull/1`, `/2` and `/3` are no longer advertised by the remote and the pull requests no longer list, so the ref half appears complete. Awaiting GitHub Support confirmation that cached views are also purged. |
 | Release identity | **Blocked** | The GitHub `npm` environment exists. The npm owner, trusted publisher, and environment approval policy still require setup. |
-| Brand rights | Needs confirmation | Preliminary exact-name checks found no direct collision, but legal clearance and the right to distribute the Noetherkin logo assets still require owner confirmation. |
+| Brand rights | Confirmed | Owner completed name clearance and confirmed the right to distribute the Noetherkin logo assets. |
 
 The source repository is published under Apache-2.0. npm publication remains blocked until every remaining release-identity and legal gate is resolved.
 
@@ -23,11 +23,11 @@ The source repository is published under Apache-2.0. npm publication remains blo
 - [x] Add the complete license text as `LICENSE`.
 - [x] Declare the `Apache-2.0` SPDX identifier in `package.json`.
 - [x] Link the README badge and license section to the selected license.
-- [ ] Confirm the copyright holder and year used by the license, if required.
-- [ ] Complete an appropriate trademark/common-law clearance for Noetherkin and confirm the rights to publish `noetherkin-logo.png`, `noetherkin-logo-light.png`, examples, catalogs, and all bundled prose.
-- [ ] Decide whether a `NOTICE` file is required, especially if Apache-2.0 or third-party notices apply.
+- [x] Confirm the copyright holder and year used by the license. `NOTICE` records `Copyright 2026 Prince Agyei Tuffour`. `LICENSE` is left byte-for-byte as published by Apache, including its "how to apply" appendix template, because editing license text is discouraged.
+- [x] Complete an appropriate trademark/common-law clearance for Noetherkin and confirm the rights to publish `noetherkin-logo.png`, `noetherkin-logo-light.png`, examples, catalogs, and all bundled prose. Owner-confirmed.
+- [x] Decide whether a `NOTICE` file is required. Added, and included in the package `files` allowlist so it travels with any distribution. It currently carries only the project copyright; registry-resolved dependencies are not redistributed and are not listed.
 - [ ] Adopt a contributor license agreement or developer certificate of origin only if project governance actually needs one; do not add process theater by default.
-- [ ] Select a dependency-license policy, then configure `deny-licenses` in dependency review if the policy requires it.
+- [x] Select a dependency-license policy, then configure `deny-licenses` in dependency review. Strong copyleft (AGPL, GPL, SSPL) fails review, because it would be inconsistent with the outbound Apache-2.0 grant on a redistributed tool.
 
 ## 2. Create and configure the GitHub repository
 
@@ -41,13 +41,13 @@ The source repository is published under Apache-2.0. npm publication remains blo
 - [x] Add repository-backed CI and CodeQL badges. Confirm they resolve after the initial push.
 - [ ] Add npm version and release badges after the first successful publication.
 - [x] Add a concise GitHub description and topics.
-- [ ] Add a social preview image.
-- [ ] Enable Issues and Discussions only if maintainers intend to support them.
+- [ ] Add a social preview image. A 1280x640 card is prepared at `docs/assets/social-preview.png` (79KB, under the 1MB limit). GitHub exposes no API for this, so upload it manually under **Settings -> General -> Social preview**.
+- [x] Enable Issues and Discussions only if maintainers intend to support them. Issues on, Discussions off, Wiki disabled: an empty wiki tab on a public repository reads as abandonment, and a solo maintainer should not open a second inbox before the first one has traffic.
 - [x] Enable private vulnerability reporting under **Settings → Security → Code security** (owner-confirmed).
 - [x] Enable the dependency graph, Dependabot alerts, and Dependabot security updates (owner-confirmed).
 - [x] Enable code scanning with the checked-in CodeQL workflow (owner-confirmed).
 - [x] Review the default `GITHUB_TOKEN` setting and keep permissions read-only unless a job grants a narrower explicit permission (owner-confirmed).
-- [ ] Add `CODEOWNERS` after the maintainer identity is known; require its review only when that rule is sustainable.
+- [x] Add `CODEOWNERS` after the maintainer identity is known; require its review only when that rule is sustainable. `.github/CODEOWNERS` assigns every path to `@nanaagyei`. Branch protection deliberately does not require that review yet, because a solo maintainer cannot satisfy an approval rule.
 - [x] Disable force pushes and branch deletion on `main` (owner-confirmed).
 - [x] Protect `main` with pull requests, conversation resolution, and required checks: both runtime matrix jobs, frozen protocol validation, dependency audit, dependency review, package inspection, and CodeQL (owner-confirmed).
 - [ ] Require at least one approving review once a second trusted maintainer exists. Do not create an impossible solo-maintainer rule.
