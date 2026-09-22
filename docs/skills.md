@@ -55,7 +55,7 @@ Alternatively, copy one entire skill folder to the skills directory supported by
 
 The Phase 10 [capability host adapters](adapters.md) project the same portable bundle into generic, Codex and Claude Code host locations. A host expression such as `/onboarding` or `$onboarding` is an invocation surface, not the identity of the `onboarding` capability. Consent-bearing operations still use the trusted terminal handoff.
 
-The npm tarball includes the same skill folders but does not automatically install them into agent directories. The Phase 6 executable requires Node.js 24+. Installing a skill alone does not initialize a learner workspace or configure an agent harness.
+Noetherkin is not published to a package registry. The CLI is built from a checkout and requires Node.js 24+; see the [CLI guide](cli.md). Installing a skill alone does not initialize a learner workspace or configure an agent harness.
 
 ## Persistent drafts
 
@@ -81,4 +81,4 @@ The full frozen schema/catalog set and shared protocol guidance are bundled with
 
 Generated Markdown changes local link locations, not protocol semantics. The reference index maps original source paths to installed files. Each `references/bundle.json` records source and output SHA-256 digests, the source-manifest digest and index digest. Explicitly listed historical/index citations remain plain repository context; an unlisted missing dependency fails generation. Check mode performs no writes and fails on drift, extra resources or broken installed links. Edit source guidance, regenerate and review; never hand-edit generated references.
 
-`npm pack` runs the bundle check before building. Tests copy skills away from the checkout, compile bundled schemas, inject broken references/content, and verify npm contents. Behavioral cases cover every skill, including authority, stale-input, fabricated-evidence, untrusted-artifact and draft-idempotency failures. These checks establish artifact portability and bounded behavior, not educational effectiveness. See [behavioral evaluation cases](../evaluations/skills-behavior.md) for the manual acceptance procedure.
+`npm pack` runs the bundle check before building; the tarball is retained as a portability check, not a release artifact. Tests copy skills away from the checkout, compile bundled schemas, inject broken references/content, and verify npm contents. Behavioral cases cover every skill, including authority, stale-input, fabricated-evidence, untrusted-artifact and draft-idempotency failures. These checks establish artifact portability and bounded behavior, not educational effectiveness. See [behavioral evaluation cases](../evaluations/skills-behavior.md) for the manual acceptance procedure.
