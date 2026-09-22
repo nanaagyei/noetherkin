@@ -8,6 +8,10 @@ All notable changes will be documented in this file. The format follows [Keep a 
 
 - Initial public-release documentation, CI, security policy, release automation, and publication gates.
 - Apache License 2.0 and a contributor-facing AI-agent policy.
+- First-party JSON Schema Draft 2020-12 subset validator (`core/schema.ts`) covering the closed keyword set the eleven protocol schemas use, with unsupported keywords and formats rejected at load time.
+- Differential parity test (`tests/schema-parity.test.mjs`) establishing equivalence with `ajv` over a 138-document corpus and 122,804 systematically mutated documents.
+- Direct test coverage for the state reader's refusal of duplicate keys in flow and nested form, non-mapping document roots, and out-of-range or non-JSON number syntax, with the `YAML_INVALID` diagnostic code pinned.
+- `docs/proposals/` staging area for architecture change proposals under review, with ACP-012 through ACP-016 and a worked forge-project example. These are explicitly non-normative and change no protocol behavior.
 
 ### Changed
 
@@ -16,6 +20,7 @@ All notable changes will be documented in this file. The format follows [Keep a 
 - Simplified the public README and documented the separate one-command agent-capability and CLI installation paths.
 - Excluded private architecture prompts and agent handoff notes from the public repository root.
 - Migrated GitHub Actions dependencies from Node.js 20-backed releases to immutable Node.js 24-backed releases.
+- Replaced `ajv` and `ajv-formats` in the runtime with the first-party validator and moved both to devDependencies, where they now serve only as the parity oracle. A production install resolves 2 packages rather than 8. Validation verdicts and reported errors are unchanged; error emission order is not reproduced and is not guaranteed.
 
 ## [0.1.0] - Unreleased
 

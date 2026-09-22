@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "id": "eval-ledger-04-operable",
+  "forge_id": "eval-ledger",
+  "pack_id": "eval-ledger-core",
+  "sequence": 4,
+  "type": "PRODUCT",
+  "title": "Make it operable by someone who did not write it",
+  "problem": "The tool works when nothing goes wrong and the operator is its author. Neither holds in practice. An interrupted run leaves a record that looks complete, two concurrent runs can corrupt each other, and a new user has no path from a clone to a comparison.",
+  "context": "Final task of the pack. This is where the project becomes something another person can run, and where production-readiness has something real to assess.",
+  "impact": "A tool nobody else can operate is a script. This task is the difference.",
+  "acceptance_criteria": [
+    { "id": "AC-interrupted", "criterion": "A record left incomplete by an interrupted run is detected on read and refused as a run. Truncated results are never reported as complete." },
+    { "id": "AC-concurrent", "criterion": "Two runs started against the same record directory do not interleave into one record. Either each owns its own record or the second refuses to start, and the chosen behavior is documented." },
+    { "id": "AC-summary", "criterion": "Each run emits a one-line summary with counts by outcome, including errored as its own count." },
+    { "id": "AC-duration", "criterion": "Per-case wall-clock duration appears in the run record." },
+    { "id": "AC-quickstart", "criterion": "A person with only the README goes from clone to a comparison against the bundled example target in under a minute." },
+    { "id": "AC-ops-note", "criterion": "An operations note covers an interrupted run, an unknown run id, and what deleting a record breaks." },
+    { "id": "AC-outside-check", "criterion": "Someone other than the learner performs the quickstart without assistance and the result is recorded, including where they got stuck." },
+    { "id": "AC-tests", "criterion": "Automated tests cover interrupted-record detection and the chosen concurrency behavior, and pass at the submitted revision." },
+    { "id": "AC-explanation", "criterion": "The learner explains the concurrency choice, one rejected alternative, and the first thing that will break when the case set grows by a factor of a hundred." }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only. No process supervisor, lock service or database.",
+    "AC-outside-check requires a real person. A simulated or model-performed walkthrough does not satisfy it, and recording one as satisfied is fabricated evidence.",
+    "Do not push to a remote, publish a package or deploy anything as part of this task."
+  ],
+  "primary_competencies": ["core.ownership", "core.technical-communication"],
+  "secondary_competencies": ["core.implementation", "core.testing", "core.debugging"],
+  "recommended_level": "E1",
+  "scope": { "classification": "component", "components": ["run lifecycle", "documentation"], "description": "Operability of the whole tool, not a new feature." },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "How an incomplete record is distinguished from a complete one without trusting the writer",
+    "What concurrency guarantee is honest to claim given the chosen mechanism",
+    "Where a first-time reader actually gets stuck, which is discovered by watching one, not by guessing"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design.",
+    "Perform the quickstart on a clean clone before claiming AC-quickstart."
+  ],
+  "documentation_requirements": [
+    "README quickstart, run record format as a stable contract, and the operations note.",
+    "Record the outside walkthrough result verbatim, including where the person got stuck."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": { "required_files": [], "required_fragments": [] },
+  "next_task_preview": null
+}
