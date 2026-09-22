@@ -1,0 +1,8 @@
+# Every path requires maintainer review.
+#
+# Branch protection does not currently require this review. A solo-maintainer
+# approval rule cannot be satisfied by the only person able to approve it, and
+# the publishing checklist deliberately avoids creating one. Make review
+# required once a second trusted maintainer exists.
+
+*       @nanaagyei
