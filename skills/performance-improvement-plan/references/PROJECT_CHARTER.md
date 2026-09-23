@@ -66,11 +66,15 @@ Agents support the learner rather than replace them.
 
 ## 2. Real Engineering Environments
 
-The simulator should operate primarily against real open-source repositories.
+The simulator operates against real open-source repositories and against first-party forge specifications.
 
-The repositories themselves are not owned or vendored by this project.
+Open-source repositories supply genuine external constraint: existing design decisions, unfamiliar conventions, real contribution processes and maintainers who did not write the code for teaching. They remain the primary environment from E3 upward.
 
-Learners fork or clone them separately.
+Forge specifications supply bounded first work. The learner authors the entire system from a shipped specification. The repository owns the specification and the task pack; it never owns or ships a solution. They carry E0 through E2.
+
+Upstream repositories are not owned or vendored by this project. Learners fork or clone them separately.
+
+(Amended by ACP-015, Phase 13; see `FOUNDATION_CHANGELOG.md`.)
 
 ---
 
@@ -222,7 +226,7 @@ workspace/
   .apprenticeship/
   source/
 
-`source/` contains the learner's fork or clone.
+`source/` contains the learner's fork or clone of an upstream project, or, for a forge project, the system the learner is writing from empty.
 
 ---
 

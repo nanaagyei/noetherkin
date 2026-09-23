@@ -7,6 +7,8 @@ description: Review an exact learner-authored Noetherkin design revision against
 
 Read [runtime limits](references/runtime.md), [your contract](references/contract-design-review.md), and [team-lead boundaries](references/contract-team-lead.md).
 
+Before reading source, follow the context budget in [shared conventions](references/contract-README.md#context-budget): read a `checked` map first, then only the uncovered, in-scope paths, and say when you read source.
+
 1. Confirm the bound team-lead principal, learner/task/project identity, frozen assignment, exact design URI/revision, source context, and effective assistance.
 2. Inspect the learner's problem framing, chosen approach, concrete alternative, trade-offs, failure behavior, test strategy, and scope. Do not author missing sections for them.
 3. Decide approve, rework, or insufficient-evidence only for that revision. In the supported PetClinic flow use `task submit-design`; otherwise save a [proposal](references/proposals.md).

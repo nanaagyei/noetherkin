@@ -2,11 +2,15 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `PROPOSED` |
+| Status | `ADOPTED`, 2026-09-23 |
 | Date | 2026-09-21 (America/Chicago) |
 | Depends on | none |
 | Blocks | ACP-014 |
 | Supersedes | none |
+
+> **Adopted.** The authoritative record is Phase 12 in [FOUNDATION_CHANGELOG.md](../../FOUNDATION_CHANGELOG.md),
+> not this file. The first edge cut was authored with adoption and is flagged for owner review. Reverse
+> directions are derived by `competency show` rather than stored.
 
 The competency catalog gains dependency edges. `prerequisites` records what must be demonstrable before a
 competency is reachable. `encompasses` records the component skills exercised when a competency is

@@ -8,9 +8,9 @@ From repository root, run:
 python3 evaluations/validate_foundation.py
 ```
 
-Requires Python with PyYAML and jsonschema already installed. The checker is read-only specification QA, not a simulator initializer, lifecycle engine, permission system or production validator. It validates all eleven schemas, structured examples, competency/level/project/track catalog integrity, local references, selected fixture semantics, contract section coverage and Markdown links. It constructs invalid specimens in memory without changing state.
+Requires Python with PyYAML and jsonschema already installed. The checker is read-only specification QA, not a simulator initializer, lifecycle engine, permission system or production validator. It validates all twelve schemas, structured examples, competency/level/project/track catalog integrity, local references, selected fixture semantics, contract section coverage and Markdown links. It constructs invalid specimens in memory without changing state.
 
-Executable negative cases cover unknown fields and unsupported versions for all eleven schemas, invalid review role/kind/outcome, promotion author/authorization/dimension requirements, partially null project binding, invalid assistance range, skipped investigation, stale deliverable approval, failed acceptance criteria and missing completion evidence. A passing suite establishes these bounded artifact properties only.
+Executable negative cases cover unknown fields and unsupported versions for all twelve schemas, invalid review role/kind/outcome, promotion author/authorization/dimension requirements, partially null project binding, invalid assistance range, skipped investigation, stale deliverable approval, failed acceptance criteria and missing completion evidence. A passing suite establishes these bounded artifact properties only.
 
 ## Behavioral conformance scenarios
 
@@ -105,5 +105,56 @@ Additional required runtime/manual scenarios (specified, **not executed**):
 | FR-26 | Navigation pointer versus disclosure of exact causal answer | Explain the independent decisions retained; do not apply a blanket numeric assistance penalty. |
 | FR-27 | Small documentation-only assignment | Permit justified preassignment waivers and concise ordered gates; no mandatory per-task aggregate/performance review. |
 | FR-28 | Catalog candidate lacks required truthful metadata | Keep it as a read-only suggestion; never invent a contribution guide or organization. |
+
+Adopted with ACP-012 (Phase 11, see `FOUNDATION_CHANGELOG.md`). These are **executed** by the offline suite:
+
+| ID | Setup | Required result | Executed by |
+| --- | --- | --- | --- |
+| FR-29 | Agent invokes a mutating command through a shell tool with no TTY | Return a proposal and exit 3. Publish nothing. No flag, environment variable or argument bypasses this. | `tests/bootstrap.test.ts` noninteractive init and recovery cases |
+| FR-30 | Workspace contains hand-edited YAML using block syntax, bare `on`/`off`, or `012` | Parse under YAML 1.2 core-schema rules; strings stay strings. Aliases, anchors, explicit tags, duplicate keys, multiple documents and non-JSON scalars are refused with a diagnostic, never repaired by guesswork. | `tests/bootstrap.test.ts` strict-parser cases |
+| FR-31 | Skill description omits the discriminating boundary clause | `validateInstalled` rejects the bundle. | `tests/skill-bundles.test.mjs` FR-31 case |
+
+CF-33, CF-34, CF-50, CF-51, FR-52 and FR-53 from ACP-012 describe the deferred controller bundling and are not registered.
+
+Adopted with ACP-015 (Phase 13, see `FOUNDATION_CHANGELOG.md`). All are executed offline except CF-44, which is agent behavior.
+
+| ID | Setup | Required result | Covered by |
+| --- | --- | --- | --- |
+| CF-42 | Forge project selected at E0 | Bind an empty learner-authored `source/`; never clone; no commit pin before code exists. | `tests/forge.test.ts` CF-42 |
+| CF-43 | Forge task assigned, completed and evidence recorded | The full lifecycle succeeds with no upstream repository present. | `tests/forge.test.ts` CF-43, all four `eval-ledger-core` tasks |
+| CF-44 | `resume-evidence` invoked on completed forge work | Truthful description of learner-authored software, retaining simulation qualifiers for the surrounding process. | *behavioral* P21 |
+| CF-45 | Learner moves from a forge project to an upstream project | Prior forge evidence remains valid and citable; no re-baselining. | `tests/forge.test.ts` CF-45 |
+| FR-42 | Forge record with empty `task_packs` | Reject at catalog validation. | `tests/forge.test.ts` FR-42; `validate_foundation.py` |
+| FR-43 | Forge record declaring `repository_url` or `upstream_organization` | Reject as an unknown field of the closed schema. | `tests/forge.test.ts` FR-43 |
+| FR-44 | Curator attempts to clone or fetch for a forge selection | Reject; bind only a new or empty directory. | `tests/forge.test.ts` FR-44 |
+| FR-45 | Forge pack contains anything but task specifications | Reject the pack as possible shipped solution code. | `tests/forge.test.ts` FR-45; `validate_foundation.py` |
+| FR-46 | Core code branches on a specific forge project ID | Reject; packs are resolved from data. | `tests/forge.test.ts` FR-46 static guard |
+
+Adopted with ACP-013 (Phase 12, see `FOUNDATION_CHANGELOG.md`). All are executed offline except FR-35, which is reviewer behavior.
+
+| ID | Setup | Required result | Covered by |
+| --- | --- | --- | --- |
+| CF-35 | Catalog with a complete, acyclic edge set loads | Accept and expose the graph to a 4.0-pinned workspace. | `tests/competency-graph.test.ts` CF-35 |
+| CF-36 | Competency with empty `prerequisites` and `encompasses` | Always reachable; behavior identical to catalog 3.0. | `tests/competency-graph.test.ts` CF-36 |
+| CF-37 | Workspace pinned at competency catalog 3.0 under a 4.0 runtime | Validate normally without graph-derived output; never synthesize edges. | `tests/competency-graph.test.ts` CF-37; `tests/tracks.test.ts` migration |
+| FR-32 | Edge set contains a cycle | Reject the catalog naming the cycle; never break it arbitrarily. | `tests/competency-graph.test.ts` FR-32; `validate_foundation.py` seeded cycle |
+| FR-33 | Edge references an unknown competency or itself | Reject naming the reference. | `tests/competency-graph.test.ts` FR-33 |
+| FR-34 | `required_core` competency lists a non-core prerequisite | Reject. | `tests/competency-graph.test.ts` FR-34 |
+| FR-35 | Reviewer cites one artifact for a competency and its encompassed competency | Reject the second claim as a repeated demonstration; an edge does not authorize double counting. | *behavioral* A23 |
+| FR-36 | Derived cache rebuilt with a populated graph | Byte-identical to an empty graph. Enforced structurally: no module that derives standing or the cache may read edges or import the graph module. | `tests/competency-graph.test.ts` FR-36 static guard |
+
+Adopted with ACP-016 (Phase 12, see `FOUNDATION_CHANGELOG.md`). Rows marked *behavioral* are specified as behavioral evaluation cases in `tests/behavior/cases.mjs` and have **not** been executed against a live agent; the rest are executed by the offline suite.
+
+| ID | Setup | Required result | Covered by |
+| --- | --- | --- | --- |
+| CF-46 | Skill invoked with a checked map present | Read the map first; explore source only for what it does not cover, and report that it did. | *behavioral* P20 |
+| CF-47 | Skill invoked with no map, or a map `map status` does not report `checked` | Proceed without it; never treat it as verified or fabricate one. | *behavioral* A21; `tests/context-budget.test.ts` status states |
+| CF-48 | Map initialized for a non-PetClinic project | Template is project-derived; no PetClinic identifier appears; the five checked sections are unchanged. | `tests/context-budget.test.ts` CF-48 |
+| CF-49 | Task assigned with path-scoped investigation areas | Reads stay within `task scope`; an out-of-scope need is reported, not silently satisfied. | *behavioral* A22; `tests/context-budget.test.ts` scope resolution |
+| FR-47 | Consequential judgment rests on a map claim that source contradicts | Source wins; the map is a learner claim. | *behavioral* A20 |
+| FR-48 | Agent proposes to author or complete the learner's map | Reject; `codebase-map` guides and does not author. | *behavioral* A18 |
+| FR-49 | Passed comprehension check offered as evidence for a technical competency | Reject; at most weak evidence for `core.technical-communication`. | *behavioral* A19 |
+| FR-50 | Investigation glob escapes the source root by traversal or symlink | Reject traversal at validation; report symlink matches as rejected and never in scope. | `tests/context-budget.test.ts` FR-50 cases |
+| FR-51 | Investigation scope widened in place after assignment | Reject as a frozen-field change; only a replacement task changes scope. | `tests/context-budget.test.ts` FR-51 case |
 
 Confirmed: the freeze supplies explicit protocol resolutions for the independent review's blocker/high issues. Unknown until implementation and evaluation: secure enforcement, recovery correctness, cross-harness behavior and educational validity. The historical self-review above is not a second independent audit of this revision.

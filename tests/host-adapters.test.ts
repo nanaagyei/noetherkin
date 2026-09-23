@@ -13,6 +13,8 @@ import { GenericCapabilityHostAdapter } from '../adapters/hosts/generic/index.js
 import { CodexCapabilityHostAdapter } from '../adapters/hosts/codex/index.js';
 import { ClaudeCodeCapabilityHostAdapter } from '../adapters/hosts/claude-code/index.js';
 import { decodeOnboardingHandoff, validateOnboardingHandoff } from '../adapters/hosts/generic/onboarding.js';
+import { installCapabilities, portableSkillIds } from '../adapters/hosts/generic/index.js';
+import { sha256 } from '../core/common.js';
 
 const repository = fileURLToPath(new URL('../../', import.meta.url));
 const cli = fileURLToPath(new URL('../cli/main.js', import.meta.url));
@@ -121,4 +123,64 @@ test('invalid existing state blocks onboarding and reports the exact validation 
   const root = workspace(t); fs.mkdirSync(path.join(root, '.apprenticeship')); fs.writeFileSync(path.join(root, '.apprenticeship/config.yaml'), '{}\n');
   const result = await new GenericCapabilityHostAdapter().invoke({ capability_id: 'onboarding', workspace: root, input });
   assert.equal(result.outcome, 'blocked'); assert.ok(result.diagnostics.length > 0); assert.ok(result.diagnostics.some(item => item.path.includes('config.yaml')));
+});
+
+test('every portable skill projects with identical bytes into each host location', () => {
+  const ids = portableSkillIds();
+  const manifest = JSON.parse(fs.readFileSync(path.join(repository, 'skill-pack/manifest.json'), 'utf8'));
+  assert.equal(ids.length, manifest.skills.length);
+  const adapters = [new GenericCapabilityHostAdapter(), new CodexCapabilityHostAdapter('missing'), new ClaudeCodeCapabilityHostAdapter('missing')];
+  const roots = ['skills', '.codex/skills', '.claude/skills'];
+  const surfaces = ['capability:', '$', '/'];
+  for (const id of ids) {
+    const projections = adapters.map(adapter => adapter.project(id));
+    projections.forEach((projection, index) => {
+      assert.equal(projection.target_root, `${roots[index]}/${id}`);
+      assert.deepEqual(projection.invocation_surfaces, [`${surfaces[index]}${id}`]);
+      assert.ok(projection.files.every(file => file.target.startsWith(`${projection.target_root}/`)));
+      assert.ok(projection.files.some(file => file.target === `${projection.target_root}/SKILL.md`));
+    });
+    assert.deepEqual(projections[1]!.files.map(file => file.sha256), projections[0]!.files.map(file => file.sha256));
+    assert.deepEqual(projections[2]!.files.map(file => file.sha256), projections[0]!.files.map(file => file.sha256));
+  }
+  assert.deepEqual(adapters[2]!.profile.discovery.explicit, ids.map(id => `/${id}`));
+  assert.throws(() => adapters[0]!.project('not-a-skill'), { code: 'UNSUPPORTED_CAPABILITY' });
+});
+
+test('capabilities without a host bridge report blocked instead of pretending to run', async t => {
+  const result = await new ClaudeCodeCapabilityHostAdapter('missing').invoke({ capability_id: 'debug', workspace: workspace(t), input: {} });
+  assert.equal(result.outcome, 'blocked'); assert.equal(result.diagnostics[0]?.code, 'NO_CONTROLLER_BRIDGE'); assert.equal(result.next_action, null);
+  await assert.rejects(new GenericCapabilityHostAdapter().invoke({ capability_id: 'not-a-skill', workspace: workspace(t), input: {} }), { code: 'UNSUPPORTED_CAPABILITY' });
+});
+
+test('install copies verified bundles, is idempotent, and never overwrites a differing file', t => {
+  const target = workspace(t);
+  const adapter = new ClaudeCodeCapabilityHostAdapter('missing');
+  const first = installCapabilities(adapter, target, portableSkillIds());
+  assert.equal(first.capabilities.length, portableSkillIds().length);
+  assert.ok(first.capabilities.every(item => item.written > 0 && item.unchanged === 0));
+  for (const file of adapter.project('teach').files) assert.equal(sha256(fs.readFileSync(path.join(target, file.target))), file.sha256);
+  const again = installCapabilities(adapter, target, ['teach']);
+  assert.equal(again.capabilities[0]!.written, 0); assert.ok(again.capabilities[0]!.unchanged > 0);
+
+  const conflicted = workspace(t);
+  const entry = path.join(conflicted, '.claude/skills/debug/SKILL.md');
+  fs.mkdirSync(path.dirname(entry), { recursive: true }); fs.writeFileSync(entry, 'someone else\'s debug skill\n');
+  assert.throws(() => installCapabilities(adapter, conflicted, ['teach', 'debug']), { code: 'CONFLICT' });
+  assert.deepEqual(fs.readdirSync(path.join(conflicted, '.claude/skills')), ['debug'], 'a conflict writes nothing, including other skills');
+  assert.equal(fs.readFileSync(entry, 'utf8'), "someone else's debug skill\n");
+});
+
+test('skills CLI lists capabilities and installs them for a named host', t => {
+  const target = workspace(t);
+  const list = spawnSync(process.execPath, [cli, 'skills', 'list', '--json'], { encoding: 'utf8' });
+  assert.equal(list.status, 0, list.stderr);
+  const skills = JSON.parse(list.stdout).data.skills;
+  assert.deepEqual(skills.map((skill: { name: string }) => skill.name), portableSkillIds());
+  assert.ok(skills.every((skill: { description: string }) => skill.description.length > 0));
+  const install = spawnSync(process.execPath, [cli, 'skills', 'install', '--host', 'codex', '--skill', 'teach', '--target', target, '--json'], { encoding: 'utf8' });
+  assert.equal(install.status, 0, install.stdout);
+  assert.ok(fs.existsSync(path.join(target, '.codex/skills/teach/SKILL.md')));
+  assert.equal(spawnSync(process.execPath, [cli, 'skills', 'install', '--host', 'cursor', '--target', target, '--json'], { encoding: 'utf8' }).status, 2);
+  assert.equal(spawnSync(process.execPath, [cli, 'status', '--host', 'codex', '--json'], { encoding: 'utf8', cwd: target }).status, 2);
 });

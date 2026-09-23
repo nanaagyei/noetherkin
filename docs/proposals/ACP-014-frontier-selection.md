@@ -8,6 +8,11 @@
 | Blocks | none |
 | Supersedes | none |
 
+> **Deferred, 2026-09-23.** Remains `PROPOSED` by owner decision. ACP-013 and ACP-015 are now adopted, so its
+> dependencies are met, but the only content to select among is one upstream task and one four-task forge pack. As
+> section 7 warns, adopting it now would adopt a scheduler with a nearly empty queue. Revisit when several authored
+> packs exist and the competency graph covers more than one track.
+
 Noetherkin gains a derived, advisory view that answers "what should this learner work on next, and why." It
 computes a knowledge frontier from the competency graph, orders competencies by how much attention they
 warrant, and feeds task assignment, remediation and baseline probing. It is regenerable, deletable, never

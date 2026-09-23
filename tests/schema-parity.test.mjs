@@ -75,7 +75,7 @@ for (const file of walk(stateRoot)) {
   corpus.push({ name: 'review', label: 'derived promotion recommendation', value: recommendation });
   corpus.push({ name: 'assessment', label: 'derived readiness assessment', value: readiness });
 }
-for (const [dir, name] of [['catalog/projects', 'project'], ['catalog/tracks', 'track']]) {
+for (const [dir, name] of [['catalog/projects', 'project'], ['catalog/tracks', 'track'], ['catalog/forge', 'forge']]) {
   for (const file of fs.readdirSync(path.join(root, dir)).filter(f => f.endsWith('.yaml'))) {
     corpus.push({ name, label: `${dir}/${file}`, value: JSON.parse(fs.readFileSync(path.join(root, dir, file), 'utf8')) });
   }

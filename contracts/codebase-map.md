@@ -20,7 +20,9 @@ Read the selected project binding, exact source revision, existing learner map, 
 
 ## Allowed and Forbidden Actions
 
-Guide targeted searches, require citations, separate static structure from observed runtime behavior, and retain unknowns. Do not generate an authoritative map from filenames alone, execute unrelated code, or treat a completed map as competency evidence.
+Guide targeted searches, require citations, separate static structure from observed runtime behavior, and retain unknowns. Do not generate an authoritative map from filenames alone, execute unrelated code, or treat a completed map as competency evidence. Do not author, complete or rewrite the learner's map, including on request: a map the agent wrote and the learner approved exercises approval, not navigation (ACP-016, FR-48).
+
+The checked map is the context substrate for later skills ([context budget](README.md#context-budget)). `map status` reports `checked` only for the exact map text checked at the current source revision; after the checkout moves or the map changes it reports `unchecked`, and affected claims must be rechecked.
 
 ## Required Output
 

@@ -10,6 +10,7 @@ Start with [the foundation authority](FOUNDATION_V1.md) and [the charter](PROJEC
 | Facts, interpretation, verification | [Evidence](docs/architecture/evidence-model.md) |
 | Specialization and assessments | [Competencies](docs/architecture/competency-model.md), [catalog](catalog/competencies.yaml) |
 | Advisory tracks and project pathways | `catalog/tracks/`, [state](docs/architecture/state-model.md), [projects contract](contracts/projects.md) |
+| Forge specifications (learner-built projects, E0–E2) | `catalog/forge/`, `tasks/forge/`, [forge schema](schemas/forge.schema.json), [charter section 2](PROJECT_CHARTER.md) |
 | E0–E5 expectations | [Leveling](docs/architecture/leveling-framework.md), [rubric](catalog/levels.yaml) |
 | Levels 0–7 and attribution | [Assistance](docs/architecture/assistance-model.md) |
 | Review kinds and promotion | [Reviews](docs/architecture/review-model.md) |

@@ -40,8 +40,9 @@ Noetherkin currently includes:
 - a frozen V1 product foundation with wire protocol 3.0;
 - a deterministic, recoverable local state publisher;
 - 21 portable [Agent Skills](docs/skills.md);
-- 34 versioned learning tracks and 87 project catalog entries;
-- generic, Codex, and Claude Code onboarding adapters;
+- 34 versioned learning tracks, 87 project catalog entries, and a forge specification (Eval Ledger) that E0 to E2 learners build from empty;
+- an advisory competency graph and a map-first context budget;
+- generic, Codex, and Claude Code capability adapters, and Codex or Claude Code role adapters;
 - evidence, assistance, review, and promotion semantics designed to resist fabricated progress.
 
 ## Why it exists
@@ -67,7 +68,7 @@ Run this inside the project where you want to use Noetherkin:
 npx skills add nanaagyei/noetherkin
 ```
 
-The [Skills CLI](https://github.com/vercel-labs/skills) discovers the bundled capabilities and lets you choose the target agent and skills. To install only onboarding:
+The [Skills CLI](https://github.com/vercel-labs/skills) discovers the bundled capabilities and lets you choose the target agent and skills. From a built checkout (step 2), `noetherkin skills install --host claude-code --target .` (or `--host codex`) does the same without the Skills CLI, verifies every file digest, and never overwrites an existing file. To install only onboarding:
 
 ```sh
 npx skills add nanaagyei/noetherkin --skill onboarding
@@ -104,7 +105,7 @@ noetherkin onboard --workspace /absolute/path/to/workspace
 noetherkin next --workspace /absolute/path/to/workspace
 ```
 
-Initialization requires direct terminal review and consent. Track selection guides project discovery but never owns skills, evidence, or promotion decisions. All CLI commands support `--json`; see the [CLI and recovery guide](docs/cli.md).
+Initialization requires direct terminal review and consent. Commands that need a role judgment use Codex by default; add `--role-adapter claude` (or set `NOETHERKIN_ROLE_ADAPTER=claude`) to use Claude Code instead. Track selection guides project discovery but never owns skills, evidence, or promotion decisions. All CLI commands support `--json`; see the [CLI and recovery guide](docs/cli.md).
 
 ## Use with an AI agent
 

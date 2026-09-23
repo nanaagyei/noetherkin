@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0",
+  "data_class": "live",
+  "id": "eval-ledger",
+  "name": "Eval Ledger",
+  "description": "A small harness that runs a declarative case set against a pluggable target, records each run as an immutable artifact, and reports per-case transitions between two runs.",
+  "status": "draft",
+  "track_alignment": [
+    "ml-engineering",
+    "ai-engineering"
+  ],
+  "competencies": [
+    "core.implementation",
+    "core.testing",
+    "core.debugging",
+    "core.git",
+    "core.technical-communication",
+    "core.ownership",
+    "python.language",
+    "python.testing",
+    "ml.evaluation"
+  ],
+  "recommended_minimum_level": "E0",
+  "ideal_level": "E1",
+  "primary_languages": [
+    "Python"
+  ],
+  "technologies": [
+    "Standard library",
+    "pytest"
+  ],
+  "external_services": [],
+  "problem": "When someone changes a component that produces judgments, such as a parser, a classifier, a ranking function or a prompt, they need to know whether the change helped, hurt, or moved results sideways. In practice this is done by running a handful of examples by hand and reading the output. The comparison is lost the moment anything else changes, there is no record of what the component did last week, and so the question 'is this better than before' ends up answered from memory. The failure is not that people lack metrics. It is that nobody keeps the per-case history that would let them see which specific cases changed.",
+  "users": [
+    {
+      "who": "Someone iterating on a component that produces judgments",
+      "needs": "To know, after a change, exactly which cases changed and in which direction, without rerunning anything from before."
+    },
+    {
+      "who": "A reviewer checking a claimed improvement",
+      "needs": "To read what actually happened across two runs without trusting the claim and without reproducing the environment."
+    }
+  ],
+  "success_criteria": [
+    {
+      "id": "SC-1",
+      "criterion": "Cases are declared in a data file. Adding, removing or editing a case requires no code change.",
+      "verifiable_by": "Add a case to the file, run the tool, observe the new case in the output. No source file was edited."
+    },
+    {
+      "id": "SC-2",
+      "criterion": "A run produces an immutable record containing every case result, the identity of the target, and when the run happened. A later run never overwrites an earlier one.",
+      "verifiable_by": "Run twice. Two records exist. The first is byte-identical to what it was before the second run."
+    },
+    {
+      "id": "SC-3",
+      "criterion": "Comparing two runs reports per-case transitions, at minimum: became-passing, became-failing, unchanged, added, removed. An aggregate count alone does not satisfy this.",
+      "verifiable_by": "Change the target so one case flips, run, compare. The output names that case and its direction."
+    },
+    {
+      "id": "SC-4",
+      "criterion": "A target that raises on one case does not cause the other case results to be lost.",
+      "verifiable_by": "Point the tool at a target that raises on a known case. The run record still contains results for every other case."
+    },
+    {
+      "id": "SC-5",
+      "criterion": "The report distinguishes cases that could not be evaluated from cases that were evaluated and failed. The two counts are never merged.",
+      "verifiable_by": "Read the summary for a run containing both. Two distinct counts appear."
+    },
+    {
+      "id": "SC-6",
+      "criterion": "Someone who did not write it can install it, run it against the bundled example target, and read a comparison without reading the source.",
+      "verifiable_by": "Hand the repository to another person with only the README. They produce a comparison."
+    }
+  ],
+  "non_goals": [
+    "Replacing a test framework. This measures a component's judgments over time; pytest checks code correctness, and the project uses pytest for its own tests.",
+    "Statistical significance testing or confidence intervals.",
+    "Any web interface, server or long-running process.",
+    "Model training, serving or inference.",
+    "Supplying a built-in scoring model. The comparison between expected and actual is supplied by the case set and the target, not decided by the tool."
+  ],
+  "operational_requirements": {
+    "failure_modes": [
+      {
+        "failure": "The target raises an exception on one case.",
+        "required_behavior": "Record that case as errored with the exception type and message, continue the remaining cases, and report the errored count separately from the failed count."
+      },
+      {
+        "failure": "The case file is malformed or references an unknown field.",
+        "required_behavior": "Refuse to run. Name the offending case and what is wrong with it. Write no run record, because a partial case set produces a misleading comparison."
+      },
+      {
+        "failure": "A run is interrupted partway through writing its record.",
+        "required_behavior": "A later read detects the record is incomplete and refuses to treat it as a run, rather than reporting truncated results as if they were complete."
+      },
+      {
+        "failure": "Two runs are started against the same record directory at the same time.",
+        "required_behavior": "They do not interleave into one record. Each run owns its own record, or the second refuses to start."
+      },
+      {
+        "failure": "A comparison is requested against a run id that does not exist.",
+        "required_behavior": "Report which run id was not found and list the run ids that do exist. Do not silently compare against the nearest one."
+      }
+    ],
+    "observability": [
+      "A one-line summary per run giving counts by outcome, including errored as its own count.",
+      "Per-case wall-clock duration in the run record.",
+      "The run record is readable and interpretable without the tool that wrote it.",
+      "The target's identity is recorded in a way that distinguishes two different targets, not just two different runs."
+    ],
+    "rollback": "Run records are immutable and addressed by run id, so there is no state to migrate or undo. Reverting the target and running again produces a new record, and every earlier comparison remains reproducible from the records already stored. The operational note documents that deleting a run record is the only destructive action available and that it breaks any comparison citing it.",
+    "documentation": [
+      "A README with a quickstart that produces a comparison against the bundled example target in under a minute.",
+      "The run record format documented as a stable contract, including which fields a reader may rely on.",
+      "An operations note covering an interrupted run, a missing run id, and what deleting a record breaks."
+    ]
+  },
+  "context_budget": {
+    "source_tokens_target": 15000,
+    "excludes": [
+      "tests",
+      "lockfiles",
+      "generated files",
+      "the bundled example target"
+    ],
+    "rationale": "A system the learner can hold in context is a system the learner can hold in their head. The budget exists to force scope discipline on this specification, not to constrain the learner's style. This number is a starting target and should be revised against ACP-016 measurements."
+  },
+  "prerequisites": [
+    "Can run a Python program and install a package into a virtual environment.",
+    "Can read and write a structured data file such as JSON or TOML.",
+    "Has used a test runner at least once, even without writing tests before."
+  ],
+  "task_packs": [
+    "eval-ledger-core"
+  ],
+  "caveats": [
+    "This is a first-party specification, not an upstream project. Completing it establishes no upstream contribution, maintainer relationship or endorsement.",
+    "The specification is owned by this repository. No solution, reference implementation or partial source is shipped with it.",
+    "Evidence derived from this work describes learner-authored software produced inside a simulated engineering process. The surrounding review, assignment and incident workflows are simulated and must be qualified as such.",
+    "The context budget is an authoring constraint on this specification and an advisory target for the learner. It is not an acceptance criterion and no task fails for exceeding it."
+  ],
+  "sources": [],
+  "checked_at": "2026-09-21T00:00:00Z"
+}

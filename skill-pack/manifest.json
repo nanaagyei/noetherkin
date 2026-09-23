@@ -13,7 +13,7 @@
     "contracts/README.md",
     "schemas/apprenticeship-config.schema.json", "schemas/learner-profile.schema.json",
     "schemas/current-project.schema.json", "schemas/current-track.schema.json", "schemas/track.schema.json", "schemas/project.schema.json", "schemas/task.schema.json",
-    "schemas/evidence.schema.json", "schemas/assessment.schema.json", "schemas/review.schema.json",
+    "schemas/evidence.schema.json", "schemas/assessment.schema.json", "schemas/review.schema.json", "schemas/forge.schema.json",
     "schemas/competency-state.schema.json", "catalog/competencies.yaml", "catalog/levels.yaml",
     "skill-pack/runtime.md", "skill-pack/proposals.md", "skill-pack/proposal.md"
   ],

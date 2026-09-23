@@ -7,6 +7,8 @@ description: Analyze Noetherkin system boundaries and architectural trade-offs f
 
 Read [runtime limits](references/runtime.md), [your contract](references/contract-architecture.md), and [shared conventions](references/contract-README.md).
 
+Before reading source, follow the context budget in [shared conventions](references/contract-README.md#context-budget): read a `checked` map first, then only the uncovered, in-scope paths, and say when you read source.
+
 1. Identify the decision, constraints, exact project revision, and what is current versus proposed. Use the learner's [codebase-map contract](references/contract-codebase-map.md) where orientation is incomplete.
 2. Ask for the learner's preferred approach and defense against one concrete alternative. Inspect evidence for actual boundaries; names and diagrams alone do not establish runtime behavior.
 3. Compare alternatives by coupling, failure behavior, operability, migration, reversibility, and stated product constraints. Preserve unknowns and identify a validating experiment.

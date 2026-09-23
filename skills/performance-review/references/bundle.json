@@ -2,7 +2,7 @@
   "format_version": 2,
   "protocol_version": "3.0",
   "skill": "performance-review",
-  "manifest_sha256": "ee54a7fc00b92271abbc908f1b479395d29d901e3f994daf6378bc6b83685b7e",
+  "manifest_sha256": "5d1aa9ba8e526fe6d4f4ae6f93604d2749649adddf55594c054426790da61e97",
   "context_only_links": {
     "SPEC.md": "Repository index; required protocol documents are bundled directly.",
     "archive/protocol-1.0/FOUNDATION_V1.md": "Historical protocol 1.0, not current authority.",
@@ -20,8 +20,8 @@
     {
       "source": "PROJECT_CHARTER.md",
       "target": "references/PROJECT_CHARTER.md",
-      "source_sha256": "bc180b71cc54d6f9c5d95ea0e279458f006ff454b7d313faf11096a059e762af",
-      "bundled_sha256": "bc180b71cc54d6f9c5d95ea0e279458f006ff454b7d313faf11096a059e762af"
+      "source_sha256": "48e45908f5f4e6fb6f216055648ebf5fcc433a1263385899bd551891455a29b0",
+      "bundled_sha256": "48e45908f5f4e6fb6f216055648ebf5fcc433a1263385899bd551891455a29b0"
     },
     {
       "source": "OPEN_QUESTIONS.md",
@@ -32,8 +32,8 @@
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "d6f381ea746f7c5260b9aa8dc2f199babde7fac47684b2bb03ed7c12f7f71d6c",
-      "bundled_sha256": "d6f381ea746f7c5260b9aa8dc2f199babde7fac47684b2bb03ed7c12f7f71d6c"
+      "source_sha256": "4c6d2343e9389a63a14d1f8decc5edd6983515a5c5c912a7c8bf1e952bd54da3",
+      "bundled_sha256": "4c6d2343e9389a63a14d1f8decc5edd6983515a5c5c912a7c8bf1e952bd54da3"
     },
     {
       "source": "docs/architecture/overview.md",
@@ -56,8 +56,8 @@
     {
       "source": "docs/architecture/state-model.md",
       "target": "references/state-model.md",
-      "source_sha256": "cb2c8cf56c7ee6370812ca39ec6c29d6300d0c7eee683d3811f84006563a5410",
-      "bundled_sha256": "cb2c8cf56c7ee6370812ca39ec6c29d6300d0c7eee683d3811f84006563a5410"
+      "source_sha256": "594538470961e13af5b0df8ff5af1c27bb32d72dcb3842861ef5586a25013bdc",
+      "bundled_sha256": "594538470961e13af5b0df8ff5af1c27bb32d72dcb3842861ef5586a25013bdc"
     },
     {
       "source": "docs/architecture/simulation-lifecycle.md",
@@ -74,8 +74,8 @@
     {
       "source": "docs/architecture/competency-model.md",
       "target": "references/competency-model.md",
-      "source_sha256": "d12af1bf058d7412258fa6154e5123ed77b6153dd690792d826aac9d76b1509d",
-      "bundled_sha256": "d12af1bf058d7412258fa6154e5123ed77b6153dd690792d826aac9d76b1509d"
+      "source_sha256": "38206015b05f82a9d838bfa33922aa5c4c8ab698a1ea75883de2b3535467ef89",
+      "bundled_sha256": "38206015b05f82a9d838bfa33922aa5c4c8ab698a1ea75883de2b3535467ef89"
     },
     {
       "source": "docs/architecture/leveling-framework.md",
@@ -104,20 +104,20 @@
     {
       "source": "docs/architecture/conformance.md",
       "target": "references/conformance.md",
-      "source_sha256": "33f44f4f7ab3d505a11a5d9dc9f9f83490224ed88888f57d50e4426c8d698648",
-      "bundled_sha256": "33f44f4f7ab3d505a11a5d9dc9f9f83490224ed88888f57d50e4426c8d698648"
+      "source_sha256": "6fc7dded82254ebe86b853e9228b2726031cf75e8d9b77bae9d359a0662b4bb6",
+      "bundled_sha256": "6fc7dded82254ebe86b853e9228b2726031cf75e8d9b77bae9d359a0662b4bb6"
     },
     {
       "source": "contracts/README.md",
       "target": "references/contract-README.md",
-      "source_sha256": "4286ae34a7eb08a075b11d5ffe1a965e7cb1357e8f40ec1ed78d21a9bf1ace5a",
-      "bundled_sha256": "41870f3e13384ad109bea58c8b4da536eee6a424878e9cffd3b2611253acf5cd"
+      "source_sha256": "a8aa50731fe9c016aa109ec8ba3a515888ec6fbdc80d67555db9b059e3a0573e",
+      "bundled_sha256": "e793840b7fdae8c947680e092641c27bb19ff27092d2bc6873ee8a750be949ab"
     },
     {
       "source": "schemas/apprenticeship-config.schema.json",
       "target": "references/apprenticeship-config.schema.json",
-      "source_sha256": "ba6c3e5912a7310732bd96ff9ad5c04800d2b1d1fdda136158b27c226f325333",
-      "bundled_sha256": "ba6c3e5912a7310732bd96ff9ad5c04800d2b1d1fdda136158b27c226f325333"
+      "source_sha256": "542c566e927b22ae402eb7dbbca76286417674463640a042cbb3d986e9bf0585",
+      "bundled_sha256": "542c566e927b22ae402eb7dbbca76286417674463640a042cbb3d986e9bf0585"
     },
     {
       "source": "schemas/learner-profile.schema.json",
@@ -128,8 +128,8 @@
     {
       "source": "schemas/current-project.schema.json",
       "target": "references/current-project.schema.json",
-      "source_sha256": "b50a05465eeb02bba0fdec4f56225bf44ddf3d83c4dd62ee8cc640b02b66d6df",
-      "bundled_sha256": "b50a05465eeb02bba0fdec4f56225bf44ddf3d83c4dd62ee8cc640b02b66d6df"
+      "source_sha256": "a8e80de73206cab6310b0807ad2f9a266a7b618649331dfcf90e7be83d5f89d9",
+      "bundled_sha256": "a8e80de73206cab6310b0807ad2f9a266a7b618649331dfcf90e7be83d5f89d9"
     },
     {
       "source": "schemas/current-track.schema.json",
@@ -152,8 +152,8 @@
     {
       "source": "schemas/task.schema.json",
       "target": "references/task.schema.json",
-      "source_sha256": "e7293baf0d02f1ddded4e08bdf1323afe04ecc58e6efbfb186a805b0bf9c72f2",
-      "bundled_sha256": "e7293baf0d02f1ddded4e08bdf1323afe04ecc58e6efbfb186a805b0bf9c72f2"
+      "source_sha256": "b41e9445ae6fde5fa237766a62d95dd0a65ebddc0cf04f3c5f9dc621e246d171",
+      "bundled_sha256": "b41e9445ae6fde5fa237766a62d95dd0a65ebddc0cf04f3c5f9dc621e246d171"
     },
     {
       "source": "schemas/evidence.schema.json",
@@ -174,6 +174,12 @@
       "bundled_sha256": "2cbac0ac5d874a48c8a8cd38372064498e9dc61606cdf7931e5a2028bd5b3d8e"
     },
     {
+      "source": "schemas/forge.schema.json",
+      "target": "references/forge.schema.json",
+      "source_sha256": "886ad04f97da39e9e643e9de63ebc09accff5360dade9514a5e6ac2f5f0d9e11",
+      "bundled_sha256": "886ad04f97da39e9e643e9de63ebc09accff5360dade9514a5e6ac2f5f0d9e11"
+    },
+    {
       "source": "schemas/competency-state.schema.json",
       "target": "references/competency-state.schema.json",
       "source_sha256": "077f17c98d5b892052f566c25509d13726b3c9455378108c3b709a6d070981e6",
@@ -182,8 +188,8 @@
     {
       "source": "catalog/competencies.yaml",
       "target": "references/competencies.yaml",
-      "source_sha256": "24728f01a299771fc054fbd66e732ab6c1ad293286809cdc2a7facc68abbd733",
-      "bundled_sha256": "24728f01a299771fc054fbd66e732ab6c1ad293286809cdc2a7facc68abbd733"
+      "source_sha256": "d000f9ff044e774fd96b25061fa45b2834269a7510fbb63daf70b5b141ede73f",
+      "bundled_sha256": "d000f9ff044e774fd96b25061fa45b2834269a7510fbb63daf70b5b141ede73f"
     },
     {
       "source": "catalog/levels.yaml",
@@ -240,5 +246,5 @@
       "bundled_sha256": "a26c0c6443667a6f958dcfe253c1988afefc346fde8c5e1b15f31ac01ddc9b93"
     }
   ],
-  "index_sha256": "621be657f9b590aabdef16247997b4a644f0eebb3257a1365252f79854abb626"
+  "index_sha256": "bfc9edd4636a6eb65a8028d09415f553708ae6dd48de077029dc7355bbc20f28"
 }

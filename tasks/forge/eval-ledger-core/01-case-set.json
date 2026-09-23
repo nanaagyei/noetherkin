@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "id": "eval-ledger-01-case-set",
+  "forge_id": "eval-ledger",
+  "pack_id": "eval-ledger-core",
+  "sequence": 1,
+  "type": "PRODUCT",
+  "title": "Declare the case set as data and refuse to run on a bad one",
+  "problem": "The harness needs a set of cases to run. If cases live in code, adding one is a code change and the case set stops being something a non-author can extend. If a malformed case set is tolerated, every later comparison silently compares different populations.",
+  "context": "This is the first task of a learner-authored forge project. No source exists yet. The learner creates the repository, chooses its structure, and owns every design decision inside the specification's constraints.",
+  "impact": "The case set is the population every later measurement is taken over. If it can drift silently, nothing built on top of it means anything.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-declarative",
+      "criterion": "Cases are declared in a data file. A case can be added, edited or removed with no source change."
+    },
+    {
+      "id": "AC-identity",
+      "criterion": "Every case has a stable identifier that survives reordering and editing of other cases."
+    },
+    {
+      "id": "AC-reject",
+      "criterion": "A malformed case set is refused before any case runs. The error names the offending case and what is wrong with it."
+    },
+    {
+      "id": "AC-no-partial",
+      "criterion": "A refused case set produces no run record and no partial output."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover at least one valid case set and at least two distinct malformed ones, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the chosen case identity scheme, one rejected alternative, and what breaks first if two cases are given the same identifier."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only. No configuration framework, schema library or CLI framework for this task.",
+    "Do not implement running, recording or comparison yet. This task ends at a validated, loaded case set.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "core.implementation",
+    "python.language"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.git"
+  ],
+  "recommended_level": "E0",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "case set loading"
+    ],
+    "description": "One input boundary and its validation."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "What identifies a case, and what must stay stable when the file is edited",
+    "Which malformations are worth detecting and which are not worth the code",
+    "How the loader reports a problem so the reader can fix it without reading the loader"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout."
+  ],
+  "documentation_requirements": [
+    "Record the case file format, the identity scheme and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Run the case set against a target and record the run immutably",
+    "summary": "Execute each case, keep going when one raises, and write a run record that a later run can never overwrite."
+  }
+}

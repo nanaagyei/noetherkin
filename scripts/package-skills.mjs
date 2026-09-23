@@ -101,6 +101,12 @@ export function validateInstalled(skillRoot, name = path.basename(skillRoot)) {
   const meta = doc.toJS();
   if (meta.name !== name || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(name) || name.length > 64) throw new Error(`Invalid skill name: ${name}`);
   if (typeof meta.description !== 'string' || !meta.description.trim() || meta.description.length > 1024) throw new Error(`Invalid description: ${name}`);
+  // ACP-012 routing contract. A harness selects a capability from its description alone, so a description that
+  // only says what the skill does gives the harness no way to rule it out. Each one must also state a boundary:
+  // what it is not for, or which sibling capability owns the adjacent work.
+  if (!/\bnot\b|\bnever\b|\bprefer\b|\brather than\b|\binstead of\b|\bbelongs? to\b/i.test(meta.description)) {
+    throw new Error(`Description states no boundary: ${name}. Name what this skill is not for, or which skill owns the adjacent work.`);
+  }
   if (entry.split('\n').length >= 500) throw new Error(`Entrypoint too long: ${name}`);
   for (const file of files.filter(file => file.endsWith('.md'))) {
     const content = fs.readFileSync(safe(skillRoot, file), 'utf8');

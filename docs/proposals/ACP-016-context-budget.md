@@ -2,11 +2,18 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `PROPOSED` |
+| Status | `ADOPTED`, 2026-09-23 |
 | Date | 2026-09-21 (America/Chicago) |
 | Depends on | none |
 | Blocks | none |
 | Supersedes | none |
+
+> **Adopted.** The authoritative record is Phase 12 in [FOUNDATION_CHANGELOG.md](../../FOUNDATION_CHANGELOG.md),
+> not this file. Two resolutions differ from the text below. The map pointer is **derived, not stored**: `map status`
+> recomputes it from the map text, the current source revision and the content-addressed check artifact, so no
+> schema gains a pointer field and no role gains a new write. Path globs live in a new optional, frozen
+> `investigation_paths` task field beside `investigation_areas` rather than inside its string entries, so the
+> frozen-field list in `state-model.md` gains one entry.
 
 Noetherkin gains an explicit position on context cost: the learner's own codebase map becomes the substrate
 every later skill reads instead of the repository, investigation is path-scoped at assignment, and context

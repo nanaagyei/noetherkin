@@ -304,9 +304,9 @@ class FreezeSpec(unittest.TestCase):
         for name in archived:
             self.assertIn('/3.0/',SCHEMAS[name].schema['$id'])
             self.assertIn('/1.0/',load(archive/f'schemas/{name}.schema.json')['$id'])
-        for name in ('track','current-track'):
+        for name in ('track','current-track','forge'):
             self.assertIn('/3.0/',SCHEMAS[name].schema['$id'])
-        self.assertEqual(len(SCHEMAS),11)
+        self.assertEqual(len(SCHEMAS),12)  # ACP-015 adds forge; see FOUNDATION_CHANGELOG.md Phase 13.
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

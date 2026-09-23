@@ -48,7 +48,7 @@ test('each skill works as a standalone file bundle with locally compilable schem
     assert.ok(files.includes('assets/proposal.md'));
     assert.ok(files.includes(`references/contract-${name}.md`));
     const schemas = files.filter(file => file.endsWith('.schema.json'));
-    assert.equal(schemas.length, 11);
+    assert.equal(schemas.length, 12);
     const ajv = new Ajv2020({ strict: false, validateFormats: true });
     addFormats(ajv);
     for (const file of schemas) ajv.compile(JSON.parse(fs.readFileSync(path.join(installed, file), 'utf8')));
@@ -100,6 +100,16 @@ test('entrypoint validation rejects duplicate YAML fields and scaffold markers',
   assert.throws(() => validateInstalled(installed), /Invalid frontmatter/);
   fs.writeFileSync(entry, original + '\nTODO: write workflow\n');
   assert.throws(() => validateInstalled(installed), /Unfinished scaffold/);
+});
+
+test('FR-31: a description with no routing boundary is rejected', t => {
+  const directory = temporary(t);
+  const installed = path.join(directory, 'teach');
+  fs.cpSync(path.join(root, 'skills/teach'), installed, { recursive: true });
+  const entry = path.join(installed, 'SKILL.md');
+  const original = fs.readFileSync(entry, 'utf8');
+  fs.writeFileSync(entry, original.replace('; debugging collaboration belongs to peer-engineer.', '.'));
+  assert.throws(() => validateInstalled(installed), /Description states no boundary: teach/);
 });
 
 test('escaping references and resource symlinks cannot satisfy portability checks', t => {
