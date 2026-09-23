@@ -19,7 +19,11 @@ const roleForEdge = (from: string, to: string): string[] => {
   if (from === 'code-review' && ['implementing', 'investigating'].includes(to)) return ['peer-engineer', 'team-lead'];
   return ['learner', 'team-lead'];
 };
-const frozen = ['id', 'created_at', 'author', 'assigned_by', 'title', 'project_id', 'type', 'problem', 'context', 'impact', 'acceptance_criteria', 'constraints', 'primary_competencies', 'secondary_competencies', 'recommended_level', 'scope', 'difficulty', 'investigation_areas', 'testing_expectations', 'documentation_requirements', 'design_required', 'code_review_required'];
+const frozen = ['id', 'created_at', 'author', 'assigned_by', 'title', 'project_id', 'type', 'problem', 'context', 'impact', 'acceptance_criteria', 'constraints', 'primary_competencies', 'secondary_competencies', 'recommended_level', 'scope', 'difficulty', 'investigation_areas', 'investigation_paths', 'testing_expectations', 'documentation_requirements', 'design_required', 'code_review_required'];
+
+export function safeInvestigationGlob(glob: string): boolean {
+  return typeof glob === 'string' && glob.length > 0 && !glob.startsWith('/') && !glob.startsWith('~') && !/[\\\0]/.test(glob) && glob.split('/').every(part => part !== '..' && part !== '');
+}
 
 function verifyArtifact(root: string, value: ObjectValue, file: string, rt: Runtime): void {
   requireThat(value && /^workspace:\/[^/]/.test(value.uri) && /^sha256:[a-f0-9]{64}$/.test(value.revision), 'ARTIFACT_INVALID', file, 'Artifact must use a content-addressed workspace reference.');
@@ -106,6 +110,8 @@ export function inspectSimulationSemantics(records: Map<string, ObjectValue>, ro
     if (file.startsWith('reviews/promotion/') && trackSelection?.alignment_status === 'pending') requireThat(Date.parse(value.created_at) < Date.parse(trackSelection.selected_at), 'TRACK_ALIGNMENT_PENDING', file, 'A track scope change blocks new promotion decisions until alignment completes.');
     if (!file.startsWith('work/')) return;
     requireThat(value.author.role === 'team-lead' && value.assigned_by.role === 'team-lead', 'AUTHORITY_INVALID', file, 'Task creation and assignment require the team lead.');
+    // ACP-016 FR-50: investigation globs are source-relative and may not climb out of the source root.
+    for (const glob of value.investigation_paths ?? []) requireThat(safeInvestigationGlob(glob), 'UNSAFE_PATH', file, `Investigation path ${JSON.stringify(glob)} must be relative to the source root without traversal.`);
     const original = originalTask(root, value.id, rt); if (original) for (const key of frozen) requireThat(canonical(value[key]) === canonical(original[key]), 'TASK_MUTATED', file, `Frozen task field ${key} changed after assignment.`);
     let previous = 'absent'; let previousAt = 0;
     for (const item of value.transitions) {

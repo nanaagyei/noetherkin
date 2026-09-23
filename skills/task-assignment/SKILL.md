@@ -7,6 +7,8 @@ description: Define a bounded, testable Noetherkin assignment and its investigat
 
 Read [runtime limits](references/runtime.md), [your contract](references/contract-task-assignment.md), and [shared conventions](references/contract-README.md). Assignment is a team-lead responsibility, not a separate principal.
 
+Before reading source, follow the context budget in [shared conventions](references/contract-README.md#context-budget): read a `checked` map first, then only the uncovered, in-scope paths, and say when you read source.
+
 1. Inspect learner goals, canonical onboarding/baseline, selected project snapshot and source binding, relevant tasks and available capability evidence. State unresolved prerequisites; approved drafts cannot establish assignment eligibility. Catalog fixtures cannot support live assignments.
    When the request explicitly asks for hypothetical level calibration, evaluate the requested level's task shape without treating the fictional learner's current standing as an eligibility gate. Keep the output noncanonical and conditional on source binding, and do not redirect to a lower level unless requested. Current evidence still governs any later live assignment.
 2. Identify the actual problem and observable success. If unclear, ask the smallest question that establishes problem or impact. Set TRAINING for a labeled simulated exercise, PRODUCT for learner-local improvement, or UPSTREAM for an intended contribution without submission authority. Never invent upstream demand or acceptance.

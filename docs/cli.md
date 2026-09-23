@@ -21,8 +21,9 @@ The executable requires Node.js 24+. Build with `npm ci` and `npm run build`, th
 | `onboard` | Confirm scope, obtain a bound all-unassessed baseline, and complete onboarding. |
 | `project select <project-id> --source <path>` | Attach any attachable catalog project after origin, cleanliness, revision and path checks. |
 | `project select <project-id> --clone-to <path>` | Explicitly clone and attach a catalog project after interactive consent. |
-| `map init`, `map check` | Create and check the learner-authored orientation map. |
+| `map init`, `map check`, `map status` | Create a project-derived template, check the learner-authored map, and report read-only whether this exact map was checked at the current source revision (`absent`, `incomplete`, `unchecked`, `checked`) with the paths it cites. |
 | `task assign`, `task begin` | Assign and start the curated `pet-type-integrity` task. |
+| `task scope` | List the files the current task's frozen `investigation_paths` globs select inside the bound source; matches that resolve outside it are reported as rejected. |
 | `task submit-design`, `task submit-change`, `task test`, `task help` | Gate design, snapshot learner work, run focused tests, or request attributed help. |
 | `review code`, `review task`, `review performance` | Publish bound peer, team-lead and manager judgments. |
 | `next` | Derive the phase and invoke safe no-input handlers; otherwise report the explicit command needing learner input or confirmation. |

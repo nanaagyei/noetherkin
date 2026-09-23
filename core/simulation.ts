@@ -8,7 +8,7 @@ import { catalogs, collect, inspectRecords, schemaFor } from './validation.js';
 import { digest, durable, exists, read, runtime, safePath, statePath, type Runtime } from './storage.js';
 import { bindApprovedTransaction, makeTransaction, publishTransaction, type ActorRole, type BoundActor } from './transactions.js';
 import { contextDigest, validateRoleOutput, type RoleAdapter, type RoleInvocationResult } from './adapters.js';
-import { inspectSimulationSemantics } from './semantics.js';
+import { inspectSimulationSemantics, safeInvestigationGlob } from './semantics.js';
 
 const assets = fileURLToPath(new URL('../../', import.meta.url));
 const common = { schema_version: '3.0', data_class: 'live' };
@@ -159,25 +159,69 @@ export function selectCatalogProject(root: string, projectId: string, sourceInpu
   return { outcome: 'success', ...publish(root, 'project-curator', 'select-project', project.id, inspected, writes, [project.id], rt), selection };
 }
 
-const mapTemplate = `# PetClinic codebase map\n\nReplace every prompt below with your own source-backed explanation. Use at least three \`source/...\` citations.\n\n## Service boundaries\n[PROMPT: Which services own which responsibilities?]\n\n## Startup order\n[PROMPT: What must start first, and why?]\n\n## One request path\n[PROMPT: Trace one request across concrete source files.]\n\n## Tests and feedback loop\n[PROMPT: Where are the focused tests and how will you run them?]\n\n## Unknowns and risks\n[PROMPT: What remains uncertain, and how would you investigate it?]\n`;
+// ACP-016: the template is derived from the bound project. The five section headings are unchanged, so a map
+// written under the earlier PetClinic template still passes the same check.
+const mapSections = ['Service boundaries', 'Startup order', 'One request path', 'Tests and feedback loop', 'Unknowns and risks'];
+function mapTemplate(projectName: string, sourcePath: string): string {
+  return `# ${projectName} codebase map\n\nReplace every prompt below with your own source-backed explanation. Use at least three \`${sourcePath}/...\` citations.\n\n## Service boundaries\n[PROMPT: Which components or services own which responsibilities?]\n\n## Startup order\n[PROMPT: What must build or start first, and why?]\n\n## One request path\n[PROMPT: Trace one request or data flow across concrete source files.]\n\n## Tests and feedback loop\n[PROMPT: Where are the focused tests and how will you run them?]\n\n## Unknowns and risks\n[PROMPT: What remains uncertain, and how would you investigate it?]\n`;
+}
 export function initMap(root: string, rt: Runtime = runtime): ObjectValue {
   const selection = record(root, 'current-project.yaml', rt);
-  requireThat(selection.project_id === 'spring-petclinic-microservices', 'PREREQUISITE_MISSING', 'current-project.yaml', 'Select PetClinic before creating its map.');
+  requireThat(selection.project_id, 'PREREQUISITE_MISSING', 'current-project.yaml', 'Select a project before creating its map.');
   if (exists(safePath(root, mapPath, rt), rt)) return { outcome: 'no-change', path: mapPath };
-  return { outcome: 'success', ...publish(root, 'learner', 'initialize-codebase-map', 'spring-petclinic-microservices', {}, new Map([[mapPath, mapTemplate.replaceAll('source/...', `${selection.source_path}/...`)]]), [], rt), path: mapPath };
+  const project = record(root, `projects/${selection.project_id}.yaml`, rt);
+  return { outcome: 'success', ...publish(root, 'learner', 'initialize-codebase-map', selection.project_id, {}, new Map([[mapPath, mapTemplate(project.name, selection.source_path)]]), [], rt), path: mapPath };
 }
-export function checkMap(root: string, rt: Runtime = runtime): ObjectValue {
+function evaluateMap(root: string, rt: Runtime): { text: string; selection: ObjectValue; missing: string[]; citations: string[]; complete: boolean } {
   const text = read(root, mapPath, rt).toString('utf8');
   const selection = record(root, 'current-project.yaml', rt);
-  const required = ['Service boundaries', 'Startup order', 'One request path', 'Tests and feedback loop', 'Unknowns and risks'];
-  const missing = required.filter(section => !new RegExp(`## ${section}\\n(?!\\[PROMPT:)`, 'm').test(text));
-  const citations = [...text.matchAll(/`([^`]+)`/g)].map(match => match[1]!).filter(value => value.startsWith(`${selection.source_path}/`));
-  const validCitations = [...new Set(citations)].filter(value => { try { return fs.statSync(safePath(root, value, rt)).isFile(); } catch { return false; } });
-  requireThat(!text.includes('[PROMPT:') && missing.length === 0 && validCitations.length >= 3, 'MAP_INCOMPLETE', mapPath, `Replace every prompt and cite at least three existing ${selection.source_path}/... files.`);
-  const mapArtifact = writeArtifact(root, 'maps', encode({ source_path: mapPath, content: text }), 'Immutable learner-authored codebase map', rt);
-  return { outcome: 'success', path: mapPath, revision: `sha256:${sha256(text)}`, artifact: mapArtifact, citations: validCitations };
+  const missing = mapSections.filter(section => !new RegExp(`## ${section}\\n(?!\\[PROMPT:)`, 'm').test(text));
+  const cited = [...text.matchAll(/`([^`]+)`/g)].map(match => match[1]!).filter(value => value.startsWith(`${selection.source_path}/`));
+  const citations = [...new Set(cited)].filter(value => { try { return fs.statSync(safePath(root, value, rt)).isFile(); } catch { return false; } });
+  return { text, selection, missing, citations, complete: !text.includes('[PROMPT:') && missing.length === 0 && citations.length >= 3 };
 }
-
+// The checked artifact binds the map text to the source revision it was checked against, so a moved checkout or an
+// edited map is detectable without any new canonical field.
+function mapArtifactBytes(text: string, sourceRevision: string | null): string { return encode({ source_path: mapPath, source_revision: sourceRevision, content: text }); }
+export function checkMap(root: string, rt: Runtime = runtime): ObjectValue {
+  const { text, selection, citations, complete } = evaluateMap(root, rt);
+  requireThat(complete, 'MAP_INCOMPLETE', mapPath, `Replace every prompt and cite at least three existing ${selection.source_path}/... files.`);
+  const mapArtifact = writeArtifact(root, 'maps', mapArtifactBytes(text, selection.source_revision), 'Immutable learner-authored codebase map', rt);
+  return { outcome: 'success', path: mapPath, revision: `sha256:${sha256(text)}`, source_revision: selection.source_revision, artifact: mapArtifact, citations };
+}
+// Read-only pointer for skills (ACP-016). "checked" means this exact text was checked at the current source revision;
+// "unchecked" means it would pass but has not been checked here, including after the checkout moved. A map is the
+// learner's claim, never verified fact: its citations tell a skill what the map covers, and source wins on conflict.
+export function mapStatus(root: string, rt: Runtime = runtime): ObjectValue {
+  const selection = record(root, 'current-project.yaml', rt);
+  const base = { path: mapPath, project_id: selection.project_id, source_revision: selection.source_revision };
+  if (!selection.project_id || !exists(safePath(root, mapPath, rt), rt)) return { ...base, status: 'absent', covered_paths: [] };
+  const { text, missing, citations, complete } = evaluateMap(root, rt);
+  if (!complete) return { ...base, status: 'incomplete', missing_sections: missing, covered_paths: citations };
+  const artifactPath = `apprenticeship-artifacts/maps/${sha256(mapArtifactBytes(text, selection.source_revision))}.json`;
+  const checked = exists(safePath(root, artifactPath, rt), rt);
+  return { ...base, status: checked ? 'checked' : 'unchecked', revision: `sha256:${sha256(text)}`, artifact: checked ? artifact(artifactPath, mapArtifactBytes(text, selection.source_revision), 'Immutable learner-authored codebase map') : null, covered_paths: citations };
+}
+// Resolves the current task's frozen investigation globs inside the bound source (ACP-016). Matches that resolve
+// outside the source root, including through a symlink, are reported as rejected and never returned as in scope.
+export function investigationScope(root: string, rt: Runtime = runtime): ObjectValue {
+  const task = currentTask(root, rt);
+  requireThat(task, 'PREREQUISITE_MISSING', 'work', 'No active task has an investigation scope.');
+  const globs: string[] = task.investigation_paths ?? [];
+  if (!globs.length) return { task_id: task.id, investigation_areas: task.investigation_areas, investigation_paths: [], paths: [], rejected: [], scoped: false };
+  const selection = record(root, 'current-project.yaml', rt);
+  const source = fs.realpathSync(safePath(root, selection.source_path, rt));
+  const paths = new Set<string>(); const rejected = new Set<string>();
+  for (const glob of globs) {
+    requireThat(safeInvestigationGlob(glob), 'UNSAFE_PATH', glob, 'Investigation path must be relative to the source root without traversal.');
+    for (const match of fs.globSync(glob, { cwd: source })) {
+      const resolved = fs.realpathSync(path.join(source, match));
+      if (resolved !== source && !resolved.startsWith(source + path.sep)) rejected.add(match);
+      else if (fs.statSync(resolved).isFile()) paths.add(match.split(path.sep).join('/'));
+    }
+  }
+  return { task_id: task.id, investigation_areas: task.investigation_areas, investigation_paths: globs, paths: [...paths].sort(), rejected: [...rejected].sort(), scoped: true };
+}
 function taskTemplate(): ObjectValue { return JSON.parse(fs.readFileSync(path.join(assets, 'tasks/petclinic-pet-type-integrity.json'), 'utf8')); }
 function assertTaskCompatibleSource(source: string): void {
   const template = taskTemplate();
@@ -376,7 +420,7 @@ export function nextAction(root: string, rt: Runtime = runtime): ObjectValue {
   const selectedProject = catalogs().projects.find(item => item.id === selection.project_id);
   if (!selectedProject?.support?.task_packs?.includes('pet-type-integrity')) return { phase: 'PORTABLE TASK ASSIGNMENT', command: null, project_id: selection.project_id, handoff: 'Use the portable task-assignment skill; this project has no bundled curated task pack.' };
   if (!exists(safePath(root, mapPath, rt), rt)) return { phase: 'CREATE CODEBASE MAP', command: 'map init' };
-  try { checkMap(root, rt); } catch { return { phase: 'CREATE CODEBASE MAP', command: 'map check' }; }
+  if (mapStatus(root, rt).status === 'incomplete') return { phase: 'CREATE CODEBASE MAP', command: 'map check' };
   const task = currentTask(root, rt); if (!task) return { phase: 'ASSIGN FIRST TASK', command: 'task assign pet-type-integrity' };
   const commands: Record<string, string> = { assigned: 'task begin', investigating: 'task begin', designing: 'task submit-design --file <path>', implementing: 'task submit-change', testing: 'task test --prediction <text>' };
   if (commands[task.status]) return { phase: task.status.toUpperCase(), command: commands[task.status], task_id: task.id };

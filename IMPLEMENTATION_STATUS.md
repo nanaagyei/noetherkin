@@ -1,6 +1,6 @@
 # Implementation status
 
-Foundational specification phase: complete. Phase 6 PetClinic vertical runtime: implemented and offline-verified. Twenty-one portable skill packages: implemented with focused per-skill bundles. Behavioral eval runner: expanded for Phase 7; the full dual-harness matrix remains deferred. Phase 8.1 versioned learning tracks, project entry metadata, generic attachment, and post-switch alignment publication: implemented. Phase 9 additive project catalog expansion: implemented. Phase 10 portable capability adapter onboarding slice: implemented and offline-verified for generic, Codex and Claude Code projections. Promotion execution remains proposal-only. Runtime schema validation is now first-party and dependency-free; `ajv` is retained only as a test oracle. ACP-012 is adopted in part: registry publication is retired and capability routing is an enforced requirement. Four architecture change proposals remain staged under `docs/proposals/` and are not normative. Codex and Claude Code both serve as role adapters, and all 21 capabilities project into generic, Codex and Claude Code hosts.
+Foundational specification phase: complete. Phase 6 PetClinic vertical runtime: implemented and offline-verified. Twenty-one portable skill packages: implemented with focused per-skill bundles. Behavioral eval runner: expanded for Phase 7; the full dual-harness matrix remains deferred. Phase 8.1 versioned learning tracks, project entry metadata, generic attachment, and post-switch alignment publication: implemented. Phase 9 additive project catalog expansion: implemented. Phase 10 portable capability adapter onboarding slice: implemented and offline-verified for generic, Codex and Claude Code projections. Promotion execution remains proposal-only. Runtime schema validation is now first-party and dependency-free; `ajv` is retained only as a test oracle. ACP-012 is adopted in part: registry publication is retired and capability routing is an enforced requirement. ACP-016 (context budget) is adopted. ACP-013 through ACP-015 remain staged under `docs/proposals/` and are not normative. Codex and Claude Code both serve as role adapters, and all 21 capabilities project into generic, Codex and Claude Code hosts.
 
 ## Foundation completion: usability slice (2026-09-23)
 
@@ -11,7 +11,9 @@ Foundational specification phase: complete. Phase 6 PetClinic vertical runtime: 
 - [x] Confirmed existing behavioral coverage: every one of the 21 skills already has dedicated cases (P07–P19, A05–A17, D01). `evals:check` validates 115 active cases. No live runs were made.
 - [x] Local verification: 132 Node tests, 21 skill bundles, foundation validation and all 22 frozen conformance cases pass.
 
-Limits: the Claude role adapter is verified offline against a fake binary, plus one live smoke on 2026-09-23. In a scratch workspace, one onboarding baseline judgment returned the closed contract in one turn, taking 6 s and costing $0.021 with no permission denials, and the resulting workspace passed `validate`. One judgment is integration evidence, not a reliability measure. Installation into a host directory is not verified against each host's live skill discovery.
+- [x] Adopted ACP-016 (Phase 12): project-derived map template, derived read-only `map status` pointer with source-revision staleness, frozen optional `investigation_paths` with `task scope` resolution and symlink-escape rejection, `references_loaded` in the contract envelope, bounded teach-back escalation and the FR-49 evidence limit. 137 Node tests and 121 behavioral cases validate; the frozen-scope test was confirmed non-vacuous by seeded defect.
+
+Limits: the Claude role adapter is verified offline against a fake binary, plus one live smoke on 2026-09-23. In a scratch workspace, one onboarding baseline judgment returned the closed contract in one turn, taking 6 s and costing $0.021 with no permission denials, and the resulting workspace passed `validate`. One judgment is integration evidence, not a reliability measure. The six ACP-016 behavioral cases (P20, A18 to A22) have not been run live. Installation into a host directory is not verified against each host's live skill discovery.
 
 ## Runtime dependency reduction and staged architecture proposals (2026-09-21)
 
@@ -28,7 +30,7 @@ Limits: the Claude role adapter is verified offline against a fake binary, plus 
 - [x] Resolved ACP-012's install-granularity gap: the runtime is bundled per skill through the existing `skill-pack/manifest.json` per-skill sources, into the 11 of 21 skills whose contracts permit a canonical write or consent-bearing operation, with every bundled copy required to be byte-identical. The single shared `skills/_noetherkin/` location is withdrawn as unreachable for a selective install.
 - [x] Resolved ACP-015's outside-check question: the criterion requiring a real person other than the learner to perform the quickstart unassisted is retained, because without it "genuinely usable by someone else" reduces to self-report.
 - [x] Adopted ACP-012 in part (Phase 11). Registry publication retired and the capability-routing requirement enforced. Bundling the controller into skill packages and the collected handoff table were deliberately not adopted; see the changelog entry for why.
-- [ ] Adopt or reject ACP-013 through ACP-016.
+- [ ] Adopt or reject ACP-013 through ACP-015. ACP-016 was adopted in Phase 12.
 
 Limits: the validator replacement is implemented and verified; the proposals are not adopted and change no protocol behavior. `ajv` is retained as a devDependency solely as the parity oracle, and if `tests/schema-parity.test.mjs` fails the replacement is not equivalent and must not ship. Error emission order is deliberately not reproduced, because it is an artifact of ajv codegen scheduling that nothing here depends on; the parity test compares the error multiset, so the guarantee is same errors, same wording, same paths and same count, with unspecified sequence. The staged forge schema and catalog record live under `docs/proposals/` rather than `schemas/` and `catalog/` because `evaluations/validate_foundation.py:43` asserts exactly eleven schemas; a proposal must not break the frozen checks it seeks permission to change. ACP-012 has since been adopted in part (Phase 11), which retired the npm publication items in the section below.
 
@@ -206,7 +208,7 @@ The independent specification review is recorded in reviews/ and its BLOCKER/HIG
 - [x] Eval-only CLI adapters and behavioral evaluation harness; observed coverage remains incomplete.
 - [x] First-party runtime schema validation with differential parity against `ajv`; error emission order is not reproduced.
 - [ ] Automated promotion workflow and operational features.
-- [ ] Disposition of the remaining staged architecture change proposals in `docs/proposals/` (ACP-013 through ACP-016).
+- [ ] Disposition of the remaining staged architecture change proposals in `docs/proposals/` (ACP-013 through ACP-015).
 
 The user separately authorized the bootstrap slice and then the portable Agent Skills layer after the foundation freeze. The skills provide procedures and proposals, not execution of the remaining formal workflows.
 

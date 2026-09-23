@@ -10,7 +10,7 @@ import { inspectWorkspace, listProjects } from '../core/commands.js';
 import { alignTrack, listTracks, selectTrack, trackAlignmentProposal } from '../core/tracks.js';
 import { migrateTo3, planMigration } from '../core/migration.js';
 import { exists, lockStatus, reclaimDeadLock, resolveWorkspace, runtime, safePath, withLock } from '../core/storage.js';
-import { advanceNext, assignTask, beginTask, checkMap, cloneCatalogProject, codeReview, initMap, onboard, performanceReview, requestHelp, selectCatalogProject, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
+import { advanceNext, assignTask, beginTask, checkMap, investigationScope, mapStatus, cloneCatalogProject, codeReview, initMap, onboard, performanceReview, requestHelp, selectCatalogProject, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
 import { CodexRoleAdapter } from '../adapters/runtime/codex.js';
 import { ClaudeRoleAdapter } from '../adapters/runtime/claude.js';
 import type { RoleAdapter } from '../core/adapters.js';
@@ -32,9 +32,10 @@ Journey:
   onboard [--constraint <text> ...]
   projects [--track <track-id>] [--stage <early|intermediate|advanced>]
   project select <project-id> (--source <path> | --clone-to <path> [--revision <ref>])
-  map <init|check>
+  map <init|check|status>
   task assign pet-type-integrity
   task begin
+  task scope
   task submit-design --file <path>
   task submit-change
   task test --prediction <text>
@@ -195,11 +196,12 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       }
       emit({ command, outcome: 'success', coverage: 'simulation', data: selectCatalogProject(root, projectId, source!), diagnostics: [] }); return;
     }
-    if (command === 'map') { if (!(positionals.length === 2 && ['init', 'check'].includes(positionals[1]!))) throw new Failure('USAGE', '', help, 2); emit({ command, outcome: 'success', coverage: 'simulation', data: positionals[1] === 'init' ? initMap(root) : checkMap(root), diagnostics: [] }); return; }
+    if (command === 'map') { if (!(positionals.length === 2 && ['init', 'check', 'status'].includes(positionals[1]!))) throw new Failure('USAGE', '', help, 2); emit({ command, outcome: 'success', coverage: 'simulation', data: positionals[1] === 'init' ? initMap(root) : positionals[1] === 'status' ? mapStatus(root) : checkMap(root), diagnostics: [] }); return; }
     if (command === 'task') {
       const action = positionals[1]; let data: any;
       if (action === 'assign' && positionals[2] === 'pet-type-integrity' && positionals.length === 3) data = assignTask(root);
       else if (action === 'begin' && positionals.length === 2) data = beginTask(root);
+      else if (action === 'scope' && positionals.length === 2) data = investigationScope(root);
       else if (action === 'submit-design' && positionals.length === 2 && values.file) data = await submitDesign(root, values.file, adapter());
       else if (action === 'submit-change' && positionals.length === 2) data = submitChange(root);
       else if (action === 'test' && positionals.length === 2 && values.prediction) data = testTask(root, values.prediction);

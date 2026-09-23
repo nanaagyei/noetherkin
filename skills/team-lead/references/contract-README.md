@@ -14,11 +14,21 @@ The first eight documents retain the frozen workflow responsibilities. Protocol 
 - `user-agent`, `production-readiness`, and `incident-response`: validation workflows.
 - `performance-review`, `promotion-review`, `performance-improvement-plan`, `resume-evidence`, and `retrospective`: career and progression workflows.
 
-Every invocation receives an identified registered actor, operation ID, workspace location, expected state digests and explicit request. Read-only invocations need no write authorization. Writes obey the role allowlist and transactional state rules. Return an outcome (`completed`, `needs-input`, `blocked`, `no-change`), concise rationale, referenced inputs, proposed or published record IDs, assistance events if any, unresolved gaps and next learner action. These are contract outputs, not a new persisted schema. `completed` describes the invocation, not task completion.
+Every invocation receives an identified registered actor, operation ID, workspace location, expected state digests and explicit request. Read-only invocations need no write authorization. Writes obey the role allowlist and transactional state rules. Return an outcome (`completed`, `needs-input`, `blocked`, `no-change`), concise rationale, referenced inputs, `references_loaded` (the bundled reference files this invocation actually read), proposed or published record IDs, assistance events if any, unresolved gaps and next learner action. These are contract outputs, not a new persisted schema. `references_loaded` makes context cost observable; it grants nothing. `completed` describes the invocation, not task completion.
 
 For retries, the caller retains operation ID and prior output IDs in the transaction receipt described by the state model. The same operation with identical inputs returns prior outputs without new records. Same ID with changed inputs is a conflict; a new logical action needs a new ID. If receipt recovery is unavailable, return blocked rather than guessing whether a write succeeded. Identical review input with no new evidence returns the existing current review. New evidence/revisions warrant a new operation and explicit supersession when correcting a prior judgment.
 
 All contracts inherit progressive assistance, attribution, no fabricated evidence, safe path handling and role boundaries from FOUNDATION_V1. They do not restate the full global policy. Missing inputs produce a focused learner question or read-only investigation; malformed state is blocked without repair by guesswork. No contract authorizes remote/destructive actions. The Examples sections are conformance targets, not transcripts of work performed.
+
+## Context budget
+
+Adopted with ACP-016. Reading the target repository, not loading a skill, dominates context cost, so every skill that inspects source follows one order:
+
+1. Run or read `noetherkin map status`. A `checked` map is the learner's cited model of the bound source revision. Read it first.
+2. Read source only for paths the task needs that the map does not cite (`covered_paths`), and say in the output that you did. When the task has `investigation_paths`, `noetherkin task scope` lists the in-scope files; stay inside them and report an out-of-scope need instead of satisfying it silently.
+3. With a status of `absent`, `incomplete` or `unchecked`, proceed from source. Never treat such a map as checked and never write one for the learner.
+
+Reading a map instead of source is a context decision, never an evidence decision. A map is the learner's claim, authoritative only for what it literally records: when source contradicts it, source wins, and a judgment that rests on a map claim must say so. No skill authors or completes the learner's map. No indexer, embedding store or retrieval layer is part of the core; optional tooling belongs in adapters and never sits on the path of a consequential write.
 
 ## Capability routing
 

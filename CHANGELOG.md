@@ -15,6 +15,7 @@ All notable changes will be documented in this file. The format follows [Keep a 
 - `ClaudeRoleAdapter` (`adapters/runtime/claude.ts`) and a `--role-adapter codex|claude` CLI option (or `NOETHERKIN_ROLE_ADAPTER`), so every role-judgment command runs with Claude Code as well as Codex. Both adapters share one prompt and closed output contract in `adapters/runtime/output-contract.ts`.
 - `noetherkin skills list` and `noetherkin skills install --host <generic|codex|claude-code>`: the host adapters now project all 21 capabilities, installation is digest-verified and never overwrites a differing file, and invoking a capability without a host bridge returns `blocked` with `NO_CONTROLLER_BRIDGE`.
 - FR-29, FR-30 and FR-31 registered in `docs/architecture/conformance.md`, with a direct negative test for FR-31.
+- ACP-016 context budget: `map status`, `task scope`, a project-derived map template, the optional frozen `investigation_paths` task field, `references_loaded` in the contract envelope, and bounded teach-back escalation with an explicit evidence limit.
 
 ### Changed
 

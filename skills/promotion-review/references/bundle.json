@@ -32,8 +32,8 @@
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "1c570a2934a343a2b54eefd8c3ef469f68a601d59f4c3f4e630c6be83c3448bd",
-      "bundled_sha256": "1c570a2934a343a2b54eefd8c3ef469f68a601d59f4c3f4e630c6be83c3448bd"
+      "source_sha256": "31c9cdd6ba97c14cd0f228c6befab33489b1b2748447847f76e910c86e10654c",
+      "bundled_sha256": "31c9cdd6ba97c14cd0f228c6befab33489b1b2748447847f76e910c86e10654c"
     },
     {
       "source": "docs/architecture/overview.md",
@@ -56,8 +56,8 @@
     {
       "source": "docs/architecture/state-model.md",
       "target": "references/state-model.md",
-      "source_sha256": "cb2c8cf56c7ee6370812ca39ec6c29d6300d0c7eee683d3811f84006563a5410",
-      "bundled_sha256": "cb2c8cf56c7ee6370812ca39ec6c29d6300d0c7eee683d3811f84006563a5410"
+      "source_sha256": "aadd4a6f5f6e379c63ec75552ec712066a86d3ed48eee4cf71c9ee930278327c",
+      "bundled_sha256": "aadd4a6f5f6e379c63ec75552ec712066a86d3ed48eee4cf71c9ee930278327c"
     },
     {
       "source": "docs/architecture/simulation-lifecycle.md",
@@ -104,14 +104,14 @@
     {
       "source": "docs/architecture/conformance.md",
       "target": "references/conformance.md",
-      "source_sha256": "a57bf9f2ce68e667c72978d90e80e0fb449d8c64047fe497971eb6360af737de",
-      "bundled_sha256": "a57bf9f2ce68e667c72978d90e80e0fb449d8c64047fe497971eb6360af737de"
+      "source_sha256": "5a5276c0393a210d245741e4a488a480982827d3be7c3539ba42bfd02e53109a",
+      "bundled_sha256": "5a5276c0393a210d245741e4a488a480982827d3be7c3539ba42bfd02e53109a"
     },
     {
       "source": "contracts/README.md",
       "target": "references/contract-README.md",
-      "source_sha256": "3b2516d04c1b188bbf2ddb7d4a81e164314816bdf8a103e15408958bb924a938",
-      "bundled_sha256": "3520c311d656bc7c72fd15807e75d515e1adc7266bb3e171b8e1650a3dde8fb5"
+      "source_sha256": "a8aa50731fe9c016aa109ec8ba3a515888ec6fbdc80d67555db9b059e3a0573e",
+      "bundled_sha256": "e793840b7fdae8c947680e092641c27bb19ff27092d2bc6873ee8a750be949ab"
     },
     {
       "source": "schemas/apprenticeship-config.schema.json",
@@ -152,8 +152,8 @@
     {
       "source": "schemas/task.schema.json",
       "target": "references/task.schema.json",
-      "source_sha256": "e7293baf0d02f1ddded4e08bdf1323afe04ecc58e6efbfb186a805b0bf9c72f2",
-      "bundled_sha256": "e7293baf0d02f1ddded4e08bdf1323afe04ecc58e6efbfb186a805b0bf9c72f2"
+      "source_sha256": "b41e9445ae6fde5fa237766a62d95dd0a65ebddc0cf04f3c5f9dc621e246d171",
+      "bundled_sha256": "b41e9445ae6fde5fa237766a62d95dd0a65ebddc0cf04f3c5f9dc621e246d171"
     },
     {
       "source": "schemas/evidence.schema.json",

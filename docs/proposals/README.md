@@ -61,7 +61,7 @@ Every proposal must contain, in this order:
 | [ACP-013](ACP-013-competency-graph.md) | Competency prerequisite and encompassing graph | `PROPOSED` |
 | [ACP-014](ACP-014-frontier-selection.md) | Advisory attention signal and frontier-guided selection | `PROPOSED` |
 | [ACP-015](ACP-015-forge-projects.md) | First-party forge projects | `PROPOSED` |
-| [ACP-016](ACP-016-context-budget.md) | Context budget discipline | `PROPOSED` |
+| [ACP-016](ACP-016-context-budget.md) | Context budget discipline | `ADOPTED`, 2026-09-23 |
 
 ACP-01 through ACP-11 were adopted before this directory existed. They are recorded in
 [`FOUNDATION_CHANGELOG.md`](../../FOUNDATION_CHANGELOG.md) and have no file here.

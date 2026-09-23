@@ -201,6 +201,15 @@
       "minItems": 1,
       "uniqueItems": true
     },
+    "investigation_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
     "testing_expectations": {
       "type": "array",
       "items": {

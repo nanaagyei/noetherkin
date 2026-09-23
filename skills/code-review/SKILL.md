@@ -7,6 +7,8 @@ description: Review one identified Noetherkin change revision for correctness, r
 
 Read [runtime limits](references/runtime.md), [your contract](references/contract-code-review.md), and [shared conventions](references/contract-README.md). Code review belongs to peer-engineer, not team-lead or manager.
 
+Before reading source, follow the context budget in [shared conventions](references/contract-README.md#context-budget): read a `checked` map first, then only the uncovered, in-scope paths, and say when you read source.
+
 1. Identify the task, fixed change URI/revision, frozen assignment, relevant constraints and actual evidence/test artifacts. Inspect the diff and surrounding source. Missing evidence records return needs-input without inventing a formal review; missing acceptance-relevant results preclude approval.
 2. Evaluate correctness and failure scenarios. Each actionable finding names a file/location and explains a concrete risk with supporting inspection or run evidence. Distinguish unrun checks from observed results; a passing suite does not prove every criterion.
 3. Give the proposed review outcome: approve only when current evidence supports the exact change, changes-requested for actionable defects, or insufficient-evidence for unsupported approval. Without required record inputs, return the findings and gaps rather than a fabricated schema-valid review.

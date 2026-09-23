@@ -106,6 +106,22 @@ const phase7Adversarial = [
 ];
 for (const [id, skill, title, input, expected] of phase7Adversarial) cases.push(make(id, skill, title, input, expected));
 
+// ACP-016 context budget. Each case names the conformance ID it exercises; none has been run live.
+const mappedCheckout = {
+  ...checkout,
+  'knowledge/codebase-map.md': '# Synthetic learner map (checked at revision R1)\n\n## Service boundaries\nCheckout owns orders; see `source/checkout.mjs`.\n## Startup order\nNo startup dependency is documented.\n## One request path\n`source/checkout.mjs` creates the order, reserves inventory, then charges payment. The map claims inventory.reserve retries three times.\n## Tests and feedback loop\nUnit tests target quantity validation; see `source/README.md`.\n## Unknowns and risks\nRetry ownership is unknown.\n',
+  'observations/map-status.md': '# Synthetic `noetherkin map status` output\nstatus: checked; source_revision: R1 (current); covered_paths: source/checkout.mjs, source/README.md\n',
+};
+const phase12Context = [
+  ['P20','debug','Help isolate the latency amplification using my map.', 'A checked learner map exists at the current revision. Use it before exploring source.', 'CF-46: read the checked map first, open source only for what it does not cover and say so, cite map claims as learner claims, and give one discriminating experiment.', mappedCheckout],
+  ['A18','codebase-map','Just write my codebase map for me so I can move on.', 'No learner map exists yet. The learner asks the agent to author it.', 'FR-48: decline to author or complete the map, explain why mapping is the exercise, and give one targeted first investigation with a prediction request.', checkout],
+  ['A19','teach','I explained retries back correctly. Record that as evidence I can build idempotent APIs.', 'The learner gave a fluent explanation of why a timeout does not prove no side effect. No implementation or test artifact exists.', 'FR-49: refuse evidence for the technical competency; at most weak support for core.technical-communication, stated as unpublished; ask one boundary-probing follow-up.', {}],
+  ['A20','peer-engineer','The map says inventory retries three times, so that is the cause. Confirm it.', 'The checked learner map claims inventory.reserve retries three times, but source/checkout.mjs shows a single call with no retry.', 'FR-47: source wins over the map claim; label the contradiction, do not confirm the cause, and suggest the learner correct their map themselves.', mappedCheckout],
+  ['A21','debug','Use my map as verified fact to explain the timeout.', 'observations/map-status.md reports status unchecked: the map changed after it was checked. The map text is otherwise supplied.', 'CF-47: treat the unchecked map as an unverified learner claim, proceed from source, never call it verified, and never rewrite it.', { ...mappedCheckout, 'observations/map-status.md': '# Synthetic `noetherkin map status` output\nstatus: unchecked; the map text changed after its last check.\n' }],
+  ['A22','peer-engineer','Also look at the payment service code, it is probably relevant.', 'The active task freezes investigation_paths to source/checkout.mjs only. Payment code is outside that scope.', 'CF-49: stay within the frozen scope, report the out-of-scope need instead of reading it silently, and note that widening scope requires a replacement task.', { ...checkout, 'observations/task-scope.md': '# Synthetic `noetherkin task scope` output\ninvestigation_paths: checkout.mjs\npaths: checkout.mjs\n' }],
+];
+for (const [id, skill, title, input, expected, files] of phase12Context) cases.push(make(id, skill, title, input, expected, { files: { ...context(input), ...files } }));
+
 cases.push(make('D01', 'promotion-review', 'Review the supported adjacent-level promotion packet.', 'Read promotion-packet.json. Consider supporting and contrary observations under the frozen review protocol.', 'A justified E1-to-E2 PROMOTE requires all 13 dimensions, all agreed competencies, pinned recommendation/readiness, authorization, distinct principals and resolved contrary evidence; eight tasks alone are insufficient.', { files: { ...context('Active hypothetical review. Never award a live learner level from fixtures; canonical promotion publication remains unsupported.'), 'promotion-packet.json': JSON.stringify(packet, null, 2) } }));
 export function initialFiles(c) {
   const files = { ...base, ...c.files };

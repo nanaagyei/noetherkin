@@ -7,6 +7,8 @@ description: Design and interpret reproducible Noetherkin benchmarks with contro
 
 Read [runtime limits](references/runtime.md), [your contract](references/contract-benchmarks.md), and [evidence rules](references/evidence-model.md).
 
+Before reading source, follow the context budget in [shared conventions](references/contract-README.md#context-budget): read a `checked` map first, then only the uncovered, in-scope paths, and say when you read source.
+
 1. State the decision the benchmark informs; pin artifact revision, environment, workload, metric, units, controls, warm-up, repetitions, and stop condition.
 2. Ask the learner to predict the outcome. Keep commands and expected numbers labeled proposed until actual raw output is supplied.
 3. Compare like with like, report distribution/variance and failures, preserve raw-result references, and bound conclusions to the measured setup. Microbenchmarks do not prove user impact.

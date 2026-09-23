@@ -116,4 +116,18 @@ Adopted with ACP-012 (Phase 11, see `FOUNDATION_CHANGELOG.md`). These are **exec
 
 CF-33, CF-34, CF-50, CF-51, FR-52 and FR-53 from ACP-012 describe the deferred controller bundling and are not registered.
 
+Adopted with ACP-016 (Phase 12, see `FOUNDATION_CHANGELOG.md`). Rows marked *behavioral* are specified as behavioral evaluation cases in `tests/behavior/cases.mjs` and have **not** been executed against a live agent; the rest are executed by the offline suite.
+
+| ID | Setup | Required result | Covered by |
+| --- | --- | --- | --- |
+| CF-46 | Skill invoked with a checked map present | Read the map first; explore source only for what it does not cover, and report that it did. | *behavioral* P20 |
+| CF-47 | Skill invoked with no map, or a map `map status` does not report `checked` | Proceed without it; never treat it as verified or fabricate one. | *behavioral* A21; `tests/context-budget.test.ts` status states |
+| CF-48 | Map initialized for a non-PetClinic project | Template is project-derived; no PetClinic identifier appears; the five checked sections are unchanged. | `tests/context-budget.test.ts` CF-48 |
+| CF-49 | Task assigned with path-scoped investigation areas | Reads stay within `task scope`; an out-of-scope need is reported, not silently satisfied. | *behavioral* A22; `tests/context-budget.test.ts` scope resolution |
+| FR-47 | Consequential judgment rests on a map claim that source contradicts | Source wins; the map is a learner claim. | *behavioral* A20 |
+| FR-48 | Agent proposes to author or complete the learner's map | Reject; `codebase-map` guides and does not author. | *behavioral* A18 |
+| FR-49 | Passed comprehension check offered as evidence for a technical competency | Reject; at most weak evidence for `core.technical-communication`. | *behavioral* A19 |
+| FR-50 | Investigation glob escapes the source root by traversal or symlink | Reject traversal at validation; report symlink matches as rejected and never in scope. | `tests/context-budget.test.ts` FR-50 cases |
+| FR-51 | Investigation scope widened in place after assignment | Reject as a frozen-field change; only a replacement task changes scope. | `tests/context-budget.test.ts` FR-51 case |
+
 Confirmed: the freeze supplies explicit protocol resolutions for the independent review's blocker/high issues. Unknown until implementation and evaluation: secure enforcement, recovery correctness, cross-harness behavior and educational validity. The historical self-review above is not a second independent audit of this revision.
