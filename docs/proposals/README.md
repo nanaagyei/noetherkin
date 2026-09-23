@@ -59,8 +59,8 @@ Every proposal must contain, in this order:
 | --- | --- | --- |
 | [ACP-012](ACP-012-skills-first-distribution.md) | Skills-first distribution and retirement of the npm package | `ADOPTED` in part, 2026-09-22 |
 | [ACP-013](ACP-013-competency-graph.md) | Competency prerequisite and encompassing graph | `ADOPTED`, 2026-09-23 |
-| [ACP-014](ACP-014-frontier-selection.md) | Advisory attention signal and frontier-guided selection | `PROPOSED` |
-| [ACP-015](ACP-015-forge-projects.md) | First-party forge projects | `PROPOSED` |
+| [ACP-014](ACP-014-frontier-selection.md) | Advisory attention signal and frontier-guided selection | `PROPOSED`, deferred 2026-09-23 until several task packs exist |
+| [ACP-015](ACP-015-forge-projects.md) | First-party forge projects | `ADOPTED`, 2026-09-23 |
 | [ACP-016](ACP-016-context-budget.md) | Context budget discipline | `ADOPTED`, 2026-09-23 |
 
 ACP-01 through ACP-11 were adopted before this directory existed. They are recorded in

@@ -17,6 +17,7 @@ All notable changes will be documented in this file. The format follows [Keep a 
 - FR-29, FR-30 and FR-31 registered in `docs/architecture/conformance.md`, with a direct negative test for FR-31.
 - ACP-016 context budget: `map status`, `task scope`, a project-derived map template, the optional frozen `investigation_paths` task field, `references_loaded` in the contract envelope, and bounded teach-back escalation with an explicit evidence limit.
 - ACP-013 competency graph: catalog 4.0 with advisory `prerequisites` and `encompasses` edges, structural validation in both validators, and `noetherkin competency show <id>`. New workspaces pin catalog 4.0; 3.0 pins remain valid.
+- ACP-015 forge projects: `noetherkin forges`, `project select <forge-id> --source <dir>`, `task attest`, `task test --command` for forge tasks, the `forge` schema, and the Eval Ledger specification with its four-task pack. Task packs are now resolved from catalog data rather than hardcoded.
 
 ### Changed
 

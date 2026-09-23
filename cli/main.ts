@@ -10,7 +10,7 @@ import { inspectWorkspace, listProjects } from '../core/commands.js';
 import { alignTrack, listTracks, selectTrack, trackAlignmentProposal } from '../core/tracks.js';
 import { migrateTo3, planMigration } from '../core/migration.js';
 import { exists, lockStatus, read, reclaimDeadLock, resolveWorkspace, runtime, safePath, statePath, withLock } from '../core/storage.js';
-import { advanceNext, assignTask, beginTask, checkMap, investigationScope, mapStatus, cloneCatalogProject, codeReview, initMap, onboard, performanceReview, requestHelp, selectCatalogProject, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
+import { advanceNext, assignTask, attestCriterion, beginTask, checkMap, investigationScope, mapStatus, selectForge, cloneCatalogProject, codeReview, initMap, onboard, performanceReview, requestHelp, selectCatalogProject, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
 import { CodexRoleAdapter } from '../adapters/runtime/codex.js';
 import { ClaudeRoleAdapter } from '../adapters/runtime/claude.js';
 import type { RoleAdapter } from '../core/adapters.js';
@@ -35,13 +35,16 @@ Journey:
   onboard [--constraint <text> ...]
   projects [--track <track-id>] [--stage <early|intermediate|advanced>]
   project select <project-id> (--source <path> | --clone-to <path> [--revision <ref>])
+  project select <forge-id> --source <new or empty directory>
+  forges
   map <init|check|status>
-  task assign pet-type-integrity
+  task assign [pet-type-integrity]
   task begin
   task scope
   task submit-design --file <path>
   task submit-change
-  task test --prediction <text>
+  task test --prediction <text> [--command <cmd>]   (forge tasks declare their own test command)
+  task attest --criterion <id> --file <notes>      (criteria only another person can check)
   task help --question <text>
   review <code|task|performance>
   next
@@ -71,12 +74,12 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       constraint: { type: 'string', multiple: true }, source: { type: 'string' }, 'clone-to': { type: 'string' }, revision: { type: 'string' },
       track: { type: 'string' }, stage: { type: 'string' }, to: { type: 'string' }, 'dry-run': { type: 'boolean' },
       file: { type: 'string' }, prediction: { type: 'string' }, question: { type: 'string' }, model: { type: 'string' }, 'codex-bin': { type: 'string' }, 'claude-bin': { type: 'string' }, 'role-adapter': { type: 'string' },
-      handoff: { type: 'string' }, host: { type: 'string' }, skill: { type: 'string', multiple: true }, target: { type: 'string' }
+      handoff: { type: 'string' }, command: { type: 'string' }, criterion: { type: 'string' }, host: { type: 'string' }, skill: { type: 'string', multiple: true }, target: { type: 'string' }
     }, allowPositionals: true, strict: true });
     const { values, positionals } = parsed; json = values.json ?? false; command = positionals[0] ?? 'help';
     if (values.help || command === 'help') { json ? emit({ command: 'help', outcome: 'success', coverage: 'none', data: { help }, diagnostics: [] }) : process.stdout.write(help); return; }
     requireThat(Number(process.versions.node.split('.')[0]) >= 24, 'RUNTIME_UNSUPPORTED', '', 'Node.js 24 or newer is required.');
-    if (!['init', 'onboard', 'adapter-handoff', 'track', 'tracks', 'migrate', 'project', 'map', 'task', 'review', 'next', 'status', 'projects', 'validate', 'doctor', 'skills', 'competency'].includes(command)) throw new Failure('USAGE', '', help, 2);
+    if (!['init', 'onboard', 'adapter-handoff', 'track', 'tracks', 'migrate', 'project', 'map', 'task', 'review', 'next', 'status', 'projects', 'validate', 'doctor', 'skills', 'competency', 'forges'].includes(command)) throw new Failure('USAGE', '', help, 2);
     const initOptions = ['name', 'goal', 'assistance-max', 'operation-id'];
     if ((command !== 'init' && initOptions.some(key => key in values)) || (values.recover && command !== 'doctor')) throw new Failure('USAGE', '', help, 2);
     const skillOptions = ['host', 'skill', 'target'];
@@ -99,6 +102,7 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       emit({ command, outcome: 'success', coverage: 'catalog', data: { competency_catalog_version: pinned, advisory: 'Edges suggest where to look; they never award or remove credit.', ...competencyNeighbourhood(competencyGraph(catalog.competencies, pinned), id) }, diagnostics: [] });
       return;
     }
+    if (command === 'forges') { if (positionals.length !== 1) throw new Failure('USAGE', '', help, 2); emit({ command, outcome: 'success', coverage: 'catalog', data: { forges: catalogs().forges.map(({ id, name, status, description, track_alignment, recommended_minimum_level, ideal_level, primary_languages, task_packs, context_budget }) => ({ id, name, status, description, track_alignment, recommended_minimum_level, ideal_level, primary_languages, task_packs, context_budget })) }, diagnostics: [] }); return; }
     if (command === 'tracks') { if (positionals.length !== 1) throw new Failure('USAGE', '', help, 2); emit({ command, outcome: 'success', coverage: 'catalog', data: listTracks(), diagnostics: [] }); return; }
     if (command === 'projects') { if (positionals.length !== 1) throw new Failure('USAGE', '', help, 2); if (values.workspace) resolveWorkspace(values.workspace); emit(listProjects(values.track, values.stage)); return; }
     if ((command === 'adapter-handoff') !== (values.handoff !== undefined)) throw new Failure('USAGE', '', help, 2);
@@ -199,6 +203,11 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       if (!(positionals[1] === 'select' && positionals[2] && positionals.length === 3)) throw new Failure('USAGE', '', help, 2);
       const projectId = positionals[2];
       requireThat(Boolean(values.source) !== Boolean(values['clone-to']), 'INPUT_REQUIRED', 'project', 'Supply exactly one of --source or --clone-to.');
+      if (catalogs().forges.some(forge => forge.id === projectId)) {
+        // FR-44: a forge project has no upstream to clone or fetch; the learner writes it into an empty directory.
+        requireThat(!values['clone-to'] && !values.revision, 'FORGE_NOT_CLONABLE', projectId, 'A forge project has nothing upstream to clone. Use --source <new or empty directory>.');
+        emit({ command, outcome: 'success', coverage: 'simulation', data: selectForge(root, projectId, values.source!), diagnostics: [] }); return;
+      }
       let source = values.source;
       if (values['clone-to']) {
         if (!interactive) { emit({ command, outcome: 'proposal', coverage: 'none', data: { destination: values['clone-to'], revision: values.revision ?? 'v3.4.1' }, diagnostics: [{ code: 'DIRECT_CONSENT_REQUIRED', path: root, message: 'Run this clone in a direct learner-controlled terminal.' }] }); return; }
@@ -211,12 +220,13 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
     if (command === 'map') { if (!(positionals.length === 2 && ['init', 'check', 'status'].includes(positionals[1]!))) throw new Failure('USAGE', '', help, 2); emit({ command, outcome: 'success', coverage: 'simulation', data: positionals[1] === 'init' ? initMap(root) : positionals[1] === 'status' ? mapStatus(root) : checkMap(root), diagnostics: [] }); return; }
     if (command === 'task') {
       const action = positionals[1]; let data: any;
-      if (action === 'assign' && positionals[2] === 'pet-type-integrity' && positionals.length === 3) data = assignTask(root);
+      if (action === 'assign' && (positionals.length === 2 || (positionals.length === 3 && positionals[2] === 'pet-type-integrity'))) data = assignTask(root);
+      else if (action === 'attest' && positionals.length === 2 && values.criterion && values.file) data = attestCriterion(root, values.criterion, values.file);
       else if (action === 'begin' && positionals.length === 2) data = beginTask(root);
       else if (action === 'scope' && positionals.length === 2) data = investigationScope(root);
       else if (action === 'submit-design' && positionals.length === 2 && values.file) data = await submitDesign(root, values.file, adapter());
       else if (action === 'submit-change' && positionals.length === 2) data = submitChange(root);
-      else if (action === 'test' && positionals.length === 2 && values.prediction) data = testTask(root, values.prediction);
+      else if (action === 'test' && positionals.length === 2 && values.prediction) data = testTask(root, values.prediction, runtime, values.command);
       else if (action === 'help' && positionals.length === 2 && values.question) data = await requestHelp(root, values.question, adapter());
       else throw new Failure('USAGE', '', help, 2);
       emit({ command, outcome: data.outcome === 'rework' ? 'incomplete' : 'success', coverage: 'simulation', data, diagnostics: [] }); return;

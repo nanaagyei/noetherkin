@@ -40,7 +40,7 @@ for path in sorted((ROOT / 'schemas').glob('*.schema.json')):
     schema = json.loads(path.read_text())
     Draft202012Validator.check_schema(schema)
     schemas[path.name.removesuffix('.schema.json')] = Draft202012Validator(schema, format_checker=FormatChecker())
-assert len(schemas) == 11
+assert len(schemas) == 12
 
 def schema_for(path):
     if path.parent.name == 'work': return 'task'
@@ -49,6 +49,7 @@ def schema_for(path):
     if 'reviews' in path.parts: return 'review'
     if path.parent.name == 'projects': return 'project'
     if path.parent.name == 'tracks': return 'track'
+    if path.parent.name == 'forge': return 'forge'
     return {'config.yaml':'apprenticeship-config', 'profile.yaml':'learner-profile',
             'current-project.yaml':'current-project', 'current-track.yaml':'current-track',
             'competencies.yaml':'competency-state'}[path.name]
@@ -56,7 +57,7 @@ def schema_for(path):
 records = {}
 validated = []
 for path in (sorted(STATE.rglob('*.yaml')) + sorted((ROOT/'catalog/projects').glob('*.yaml'))
-             + sorted((ROOT/'catalog/tracks').glob('*.yaml'))):
+             + sorted((ROOT/'catalog/tracks').glob('*.yaml')) + sorted((ROOT/'catalog/forge').glob('*.yaml'))):
     value = read_yaml(path)
     name = schema_for(path)
     schemas[name].validate(value)
@@ -145,7 +146,27 @@ def inspect(value):
             if parsed.fragment: assert '## '+parsed.fragment in target.read_text(), item
         inspect(item)
 
-for _, _, value in validated: inspect(value)
+for _, name, value in validated:
+    if name == 'forge': continue  # Forge statuses are draft/supported/deprecated; checked below.
+    inspect(value)
+
+# ACP-015 forge specifications: a closed record with no upstream identity, a non-empty authored task pack whose
+# directory holds task JSON only (never solution code), and competencies equal to what its tasks exercise.
+forges = [value for path, name, value in validated if name == 'forge']
+assert forges and not (project_ids & {forge['id'] for forge in forges})
+for forge in forges:
+    assert forge['data_class'] == 'live' and forge['status'] in ('draft', 'supported')
+    assert 'repository_url' not in forge and 'upstream_organization' not in forge
+    assert forge['task_packs'] and all(track in {t['id'] for t in tracks} for track in forge['track_alignment'])
+    exercised = set()
+    for pack in forge['task_packs']:
+        files = sorted((ROOT/'tasks/forge'/pack).iterdir())
+        assert files and all(file.suffix == '.json' for file in files), f'Forge pack {pack} must contain task JSON only'
+        for file in files:
+            task = json.loads(file.read_text())
+            assert task['forge_id'] == forge['id'] and task['pack_id'] == pack
+            exercised |= set(task['primary_competencies']) | set(task['secondary_competencies'])
+    assert exercised == set(forge['competencies'])
 
 edges = {
  'backlog':{'assigned','cancelled'}, 'assigned':{'investigating','cancelled'},

@@ -8,9 +8,9 @@ From repository root, run:
 python3 evaluations/validate_foundation.py
 ```
 
-Requires Python with PyYAML and jsonschema already installed. The checker is read-only specification QA, not a simulator initializer, lifecycle engine, permission system or production validator. It validates all eleven schemas, structured examples, competency/level/project/track catalog integrity, local references, selected fixture semantics, contract section coverage and Markdown links. It constructs invalid specimens in memory without changing state.
+Requires Python with PyYAML and jsonschema already installed. The checker is read-only specification QA, not a simulator initializer, lifecycle engine, permission system or production validator. It validates all twelve schemas, structured examples, competency/level/project/track catalog integrity, local references, selected fixture semantics, contract section coverage and Markdown links. It constructs invalid specimens in memory without changing state.
 
-Executable negative cases cover unknown fields and unsupported versions for all eleven schemas, invalid review role/kind/outcome, promotion author/authorization/dimension requirements, partially null project binding, invalid assistance range, skipped investigation, stale deliverable approval, failed acceptance criteria and missing completion evidence. A passing suite establishes these bounded artifact properties only.
+Executable negative cases cover unknown fields and unsupported versions for all twelve schemas, invalid review role/kind/outcome, promotion author/authorization/dimension requirements, partially null project binding, invalid assistance range, skipped investigation, stale deliverable approval, failed acceptance criteria and missing completion evidence. A passing suite establishes these bounded artifact properties only.
 
 ## Behavioral conformance scenarios
 
@@ -115,6 +115,20 @@ Adopted with ACP-012 (Phase 11, see `FOUNDATION_CHANGELOG.md`). These are **exec
 | FR-31 | Skill description omits the discriminating boundary clause | `validateInstalled` rejects the bundle. | `tests/skill-bundles.test.mjs` FR-31 case |
 
 CF-33, CF-34, CF-50, CF-51, FR-52 and FR-53 from ACP-012 describe the deferred controller bundling and are not registered.
+
+Adopted with ACP-015 (Phase 13, see `FOUNDATION_CHANGELOG.md`). All are executed offline except CF-44, which is agent behavior.
+
+| ID | Setup | Required result | Covered by |
+| --- | --- | --- | --- |
+| CF-42 | Forge project selected at E0 | Bind an empty learner-authored `source/`; never clone; no commit pin before code exists. | `tests/forge.test.ts` CF-42 |
+| CF-43 | Forge task assigned, completed and evidence recorded | The full lifecycle succeeds with no upstream repository present. | `tests/forge.test.ts` CF-43, all four `eval-ledger-core` tasks |
+| CF-44 | `resume-evidence` invoked on completed forge work | Truthful description of learner-authored software, retaining simulation qualifiers for the surrounding process. | *behavioral* P21 |
+| CF-45 | Learner moves from a forge project to an upstream project | Prior forge evidence remains valid and citable; no re-baselining. | `tests/forge.test.ts` CF-45 |
+| FR-42 | Forge record with empty `task_packs` | Reject at catalog validation. | `tests/forge.test.ts` FR-42; `validate_foundation.py` |
+| FR-43 | Forge record declaring `repository_url` or `upstream_organization` | Reject as an unknown field of the closed schema. | `tests/forge.test.ts` FR-43 |
+| FR-44 | Curator attempts to clone or fetch for a forge selection | Reject; bind only a new or empty directory. | `tests/forge.test.ts` FR-44 |
+| FR-45 | Forge pack contains anything but task specifications | Reject the pack as possible shipped solution code. | `tests/forge.test.ts` FR-45; `validate_foundation.py` |
+| FR-46 | Core code branches on a specific forge project ID | Reject; packs are resolved from data. | `tests/forge.test.ts` FR-46 static guard |
 
 Adopted with ACP-013 (Phase 12, see `FOUNDATION_CHANGELOG.md`). All are executed offline except FR-35, which is reviewer behavior.
 

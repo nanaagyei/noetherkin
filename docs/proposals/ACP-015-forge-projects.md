@@ -2,11 +2,16 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `PROPOSED` |
+| Status | `ADOPTED`, 2026-09-23 |
 | Date | 2026-09-21 (America/Chicago) |
 | Depends on | none |
 | Blocks | ACP-014 (which needs content to select among) |
 | Supersedes | none |
+
+> **Adopted.** The authoritative record is Phase 13 in [FOUNDATION_CHANGELOG.md](../../FOUNDATION_CHANGELOG.md),
+> not this file. The staged assets below were promoted to `schemas/forge.schema.json`, `catalog/forge/eval-ledger.yaml`
+> and `tasks/forge/eval-ledger-core/`; the copies here are kept as the reviewed proposal text. Outside checks are
+> enforced through learner-recorded attestations (`task attest`).
 
 Noetherkin gains a second kind of project. A **forge project** is built by the learner from a specification
 this repository ships. The repository ships the problem, the acceptance criteria, the operational requirements

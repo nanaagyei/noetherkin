@@ -2,7 +2,7 @@
   "format_version": 2,
   "protocol_version": "3.0",
   "skill": "projects",
-  "manifest_sha256": "ee54a7fc00b92271abbc908f1b479395d29d901e3f994daf6378bc6b83685b7e",
+  "manifest_sha256": "5d1aa9ba8e526fe6d4f4ae6f93604d2749649adddf55594c054426790da61e97",
   "context_only_links": {
     "SPEC.md": "Repository index; required protocol documents are bundled directly.",
     "archive/protocol-1.0/FOUNDATION_V1.md": "Historical protocol 1.0, not current authority.",
@@ -20,8 +20,8 @@
     {
       "source": "PROJECT_CHARTER.md",
       "target": "references/PROJECT_CHARTER.md",
-      "source_sha256": "bc180b71cc54d6f9c5d95ea0e279458f006ff454b7d313faf11096a059e762af",
-      "bundled_sha256": "bc180b71cc54d6f9c5d95ea0e279458f006ff454b7d313faf11096a059e762af"
+      "source_sha256": "48e45908f5f4e6fb6f216055648ebf5fcc433a1263385899bd551891455a29b0",
+      "bundled_sha256": "48e45908f5f4e6fb6f216055648ebf5fcc433a1263385899bd551891455a29b0"
     },
     {
       "source": "OPEN_QUESTIONS.md",
@@ -32,8 +32,8 @@
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "31c9cdd6ba97c14cd0f228c6befab33489b1b2748447847f76e910c86e10654c",
-      "bundled_sha256": "31c9cdd6ba97c14cd0f228c6befab33489b1b2748447847f76e910c86e10654c"
+      "source_sha256": "4c6d2343e9389a63a14d1f8decc5edd6983515a5c5c912a7c8bf1e952bd54da3",
+      "bundled_sha256": "4c6d2343e9389a63a14d1f8decc5edd6983515a5c5c912a7c8bf1e952bd54da3"
     },
     {
       "source": "docs/architecture/overview.md",
@@ -56,8 +56,8 @@
     {
       "source": "docs/architecture/state-model.md",
       "target": "references/state-model.md",
-      "source_sha256": "aadd4a6f5f6e379c63ec75552ec712066a86d3ed48eee4cf71c9ee930278327c",
-      "bundled_sha256": "aadd4a6f5f6e379c63ec75552ec712066a86d3ed48eee4cf71c9ee930278327c"
+      "source_sha256": "594538470961e13af5b0df8ff5af1c27bb32d72dcb3842861ef5586a25013bdc",
+      "bundled_sha256": "594538470961e13af5b0df8ff5af1c27bb32d72dcb3842861ef5586a25013bdc"
     },
     {
       "source": "docs/architecture/simulation-lifecycle.md",
@@ -104,8 +104,8 @@
     {
       "source": "docs/architecture/conformance.md",
       "target": "references/conformance.md",
-      "source_sha256": "9846145046171004541c5c0ea5df7026be493d730bdc67af6b079119feb15b9c",
-      "bundled_sha256": "9846145046171004541c5c0ea5df7026be493d730bdc67af6b079119feb15b9c"
+      "source_sha256": "6fc7dded82254ebe86b853e9228b2726031cf75e8d9b77bae9d359a0662b4bb6",
+      "bundled_sha256": "6fc7dded82254ebe86b853e9228b2726031cf75e8d9b77bae9d359a0662b4bb6"
     },
     {
       "source": "contracts/README.md",
@@ -116,8 +116,8 @@
     {
       "source": "schemas/apprenticeship-config.schema.json",
       "target": "references/apprenticeship-config.schema.json",
-      "source_sha256": "04d821b4fd1dff06d1097a8ac20dfcde5ffd3c9cebe3515b4198130c49c14bb8",
-      "bundled_sha256": "04d821b4fd1dff06d1097a8ac20dfcde5ffd3c9cebe3515b4198130c49c14bb8"
+      "source_sha256": "542c566e927b22ae402eb7dbbca76286417674463640a042cbb3d986e9bf0585",
+      "bundled_sha256": "542c566e927b22ae402eb7dbbca76286417674463640a042cbb3d986e9bf0585"
     },
     {
       "source": "schemas/learner-profile.schema.json",
@@ -128,8 +128,8 @@
     {
       "source": "schemas/current-project.schema.json",
       "target": "references/current-project.schema.json",
-      "source_sha256": "b50a05465eeb02bba0fdec4f56225bf44ddf3d83c4dd62ee8cc640b02b66d6df",
-      "bundled_sha256": "b50a05465eeb02bba0fdec4f56225bf44ddf3d83c4dd62ee8cc640b02b66d6df"
+      "source_sha256": "a8e80de73206cab6310b0807ad2f9a266a7b618649331dfcf90e7be83d5f89d9",
+      "bundled_sha256": "a8e80de73206cab6310b0807ad2f9a266a7b618649331dfcf90e7be83d5f89d9"
     },
     {
       "source": "schemas/current-track.schema.json",
@@ -174,6 +174,12 @@
       "bundled_sha256": "2cbac0ac5d874a48c8a8cd38372064498e9dc61606cdf7931e5a2028bd5b3d8e"
     },
     {
+      "source": "schemas/forge.schema.json",
+      "target": "references/forge.schema.json",
+      "source_sha256": "886ad04f97da39e9e643e9de63ebc09accff5360dade9514a5e6ac2f5f0d9e11",
+      "bundled_sha256": "886ad04f97da39e9e643e9de63ebc09accff5360dade9514a5e6ac2f5f0d9e11"
+    },
+    {
       "source": "schemas/competency-state.schema.json",
       "target": "references/competency-state.schema.json",
       "source_sha256": "077f17c98d5b892052f566c25509d13726b3c9455378108c3b709a6d070981e6",
@@ -212,8 +218,8 @@
     {
       "source": "contracts/projects.md",
       "target": "references/contract-projects.md",
-      "source_sha256": "d46348aa2e262f5cd217f01f6ecaa33c6c0a70450fbea948a8c43ee69926d4e1",
-      "bundled_sha256": "938096116c2f3dbd499c2b3502343d7a8817d140beb33f2759212ba1b6248aa0"
+      "source_sha256": "90650c1371ae715e963000098aeab05a56f2ddeada30a838056dc04b1560e584",
+      "bundled_sha256": "6935ca44878865267ab7f9f4634d59010b380cf1129cacc79e1af90987a7db34"
     },
     {
       "source": "contracts/onboarding.md",
@@ -228,5 +234,5 @@
       "bundled_sha256": "7b0e369bd08e88a8bbd81e577fe1726f23310047fd1fca299d75340b7a10bc8c"
     }
   ],
-  "index_sha256": "80481ae53ea6017f263aa480f0af2f42533764a6696ce4b5c7297f332fc4d052"
+  "index_sha256": "e798f7c57a00787ce1c1694a0e9228754fe402991c1009d91ed3577ac6932bc0"
 }

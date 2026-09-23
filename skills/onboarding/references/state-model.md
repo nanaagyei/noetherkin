@@ -1,14 +1,15 @@
 # Persistent state and object identity
 
-State is UTF-8 YAML 1.2 restricted to JSON-compatible values. Reject duplicate mapping keys, custom tags, aliases, non-finite numbers and implicit date objects; quote timestamps and schema versions. JSON Schema Draft 2020-12 plus format checking validates each document. Protocol 3.0 mutable workspace records carry `schema_version: "3.0"`; migrated immutable evidence, assessments, reviews, project snapshots and task history retain `schema_version: "2.0"`. Every record carries `data_class: live | fixture`. The competency catalog is 3.0, the expanded track catalog is 1.1, and the unchanged level catalog remains 2.0.
+State is UTF-8 YAML 1.2 restricted to JSON-compatible values. Reject duplicate mapping keys, custom tags, aliases, non-finite numbers and implicit date objects; quote timestamps and schema versions. JSON Schema Draft 2020-12 plus format checking validates each document. Protocol 3.0 mutable workspace records carry `schema_version: "3.0"`; migrated immutable evidence, assessments, reviews, project snapshots and task history retain `schema_version: "2.0"`. Every record carries `data_class: live | fixture`. The competency catalog is 4.0 (3.0 pins remain valid), the expanded track catalog is 1.1, the forge catalog is 1.0, and the unchanged level catalog remains 2.0.
 
 | Location inside `.apprenticeship/` | Schema | Authority |
 | --- | --- | --- |
 | `config.yaml` | apprenticeship-config | Canonical workspace identity, mode and principal registry |
 | `profile.yaml` | learner-profile | Canonical learner goals, onboarding, baseline pointer; self-report is not evidence |
-| `current-project.yaml` | current-project | Canonical nullable selection and local source binding |
+| `current-project.yaml` | current-project | Canonical nullable selection and local source binding. `kind: forge` binds a learner-authored directory with a null `source_revision`; absent or `upstream` binds a pinned checkout |
 | `current-track.yaml` | current-track | Canonical nullable advisory track, pinned definition digest and scope-alignment state |
 | `projects/<project-id>.yaml` | project | Canonical pinned catalog definition for this workspace |
+| `forge/<forge-id>.yaml` | forge | Canonical pinned forge specification for this workspace; immutable like a project snapshot |
 | `work/<task-id>.yaml` | task | Canonical assignment, status, assistance history, validation and transition history |
 | `evidence/<evidence-id>.yaml` | evidence | Canonical attributable observation and interpretation |
 | `assessments/<assessment-id>.yaml` | assessment | Canonical baseline or technical competency judgment |

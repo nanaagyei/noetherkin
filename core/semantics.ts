@@ -33,7 +33,7 @@ function verifyArtifact(root: string, value: ObjectValue, file: string, rt: Runt
 }
 
 function verifyReceipts(root: string, config: ObjectValue, rt: Runtime): void {
-  const actionRoles: Record<string, string> = { init: 'onboarding-coordinator', 'migrate-protocol': 'learner', 'select-track': 'learner', 'assess-track-alignment': 'team-lead', 'review-track-alignment': 'manager', 'align-track': 'learner', 'establish-baseline': 'team-lead', 'complete-onboarding': 'onboarding-coordinator', 'select-project': 'project-curator', 'initialize-codebase-map': 'learner', 'assign-task': 'team-lead', 'begin-task': 'learner', 'review-design': 'team-lead', 'open-implementation-gate': 'team-lead', 'submit-change': 'learner', 'record-test-run': 'learner', 'record-help': 'peer-engineer', 'code-review': 'peer-engineer', 'task-review-rework': 'team-lead', 'complete-task': 'team-lead', 'performance-review': 'manager' };
+  const actionRoles: Record<string, string> = { init: 'onboarding-coordinator', 'migrate-protocol': 'learner', 'select-track': 'learner', 'assess-track-alignment': 'team-lead', 'review-track-alignment': 'manager', 'align-track': 'learner', 'establish-baseline': 'team-lead', 'complete-onboarding': 'onboarding-coordinator', 'select-project': 'project-curator', 'select-forge': 'project-curator', 'initialize-codebase-map': 'learner', 'assign-task': 'team-lead', 'begin-task': 'learner', 'review-design': 'team-lead', 'open-implementation-gate': 'team-lead', 'submit-change': 'learner', 'record-test-run': 'learner', 'record-help': 'peer-engineer', 'code-review': 'peer-engineer', 'task-review-rework': 'team-lead', 'complete-task': 'team-lead', 'performance-review': 'manager' };
   const directory = safePath(root, statePath('operations'), rt);
   if (!exists(directory, rt)) return;
   const history = new Map<string, ObjectValue[]>();
@@ -94,7 +94,15 @@ export function inspectSimulationSemantics(records: Map<string, ObjectValue>, ro
     requireThat(baseline.findings.length > 0 && baseline.findings.every((item: ObjectValue) => item.status === 'unassessed' && item.evidence_ids.length === 0), 'BASELINE_INVALID', `assessments/${baseline.id}.yaml`, 'The pre-task baseline must honestly remain all-unassessed.');
     requireThat(exists(safePath(root, statePath('knowledge/evaluation-scope.md'), rt), rt), 'SCOPE_MISSING', 'knowledge/evaluation-scope.md', 'The agreed evaluation scope is missing.');
   });
-  if (selection.project_id) check(() => {
+  if (selection.project_id && selection.kind === 'forge') check(() => {
+    // A forge binding has no upstream identity and no commit pin (ACP-015): the learner writes source/ from empty.
+    const forge = byId.get(selection.project_id);
+    requireThat(profile.onboarding === 'complete' && forge?.data_class === 'live' && forge.status !== 'deprecated' && Array.isArray(forge.task_packs) && !('repository_url' in forge), 'PROJECT_BINDING_INVALID', 'current-project.yaml', 'A forge selection must bind a pinned live forge specification after onboarding.');
+    requireThat(selection.source_revision === null, 'PROJECT_BINDING_INVALID', 'current-project.yaml', 'A forge binding records no upstream commit pin.');
+    const source = safePath(root, selection.source_path, rt);
+    requireThat(exists(source, rt) && rt.fs.lstatSync(source).isDirectory(), 'SOURCE_INVALID', selection.source_path, 'The learner-authored forge source directory is missing.');
+  });
+  else if (selection.project_id) check(() => {
     const project = byId.get(selection.project_id);
     requireThat(profile.onboarding === 'complete' && project?.data_class === 'live' && project.status !== 'deprecated' && project.support?.attachable, 'PROJECT_BINDING_INVALID', 'current-project.yaml', 'Selection must bind an attachable live catalog project after onboarding.');
     requireThat(/^[a-f0-9]{40}$/.test(selection.source_revision), 'PROJECT_BINDING_INVALID', 'current-project.yaml', 'Selection must retain a full commit SHA.');

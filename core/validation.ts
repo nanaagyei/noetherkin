@@ -6,6 +6,7 @@ import { canonical, diagnostic, encode, requireThat, sha256, validId, type Diagn
 import { exists, read, runtime, safePath, statePath, type Runtime } from './storage.js';
 import { compileSchema, errorsText } from './schema.js';
 import { validateCompetencyGraph } from './graph.js';
+import { loadForgeRecords } from './packs.js';
 
 const assets = fileURLToPath(new URL('../../', import.meta.url));
 const validators = new Map(fs.readdirSync(path.join(assets, 'schemas')).filter(f => f.endsWith('.schema.json')).map(file => {
@@ -18,7 +19,7 @@ export function validateDocument(value: ObjectValue, schema: string, file: strin
   const errors = validator(value);
   requireThat(errors.length === 0, 'SCHEMA_INVALID', file, errorsText(errors));
 }
-export function catalogs(): { projects: ObjectValue[]; tracks: ObjectValue[]; competencies: ObjectValue[]; competencyIds: Set<string>; coreCompetencyIds: Set<string> } {
+export function catalogs(): { projects: ObjectValue[]; tracks: ObjectValue[]; forges: ObjectValue[]; competencies: ObjectValue[]; competencyIds: Set<string>; coreCompetencyIds: Set<string> } {
   const competencies = parse(fs.readFileSync(path.join(assets, 'catalog/competencies.yaml')), 'catalog/competencies.yaml');
   const levels = parse(fs.readFileSync(path.join(assets, 'catalog/levels.yaml')), 'catalog/levels.yaml');
   requireThat(competencies.catalog_version === '4.0' && levels.catalog_version === '2.0', 'CATALOG_INVALID', 'catalog', 'Expected competency catalog 4.0 and level catalog 2.0.');
@@ -47,13 +48,16 @@ export function catalogs(): { projects: ObjectValue[]; tracks: ObjectValue[]; co
     requireThat(recommendations.every((id: string) => projectIds.has(id) && projects.find(project => project.id === id)?.status !== 'deprecated'), 'CATALOG_INVALID', file, 'Track project references must resolve to non-deprecated catalog entries.');
     return track;
   });
-  return { projects, tracks, competencies: competencies.competencies, competencyIds, coreCompetencyIds };
+  const forges = loadForgeRecords({ competencyIds, coreCompetencyIds, tracks }, (record, file) => validateDocument(record, 'forge', file));
+  requireThat(forges.every(forge => !projectIds.has(forge.id)), 'CATALOG_INVALID', 'catalog/forge', 'Forge and upstream project IDs share one selection namespace and must not collide.');
+  return { projects, tracks, forges, competencies: competencies.competencies, competencyIds, coreCompetencyIds };
 }
 export const bootstrapFiles = ['config.yaml', 'profile.yaml', 'current-project.yaml', 'current-track.yaml', 'competencies.yaml'];
 export function schemaFor(file: string): string | undefined {
   const roots: Record<string, string> = { 'config.yaml': 'apprenticeship-config', 'profile.yaml': 'learner-profile', 'current-project.yaml': 'current-project', 'current-track.yaml': 'current-track', 'competencies.yaml': 'competency-state' };
   if (roots[file]) return roots[file];
   if (/^projects\/[^/]+\.yaml$/.test(file)) return 'project';
+  if (/^forge\/[^/]+\.yaml$/.test(file)) return 'forge';
   if (/^work\/[^/]+\.yaml$/.test(file)) return 'task';
   if (/^evidence\/[^/]+\.yaml$/.test(file)) return 'evidence';
   if (/^assessments\/[^/]+\.yaml$/.test(file)) return 'assessment';
@@ -104,7 +108,7 @@ export function inspectRecords(records: Map<string, ObjectValue>, root?: string,
     used.add(id);
   };
   check(() => {
-    if (config.schema_version === '3.0') requireThat(['3.0', '4.0'].includes(config.competency_catalog_version) && config.level_catalog_version === '2.0' && ['1.0', '1.1'].includes(config.track_catalog_version), 'CATALOG_BINDING_INVALID', 'config.yaml', 'Protocol 3.0 workspaces must pin competency 3.0 or 4.0, level 2.0, and a supported track catalog.');
+    if (config.schema_version === '3.0') requireThat(['3.0', '4.0'].includes(config.competency_catalog_version) && config.level_catalog_version === '2.0' && ['1.0', '1.1'].includes(config.track_catalog_version) && [undefined, '1.0'].includes(config.forge_catalog_version), 'CATALOG_BINDING_INVALID', 'config.yaml', 'Protocol 3.0 workspaces must pin competency 3.0 or 4.0, level 2.0, and a supported track catalog.');
     register(config.workspace_id, 'config.yaml', 'WS'); register(config.learner_id, 'config.yaml', 'LEARNER');
     requireThat(profile.learner_id === config.learner_id, 'IDENTITY_MISMATCH', 'profile.yaml', 'Profile and config must identify the same learner.');
     for (const principal of config.principals) register(principal.id, 'config.yaml', 'ACTOR');
@@ -132,7 +136,9 @@ export function inspectRecords(records: Map<string, ObjectValue>, root?: string,
       if (Array.isArray(item)) { item.forEach(walk); return; }
       if (item.id && item.role) requireThat(config.principals.some((p: ObjectValue) => p.id === item.id && p.role === item.role), 'ACTOR_INVALID', file, 'Actor ID and role must match the retained registry.');
       for (const [key, child] of Object.entries(item)) {
-        if (single[key] && child !== null) ref(child as string, single[key]!);
+        // A task or evidence project_id names either a pinned upstream project or a pinned forge specification.
+        if (key === 'project_id' && child !== null) requireThat(['project', 'forge'].includes(objects.get(child as string)?.schema ?? ''), 'REFERENCE_INVALID', file, `${child} must resolve to a pinned project or forge record in this workspace.`);
+        else if (single[key] && child !== null) ref(child as string, single[key]!);
         if (lists[key] && Array.isArray(child)) child.forEach(id => ref(id, lists[key]!));
         if (key === 'stale_record_ids' && Array.isArray(child)) requireThat(child.every(id => ['evidence', 'assessment', 'review'].includes(objects.get(id)?.schema ?? '')), 'REFERENCE_INVALID', file, 'Stale record IDs must resolve to evidence, assessments, or reviews.');
         if (key === 'principal_id' && child !== null) requireThat(config.principals.some((p: ObjectValue) => p.id === child), 'ACTOR_INVALID', file, 'Provider principal must be registered.');

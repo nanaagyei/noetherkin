@@ -1,0 +1,361 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://engineering-apprenticeship.example/schemas/3.0/forge.schema.json",
+  "title": "forge",
+  "description": "PROPOSED under ACP-015. Not normative. A first-party specification the learner builds from. This repository owns the specification and the task pack; it never ships a solution.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "data_class",
+    "id",
+    "name",
+    "description",
+    "status",
+    "track_alignment",
+    "competencies",
+    "recommended_minimum_level",
+    "ideal_level",
+    "primary_languages",
+    "technologies",
+    "external_services",
+    "problem",
+    "users",
+    "success_criteria",
+    "non_goals",
+    "operational_requirements",
+    "context_budget",
+    "prerequisites",
+    "task_packs",
+    "caveats",
+    "sources",
+    "checked_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "1.0"
+      ]
+    },
+    "data_class": {
+      "enum": [
+        "live",
+        "fixture"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "supported",
+        "deprecated"
+      ]
+    },
+    "track_alignment": {
+      "description": "Track IDs whose required_competencies this specification exercises. At least one; a forge project that teaches nothing on any track does not belong in the catalog.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "competencies": {
+      "description": "Catalog competency IDs. References, never scores or levels.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "recommended_minimum_level": {
+      "enum": [
+        "E0",
+        "E1",
+        "E2"
+      ]
+    },
+    "ideal_level": {
+      "enum": [
+        "E0",
+        "E1",
+        "E2"
+      ]
+    },
+    "primary_languages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "technologies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "external_services": {
+      "description": "Third-party services the finished system requires. Empty is the preferred value; each entry is a dependency the learner must obtain before starting.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "purpose",
+          "substitutable"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "substitutable": {
+            "description": "Whether a local or offline stand-in is acceptable. False means the learner cannot start without it.",
+            "type": "boolean"
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+    "problem": {
+      "description": "What is wrong in the world without this system. Stated as a situation, not as a list of features to implement.",
+      "type": "string",
+      "minLength": 1
+    },
+    "users": {
+      "description": "Who runs this and what they are trying to accomplish. At least one, because 'genuinely usable by someone other than the learner' is an entry requirement.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "who",
+          "needs"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "who": {
+            "type": "string",
+            "minLength": 1
+          },
+          "needs": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "success_criteria": {
+      "description": "Observable properties of the finished system. Each must be checkable by someone who did not write it. These describe the whole project; per-task acceptance criteria live in the task records.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "criterion",
+          "verifiable_by"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^SC-[0-9]+$"
+          },
+          "criterion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "verifiable_by": {
+            "description": "How an outside reviewer confirms this without trusting a claim.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "non_goals": {
+      "description": "Explicitly out of scope. Present to bound the work, because an unbounded specification cannot meet its context budget.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "operational_requirements": {
+      "description": "What the system must do to be operable, not merely correct. This is what distinguishes a forge project from an exercise and gives production-readiness something real to assess.",
+      "type": "object",
+      "required": [
+        "failure_modes",
+        "observability",
+        "rollback",
+        "documentation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "failure_modes": {
+          "description": "Failures the system must handle explicitly, each with the required behavior.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "failure",
+              "required_behavior"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "failure": {
+                "type": "string",
+                "minLength": 1
+              },
+              "required_behavior": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "observability": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "rollback": {
+          "description": "How a bad change is undone. 'Not applicable' is not an acceptable value; state the actual procedure.",
+          "type": "string",
+          "minLength": 1
+        },
+        "documentation": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "context_budget": {
+      "description": "Target size of the finished artifact. Advisory and revisable against ACP-016 measurements; stated because an unstated budget is not a constraint.",
+      "type": "object",
+      "required": [
+        "source_tokens_target",
+        "excludes",
+        "rationale"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "source_tokens_target": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "excludes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "prerequisites": {
+      "description": "What the learner must already be able to do. Prose, not competency IDs; competency fit is carried by the competencies field.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "task_packs": {
+      "description": "Task pack IDs. Non-empty by construction: a forge record with no authored tasks is rejected. This is the rule that stops the forge catalog repeating the breadth-without-depth problem of the upstream project catalog.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "caveats": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "sources": {
+      "description": "Where the problem statement came from. Empty is permitted for an invented problem; an entry claims a real need and must be checkable.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "uri",
+          "description",
+          "revision"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "uri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

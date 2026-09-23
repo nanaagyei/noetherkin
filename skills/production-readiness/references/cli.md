@@ -13,7 +13,7 @@ The executable requires Node.js 24+. Build with `npm ci` and `npm run build`, th
 | `track select <track-id>` | Explicitly select or switch the active track; a switch creates pending alignment. |
 | `track align` | In noninteractive use, report the exact alignment proposal. In a direct terminal, authorize an exact-scope longitudinal assessment and manager review, then adopt the scope only after a `continue` outcome. |
 | `projects --track <track-id> [--stage early\|intermediate\|advanced]` | Browse track recommendations without treating tiers as level gates. |
-| `validate` | Validate parsing, eleven schema types, references, catalog pins and supported state integrity. |
+| `validate` | Validate parsing, twelve schema types, references, catalog pins and supported state integrity. |
 | `migrate --to 3.0 --dry-run` | Report every proposed protocol migration change without writing. |
 | `migrate --to 3.0` | After interactive learner authorization, publish the transactional 2.0 to 3.0 migration. |
 | `doctor` | Diagnose retained locks, pending publication, receipts, snapshots, and invalid state. |
@@ -22,9 +22,11 @@ The executable requires Node.js 24+. Build with `npm ci` and `npm run build`, th
 | `project select <project-id> --source <path>` | Attach any attachable catalog project after origin, cleanliness, revision and path checks. |
 | `project select <project-id> --clone-to <path>` | Explicitly clone and attach a catalog project after interactive consent. |
 | `map init`, `map check`, `map status` | Create a project-derived template, check the learner-authored map, and report read-only whether this exact map was checked at the current source revision (`absent`, `incomplete`, `unchecked`, `checked`) with the paths it cites. |
-| `task assign`, `task begin` | Assign and start the curated `pet-type-integrity` task. |
+| `task assign`, `task begin` | Assign the next task from the bound project's curated pack (`pet-type-integrity` for PetClinic, or the next forge task in sequence), then start it. |
+| `task attest --criterion <id> --file <notes>` | Record a check only another person can perform, such as an outside quickstart, against the exact submitted work revision. Task review requires it for criteria the pack marks. |
+| `forges`, `project select <forge-id> --source <dir>` | List forge specifications, and bind one to a new or empty learner-authored directory. Nothing is cloned. |
 | `task scope` | List the files the current task's frozen `investigation_paths` globs select inside the bound source; matches that resolve outside it are reported as rejected. |
-| `task submit-design`, `task submit-change`, `task test`, `task help` | Gate design, snapshot learner work, run focused tests, or request attributed help. |
+| `task submit-design`, `task submit-change`, `task test`, `task help` | Gate design, snapshot learner work, run focused tests, or request attributed help. A forge task snapshots every non-ignored file of the learner's repository and takes the learner's declared `--command`. |
 | `review code`, `review task`, `review performance` | Publish bound peer, team-lead and manager judgments. |
 | `next` | Derive the phase and invoke safe no-input handlers; otherwise report the explicit command needing learner input or confirmation. |
 

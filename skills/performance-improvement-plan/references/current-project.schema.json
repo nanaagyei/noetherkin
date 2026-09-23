@@ -4,7 +4,12 @@
   "title": "current-project",
   "type": "object",
   "properties": {
-    "schema_version": { "enum": ["2.0", "3.0"] },
+    "schema_version": {
+      "enum": [
+        "2.0",
+        "3.0"
+      ]
+    },
     "data_class": {
       "enum": [
         "live",
@@ -38,6 +43,12 @@
         "null"
       ],
       "format": "date-time"
+    },
+    "kind": {
+      "enum": [
+        "upstream",
+        "forge"
+      ]
     }
   },
   "required": [
@@ -63,6 +74,9 @@
         },
         "selected_at": {
           "type": "null"
+        },
+        "kind": {
+          "const": "upstream"
         }
       }
     },
@@ -83,8 +97,36 @@
         "selected_at": {
           "type": "string",
           "minLength": 1
+        },
+        "kind": {
+          "const": "upstream"
         }
       }
+    },
+    {
+      "properties": {
+        "kind": {
+          "const": "forge"
+        },
+        "project_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_revision": {
+          "type": "null"
+        },
+        "selected_at": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind"
+      ]
     }
   ]
 }
