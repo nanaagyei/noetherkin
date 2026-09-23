@@ -31,6 +31,7 @@ Generated from the protocol 2.0 source manifest. Read the runtime guide and the 
 | `schemas/evidence.schema.json` | [evidence.schema.json](evidence.schema.json) |
 | `schemas/assessment.schema.json` | [assessment.schema.json](assessment.schema.json) |
 | `schemas/review.schema.json` | [review.schema.json](review.schema.json) |
+| `schemas/forge.schema.json` | [forge.schema.json](forge.schema.json) |
 | `schemas/competency-state.schema.json` | [competency-state.schema.json](competency-state.schema.json) |
 | `catalog/competencies.yaml` | [competencies.yaml](competencies.yaml) |
 | `catalog/levels.yaml` | [levels.yaml](levels.yaml) |

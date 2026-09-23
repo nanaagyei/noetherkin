@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "catalog_version": "3.0",
+  "catalog_version": "4.0",
   "competencies": [
     {
       "id": "core.codebase-navigation",
@@ -14,21 +14,31 @@
       "domain": "core",
       "name": "implementation",
       "observable_behavior": "Implement a scoped change and explain correctness and failure behavior.",
-      "required_core": true
+      "required_core": true,
+      "prerequisites": [
+        "core.codebase-navigation"
+      ]
     },
     {
       "id": "core.debugging",
       "domain": "core",
       "name": "debugging",
       "observable_behavior": "Form and test causal hypotheses against a reproducible failure.",
-      "required_core": true
+      "required_core": true,
+      "prerequisites": [
+        "core.codebase-navigation",
+        "core.testing"
+      ]
     },
     {
       "id": "core.testing",
       "domain": "core",
       "name": "testing",
       "observable_behavior": "Choose tests that expose plausible defects and explain their limits.",
-      "required_core": true
+      "required_core": true,
+      "prerequisites": [
+        "core.codebase-navigation"
+      ]
     },
     {
       "id": "core.technical-communication",
@@ -42,7 +52,14 @@
       "domain": "core",
       "name": "ownership",
       "observable_behavior": "Follow work through validation and communicate risks and unfinished obligations.",
-      "required_core": true
+      "required_core": true,
+      "prerequisites": [
+        "core.implementation",
+        "core.testing"
+      ],
+      "encompasses": [
+        "core.technical-communication"
+      ]
     },
     {
       "id": "core.git",
@@ -56,7 +73,10 @@
       "domain": "design",
       "name": "api design",
       "observable_behavior": "Define API behavior including errors and compatibility.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "backend.http-api"
+      ]
     },
     {
       "id": "design.abstraction",
@@ -70,7 +90,10 @@
       "domain": "design",
       "name": "data modeling",
       "observable_behavior": "Model identity, constraints and evolution of persisted data.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "backend.databases"
+      ]
     },
     {
       "id": "design.system-design",
@@ -98,14 +121,20 @@
       "domain": "backend",
       "name": "http api",
       "observable_behavior": "Trace HTTP requests including status, headers and failure paths.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "core.codebase-navigation"
+      ]
     },
     {
       "id": "backend.databases",
       "domain": "backend",
       "name": "databases",
       "observable_behavior": "Explain query behavior, indexes and transactional boundaries.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "core.codebase-navigation"
+      ]
     },
     {
       "id": "backend.caching",
@@ -119,14 +148,22 @@
       "domain": "backend",
       "name": "authentication authorization",
       "observable_behavior": "Distinguish identity verification from permission checks and test denial paths.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "backend.http-api",
+        "core.testing"
+      ]
     },
     {
       "id": "backend.concurrency",
       "domain": "backend",
       "name": "concurrency",
       "observable_behavior": "Identify shared state and test ordering and race assumptions.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "core.debugging",
+        "core.testing"
+      ]
     },
     {
       "id": "backend.queues-messaging",
@@ -224,7 +261,10 @@
       "domain": "production",
       "name": "observability",
       "observable_behavior": "Combine signals to distinguish competing failure hypotheses.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "core.debugging"
+      ]
     },
     {
       "id": "production.reliability",

@@ -26,8 +26,9 @@
         "archived"
       ]
     },
-    "competency_catalog_version": { "enum": ["2.0", "3.0"] },
+    "competency_catalog_version": { "enum": ["2.0", "3.0", "4.0"] },
     "track_catalog_version": { "enum": ["1.0", "1.1"] },
+    "forge_catalog_version": { "enum": ["1.0"] },
     "level_catalog_version": {
       "const": "2.0"
     },

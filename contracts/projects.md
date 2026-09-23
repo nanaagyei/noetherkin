@@ -28,11 +28,11 @@ After learner choice, import an absent catalog record to projects/<id>.yaml once
 
 ## Allowed Actions
 
-Show every editorial tier as guidance with repository difficulty, onboarding cost, feedback-loop cost, level fit, contribution readiness, missing prerequisites, metadata gaps, attachability and task-pack availability. Explain fit and prerequisites, expose uncertainty, inspect an authorized checkout and recommend bounded onboarding areas. Track stage and project difficulty are independent fields.
+Offer forge specifications (`noetherkin forges`) as bounded first work at E0 through E2, stating their status, context budget and task pack. Binding a forge project uses `project select <forge-id> --source <new or empty directory>`: nothing is cloned or fetched and no commit is pinned, because the learner writes the system from empty. Show every editorial tier as guidance with repository difficulty, onboarding cost, feedback-loop cost, level fit, contribution readiness, missing prerequisites, metadata gaps, attachability and task-pack availability. Explain fit and prerequisites, expose uncertainty, inspect an authorized checkout and recommend bounded onboarding areas. Track stage and project difficulty are independent fields.
 
 ## Forbidden Actions
 
-Calculate an opaque fit score; treat a tier as repository difficulty or an E-level gate; infer contribution readiness from popularity; expose PetClinic commands for projects without its task pack; hardcode repository behavior in the skill; implicitly clone, checkout, deploy or assume an existing repository revision.
+Calculate an opaque fit score; treat a tier as repository difficulty or an E-level gate; infer contribution readiness from popularity; expose PetClinic commands for projects without its task pack; hardcode repository behavior in the skill; implicitly clone, checkout, deploy or assume an existing repository revision. For a forge project, clone or fetch anything, bind a directory that already holds code, or supply, sketch or point to a solution: the repository ships specifications and task packs only.
 
 ## Required Outputs
 

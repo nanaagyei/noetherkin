@@ -30,13 +30,18 @@ export function normalize(raw) {
   }
   return {...parsed,sessionId,model,complete,failed,harnessUnavailable,messages,tools};
 }
+const builtinPlugins=new Set(['agents-md@builtin','telemetry@builtin']);
 export function isolationViolations(normalized) {
   const errors=[];
   for (const {event:e} of normalized.events) if (e.type==='system' && e.subtype==='init') {
-    if ((e.mcp_servers ?? []).length || (e.skills ?? []).length || (e.plugins ?? []).length) errors.push('Unexpected skills/plugins/MCP servers in isolated Claude context');
+    // Claude Code 2.1.280 reports two built-in plugins even in safe mode. A canary run on 2026-09-23 found that neither
+    // loads workspace, parent or user AGENTS.md/CLAUDE.md content under these flags, so exactly these two are allowed.
+    // Any other plugin, or these names from a non-builtin source, still fails isolation.
+    const unexpectedPlugins=(e.plugins ?? []).filter(p=>!(p?.path==='builtin' && builtinPlugins.has(p?.source)));
+    if ((e.mcp_servers ?? []).length || (e.skills ?? []).length || unexpectedPlugins.length) errors.push('Unexpected skills/plugins/MCP servers in isolated Claude context');
     const allowed=new Set(['Read','Glob','Grep','Write','Edit','ToolSearch']);
     if ((e.tools ?? []).some(t=>!allowed.has(t))) errors.push('Unexpected native tool in isolated Claude context');
   }
   return errors;
 }
-export const limitations = 'Native Read/Glob/Grep/Write/Edit only, restricted to working directories; shell, terminal, network and canonical publisher tools unavailable. Skill loaded explicitly from its isolated bundle; native skill discovery is not evaluated.';
+export const limitations = 'Native Read/Glob/Grep/Write/Edit only, restricted to working directories; shell, terminal, network and canonical publisher tools unavailable. Skill loaded explicitly from its isolated bundle; native skill discovery is not evaluated. The host still injects the signed-in account email as system context; it carries no instructions.';

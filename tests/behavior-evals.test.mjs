@@ -73,6 +73,10 @@ test('adapters pin models and resume exact sessions with isolation settings',()=
   const b=codex.args({workspace:'/tmp/fixture',audit:'/tmp/private',model:'pinned',sessionId:'specific'});assert.deepEqual(b.slice(0,3),['exec','resume','specific']);assert.ok(b.includes('features.skip_host_skill_discovery=true'));assert.ok(b.includes('features.shell_tool=false'));assert.ok(!b.includes('--last'));
   for(const feature of ['memories','browser_use','browser_use_external','in_app_browser','image_generation','view_image']) assert.ok(b.includes(`features.${feature}=false`));
   assert.ok(claude.isolationViolations({events:[{event:{type:'system',subtype:'init',tools:['Bash'],skills:['personal']}}]}).length);
+  const init=plugins=>({events:[{event:{type:'system',subtype:'init',tools:['Read'],skills:[],mcp_servers:[],plugins}}]});
+  assert.deepEqual(claude.isolationViolations(init([{name:'agents-md',path:'builtin',source:'agents-md@builtin'},{name:'telemetry',path:'builtin',source:'telemetry@builtin'}])),[]);
+  assert.ok(claude.isolationViolations(init([{name:'agents-md',path:'/Users/someone/.claude/plugins/agents-md',source:'agents-md@builtin'}])).length,'a builtin name from a non-builtin path is rejected');
+  assert.ok(claude.isolationViolations(init([{name:'superpowers',path:'builtin',source:'superpowers@marketplace'}])).length,'any other plugin is rejected');
 });
 test('hard checks catch canonical writes even after infrastructure errors, archived writes and duplicate drafts',()=>{
   const r={status:'infrastructure-error',turns:[{changes:[{path:'.apprenticeship/profile.yaml',after:'hash'}]}]};assert.equal(gradeResult(r,[],null).status,'fail');

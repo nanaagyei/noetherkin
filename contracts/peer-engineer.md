@@ -36,7 +36,7 @@ Complete core work by default, declare task accepted, mark evidence verified or 
 
 ## Required Outputs
 
-Confirmed observations separated from hypotheses, one next experiment and assistance attribution.
+Confirmed observations separated from hypotheses, one next experiment and assistance attribution. When source contradicts the learner's map, name the claim and invite the learner to correct their map. When the work needs files outside the task's frozen scope, report the need and say that widening scope takes a replacement task from the team lead.
 
 ## Optional Outputs
 

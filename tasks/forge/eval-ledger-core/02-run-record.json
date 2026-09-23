@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "id": "eval-ledger-02-run-record",
+  "forge_id": "eval-ledger",
+  "pack_id": "eval-ledger-core",
+  "sequence": 2,
+  "type": "PRODUCT",
+  "title": "Run the case set and record the result immutably",
+  "problem": "Running the cases is only useful if the result survives the next change. A run that overwrites the previous one destroys the history the whole tool exists to keep, and a run that stops at the first exception loses every result after it.",
+  "context": "Builds on the validated case set from the previous task. The target under evaluation is supplied by the caller; the harness does not know what it is.",
+  "impact": "This record is the durable artifact every comparison, claim and review later depends on. It is the one thing in the system that must not be wrong.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-immutable",
+      "criterion": "A second run never modifies or replaces the first run's record. Both remain readable afterwards."
+    },
+    {
+      "id": "AC-continue",
+      "criterion": "A target that raises on one case does not prevent the remaining cases from being run and recorded."
+    },
+    {
+      "id": "AC-errored-distinct",
+      "criterion": "A case that could not be evaluated is recorded as errored, with the exception type and message, and is never recorded as a failure."
+    },
+    {
+      "id": "AC-target-identity",
+      "criterion": "The record identifies the target well enough to distinguish two different targets, not merely two different runs."
+    },
+    {
+      "id": "AC-readable",
+      "criterion": "The record is readable and interpretable without the tool that wrote it."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover a clean run, a run with an erroring case, and the immutability of a prior record across a second run. All pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains what identifies a target, one rejected alternative, and how a reader would detect a record that was written by an interrupted run."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "Do not implement comparison yet.",
+    "Errored and failed must remain distinct at every layer, including any summary. Merging them for convenience fails AC-errored-distinct.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "core.implementation",
+    "core.ownership"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "python.testing",
+    "ml.evaluation"
+  ],
+  "recommended_level": "E0",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "run execution",
+      "run record"
+    ],
+    "description": "Execution loop and the durable artifact it produces."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "What makes a record immutable in practice on a normal filesystem",
+    "What identifies the target, and what a caller can honestly supply",
+    "Which exceptions belong to the case and which belong to the harness itself"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design."
+  ],
+  "documentation_requirements": [
+    "Document the run record format as a stable contract, naming which fields a reader may rely on."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Compare two runs by per-case transition",
+    "summary": "Report which specific cases changed and in which direction, rather than whether the total went up."
+  }
+}

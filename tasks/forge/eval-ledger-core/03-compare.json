@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "id": "eval-ledger-03-compare",
+  "forge_id": "eval-ledger",
+  "pack_id": "eval-ledger-core",
+  "sequence": 3,
+  "type": "PRODUCT",
+  "title": "Compare two runs by per-case transition",
+  "problem": "An aggregate that moves from 41 to 43 passing cases hides the case that broke. The question a user actually has is which cases changed and in which direction, and an aggregate cannot answer it.",
+  "context": "Builds on immutable run records. The comparison reads two existing records and writes nothing to them.",
+  "impact": "This is the output the tool exists to produce. Everything before it is plumbing.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-transitions",
+      "criterion": "The comparison reports per-case transitions covering at minimum became-passing, became-failing, unchanged, added and removed."
+    },
+    {
+      "id": "AC-errored",
+      "criterion": "Transitions into and out of errored are reported distinctly from transitions into and out of failed."
+    },
+    {
+      "id": "AC-population",
+      "criterion": "A case present in one run and absent from the other is reported as added or removed, never silently dropped and never counted as a change in outcome."
+    },
+    {
+      "id": "AC-missing-run",
+      "criterion": "A comparison against an unknown run id reports which id was not found and lists the ids that exist. It never falls back to the nearest run."
+    },
+    {
+      "id": "AC-readonly",
+      "criterion": "Comparison does not modify either record. Both are byte-identical afterwards."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover every transition kind including the errored transitions, a differing population, and an unknown run id. All pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains how a case present in only one run is handled, one rejected alternative, and one comparison this output could still mislead a reader about."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "No statistical testing, confidence intervals or significance claims.",
+    "Comparison is read-only with respect to run records.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "core.implementation",
+    "ml.evaluation"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.technical-communication"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "comparison"
+    ],
+    "description": "A pure function over two records and its presentation."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "What the transition set should be, and whether the five named ones are sufficient",
+    "How a differing case population is represented without implying an outcome change",
+    "What an honest summary line says when most cases errored"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design."
+  ],
+  "documentation_requirements": [
+    "Record the transition taxonomy and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Make it operable by someone who did not write it",
+    "summary": "Interrupted runs, concurrent runs, the quickstart, and the operations note."
+  }
+}

@@ -1,20 +1,21 @@
 # Persistent state and object identity
 
-State is UTF-8 YAML 1.2 restricted to JSON-compatible values. Reject duplicate mapping keys, custom tags, aliases, non-finite numbers and implicit date objects; quote timestamps and schema versions. JSON Schema Draft 2020-12 plus format checking validates each document. Protocol 3.0 mutable workspace records carry `schema_version: "3.0"`; migrated immutable evidence, assessments, reviews, project snapshots and task history retain `schema_version: "2.0"`. Every record carries `data_class: live | fixture`. The competency catalog is 3.0, the expanded track catalog is 1.1, and the unchanged level catalog remains 2.0.
+State is UTF-8 YAML 1.2 restricted to JSON-compatible values. Reject duplicate mapping keys, custom tags, aliases, non-finite numbers and implicit date objects; quote timestamps and schema versions. JSON Schema Draft 2020-12 plus format checking validates each document. Protocol 3.0 mutable workspace records carry `schema_version: "3.0"`; migrated immutable evidence, assessments, reviews, project snapshots and task history retain `schema_version: "2.0"`. Every record carries `data_class: live | fixture`. The competency catalog is 4.0 (3.0 pins remain valid), the expanded track catalog is 1.1, the forge catalog is 1.0, and the unchanged level catalog remains 2.0.
 
 | Location inside `.apprenticeship/` | Schema | Authority |
 | --- | --- | --- |
 | `config.yaml` | apprenticeship-config | Canonical workspace identity, mode and principal registry |
 | `profile.yaml` | learner-profile | Canonical learner goals, onboarding, baseline pointer; self-report is not evidence |
-| `current-project.yaml` | current-project | Canonical nullable selection and local source binding |
+| `current-project.yaml` | current-project | Canonical nullable selection and local source binding. `kind: forge` binds a learner-authored directory with a null `source_revision`; absent or `upstream` binds a pinned checkout |
 | `current-track.yaml` | current-track | Canonical nullable advisory track, pinned definition digest and scope-alignment state |
 | `projects/<project-id>.yaml` | project | Canonical pinned catalog definition for this workspace |
+| `forge/<forge-id>.yaml` | forge | Canonical pinned forge specification for this workspace; immutable like a project snapshot |
 | `work/<task-id>.yaml` | task | Canonical assignment, status, assistance history, validation and transition history |
 | `evidence/<evidence-id>.yaml` | evidence | Canonical attributable observation and interpretation |
 | `assessments/<assessment-id>.yaml` | assessment | Canonical baseline or technical competency judgment |
 | `reviews/<kind>/<review-id>.yaml` | review | Canonical code, task, performance or promotion review |
 | `competencies.yaml` | competency-state | Derived cache; can be deleted and rebuilt without losing a decision |
-| `knowledge/*.md` | No machine schema | Learner-authored notes, authoritative only for what they literally record |
+| `knowledge/*.md` | No machine schema | Learner-authored notes, authoritative only for what they literally record. `knowledge/codebase-map.md` is located by the derived, read-only `map status` pointer (ACP-016), which reports whether that exact text was checked at the current source revision; the pointer adds no canonical field and no authority |
 | `evidence/resume-evidence.md` | No machine schema | Optional derived export; cite live evidence and describe simulation limits |
 
 Unlike the suggested directory layout, tasks never move among backlog/active/completed directories. Status is stored once in the task record. One evidence record per file reduces merge conflicts and permits immutable review citations. There is no monolithic evidence ledger. Assessments get an explicit directory because baseline and technical judgments are distinct from reviews. Empty optional directories need not exist.
@@ -45,7 +46,7 @@ For each competency, use only unsuperseded **longitudinal** assessment findings,
 
 ## Complete assignment freeze
 
-From first transition to assigned, only these task fields may change: `status`, `blocked_reason`, `work_artifact`, `design_artifact`, `design_assessment_id`, `validation`, `completion_evidence_ids`, `transitions`, and `assistance_history`. Every other field is frozen, including identity, author, assigned_by, title, project, type, problem, context, impact, criteria, constraints, competency targets, recommended level, scope, difficulty, investigation areas, testing expectations, documentation requirements and both review flags. No in-place amendments exist in V1. Team lead creates a replacement task for changed requirements; retained context identifies the replaced task and reason.
+From first transition to assigned, only these task fields may change: `status`, `blocked_reason`, `work_artifact`, `design_artifact`, `design_assessment_id`, `validation`, `completion_evidence_ids`, `transitions`, and `assistance_history`. Every other field is frozen, including identity, author, assigned_by, title, project, type, problem, context, impact, criteria, constraints, competency targets, recommended level, scope, difficulty, investigation areas and their optional source-relative path globs (`investigation_paths`, ACP-016), testing expectations, documentation requirements and both review flags. No in-place amendments exist in V1. Team lead creates a replacement task for changed requirements; retained context identifies the replaced task and reason.
 
 Mutable execution fields still require their role and lifecycle gate. Learner owns design/work artifacts in investigation, design, implementation and testing; team lead owns design-assessment pointer, validation and completion references. A changed design clears its pointer and blocks forward advancement until a new approval; return through investigation/design as needed. Terminal tasks permit only append-only assistance disclosure/correction, no other field change. Reassessment of a terminal task creates formal records without reopening it. Receipt snapshots preserve every overwritten execution value.
 
