@@ -32,8 +32,8 @@
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "41147b378eb27731e7290dc8c0749380d42ec4ac93ea10388e7a43cd2d90cc5d",
-      "bundled_sha256": "41147b378eb27731e7290dc8c0749380d42ec4ac93ea10388e7a43cd2d90cc5d"
+      "source_sha256": "1c570a2934a343a2b54eefd8c3ef469f68a601d59f4c3f4e630c6be83c3448bd",
+      "bundled_sha256": "1c570a2934a343a2b54eefd8c3ef469f68a601d59f4c3f4e630c6be83c3448bd"
     },
     {
       "source": "docs/architecture/overview.md",

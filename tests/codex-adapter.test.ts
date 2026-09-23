@@ -17,7 +17,7 @@ test('Codex role output contracts are independent of requested key order', () =>
 });
 
 test('Codex role output contracts reject unregistered shapes', () => {
-  assert.throws(() => roleOutputContract(['unknown']), /No closed Codex output contract is registered/);
+  assert.throws(() => roleOutputContract(['unknown']), /No closed role output contract is registered/);
 });
 
 test('canonical review contracts require at least one finding', () => {

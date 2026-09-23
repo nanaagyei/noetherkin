@@ -27,6 +27,12 @@ The executable requires Node.js 24+. Build with `npm ci` and `npm run build`, th
 | `review code`, `review task`, `review performance` | Publish bound peer, team-lead and manager judgments. |
 | `next` | Derive the phase and invoke safe no-input handlers; otherwise report the explicit command needing learner input or confirmation. |
 
+## Role judgments
+
+`onboard`, `track align`, `task submit-design`, `task help`, `review *` and `next` ask a model for one bounded role judgment. Choose the model host with `--role-adapter codex|claude`, or set `NOETHERKIN_ROLE_ADAPTER`; the default is `codex`. `--model` pins a model for either adapter, and `--codex-bin` or `--claude-bin` (or `NOETHERKIN_CODEX_BIN`, `NOETHERKIN_CLAUDE_BIN`) points at a specific binary.
+
+Both adapters send the same prompt and closed output contract, run with tools disabled and without user or project settings, and return output the controller validates again before anything is published. The Claude adapter runs `claude --print --output-format json` in safe and restricted mode with `--tools ""`, an empty MCP configuration and no saved session. A role judgment is never consent and never publishes by itself.
+
 Every command accepts `--workspace <existing-directory>` and `--json`. Init defaults to the current directory. Inspection walks upward to the nearest workspace; an explicit path takes precedence. Track and project catalog browsing can run without a workspace.
 
 Initialization creates an unselected `current-track.yaml`. Onboarding refuses to complete until the learner explicitly selects a track. Initial onboarding aligns universal core plus the track's required competencies. Switching later updates recommendations immediately but leaves evaluation scope pending; existing tasks remain valid and promotion is blocked until a fresh scope agreement, longitudinal assessment and manager performance review support alignment.

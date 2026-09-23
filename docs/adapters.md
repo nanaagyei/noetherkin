@@ -8,6 +8,10 @@ The portable unit is a capability such as `onboarding`. A host expression such a
 
 The generic onboarding bridge returns one of `needs-input`, `proposal`, `consent-required`, `completed`, `no-change` or `blocked`. It separates confirmed facts from unverified user/environment input and reports structured diagnostics. Codex and Claude Code use this same bridge.
 
+## Role adapters
+
+`adapters/runtime/codex.ts` and `adapters/runtime/claude.ts` implement `RoleAdapter` for local Codex and Claude Code binaries. They share `adapters/runtime/output-contract.ts`, which holds the role prompt and the closed output shapes, so switching hosts changes the process that answers, not the question. Each adapter checks the bound context digest before spawning, runs the host with tools disabled and settings ignored, and passes the parsed object through `validateRoleOutput`. `ScriptedRoleAdapter` in `core/adapters.ts` serves offline tests. Select one with `--role-adapter`; see the [CLI guide](cli.md#role-judgments).
+
 ## Trusted terminal handoff
 
 Consent-bearing work produces an exact `adapter-handoff` command. Its transparent base64url payload binds:

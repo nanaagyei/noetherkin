@@ -51,7 +51,7 @@ npx skills add nanaagyei/noetherkin --skill onboarding --global --agent codex
 
 This uses the documented GitHub-source, skill-selection, scope and agent-targeting options in the [Skills CLI](https://github.com/vercel-labs/skills). The directory/frontmatter format follows the [Agent Skills specification](https://agentskills.io/specification). Documentation checked 2026-09-13; external installer behavior is not exercised by the repository tests.
 
-Alternatively, copy one entire skill folder to the skills directory supported by your harness. Keep `SKILL.md`, `references/` and `assets/` together. No sibling skill, original checkout or model vendor is required to read the bundle. Invocation/discovery conventions still depend on the harness. The runtime includes only a local Codex role adapter plus the vendor-neutral adapter contract. Avoid overwriting an unrelated installed skill with the same short name.
+Alternatively, copy one entire skill folder to the skills directory supported by your harness. Keep `SKILL.md`, `references/` and `assets/` together. No sibling skill, original checkout or model vendor is required to read the bundle. Invocation/discovery conventions still depend on the harness. The runtime includes local Codex and Claude Code role adapters plus the vendor-neutral adapter contract. Avoid overwriting an unrelated installed skill with the same short name.
 
 The Phase 10 [capability host adapters](adapters.md) project the same portable bundle into generic, Codex and Claude Code host locations. A host expression such as `/onboarding` or `$onboarding` is an invocation surface, not the identity of the `onboarding` capability. Consent-bearing operations still use the trusted terminal handoff.
 

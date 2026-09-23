@@ -41,7 +41,7 @@ Noetherkin currently includes:
 - a deterministic, recoverable local state publisher;
 - 21 portable [Agent Skills](docs/skills.md);
 - 34 versioned learning tracks and 87 project catalog entries;
-- generic, Codex, and Claude Code onboarding adapters;
+- generic, Codex, and Claude Code capability adapters, and Codex or Claude Code role adapters;
 - evidence, assistance, review, and promotion semantics designed to resist fabricated progress.
 
 ## Why it exists
@@ -104,7 +104,7 @@ noetherkin onboard --workspace /absolute/path/to/workspace
 noetherkin next --workspace /absolute/path/to/workspace
 ```
 
-Initialization requires direct terminal review and consent. Track selection guides project discovery but never owns skills, evidence, or promotion decisions. All CLI commands support `--json`; see the [CLI and recovery guide](docs/cli.md).
+Initialization requires direct terminal review and consent. Commands that need a role judgment use Codex by default; add `--role-adapter claude` (or set `NOETHERKIN_ROLE_ADAPTER=claude`) to use Claude Code instead. Track selection guides project discovery but never owns skills, evidence, or promotion decisions. All CLI commands support `--json`; see the [CLI and recovery guide](docs/cli.md).
 
 ## Use with an AI agent
 

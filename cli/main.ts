@@ -12,6 +12,8 @@ import { migrateTo3, planMigration } from '../core/migration.js';
 import { exists, lockStatus, reclaimDeadLock, resolveWorkspace, runtime, safePath, withLock } from '../core/storage.js';
 import { advanceNext, assignTask, beginTask, checkMap, cloneCatalogProject, codeReview, initMap, onboard, performanceReview, requestHelp, selectCatalogProject, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
 import { CodexRoleAdapter } from '../adapters/runtime/codex.js';
+import { ClaudeRoleAdapter } from '../adapters/runtime/claude.js';
+import type { RoleAdapter } from '../core/adapters.js';
 import { decodeOnboardingHandoff, validateOnboardingHandoff } from '../adapters/hosts/generic/onboarding.js';
 import { planTransactionRecovery, recoverTransaction } from '../core/transactions.js';
 
@@ -33,8 +35,12 @@ Journey:
   task submit-change
   task test --prediction <text>
   task help --question <text>
-  review <code|task|performance> [--model <model>] [--codex-bin <path>]
+  review <code|task|performance>
   next
+
+Role judgments (onboard, track align, task submit-design, task help, review, next):
+  --role-adapter <codex|claude>   default: $NOETHERKIN_ROLE_ADAPTER, else codex
+  --model <model> [--codex-bin <path>] [--claude-bin <path>]
 
 All commands: --workspace <existing directory> --json
 init: --name <display name> --goal <goal> (repeatable) --assistance-max <0..7> [--operation-id <OP-UUID>]
@@ -56,7 +62,7 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       name: { type: 'string' }, goal: { type: 'string', multiple: true }, 'assistance-max': { type: 'string' }, 'operation-id': { type: 'string' }, recover: { type: 'boolean' },
       constraint: { type: 'string', multiple: true }, source: { type: 'string' }, 'clone-to': { type: 'string' }, revision: { type: 'string' },
       track: { type: 'string' }, stage: { type: 'string' }, to: { type: 'string' }, 'dry-run': { type: 'boolean' },
-      file: { type: 'string' }, prediction: { type: 'string' }, question: { type: 'string' }, model: { type: 'string' }, 'codex-bin': { type: 'string' },
+      file: { type: 'string' }, prediction: { type: 'string' }, question: { type: 'string' }, model: { type: 'string' }, 'codex-bin': { type: 'string' }, 'claude-bin': { type: 'string' }, 'role-adapter': { type: 'string' },
       handoff: { type: 'string' }
     }, allowPositionals: true, strict: true });
     const { values, positionals } = parsed; json = values.json ?? false; command = positionals[0] ?? 'help';
@@ -69,7 +75,13 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
     if (command === 'projects') { if (positionals.length !== 1) throw new Failure('USAGE', '', help, 2); if (values.workspace) resolveWorkspace(values.workspace); emit(listProjects(values.track, values.stage)); return; }
     if ((command === 'adapter-handoff') !== (values.handoff !== undefined)) throw new Failure('USAGE', '', help, 2);
     const root = resolveWorkspace(values.workspace, command === 'init' || command === 'adapter-handoff'); const interactive = Boolean(stdin.isTTY && stderr.isTTY);
-    const adapter = () => new CodexRoleAdapter({ binary: values['codex-bin'], model: values.model });
+    const roleAdapterName = values['role-adapter'] ?? process.env.NOETHERKIN_ROLE_ADAPTER ?? 'codex';
+    // Resolved only when a command actually needs a role judgment, so a stale environment value cannot break status.
+    const adapter = (): RoleAdapter => {
+      if (roleAdapterName === 'claude') return new ClaudeRoleAdapter({ binary: values['claude-bin'], model: values.model });
+      if (roleAdapterName === 'codex') return new CodexRoleAdapter({ binary: values['codex-bin'], model: values.model });
+      throw new Failure('USAGE', 'role-adapter', 'Choose --role-adapter codex or claude.', 2);
+    };
 
     if (command === 'adapter-handoff') {
       if (positionals.length !== 1) throw new Failure('USAGE', '', help, 2);
