@@ -110,8 +110,8 @@
     {
       "source": "contracts/README.md",
       "target": "references/contract-README.md",
-      "source_sha256": "a8aa50731fe9c016aa109ec8ba3a515888ec6fbdc80d67555db9b059e3a0573e",
-      "bundled_sha256": "2457a4ff95d51839b9e4b549b76e537d636f811c18ccf118f4cc5dfd648efb60"
+      "source_sha256": "939e9b12b0f42007283d49b2f0aab3dbe60f0792208a782e3401f8212b271438",
+      "bundled_sha256": "1722c940a091521e1bb4ca09d4a97db1d25d75c9da297ea8c56e5df31eb1c3b5"
     },
     {
       "source": "schemas/apprenticeship-config.schema.json",
@@ -200,8 +200,8 @@
     {
       "source": "skill-pack/runtime.md",
       "target": "references/runtime.md",
-      "source_sha256": "a3d4f14ce43881fda191eba34ba41316ac7cbf04fb3165284efcf840836034af",
-      "bundled_sha256": "c9b1114b998d2b391c780e106694630d592cb6594ade84190dcd5c98e187f4ea"
+      "source_sha256": "bd8b73fca6730569a440731609229787d30e931c4e1a5c9f08e6fa9767211774",
+      "bundled_sha256": "971346dc551b67c54ab2b46162bbb16274da77058d547f54a29b983bf5c089a2"
     },
     {
       "source": "skill-pack/proposals.md",
@@ -224,8 +224,8 @@
     {
       "source": "contracts/codebase-map.md",
       "target": "references/contract-codebase-map.md",
-      "source_sha256": "e521c4f7d3d4f05df820fcde401a9b14cc18f5f642ce70c3716a81920d8130cb",
-      "bundled_sha256": "34cc27b83e8a3fd875706f37f4a9def11a2b57d269876a081efec098976c03bd"
+      "source_sha256": "43ca5f19bf1e63d809fcf5e89080d2d4263c1178f5e2dfaee688478af01e52a4",
+      "bundled_sha256": "261835ab80996dd302ffa319890d52fdf59f69f62ef7a419978b610844f37e38"
     },
     {
       "source": "contracts/design-review.md",

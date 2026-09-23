@@ -1,6 +1,6 @@
 # Runtime boundary for this skill release
 
-Read this guide and the skill's contract before acting. Load other bundled references only for the current workflow. Frozen documents remain authoritative. The current release supports one canonical Spring PetClinic Microservices journey; other projects and protocol operations remain proposal-only.
+Read this guide and the skill's contract before acting. Load other bundled references only for the current workflow. Frozen documents remain authoritative. The current release supports two canonical journeys: the curated Spring PetClinic Microservices task on an upstream checkout, and forge projects the learner builds from empty from a shipped specification and task pack. Other projects and protocol operations remain proposal-only.
 
 ## Locate and inspect
 
@@ -12,14 +12,16 @@ If the installed `noetherkin` executable is available, use explicit `--workspace
 | --- | --- |
 | `status` | Read identity, mode, onboarding, selection, counts and coverage. |
 | `validate` | Inspect supported parsing, structure and bootstrap integrity. |
-| `projects` | Browse catalog without selection; works without a workspace. |
+| `projects`, `forges` | Browse upstream and forge catalogs without selection; works without a workspace. |
+| `competency show <id>` | Read advisory prerequisite and encompassing edges; they never award credit. |
 | `doctor` | Diagnose conflicts, retained locks and recovery needs. |
 | `init` | Noninteractive proposal only; learner performs consent in their own terminal. |
 | `doctor --recover` | Refer to the learner's own terminal after reviewing doctor output. |
 | `onboard` | With direct learner confirmation, launch the bound team-lead baseline judgment and complete onboarding. |
 | `project select spring-petclinic-microservices` | Attach a clean compatible checkout, or explicitly clone the supported repository. |
-| `map init`, `map check` | Create and deterministically check the learner-authored orientation map. |
-| `task ...` | Assign/begin the curated task, submit learner design/change, run the focused test, or request attributed peer help. |
+| `project select <forge-id> --source <dir>` | Bind a new or empty learner directory to a forge specification; nothing is cloned. |
+| `map init`, `map check`, `map status` | Create a project-derived template, check the learner-authored map, and read whether this exact map is `checked` at the current source revision. |
+| `task ...` | Assign/begin the next curated or forge task, submit learner design/change, run the focused test (forge tasks take the learner's declared `--command`), list the frozen `task scope`, record a learner `task attest` for a check only another person can perform, or request attributed peer help. |
 | `review ...` | Launch bound design, code, task, and one-task performance judgments through the configured adapter. |
 | `next` | Derive the phase and invoke safe no-input handlers; otherwise report the one explicit command that needs learner input or confirmation. |
 
@@ -31,7 +33,7 @@ JSON has `command`, `outcome`, `coverage`, `data`, and `diagnostics`. Exit 0 mea
 
 ## Authority and publication
 
-The CLI's single-writer publisher is the only supported canonical write path. It covers the six registered Phase 6 roles and the PetClinic lifecycle commands listed above. Unsupported projects, promotions, arbitrary tasks, and general record mutation remain proposals outside canonical state. Never tell the learner to copy a draft into `.apprenticeship/` as a workaround.
+The CLI's single-writer publisher is the only supported canonical write path. It covers the six registered Phase 6 roles and the curated-task and forge lifecycle commands listed above. Unsupported projects, promotions, arbitrary tasks, and general record mutation remain proposals outside canonical state. Never tell the learner to copy a draft into `.apprenticeship/` as a workaround.
 
 Bootstrap registers learner, onboarding coordinator, project curator, peer engineer, team lead, and manager in one reviewed consent. A requested skill or declared actor ID still cannot create a principal, grant a role, or establish trusted invoker binding. The controller supplies actor identity and the adapter returns judgment only. Do not impersonate distinct reviewers through manual record edits.
 

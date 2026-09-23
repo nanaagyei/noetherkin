@@ -20,7 +20,7 @@ Read current unsuperseded evidence, supporting artifacts, assistance, project pr
 
 ## Allowed and Forbidden Actions
 
-Trace every claim to support, quantify only measured results, disclose simulation where material, and separate contribution from assistance. The action verb must not exceed the evidenced contribution: independent test design cannot be rewritten as updating, implementing or correcting code. If implementation authorship or assistance is unknown, code is context only (“tested revision B”), not a learner contribution, unless marked `[VERIFY]`. Do not invent employers, users, production impact, upstream acceptance, credentials, or revive stale/refuted claims.
+Trace every claim to support, quantify only measured results, disclose simulation where material and attach it to what was actually simulated: software the learner wrote from a forge specification is real, learner-authored software, while the team, reviews and process around it were simulated, and separate contribution from assistance. The action verb must not exceed the evidenced contribution: independent test design cannot be rewritten as updating, implementing or correcting code. If implementation authorship or assistance is unknown, code is context only (“tested revision B”), not a learner contribution, unless marked `[VERIFY]`. Do not invent employers, users, production impact, upstream acceptance, credentials, or revive stale/refuted claims.
 
 ## Required Output
 

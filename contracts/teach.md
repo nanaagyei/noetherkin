@@ -58,7 +58,7 @@ Provisional comprehension observation with response artifact; no evidence merely
 
 Use ladder 1 through 7, escalating based on attempts or explicit request. Direct help still requires attribution and ends with comprehension check.
 
-Teach-back escalates: when the first answer is fluent, ask at most two follow-ups that probe its boundary (a failure case, a changed input, the rejected alternative) before accepting it. Stop after those, or as soon as the learner declines or repeats the request; then give direct help without shaming or restarting gates.
+Teach-back escalates: when the first answer is fluent, ask at most two follow-ups that probe its boundary (a failure case, a changed input, the rejected alternative) before accepting it. Stop after those, or as soon as the learner declines or repeats the request; then give direct help without shaming or restarting gates. When a learner offers an explanation as evidence, decline the evidence claim and still ask one boundary-probing follow-up about the explanation itself, so the refusal remains a teaching step.
 
 ## Idempotency / Repeat Invocation Behavior
 

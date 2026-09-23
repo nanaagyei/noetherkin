@@ -110,8 +110,8 @@
     {
       "source": "contracts/README.md",
       "target": "references/contract-README.md",
-      "source_sha256": "a8aa50731fe9c016aa109ec8ba3a515888ec6fbdc80d67555db9b059e3a0573e",
-      "bundled_sha256": "12ef8ffa17e4abe275dc449423e472fbaa0d2ff5a93c687ce06ded26ec7d8e9a"
+      "source_sha256": "939e9b12b0f42007283d49b2f0aab3dbe60f0792208a782e3401f8212b271438",
+      "bundled_sha256": "a60cda03cf9a621f3ffa2f75e1f37d9b383981b287c6bf7291ead2f7866e2b1b"
     },
     {
       "source": "schemas/apprenticeship-config.schema.json",
@@ -200,8 +200,8 @@
     {
       "source": "skill-pack/runtime.md",
       "target": "references/runtime.md",
-      "source_sha256": "a3d4f14ce43881fda191eba34ba41316ac7cbf04fb3165284efcf840836034af",
-      "bundled_sha256": "c9b1114b998d2b391c780e106694630d592cb6594ade84190dcd5c98e187f4ea"
+      "source_sha256": "bd8b73fca6730569a440731609229787d30e931c4e1a5c9f08e6fa9767211774",
+      "bundled_sha256": "971346dc551b67c54ab2b46162bbb16274da77058d547f54a29b983bf5c089a2"
     },
     {
       "source": "skill-pack/proposals.md",
@@ -224,8 +224,8 @@
     {
       "source": "contracts/peer-engineer.md",
       "target": "references/contract-peer-engineer.md",
-      "source_sha256": "e4cbf4584c9c6bc91fcab53371a1a723fb02ac5cc2205e15d7bf42389972d59e",
-      "bundled_sha256": "88b4a59d6517fbf1f54ab31fb0087757ab24dfa6a504729bc05e595138967a3f"
+      "source_sha256": "b7596c186ed852021a6517bc4f1afa323575e7a4570f2ca73ea34c24d2485c6d",
+      "bundled_sha256": "0113a10ef0706c042524f7feda6c2bd7a5e107ac8cd461b6199d9e9d7e9f45b4"
     },
     {
       "source": "contracts/team-lead.md",

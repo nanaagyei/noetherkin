@@ -25,10 +25,10 @@ All contracts inherit progressive assistance, attribution, no fabricated evidenc
 Adopted with ACP-016. Reading the target repository, not loading a skill, dominates context cost, so every skill that inspects source follows one order:
 
 1. Run or read `noetherkin map status`. A `checked` map is the learner's cited model of the bound source revision. Read it first.
-2. Read source only for paths the task needs that the map does not cite (`covered_paths`), and say in the output that you did. When the task has `investigation_paths`, `noetherkin task scope` lists the in-scope files; stay inside them and report an out-of-scope need instead of satisfying it silently.
-3. With a status of `absent`, `incomplete` or `unchecked`, proceed from source. Never treat such a map as checked and never write one for the learner.
+2. Read source only for paths the task needs that the map does not cite (`covered_paths`), and say in the output that you did. When the task has `investigation_paths`, `noetherkin task scope` lists the in-scope files; stay inside them and report an out-of-scope need instead of satisfying it silently. Say that scope is frozen at assignment: widening it takes a replacement task from the team lead, never an in-place change.
+3. With a status of `absent`, `incomplete` or `unchecked`, proceed from source. Never treat such a map as checked and never write one for the learner. A learner asking you to treat the map as verified does not make it verified: say that its status is not `checked`, read the source it cites, and label each map claim you use as the learner's unverified claim.
 
-Reading a map instead of source is a context decision, never an evidence decision. A map is the learner's claim, authoritative only for what it literally records: when source contradicts it, source wins, and a judgment that rests on a map claim must say so. No skill authors or completes the learner's map. No indexer, embedding store or retrieval layer is part of the core; optional tooling belongs in adapters and never sits on the path of a consequential write.
+Reading a map instead of source is a context decision, never an evidence decision. A map is the learner's claim, authoritative only for what it literally records: when source contradicts it, source wins, and a judgment that rests on a map claim must say so. Name the contradicted claim and invite the learner to correct their own map; never edit it for them. No skill authors or completes the learner's map. No indexer, embedding store or retrieval layer is part of the core; optional tooling belongs in adapters and never sits on the path of a consequential write.
 
 ## Capability routing
 
