@@ -74,8 +74,8 @@
     {
       "source": "docs/architecture/competency-model.md",
       "target": "references/competency-model.md",
-      "source_sha256": "d12af1bf058d7412258fa6154e5123ed77b6153dd690792d826aac9d76b1509d",
-      "bundled_sha256": "d12af1bf058d7412258fa6154e5123ed77b6153dd690792d826aac9d76b1509d"
+      "source_sha256": "38206015b05f82a9d838bfa33922aa5c4c8ab698a1ea75883de2b3535467ef89",
+      "bundled_sha256": "38206015b05f82a9d838bfa33922aa5c4c8ab698a1ea75883de2b3535467ef89"
     },
     {
       "source": "docs/architecture/leveling-framework.md",
@@ -104,8 +104,8 @@
     {
       "source": "docs/architecture/conformance.md",
       "target": "references/conformance.md",
-      "source_sha256": "5a5276c0393a210d245741e4a488a480982827d3be7c3539ba42bfd02e53109a",
-      "bundled_sha256": "5a5276c0393a210d245741e4a488a480982827d3be7c3539ba42bfd02e53109a"
+      "source_sha256": "9846145046171004541c5c0ea5df7026be493d730bdc67af6b079119feb15b9c",
+      "bundled_sha256": "9846145046171004541c5c0ea5df7026be493d730bdc67af6b079119feb15b9c"
     },
     {
       "source": "contracts/README.md",
@@ -116,8 +116,8 @@
     {
       "source": "schemas/apprenticeship-config.schema.json",
       "target": "references/apprenticeship-config.schema.json",
-      "source_sha256": "ba6c3e5912a7310732bd96ff9ad5c04800d2b1d1fdda136158b27c226f325333",
-      "bundled_sha256": "ba6c3e5912a7310732bd96ff9ad5c04800d2b1d1fdda136158b27c226f325333"
+      "source_sha256": "04d821b4fd1dff06d1097a8ac20dfcde5ffd3c9cebe3515b4198130c49c14bb8",
+      "bundled_sha256": "04d821b4fd1dff06d1097a8ac20dfcde5ffd3c9cebe3515b4198130c49c14bb8"
     },
     {
       "source": "schemas/learner-profile.schema.json",
@@ -182,8 +182,8 @@
     {
       "source": "catalog/competencies.yaml",
       "target": "references/competencies.yaml",
-      "source_sha256": "24728f01a299771fc054fbd66e732ab6c1ad293286809cdc2a7facc68abbd733",
-      "bundled_sha256": "24728f01a299771fc054fbd66e732ab6c1ad293286809cdc2a7facc68abbd733"
+      "source_sha256": "d000f9ff044e774fd96b25061fa45b2834269a7510fbb63daf70b5b141ede73f",
+      "bundled_sha256": "d000f9ff044e774fd96b25061fa45b2834269a7510fbb63daf70b5b141ede73f"
     },
     {
       "source": "catalog/levels.yaml",

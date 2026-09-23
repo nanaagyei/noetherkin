@@ -1,6 +1,17 @@
 # Foundation changelog
 
-## Phase 12 context budget, 2026-09-23 (America/Chicago)
+## Phase 12 context budget and competency graph, 2026-09-23 (America/Chicago)
+
+### ACP-013: competency prerequisite and encompassing graph, adopted
+
+Adopted on the project owner's explicit authorization. Competency catalog 3.0 becomes 4.0 and each record may carry `prerequisites` and `encompasses`, both lists of catalog IDs. The contradiction resolved is that the protocol had no way to say what a learner should be able to do before work on a competency is reasonable, so selection and remediation could only be vague. **The graph changes where a human looks, never what a human concludes.** Edges never gate assignment, review or promotion, never award, weight or remove credit, and never reach the derived cache. An evidence record still makes one claim in one context, a claim about an encompassed competency still needs its own evidence record, interpretation and authorized author, and repeated citations of one artifact are still not repeated demonstrations.
+
+Structural rules: known IDs only, no self edges, core competencies require only core, and the union of both edge sets is a DAG; a violating catalog is rejected naming the defect, including the full cycle, and is never repaired by dropping an edge. The rejected alternative is Math Academy style fractional implicit credit, which would be a numeric skill score against `competency-model.md`; weighted edges, track-owned prerequisites and task-owned prerequisites are rejected as in the proposal.
+
+Resolutions of the open questions. The first cut is authored with adoption and covers the seven core competencies and the backend-engineering track, fourteen nodes, and it is flagged for owner review because a wrong edge distorts every suggestion built on it. Only the edges judged necessary are stored in each direction; reverse views (`required_by`, `encompassed_by`) are derived by `competency show` rather than duplicated in the catalog. Acyclicity is adopted because it is checkable and a cycle has no useful meaning for selection, not because the domain is known to be acyclic.
+
+Schema impact: `apprenticeship-config.schema.json` accepts `competency_catalog_version` 4.0, and the runtime accepts a 3.0 or 4.0 pin in protocol 3.0 workspaces; new workspaces pin 4.0. No record schema changes. Catalog impact: `catalog/competencies.yaml` 4.0, with no ID renamed, no behavior reworded and no core flag flipped. Migration: none; a 3.0-pinned workspace keeps working and receives no graph. Conformance: CF-35 to CF-37 and FR-32 to FR-36 are registered; FR-35 is a behavioral case not yet run live, and FR-36 is enforced structurally by a guard that fails if any module deriving standing or the cache reads edges, confirmed non-vacuous by a seeded import.
+
 
 ### ACP-016: context budget discipline, adopted
 

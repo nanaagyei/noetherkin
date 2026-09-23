@@ -9,7 +9,7 @@ import { bindApprovedInit, existingInit, planRecovery, proposeInit, publishInit,
 import { inspectWorkspace, listProjects } from '../core/commands.js';
 import { alignTrack, listTracks, selectTrack, trackAlignmentProposal } from '../core/tracks.js';
 import { migrateTo3, planMigration } from '../core/migration.js';
-import { exists, lockStatus, reclaimDeadLock, resolveWorkspace, runtime, safePath, withLock } from '../core/storage.js';
+import { exists, lockStatus, read, reclaimDeadLock, resolveWorkspace, runtime, safePath, statePath, withLock } from '../core/storage.js';
 import { advanceNext, assignTask, beginTask, checkMap, investigationScope, mapStatus, cloneCatalogProject, codeReview, initMap, onboard, performanceReview, requestHelp, selectCatalogProject, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
 import { CodexRoleAdapter } from '../adapters/runtime/codex.js';
 import { ClaudeRoleAdapter } from '../adapters/runtime/claude.js';
@@ -19,10 +19,13 @@ import { GenericCapabilityHostAdapter, installCapabilities, portableSkillIds, po
 import { CodexCapabilityHostAdapter } from '../adapters/hosts/codex/index.js';
 import { ClaudeCodeCapabilityHostAdapter } from '../adapters/hosts/claude-code/index.js';
 import { planTransactionRecovery, recoverTransaction } from '../core/transactions.js';
+import { competencyGraph, competencyNeighbourhood } from '../core/graph.js';
+import { catalogs } from '../core/validation.js';
+import { parse } from '../core/parsing.js';
 
 const help = `noetherkin <command>
 
-Bootstrap: init | status | tracks | projects | validate | migrate --to 3.0 [--dry-run] | doctor [--recover]
+Bootstrap: init | status | tracks | projects | competency show <competency-id> | validate | migrate --to 3.0 [--dry-run] | doctor [--recover]
 Adapter bridge: adapter-handoff --handoff <token>
 Capabilities: skills list | skills install --host <generic|codex|claude-code> [--skill <id> ...] [--target <directory>]
 Journey:
@@ -73,7 +76,7 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
     const { values, positionals } = parsed; json = values.json ?? false; command = positionals[0] ?? 'help';
     if (values.help || command === 'help') { json ? emit({ command: 'help', outcome: 'success', coverage: 'none', data: { help }, diagnostics: [] }) : process.stdout.write(help); return; }
     requireThat(Number(process.versions.node.split('.')[0]) >= 24, 'RUNTIME_UNSUPPORTED', '', 'Node.js 24 or newer is required.');
-    if (!['init', 'onboard', 'adapter-handoff', 'track', 'tracks', 'migrate', 'project', 'map', 'task', 'review', 'next', 'status', 'projects', 'validate', 'doctor', 'skills'].includes(command)) throw new Failure('USAGE', '', help, 2);
+    if (!['init', 'onboard', 'adapter-handoff', 'track', 'tracks', 'migrate', 'project', 'map', 'task', 'review', 'next', 'status', 'projects', 'validate', 'doctor', 'skills', 'competency'].includes(command)) throw new Failure('USAGE', '', help, 2);
     const initOptions = ['name', 'goal', 'assistance-max', 'operation-id'];
     if ((command !== 'init' && initOptions.some(key => key in values)) || (values.recover && command !== 'doctor')) throw new Failure('USAGE', '', help, 2);
     const skillOptions = ['host', 'skill', 'target'];
@@ -85,6 +88,15 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       const host = hosts[values.host ?? ''];
       if (!host) throw new Failure('USAGE', 'host', 'Choose --host generic, codex or claude-code.', 2);
       emit({ command, outcome: 'success', coverage: 'none', data: installCapabilities(host(), values.target ?? process.cwd(), values.skill ?? portableSkillIds()), diagnostics: [] });
+      return;
+    }
+    if (command === 'competency') {
+      if (positionals[1] !== 'show' || positionals.length !== 3) throw new Failure('USAGE', '', help, 2);
+      const catalog = catalogs(); const id = positionals[2]!;
+      if (!catalog.competencyIds.has(id)) throw new Failure('COMPETENCY_INVALID', id, 'Unknown competency ID.', 2);
+      // With a workspace, honour its pinned catalog: a 3.0 pin predates the graph and shows no edges.
+      const pinned = values.workspace ? parse(read(resolveWorkspace(values.workspace), statePath('config.yaml')), 'config.yaml').competency_catalog_version : '4.0';
+      emit({ command, outcome: 'success', coverage: 'catalog', data: { competency_catalog_version: pinned, advisory: 'Edges suggest where to look; they never award or remove credit.', ...competencyNeighbourhood(competencyGraph(catalog.competencies, pinned), id) }, diagnostics: [] });
       return;
     }
     if (command === 'tracks') { if (positionals.length !== 1) throw new Failure('USAGE', '', help, 2); emit({ command, outcome: 'success', coverage: 'catalog', data: listTracks(), diagnostics: [] }); return; }

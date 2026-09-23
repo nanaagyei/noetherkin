@@ -116,6 +116,19 @@ Adopted with ACP-012 (Phase 11, see `FOUNDATION_CHANGELOG.md`). These are **exec
 
 CF-33, CF-34, CF-50, CF-51, FR-52 and FR-53 from ACP-012 describe the deferred controller bundling and are not registered.
 
+Adopted with ACP-013 (Phase 12, see `FOUNDATION_CHANGELOG.md`). All are executed offline except FR-35, which is reviewer behavior.
+
+| ID | Setup | Required result | Covered by |
+| --- | --- | --- | --- |
+| CF-35 | Catalog with a complete, acyclic edge set loads | Accept and expose the graph to a 4.0-pinned workspace. | `tests/competency-graph.test.ts` CF-35 |
+| CF-36 | Competency with empty `prerequisites` and `encompasses` | Always reachable; behavior identical to catalog 3.0. | `tests/competency-graph.test.ts` CF-36 |
+| CF-37 | Workspace pinned at competency catalog 3.0 under a 4.0 runtime | Validate normally without graph-derived output; never synthesize edges. | `tests/competency-graph.test.ts` CF-37; `tests/tracks.test.ts` migration |
+| FR-32 | Edge set contains a cycle | Reject the catalog naming the cycle; never break it arbitrarily. | `tests/competency-graph.test.ts` FR-32; `validate_foundation.py` seeded cycle |
+| FR-33 | Edge references an unknown competency or itself | Reject naming the reference. | `tests/competency-graph.test.ts` FR-33 |
+| FR-34 | `required_core` competency lists a non-core prerequisite | Reject. | `tests/competency-graph.test.ts` FR-34 |
+| FR-35 | Reviewer cites one artifact for a competency and its encompassed competency | Reject the second claim as a repeated demonstration; an edge does not authorize double counting. | *behavioral* A23 |
+| FR-36 | Derived cache rebuilt with a populated graph | Byte-identical to an empty graph. Enforced structurally: no module that derives standing or the cache may read edges or import the graph module. | `tests/competency-graph.test.ts` FR-36 static guard |
+
 Adopted with ACP-016 (Phase 12, see `FOUNDATION_CHANGELOG.md`). Rows marked *behavioral* are specified as behavioral evaluation cases in `tests/behavior/cases.mjs` and have **not** been executed against a live agent; the rest are executed by the offline suite.
 
 | ID | Setup | Required result | Covered by |

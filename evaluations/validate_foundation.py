@@ -74,9 +74,26 @@ competencies = read_yaml(ROOT/'catalog/competencies.yaml')
 levels = read_yaml(ROOT/'catalog/levels.yaml')
 ids = {c['id'] for c in competencies['competencies']}
 assert len(ids) == len(competencies['competencies'])
-assert competencies['catalog_version'] == '3.0'
+assert competencies['catalog_version'] == '4.0'
 assert levels['catalog_version'] == '2.0'
-assert all(set(c) == {'id','domain','name','observable_behavior','required_core'} and c['observable_behavior'] for c in competencies['competencies'])
+assert all({'id','domain','name','observable_behavior','required_core'} <= set(c) <= {'id','domain','name','observable_behavior','required_core','prerequisites','encompasses'} and c['observable_behavior'] for c in competencies['competencies'])
+# ACP-013: edges reference known IDs, never the source itself, core depends only on core, and the union is acyclic.
+core_ids = {c['id'] for c in competencies['competencies'] if c['required_core']}
+edges = {c['id']: c.get('prerequisites', []) + c.get('encompasses', []) for c in competencies['competencies']}
+assert all(target in ids and target != source for source, targets in edges.items() for target in targets)
+assert all(set(c.get('prerequisites', [])) <= core_ids for c in competencies['competencies'] if c['required_core'])
+def acyclic(graph):
+    state = {}
+    def visit(node):
+        if state.get(node) == 'done': return True
+        if state.get(node) == 'visiting': return False
+        state[node] = 'visiting'
+        ok = all(visit(target) for target in graph[node])
+        state[node] = 'done'
+        return ok
+    return all(visit(node) for node in graph)
+assert acyclic(edges)
+assert not acyclic({**edges, 'core.codebase-navigation': ['core.debugging']}), 'cycle detection must reject a seeded cycle'
 assert len([c for c in competencies['competencies'] if c['required_core']]) == 7
 assert [level['id'] for level in levels['levels']] == ['E'+str(i) for i in range(6)]
 assert len(levels['dimensions']) == 13
