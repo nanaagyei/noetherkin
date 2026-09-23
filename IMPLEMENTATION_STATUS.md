@@ -2,6 +2,11 @@
 
 Foundational specification phase: complete. Phase 6 PetClinic vertical runtime: implemented and offline-verified. Twenty-one portable skill packages: implemented with focused per-skill bundles. Behavioral eval runner: expanded for Phase 7; the full dual-harness matrix remains deferred. Phase 8.1 versioned learning tracks, project entry metadata, generic attachment, and post-switch alignment publication: implemented. Phase 9 additive project catalog expansion: implemented. Phase 10 portable capability adapter onboarding slice: implemented and offline-verified for generic, Codex and Claude Code projections. Promotion execution remains proposal-only. Runtime schema validation is now first-party and dependency-free; `ajv` is retained only as a test oracle. ACP-012 is adopted in part: registry publication is retired and capability routing is an enforced requirement. Four architecture change proposals remain staged under `docs/proposals/` and are not normative.
 
+## Foundation completion: usability slice (2026-09-23)
+
+- [x] Closed out ACP-012: registered FR-29 to FR-31 in `docs/architecture/conformance.md`, added the missing FR-31 negative test, recorded ADR-015, and removed stale npm and legal-gate lines from this file and the publishing checklist.
+- [x] Local verification: 121 Node tests, 21 skill bundles, foundation validation and all 22 frozen conformance cases pass.
+
 ## Runtime dependency reduction and staged architecture proposals (2026-09-21)
 
 - [x] Replaced `ajv` and `ajv-formats` in the runtime with `core/schema.ts`, a first-party validator for the closed Draft 2020-12 subset the eleven protocol schemas use: 22 validating keywords, two formats (`date-time`, `uri`), local `$ref` only, `additionalProperties` always false. 190 lines of code.
@@ -19,26 +24,27 @@ Foundational specification phase: complete. Phase 6 PetClinic vertical runtime: 
 - [x] Adopted ACP-012 in part (Phase 11). Registry publication retired and the capability-routing requirement enforced. Bundling the controller into skill packages and the collected handoff table were deliberately not adopted; see the changelog entry for why.
 - [ ] Adopt or reject ACP-013 through ACP-016.
 
-Limits: the validator replacement is implemented and verified; the proposals are not adopted and change no protocol behavior. `ajv` is retained as a devDependency solely as the parity oracle, and if `tests/schema-parity.test.mjs` fails the replacement is not equivalent and must not ship. Error emission order is deliberately not reproduced, because it is an artifact of ajv codegen scheduling that nothing here depends on; the parity test compares the error multiset, so the guarantee is same errors, same wording, same paths and same count, with unspecified sequence. The staged forge schema and catalog record live under `docs/proposals/` rather than `schemas/` and `catalog/` because `evaluations/validate_foundation.py:43` asserts exactly eleven schemas; a proposal must not break the frozen checks it seeks permission to change. The npm publication items in the section below remain open on their own terms; ACP-012 proposes retiring them but is not adopted.
+Limits: the validator replacement is implemented and verified; the proposals are not adopted and change no protocol behavior. `ajv` is retained as a devDependency solely as the parity oracle, and if `tests/schema-parity.test.mjs` fails the replacement is not equivalent and must not ship. Error emission order is deliberately not reproduced, because it is an artifact of ajv codegen scheduling that nothing here depends on; the parity test compares the error multiset, so the guarantee is same errors, same wording, same paths and same count, with unspecified sequence. The staged forge schema and catalog record live under `docs/proposals/` rather than `schemas/` and `catalog/` because `evaluations/validate_foundation.py:43` asserts exactly eleven schemas; a proposal must not break the frozen checks it seeks permission to change. ACP-012 has since been adopted in part (Phase 11), which retired the npm publication items in the section below.
 
 ## Public-release preparation (2026-09-18)
 
 - [x] Reworked the root README around the Noetherkin identity, portable-capability model, quick start, architecture, trust boundaries, current status and contributor paths.
 - [x] Added a security policy, changelog, contribution/release guidance, structured issue forms and a pull-request checklist.
-- [x] Added least-privilege CI for macOS/Linux runtime tests, frozen protocol validation, dependency audit and exact npm package inspection.
+- [x] Added least-privilege CI for macOS/Linux runtime tests, frozen protocol validation, dependency audit and package content inspection.
 - [x] Added pinned CodeQL and dependency-review workflows plus grouped npm and GitHub Actions Dependabot updates.
-- [x] Added an npm release workflow using a protected GitHub environment, OIDC trusted publishing, provenance configuration and publication of the exact verified tarball.
+- [x] ~~Added an npm release workflow using OIDC trusted publishing.~~ Retired by ACP-012: the release workflow now keeps only its verification job.
 - [x] Added a fail-closed release metadata check and a sequenced publication checklist covering legal identity, GitHub controls, npm setup, release review and post-publication verification.
 - [x] Local verification: 106 Node tests, all 21 skill bundles, 11 schemas, 135 fixture/catalog documents, 151 competencies, 34 tracks, 87 projects, 34 negative cases and all 22 frozen conformance cases pass. `npm audit` reports zero known vulnerabilities. The Noetherkin dry-run tarball contains 1,010 files (6,837,182 unpacked bytes), includes Apache-2.0, both theme-aware logo variants, every reference host adapter and required public document, and excludes source tests, local state, drafts, artifacts and environment files.
 - [x] Adopted Apache-2.0 and connected the SPDX package metadata, license file and README badge.
-- [ ] Complete legal clearance for the Noetherkin name and confirm distribution rights for the generated logo. Preliminary exact-name web, USPTO, npm, GitHub and domain checks found no direct collision; this is not a legal opinion or reservation.
+- [x] Complete legal clearance for the Noetherkin name and confirm distribution rights for the generated logo. Owner-confirmed; see `docs/PUBLISHING_CHECKLIST.md` section 1.
 - [x] Bound clone, homepage, issue, CI badge and npm metadata to the intended `https://github.com/nanaagyei/noetherkin` repository identity.
 - [x] Adopted `Noetherkin` as the public product name and `noetherkin` as the pre-release npm package and executable. Versioned schema `$id` namespaces, archived protocol snapshots and retained behavioral transcripts remain unchanged historical/protocol identifiers.
 - [x] Published the reviewed initial history to `main`, created `release/dev`, updated `origin` to `nanaagyei/noetherkin`, and owner-confirmed branch protection and security settings.
 - [x] Rechecked the unscoped `noetherkin` npm name after publication of the repository; the name remains apparently available but is not reserved.
-- [ ] Establish npm ownership, a protected `npm` environment and the trusted-publisher relationship; complete the manual checklist before publishing a GitHub release.
+- [x] ~~Establish npm ownership, a protected `npm` environment and the trusted-publisher relationship.~~ Not applicable after ACP-012 retired registry publication.
+- [ ] GitHub Support confirmation that pull requests 1-3 are purged, then the public visibility change. This is the only remaining publication gate.
 
-Limits: the repository identity, `main`, `release/dev`, branch protection and security settings are owner-confirmed. No npm package was reserved or published. Legal clearance, logo distribution rights, trusted publishing and release-environment approval remain publication gates.
+Limits: the repository identity, `main`, `release/dev`, branch protection, security settings, name clearance and logo rights are owner-confirmed. No npm package was reserved or published, and none will be under ACP-012. The pull-request purge is the remaining publication gate.
 
 ## Phase 10 portable capability adapter layer (2026-09-17)
 
@@ -114,7 +120,7 @@ Current offline verification: **85 tests passed** on macOS, including the locall
 
 ## Adversarial behavioral evaluations (2026-09-13–15, America/Chicago)
 
-- [x] Portable Node.js case runner with 49 active cases and one deferred promotion-review case; retains S01–S20 and adds adversarial/positive controls across all eight skills.
+- [x] Portable Node.js case runner with 49 active cases and one then-deferred promotion-review case (D01, activated in Phase 7); retains S01–S20 and adds adversarial/positive controls across all eight skills.
 - [x] Codex and Claude CLI adapters, isolated skill/fixture workspaces, explicit session continuation, model pinning, capability probes and per-case deadlines.
 - [x] Transcript/tool-event capture, state and draft integrity checks, citation-bound maintainer reviews, and pass/fail/pending/infrastructure/not-run/deferred reporting.
 - [x] Existing offline test command stays model-free; 21 meaningful runner tests cover isolation, event parsing, UTF-8 preservation, failures, sessions, grading and report completeness.

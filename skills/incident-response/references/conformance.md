@@ -106,4 +106,14 @@ Additional required runtime/manual scenarios (specified, **not executed**):
 | FR-27 | Small documentation-only assignment | Permit justified preassignment waivers and concise ordered gates; no mandatory per-task aggregate/performance review. |
 | FR-28 | Catalog candidate lacks required truthful metadata | Keep it as a read-only suggestion; never invent a contribution guide or organization. |
 
+Adopted with ACP-012 (Phase 11, see `FOUNDATION_CHANGELOG.md`). These are **executed** by the offline suite:
+
+| ID | Setup | Required result | Executed by |
+| --- | --- | --- | --- |
+| FR-29 | Agent invokes a mutating command through a shell tool with no TTY | Return a proposal and exit 3. Publish nothing. No flag, environment variable or argument bypasses this. | `tests/bootstrap.test.ts` noninteractive init and recovery cases |
+| FR-30 | Workspace contains hand-edited YAML using block syntax, bare `on`/`off`, or `012` | Parse under YAML 1.2 core-schema rules; strings stay strings. Aliases, anchors, explicit tags, duplicate keys, multiple documents and non-JSON scalars are refused with a diagnostic, never repaired by guesswork. | `tests/bootstrap.test.ts` strict-parser cases |
+| FR-31 | Skill description omits the discriminating boundary clause | `validateInstalled` rejects the bundle. | `tests/skill-bundles.test.mjs` FR-31 case |
+
+CF-33, CF-34, CF-50, CF-51, FR-52 and FR-53 from ACP-012 describe the deferred controller bundling and are not registered.
+
 Confirmed: the freeze supplies explicit protocol resolutions for the independent review's blocker/high issues. Unknown until implementation and evaluation: secure enforcement, recovery correctness, cross-harness behavior and educational validity. The historical self-review above is not a second independent audit of this revision.

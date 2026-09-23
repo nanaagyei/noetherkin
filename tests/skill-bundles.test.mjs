@@ -102,6 +102,16 @@ test('entrypoint validation rejects duplicate YAML fields and scaffold markers',
   assert.throws(() => validateInstalled(installed), /Unfinished scaffold/);
 });
 
+test('FR-31: a description with no routing boundary is rejected', t => {
+  const directory = temporary(t);
+  const installed = path.join(directory, 'teach');
+  fs.cpSync(path.join(root, 'skills/teach'), installed, { recursive: true });
+  const entry = path.join(installed, 'SKILL.md');
+  const original = fs.readFileSync(entry, 'utf8');
+  fs.writeFileSync(entry, original.replace('; debugging collaboration belongs to peer-engineer.', '.'));
+  assert.throws(() => validateInstalled(installed), /Description states no boundary: teach/);
+});
+
 test('escaping references and resource symlinks cannot satisfy portability checks', t => {
   const directory = temporary(t);
   const installed = path.join(directory, 'teach');

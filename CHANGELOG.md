@@ -12,6 +12,7 @@ All notable changes will be documented in this file. The format follows [Keep a 
 - Differential parity test (`tests/schema-parity.test.mjs`) establishing equivalence with `ajv` over a 138-document corpus and 122,804 systematically mutated documents.
 - Direct test coverage for the state reader's refusal of duplicate keys in flow and nested form, non-mapping document roots, and out-of-range or non-JSON number syntax, with the `YAML_INVALID` diagnostic code pinned.
 - `docs/proposals/` staging area for architecture change proposals under review, with ACP-012 through ACP-016 and a worked forge-project example. These are explicitly non-normative and change no protocol behavior.
+- FR-29, FR-30 and FR-31 registered in `docs/architecture/conformance.md`, with a direct negative test for FR-31.
 
 ### Changed
 

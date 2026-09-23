@@ -18,6 +18,7 @@ All decisions below are explicit V1 design choices, not empirical findings. Revi
 | ADR-012 | Fixture classification on every structured example | Unmarked realistic-looking state | Prevent demo accomplishments entering live evaluation | Live cross-reference checks must reject fixtures |
 | ADR-013 | Eight workflow contracts now; final skill packages and promotion workflow later | Generate all SKILL.md files and runtime immediately | Foundational specification is the requested scope | Agent 2 reviews before implementing a narrow slice |
 | ADR-014 | Terminal tasks stay terminal; blocked reason overlays active phase | Reopen completed tasks; add blocked as a phase | Preserve completed-work history without losing resume context | Defects create follow-up tasks; cancellation is not success |
+| ADR-015 | Distribute as agent capabilities; no package registry publication; every skill description states a routing boundary (ACP-012, adopted in part) | Publish an npm package; bundle the controller into each skill | Keep the controller reviewable from a checkout and let hosts route from descriptions alone | Bundled controller and collected handoff table stay open for a future proposal; see `FOUNDATION_CHANGELOG.md` Phase 11 |
 
 The registry bootstrap is explicitly learner-authorized. No role may appoint itself during normal operation. Assistance snapshots preserve the observation context while the task history remains the canonical help ledger.
 

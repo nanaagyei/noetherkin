@@ -25,7 +25,7 @@ The source repository is published under Apache-2.0. There is no npm publication
 - [x] Link the README badge and license section to the selected license.
 - [x] Confirm the copyright holder and year used by the license. `NOTICE` records `Copyright 2026 Prince Agyei Tuffour`. `LICENSE` is left byte-for-byte as published by Apache, including its "how to apply" appendix template, because editing license text is discouraged.
 - [x] Complete an appropriate trademark/common-law clearance for Noetherkin and confirm the rights to publish `noetherkin-logo.png`, `noetherkin-logo-light.png`, examples, catalogs, and all bundled prose. Owner-confirmed.
-- [x] Decide whether a `NOTICE` file is required. Added, and included in the package `files` allowlist so it travels with any distribution. It currently carries only the project copyright; registry-resolved dependencies are not redistributed and are not listed.
+- [x] Decide whether a `NOTICE` file is required. Added at the repository root so it travels with every checkout and skill-based distribution. It currently carries only the project copyright; registry-resolved dependencies are not redistributed and are not listed.
 - [ ] Adopt a contributor license agreement or developer certificate of origin only if project governance actually needs one; do not add process theater by default.
 - [x] Select a dependency-license policy, then configure `deny-licenses` in dependency review. Strong copyleft (AGPL, GPL, SSPL) fails review, because it would be inconsistent with the outbound Apache-2.0 grant on a redistributed tool.
 
@@ -39,7 +39,6 @@ The source repository is published under Apache-2.0. There is no npm publication
 - [x] Create `release/dev`. CI and CodeQL validate pushes to both `main` and `release/dev`; Dependabot targets `release/dev`; release publication remains gated separately.
 - [x] Confirm the clone, repository, homepage, issue, and badge URLs after the GitHub rename.
 - [x] Add repository-backed CI and CodeQL badges. Confirm they resolve after the initial push.
-- [ ] Add npm version and release badges after the first successful publication.
 - [x] Add a concise GitHub description and topics.
 - [ ] Add a social preview image. A 1280x640 card is prepared at `docs/assets/social-preview.png` (79KB, under the 1MB limit). GitHub exposes no API for this, so upload it manually under **Settings -> General -> Social preview**.
 - [x] Enable Issues and Discussions only if maintainers intend to support them. Issues on, Discussions off, Wiki disabled: an empty wiki tab on a public repository reads as abandonment, and a solo maintainer should not open a second inbox before the first one has traffic.
