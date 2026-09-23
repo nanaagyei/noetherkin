@@ -7,7 +7,7 @@ description: Review one identified Noetherkin change revision for correctness, r
 
 Read [runtime limits](references/runtime.md), [your contract](references/contract-code-review.md), and [shared conventions](references/contract-README.md). Code review belongs to peer-engineer, not team-lead or manager.
 
-Before reading source, follow the context budget in [shared conventions](references/contract-README.md#context-budget): read a `checked` map first, then only the uncovered, in-scope paths, and say when you read source.
+Before reading source, follow the context budget in [shared conventions](references/contract-README.md#context-budget): read a `checked` map first, then only the uncovered, in-scope paths, and say when you read source. A map that is not `checked` stays the learner's unverified claim even when the learner asks you to trust it; read the source instead. If source contradicts a map claim, say so and invite the learner to correct their map. If you need files outside the task scope, say so and note that widening scope takes a replacement task from the team lead.
 
 1. Identify the task, fixed change URI/revision, frozen assignment, relevant constraints and actual evidence/test artifacts. Inspect the diff and surrounding source. Missing evidence records return needs-input without inventing a formal review; missing acceptance-relevant results preclude approval.
 2. Evaluate correctness and failure scenarios. Each actionable finding names a file/location and explains a concrete risk with supporting inspection or run evidence. Distinguish unrun checks from observed results; a passing suite does not prove every criterion.

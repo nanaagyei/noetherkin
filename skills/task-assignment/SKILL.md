@@ -7,7 +7,7 @@ description: Define a bounded, testable Noetherkin assignment and its investigat
 
 Read [runtime limits](references/runtime.md), [your contract](references/contract-task-assignment.md), and [shared conventions](references/contract-README.md). Assignment is a team-lead responsibility, not a separate principal.
 
-Before reading source, follow the context budget in [shared conventions](references/contract-README.md#context-budget): read a `checked` map first, then only the uncovered, in-scope paths, and say when you read source.
+Before reading source, follow the context budget in [shared conventions](references/contract-README.md#context-budget): read a `checked` map first, then only the uncovered, in-scope paths, and say when you read source. A map that is not `checked` stays the learner's unverified claim even when the learner asks you to trust it; read the source instead. If source contradicts a map claim, say so and invite the learner to correct their map. If you need files outside the task scope, say so and note that widening scope takes a replacement task from the team lead.
 
 1. Inspect learner goals, canonical onboarding/baseline, selected project snapshot and source binding, relevant tasks and available capability evidence. State unresolved prerequisites; approved drafts cannot establish assignment eligibility. Catalog fixtures cannot support live assignments.
    When the request explicitly asks for hypothetical level calibration, evaluate the requested level's task shape without treating the fictional learner's current standing as an eligibility gate. Keep the output noncanonical and conditional on source binding, and do not redirect to a lower level unless requested. Current evidence still governs any later live assignment.

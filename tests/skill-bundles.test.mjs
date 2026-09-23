@@ -137,3 +137,18 @@ test('regeneration is deterministic and extra untracked resources fail closed', 
   fs.writeFileSync(path.join(directory, 'skills/manager/references/unmanaged.md'), 'Not in the manifest.\n');
   assert.throws(() => packageSkills({ check: true, base: directory }), /Unmanaged skill resource/);
 });
+
+test('portable skill entrypoints and contracts name no model, vendor or agent host', () => {
+  // The charter's agent-independence principle: host-specific behavior belongs in adapters/, never in the
+  // portable instructions every harness reads.
+  const hosts = /\b(claude|codex|anthropic|openai|gpt-\d|gemini|cursor|windsurf|opencode|kiro|openhands|copilot)\b/i;
+  const files = [
+    ...fs.readdirSync(path.join(root, 'contracts')).map(file => `contracts/${file}`),
+    ...expectedBundle().manifest.skills.flatMap(({ name }) => [`skills/${name}/SKILL.md`, `skills/${name}/assets/proposal.md`]),
+    'skill-pack/runtime.md', 'skill-pack/proposals.md', 'skill-pack/proposal.md',
+  ];
+  for (const file of files) {
+    const match = fs.readFileSync(path.join(root, file), 'utf8').match(hosts);
+    assert.equal(match, null, `${file} names host-specific ${match?.[0]}`);
+  }
+});
