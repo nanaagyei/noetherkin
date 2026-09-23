@@ -67,7 +67,7 @@ Run this inside the project where you want to use Noetherkin:
 npx skills add nanaagyei/noetherkin
 ```
 
-The [Skills CLI](https://github.com/vercel-labs/skills) discovers the bundled capabilities and lets you choose the target agent and skills. To install only onboarding:
+The [Skills CLI](https://github.com/vercel-labs/skills) discovers the bundled capabilities and lets you choose the target agent and skills. From a built checkout (step 2), `noetherkin skills install --host claude-code --target .` (or `--host codex`) does the same without the Skills CLI, verifies every file digest, and never overwrites an existing file. To install only onboarding:
 
 ```sh
 npx skills add nanaagyei/noetherkin --skill onboarding

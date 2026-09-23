@@ -29,7 +29,19 @@ The current onboarding handoff is intentionally stepwise: initialize, select a t
 
 ## Bundle projection
 
-All projections read `skills/onboarding/` and its generated `references/bundle.json`. The adapter changes target paths and invocation metadata only. It does not rewrite `SKILL.md`, protocol references or their bytes. Bundle checks and adapter conformance tests compare every projected file digest across generic, Codex and Claude Code.
+Every capability listed in `skill-pack/manifest.json` can be projected. A projection reads `skills/<id>/` and its generated `references/bundle.json`; the adapter changes target paths (`skills/<id>`, `.codex/skills/<id>`, `.claude/skills/<id>`) and invocation metadata only. It does not rewrite `SKILL.md`, protocol references or their bytes. Adapter tests compare every projected file digest for every capability across generic, Codex and Claude Code.
+
+Only `onboarding` has an invocation bridge. `invoke` on any other known capability returns `blocked` with `NO_CONTROLLER_BRIDGE` rather than throwing or pretending to execute it; unknown capability IDs fail with `UNSUPPORTED_CAPABILITY`.
+
+Install projections with the CLI:
+
+```sh
+noetherkin skills list
+noetherkin skills install --host claude-code --target /path/to/learner-workspace
+noetherkin skills install --host codex --skill onboarding --skill teach --target /path/to/learner-workspace
+```
+
+Installation plans every file before writing. An identical existing file is left alone, so reinstalling is a no-op. A differing file, directory or symlink in the way fails the whole install with `CONFLICT` and nothing is written. Every written file is verified against its bundle digest. Installing skills is not consent and creates no workspace state or principal.
 
 ## Verification
 

@@ -53,7 +53,7 @@ This uses the documented GitHub-source, skill-selection, scope and agent-targeti
 
 Alternatively, copy one entire skill folder to the skills directory supported by your harness. Keep `SKILL.md`, `references/` and `assets/` together. No sibling skill, original checkout or model vendor is required to read the bundle. Invocation/discovery conventions still depend on the harness. The runtime includes local Codex and Claude Code role adapters plus the vendor-neutral adapter contract. Avoid overwriting an unrelated installed skill with the same short name.
 
-The Phase 10 [capability host adapters](adapters.md) project the same portable bundle into generic, Codex and Claude Code host locations. A host expression such as `/onboarding` or `$onboarding` is an invocation surface, not the identity of the `onboarding` capability. Consent-bearing operations still use the trusted terminal handoff.
+From a checkout, `noetherkin skills install --host <generic|codex|claude-code> --target <directory>` copies all 21 bundles, or those named with repeated `--skill`, into that host's skill directory with digest verification and no overwrites. The [capability host adapters](adapters.md) project the same portable bundle into generic, Codex and Claude Code host locations. A host expression such as `/onboarding` or `$onboarding` is an invocation surface, not the identity of the `onboarding` capability. Consent-bearing operations still use the trusted terminal handoff.
 
 Noetherkin is not published to a package registry. The CLI is built from a checkout and requires Node.js 24+; see the [CLI guide](cli.md). Installing a skill alone does not initialize a learner workspace or configure an agent harness.
 

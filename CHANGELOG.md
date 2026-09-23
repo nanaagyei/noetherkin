@@ -13,6 +13,7 @@ All notable changes will be documented in this file. The format follows [Keep a 
 - Direct test coverage for the state reader's refusal of duplicate keys in flow and nested form, non-mapping document roots, and out-of-range or non-JSON number syntax, with the `YAML_INVALID` diagnostic code pinned.
 - `docs/proposals/` staging area for architecture change proposals under review, with ACP-012 through ACP-016 and a worked forge-project example. These are explicitly non-normative and change no protocol behavior.
 - `ClaudeRoleAdapter` (`adapters/runtime/claude.ts`) and a `--role-adapter codex|claude` CLI option (or `NOETHERKIN_ROLE_ADAPTER`), so every role-judgment command runs with Claude Code as well as Codex. Both adapters share one prompt and closed output contract in `adapters/runtime/output-contract.ts`.
+- `noetherkin skills list` and `noetherkin skills install --host <generic|codex|claude-code>`: the host adapters now project all 21 capabilities, installation is digest-verified and never overwrites a differing file, and invoking a capability without a host bridge returns `blocked` with `NO_CONTROLLER_BRIDGE`.
 - FR-29, FR-30 and FR-31 registered in `docs/architecture/conformance.md`, with a direct negative test for FR-31.
 
 ### Changed

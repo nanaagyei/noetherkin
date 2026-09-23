@@ -15,12 +15,16 @@ import { CodexRoleAdapter } from '../adapters/runtime/codex.js';
 import { ClaudeRoleAdapter } from '../adapters/runtime/claude.js';
 import type { RoleAdapter } from '../core/adapters.js';
 import { decodeOnboardingHandoff, validateOnboardingHandoff } from '../adapters/hosts/generic/onboarding.js';
+import { GenericCapabilityHostAdapter, installCapabilities, portableSkillIds, portableSkills } from '../adapters/hosts/generic/index.js';
+import { CodexCapabilityHostAdapter } from '../adapters/hosts/codex/index.js';
+import { ClaudeCodeCapabilityHostAdapter } from '../adapters/hosts/claude-code/index.js';
 import { planTransactionRecovery, recoverTransaction } from '../core/transactions.js';
 
 const help = `noetherkin <command>
 
 Bootstrap: init | status | tracks | projects | validate | migrate --to 3.0 [--dry-run] | doctor [--recover]
 Adapter bridge: adapter-handoff --handoff <token>
+Capabilities: skills list | skills install --host <generic|codex|claude-code> [--skill <id> ...] [--target <directory>]
 Journey:
   track show <track-id>
   track select <track-id>
@@ -63,14 +67,25 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       constraint: { type: 'string', multiple: true }, source: { type: 'string' }, 'clone-to': { type: 'string' }, revision: { type: 'string' },
       track: { type: 'string' }, stage: { type: 'string' }, to: { type: 'string' }, 'dry-run': { type: 'boolean' },
       file: { type: 'string' }, prediction: { type: 'string' }, question: { type: 'string' }, model: { type: 'string' }, 'codex-bin': { type: 'string' }, 'claude-bin': { type: 'string' }, 'role-adapter': { type: 'string' },
-      handoff: { type: 'string' }
+      handoff: { type: 'string' }, host: { type: 'string' }, skill: { type: 'string', multiple: true }, target: { type: 'string' }
     }, allowPositionals: true, strict: true });
     const { values, positionals } = parsed; json = values.json ?? false; command = positionals[0] ?? 'help';
     if (values.help || command === 'help') { json ? emit({ command: 'help', outcome: 'success', coverage: 'none', data: { help }, diagnostics: [] }) : process.stdout.write(help); return; }
     requireThat(Number(process.versions.node.split('.')[0]) >= 24, 'RUNTIME_UNSUPPORTED', '', 'Node.js 24 or newer is required.');
-    if (!['init', 'onboard', 'adapter-handoff', 'track', 'tracks', 'migrate', 'project', 'map', 'task', 'review', 'next', 'status', 'projects', 'validate', 'doctor'].includes(command)) throw new Failure('USAGE', '', help, 2);
+    if (!['init', 'onboard', 'adapter-handoff', 'track', 'tracks', 'migrate', 'project', 'map', 'task', 'review', 'next', 'status', 'projects', 'validate', 'doctor', 'skills'].includes(command)) throw new Failure('USAGE', '', help, 2);
     const initOptions = ['name', 'goal', 'assistance-max', 'operation-id'];
     if ((command !== 'init' && initOptions.some(key => key in values)) || (values.recover && command !== 'doctor')) throw new Failure('USAGE', '', help, 2);
+    const skillOptions = ['host', 'skill', 'target'];
+    if (command !== 'skills' && skillOptions.some(key => key in values)) throw new Failure('USAGE', '', help, 2);
+    if (command === 'skills') {
+      if (positionals[1] === 'list' && positionals.length === 2 && !skillOptions.some(key => key in values)) { emit({ command, outcome: 'success', coverage: 'catalog', data: { skills: portableSkills() }, diagnostics: [] }); return; }
+      if (positionals[1] !== 'install' || positionals.length !== 2) throw new Failure('USAGE', '', help, 2);
+      const hosts: Record<string, () => GenericCapabilityHostAdapter> = { generic: () => new GenericCapabilityHostAdapter(), codex: () => new CodexCapabilityHostAdapter(), 'claude-code': () => new ClaudeCodeCapabilityHostAdapter() };
+      const host = hosts[values.host ?? ''];
+      if (!host) throw new Failure('USAGE', 'host', 'Choose --host generic, codex or claude-code.', 2);
+      emit({ command, outcome: 'success', coverage: 'none', data: installCapabilities(host(), values.target ?? process.cwd(), values.skill ?? portableSkillIds()), diagnostics: [] });
+      return;
+    }
     if (command === 'tracks') { if (positionals.length !== 1) throw new Failure('USAGE', '', help, 2); emit({ command, outcome: 'success', coverage: 'catalog', data: listTracks(), diagnostics: [] }); return; }
     if (command === 'projects') { if (positionals.length !== 1) throw new Failure('USAGE', '', help, 2); if (values.workspace) resolveWorkspace(values.workspace); emit(listProjects(values.track, values.stage)); return; }
     if ((command === 'adapter-handoff') !== (values.handoff !== undefined)) throw new Failure('USAGE', '', help, 2);

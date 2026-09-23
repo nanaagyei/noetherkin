@@ -9,6 +9,7 @@ import { digest, exists, read, runtime, safePath, statePath, type Runtime } from
 import { listTracks } from '../../../core/tracks.js';
 import type { CapabilityDiagnostic, CapabilityResult, HostCapabilityProfile } from './contract.js';
 import { capabilityHostContractVersion } from './contract.js';
+import { skillBundleRoot } from './bundles.js';
 
 const repository = fileURLToPath(new URL('../../../../', import.meta.url));
 const capabilityId = 'onboarding';
@@ -123,4 +124,4 @@ export function validateOnboardingHandoff(root: string, payload: OnboardingHando
   }
 }
 
-export function onboardingBundleRoot(): string { return path.join(repository, 'skills/onboarding'); }
+export function onboardingBundleRoot(): string { return skillBundleRoot(capabilityId); }
