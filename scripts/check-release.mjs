@@ -24,7 +24,9 @@ if (repositoryMatch) {
   if (pkg.homepage && pkg.homepage !== `${repositoryBase}#readme`) failures.push('package.json homepage does not match repository.url.');
   if (pkg.bugs?.url && pkg.bugs.url !== `${repositoryBase}/issues`) failures.push('package.json bugs.url does not match repository.url.');
 }
-if (pkg.private === true) failures.push('package.json is marked private.');
+// ACP-012: never published to a registry. `private` blocks an accidental `npm publish`; releases ship the packed
+// tarball as a GitHub release asset instead, which `private` does not affect.
+if (pkg.private !== true) failures.push('package.json must stay private: Noetherkin is distributed as a release tarball, not through a registry (ACP-012).');
 if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(pkg.version ?? '')) failures.push('package.json version is not a publishable semantic version.');
 const readmePath = path.join(root, 'README.md');
 if (fs.existsSync(readmePath)) {

@@ -40,9 +40,12 @@ All notable changes will be documented in this file. The format follows [Keep a 
 - Usage errors print only the failing command's usage; unknown flags report `USAGE` rather than `IO_ERROR`; subcommands are checked before workspace lookup; an uninitialized directory reports `WORKSPACE_NOT_INITIALIZED`. The init prompt explains the assistance scale and names the roles; the onboard prompt names the selected track and its competencies.
 - The README install is now: clone, `npm install`, `npm link`, then `noetherkin setup`. `npm install -g` from a git URL does not work under npm 11 and is documented as such.
 - Codex skills install under `.agents/skills`.
+- The CLI now installs in one command from the latest GitHub release: `npm install -g https://github.com/nanaagyei/noetherkin/releases/latest/download/noetherkin.tgz`. The release workflow attaches the verified tarball under a versioned and a stable name, each with a SHA-256 checksum (ADR-017). Cloning with `npm link` remains the contributor path.
 - Replaced `ajv` and `ajv-formats` in the runtime with the first-party validator and moved both to devDependencies, where they now serve only as the parity oracle. A production install resolves 2 packages rather than 8. Validation verdicts and reported errors are unchanged; error emission order is not reproduced and is not guaranteed.
 
 ### Fixed
+
+- The release gate required a non-private package, contradicting ACP-012's `private: true`, so no release could pass verification. It now requires `private`.
 
 - The packed CLI now ships `skill-pack/manifest.json`, so `skills install` and `setup` work from an installed package and not only from a checkout. A package test now installs a skill from the packed executable.
 - Onboarding handoffs ignore the derived advisory directory, so regenerating the advisory never stales a prepared handoff.

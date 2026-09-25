@@ -60,14 +60,13 @@ Progress is based on attributable evidence, not points, streaks, task counts, or
 
 Noetherkin has two parts: a trusted local CLI that owns workspace state, and portable skills that teach your AI agent how to take part. The CLI installs the skills for you. It needs Node.js 24 or newer and Git.
 
-1. **Install the CLI.** It is not published to a package registry, so install it from a checkout:
+1. **Install the CLI** from the latest release:
 
    ```sh
-   git clone https://github.com/nanaagyei/noetherkin.git
-   cd noetherkin
-   npm install   # also builds the CLI
-   npm link      # puts `noetherkin` on your PATH
+   npm install -g https://github.com/nanaagyei/noetherkin/releases/latest/download/noetherkin.tgz
    ```
+
+   This puts `noetherkin` on your PATH. Rerun the same command to update. Noetherkin is not on the npm registry; each GitHub release carries the package as `noetherkin.tgz`, with a `.sha256` checksum beside it.
 
 2. **Run setup** from the directory you want to learn in:
 
@@ -79,7 +78,7 @@ Noetherkin has two parts: a trusted local CLI that owns workspace state, and por
 
 3. **Open your agent** in that directory and ask it to use the Noetherkin onboarding skill.
 
-`npm install -g github:nanaagyei/noetherkin` does not work yet. npm 11 runs a git dependency's preparation install with the outer `--global` still set, so it links a temporary clone globally instead of building it, and the result is broken. The package itself cannot fix this. Use the checkout above. To install the skills without setup, run `noetherkin skills install` (add `--global` for your user account, or `--target <dir>` for one project). It verifies every file digest and never overwrites an existing file. `npx skills add nanaagyei/noetherkin` also works with the [Skills CLI](https://github.com/vercel-labs/skills).
+To work on Noetherkin itself, clone it instead: `git clone https://github.com/nanaagyei/noetherkin.git`, then `npm install` (which builds) and `npm link`. Don't use `npm install -g github:nanaagyei/noetherkin`: under npm 11 a git-URL global install links a temporary clone and leaves a broken install. To install the skills without setup, run `noetherkin skills install` (add `--global` for your user account, or `--target <dir>` for one project). It verifies every file digest and never overwrites an existing file. `npx skills add nanaagyei/noetherkin` also works with the [Skills CLI](https://github.com/vercel-labs/skills).
 
 The skills teach an agent how to take part. The CLI is what writes state: it owns validation, consent, transactions, and every canonical record. An agent proposes; the CLI publishes.
 
@@ -106,7 +105,7 @@ Noetherkin has three parts, and each lives in one place:
 
 | Part | Where it lives | How often you install it |
 | --- | --- | --- |
-| The `noetherkin` CLI | Your clone of this repository, linked onto your PATH | Once per machine |
+| The `noetherkin` CLI | Your global npm packages, installed from the release tarball | Once per machine |
 | The agent skills | `~/.claude/skills` (Claude Code) and `~/.agents/skills` (Codex), or one folder with `--target` | Once per machine |
 | Your workspace | A folder you choose. Its `.apprenticeship/` subfolder is your record | Once per apprenticeship |
 

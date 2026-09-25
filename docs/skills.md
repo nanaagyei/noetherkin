@@ -55,7 +55,7 @@ Alternatively, copy one entire skill folder to the skills directory supported by
 
 `noetherkin skills install [--host <generic|codex|claude-code>] [--global | --target <directory>]` copies all 21 bundles, or those named with repeated `--skill`, into each host's skill directory with digest verification and no overwrites. Without `--host` it installs for every agent it detects; `--global` installs under `~/.claude/skills` (Claude Code) and `~/.agents/skills` (Codex). Whether each host then discovers the installed skills live has not been verified by the repository tests. The [capability host adapters](adapters.md) project the same portable bundle into generic, Codex and Claude Code host locations. A host expression such as `/onboarding` or `$onboarding` is an invocation surface, not the identity of the `onboarding` capability. Consent-bearing operations still use the trusted terminal handoff.
 
-Noetherkin is not published to a package registry. The CLI is installed from a checkout (`npm install`, then `npm link`) and requires Node.js 24+; see the [CLI guide](cli.md). Installing a skill alone does not initialize a learner workspace or configure an agent harness.
+Noetherkin is not published to a package registry. The CLI installs with `npm install -g https://github.com/nanaagyei/noetherkin/releases/latest/download/noetherkin.tgz` and requires Node.js 24+; see the [CLI guide](cli.md). Installing a skill alone does not initialize a learner workspace or configure an agent harness.
 
 ## Persistent drafts
 

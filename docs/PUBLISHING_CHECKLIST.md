@@ -32,7 +32,7 @@ The source repository is published under Apache-2.0. There is no npm publication
 ## 2. Create and configure the GitHub repository
 
 - [x] Ask [GitHub Support](https://support.github.com/) to dereference affected pull requests 1-3, remove cached views, and garbage-collect the old objects.
-- [ ] Make the repository public only after GitHub Support confirms that purge is complete.
+- [x] Make the repository public only after GitHub Support confirms that purge is complete (owner-confirmed 2026-09-24).
 - [x] Configure package metadata for `git+https://github.com/nanaagyei/noetherkin.git`.
 - [x] Update local `origin` to `https://github.com/nanaagyei/noetherkin.git` and verify it.
 - [x] Commit and push the reviewed initial history to `main`.
@@ -40,7 +40,7 @@ The source repository is published under Apache-2.0. There is no npm publication
 - [x] Confirm the clone, repository, homepage, issue, and badge URLs after the GitHub rename.
 - [x] Add repository-backed CI and CodeQL badges. Confirm they resolve after the initial push.
 - [x] Add a concise GitHub description and topics.
-- [ ] Add a social preview image. A 1280x640 card is prepared at `docs/assets/social-preview.png` (79KB, under the 1MB limit). GitHub exposes no API for this, so upload it manually under **Settings -> General -> Social preview**.
+- [x] Add a social preview image (owner-confirmed 2026-09-24). A 1280x640 card is prepared at `docs/assets/social-preview.png` (79KB, under the 1MB limit). GitHub exposes no API for this, so upload it manually under **Settings -> General -> Social preview**.
 - [x] Enable Issues and Discussions only if maintainers intend to support them. Issues on, Discussions off, Wiki disabled: an empty wiki tab on a public repository reads as abandonment, and a solo maintainer should not open a second inbox before the first one has traffic.
 - [x] Enable private vulnerability reporting under **Settings → Security → Code security** (owner-confirmed).
 - [x] Enable the dependency graph, Dependabot alerts, and Dependabot security updates (owner-confirmed).
@@ -58,15 +58,18 @@ ACP-012 is adopted: Noetherkin is **not published to a package registry**, and n
 publisher or release environment is required. The previous sections on npm setup, release candidates,
 publication and post-publication verification are removed rather than left as unreachable steps.
 
-- [x] Retire registry publication. `package.json` is `private`, `publishConfig` and `prepublishOnly` are gone,
-      and `.github/workflows/release.yml` keeps only its verification job.
-- [ ] Cut a GitHub release when a version is worth marking. Tag exactly `v<package-version>` from a reviewed
-      commit and use the changelog entry as release notes. The workflow verifies and retains a release
-      candidate for inspection; nothing is uploaded anywhere.
-- [ ] Keep `npm pack` green. The tarball is retained as a portability check, exercised by the package test,
-      and is not a release artifact.
+- [x] Retire registry publication. `package.json` is `private`, and `publishConfig` and `prepublishOnly` are gone.
+      `scripts/check-release.mjs` now requires `private: true`, so an accidental `npm publish` stays blocked.
+- [x] Ship the CLI as a release asset (ADR-017). Publishing a GitHub release runs `.github/workflows/release.yml`:
+      the `verify` job runs `release:check`, audits and packs; the `attach` job, the only one with write access,
+      uploads `noetherkin-<version>.tgz`, a stable-named `noetherkin.tgz` and a `.sha256` for each. Learners install
+      with `npm install -g https://github.com/nanaagyei/noetherkin/releases/latest/download/noetherkin.tgz`.
+- [ ] Cut a GitHub release when a version is worth marking. Tag exactly `v<package-version>` on a reviewed
+      `main` commit and use the changelog entry as release notes. After the workflow finishes, run the install
+      command above in a clean prefix and confirm `noetherkin --help` and `noetherkin skills list`.
+- [ ] Keep `npm pack` green. The tarball is the release artifact and is exercised by the package test.
 
-Capabilities install with `npx skills add nanaagyei/noetherkin`. The CLI is built from a checkout, as the
-README describes. Bundling the CLI into the skill packages was proposed in ACP-012 section 3.7 and deferred:
+The CLI installs from the latest release tarball, and `noetherkin setup` installs the skills. `npx skills add nanaagyei/noetherkin`
+still works for the skills alone. Bundling the CLI into the skill packages was proposed in ACP-012 section 3.7 and deferred:
 with `yaml` retained under FR-21, it would mean vendoring a third-party parser into the repository and losing
 dependency updates on it.
