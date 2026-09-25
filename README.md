@@ -58,54 +58,47 @@ Progress is based on attributable evidence, not points, streaks, task counts, or
 
 ## Install
 
-Noetherkin has two portable parts: capabilities for your AI agent, and a trusted local CLI that owns workspace state. They install separately and neither authorizes the other.
+Noetherkin has two parts: a trusted local CLI that owns workspace state, and portable skills that teach your AI agent how to take part. The CLI installs the skills for you. It needs Node.js 24 or newer and Git.
 
-### 1. Install the capabilities
+1. **Install the CLI.** It is not published to a package registry, so install it from a checkout:
 
-Run this inside the project where you want to use Noetherkin:
+   ```sh
+   git clone https://github.com/nanaagyei/noetherkin.git
+   cd noetherkin
+   npm install   # also builds the CLI
+   npm link      # puts `noetherkin` on your PATH
+   ```
 
-```sh
-npx skills add nanaagyei/noetherkin
-```
+2. **Run setup** from the directory you want to learn in:
 
-The [Skills CLI](https://github.com/vercel-labs/skills) discovers the bundled capabilities and lets you choose the target agent and skills. From a built checkout (step 2), `noetherkin skills install --host claude-code --target .` (or `--host codex`) does the same without the Skills CLI, verifies every file digest, and never overwrites an existing file. To install only onboarding:
+   ```sh
+   noetherkin setup
+   ```
 
-```sh
-npx skills add nanaagyei/noetherkin --skill onboarding
-```
+   Setup checks your machine (Node, Git, and an agent CLI such as Claude Code or Codex for role judgments), offers to install the skills for every agent it finds, and offers to start a workspace. Every step asks first, and it is safe to rerun.
 
-### 2. Build the CLI
+3. **Open your agent** in that directory and ask it to use the Noetherkin onboarding skill.
 
-The CLI is not published to a package registry. Build it from a checkout, which needs Node.js 24 or newer:
+`npm install -g github:nanaagyei/noetherkin` does not work yet: with npm 11, the build step inside a git install runs without development dependencies and cannot find the TypeScript compiler. Use the checkout above. To install the skills without setup, run `noetherkin skills install` (add `--global` for your user account, or `--target <dir>` for one project). It verifies every file digest and never overwrites an existing file. `npx skills add nanaagyei/noetherkin` also works with the [Skills CLI](https://github.com/vercel-labs/skills).
 
-```sh
-git clone https://github.com/nanaagyei/noetherkin.git
-cd noetherkin
-npm ci
-npm run build
-```
-
-That produces the executable at `dist/cli/main.js`. The examples below assume a shell alias:
-
-```sh
-alias noetherkin="node $PWD/dist/cli/main.js"
-```
-
-`npx skills add` installs instructions that teach an agent how to participate. The CLI is what actually writes state: it owns validation, consent, transactions, and every canonical record. An agent proposes; the CLI publishes.
+The skills teach an agent how to take part. The CLI is what writes state: it owns validation, consent, transactions, and every canonical record. An agent proposes; the CLI publishes.
 
 ## Start a workspace
 
+`noetherkin setup` can do this for you. By hand:
+
 ```sh
-mkdir -p /absolute/path/to/workspace
-noetherkin init --workspace /absolute/path/to/workspace
-noetherkin tracks
-noetherkin track select backend-engineering \
-  --workspace /absolute/path/to/workspace
-noetherkin onboard --workspace /absolute/path/to/workspace
-noetherkin next --workspace /absolute/path/to/workspace
+mkdir my-apprenticeship && cd my-apprenticeship
+noetherkin init                  # review, then type "initialize"
+noetherkin tracks                # which tracks have a runnable path
+noetherkin track select frontend-engineering
+noetherkin onboard               # records an all-unassessed baseline
+noetherkin next                  # prints the exact next command to run
 ```
 
-Initialization requires direct terminal review and consent. Commands that need a role judgment use Codex by default; add `--role-adapter claude` (or set `NOETHERKIN_ROLE_ADAPTER=claude`) to use Claude Code instead. Track selection guides project discovery but never owns skills, evidence, or promotion decisions. All CLI commands support `--json`; see the [CLI and recovery guide](docs/cli.md).
+Commands find the nearest workspace above the current directory; pass `--workspace <dir>` to choose another. Initialization and other consent steps need you at a terminal. Commands that need a role judgment use the first working agent CLI (Codex, then Claude Code); choose one with `--role-adapter claude` or `NOETHERKIN_ROLE_ADAPTER=claude`. A track guides recommendations but never owns skills, evidence, or promotion decisions. `next` also shows an advisory block naming which competencies to look at first and which forge or project exercises them; it is derived, not evidence, and gates nothing. Every command supports `--json` and `--help`; see the [CLI and recovery guide](docs/cli.md).
+
+Twelve tracks have a runnable path today: forge projects you build from an empty directory (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest, all still `draft`) and the curated Spring PetClinic task. The other tracks use the portable task-assignment skill on any attachable catalog project.
 
 ## Use with an AI agent
 

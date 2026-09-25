@@ -5,7 +5,7 @@ const judgment = 'Asks a model for one bounded role judgment (see "Role judgment
 
 export const commandHelp: Record<string, CommandHelp> = {
   setup: { group: 'Start here', summary: 'Check your machine, install the agent skills, and start a workspace, one confirmed step at a time.', usage: ['setup [--target <directory>] [--workspace <directory>]'], notes: ['Safe to rerun: completed steps are skipped.', 'Without a terminal it only reports and never writes.'] },
-  next: { group: 'Start here', summary: 'Show the next step and run it when it needs no input or confirmation.', usage: ['next'], notes: ['Runs map init, task assign and task begin by itself, and code, task and performance reviews. Reviews ask a model.'] },
+  next: { group: 'Start here', summary: 'Show the next step and run it when it needs no input or confirmation.', usage: ['next'], notes: ['Runs map init, task assign and task begin by itself, and code, task and performance reviews. Reviews ask a model.', 'Also shows an advisory block: which competencies to look at first and why. It is derived, not evidence, and gates nothing.'] },
   status: { group: 'Start here', summary: 'Show the workspace, current track and project, standing, and the next step.', usage: ['status'] },
   help: { group: 'Start here', summary: 'Show this overview, or the help for one command.', usage: ['help [<command>]', '<command> --help'] },
   init: { group: 'Workspace', summary: 'Create a workspace after you review and type "initialize".', usage: ['init [--name <display name>] [--goal <goal> ...] [--assistance-max <0-7>] [--operation-id <OP-UUID>]'], notes: ['Prompts for any missing input when run in a terminal.'] },

@@ -32,6 +32,12 @@ test('packed npm executable installs offline and supports the complete terminal 
   const installed = spawnSync('npm', ['install', '--offline', '--ignore-scripts', '--no-audit', '--no-fund', '--prefix', prefix, path.join(temporary, info.filename)], { encoding: 'utf8', env: npmEnv });
   assert.equal(installed.status, 0, `${installed.stderr}\nPopulate this npm cache with npm install/ci before running the offline package test.`);
   const executable = path.join(prefix, 'node_modules/.bin/noetherkin');
+  // An installed copy (not a checkout) must list and install the skills; the manifest ships in the tarball.
+  const listed = spawnSync(executable, ['skills', 'list', '--json'], { cwd: temporary, encoding: 'utf8' });
+  assert.equal(listed.status, 0, listed.stderr + listed.stdout); assert.equal(JSON.parse(listed.stdout).data.skills.length, manifest.skills.length);
+  const skillTarget = path.join(temporary, 'skill-target'); fs.mkdirSync(skillTarget);
+  const skillInstall = spawnSync(executable, ['skills', 'install', '--host', 'generic', '--target', skillTarget, '--skill', 'onboarding', '--json'], { cwd: temporary, encoding: 'utf8' });
+  assert.equal(skillInstall.status, 0, skillInstall.stderr + skillInstall.stdout);
   const root = path.join(temporary, 'learner-workspace'); fs.mkdirSync(root);
   const denied = spawnSync('python3', [terminal, process.execPath, executable, root, 'cancel'], { encoding: 'utf8', timeout: 20000 });
   assert.equal(denied.status, 0, denied.stderr);
