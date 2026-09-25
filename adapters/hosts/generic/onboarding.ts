@@ -5,7 +5,7 @@ import { proposeInit, type InitProposal, type InitRequest } from '../../../core/
 import { inspectWorkspace } from '../../../core/commands.js';
 import { canonical, diagnostic, Failure, requireThat, sha256, shellQuote, validId, type ObjectValue } from '../../../core/common.js';
 import { parse } from '../../../core/parsing.js';
-import { digest, exists, read, runtime, safePath, statePath, type Runtime } from '../../../core/storage.js';
+import { advisoryDirectory, digest, exists, read, runtime, safePath, statePath, type Runtime } from '../../../core/storage.js';
 import { listTracks } from '../../../core/tracks.js';
 import type { CapabilityDiagnostic, CapabilityResult, HostCapabilityProfile } from './contract.js';
 import { capabilityHostContractVersion } from './contract.js';
@@ -48,6 +48,7 @@ function stateDigests(root: string, rt: Runtime): Record<string, string | null> 
   const walk = (directory: string): void => {
     for (const entry of rt.fs.readdirSync(safePath(root, directory, rt), { withFileTypes: true })) {
       const relative = `${directory}/${entry.name}`;
+      if (relative === advisoryDirectory) continue;
       if (entry.isDirectory()) walk(relative);
       else if (entry.isFile()) entries.push([relative, digest(root, relative, rt)!]);
     }

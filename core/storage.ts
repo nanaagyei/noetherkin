@@ -13,6 +13,8 @@ export interface Runtime {
 }
 export const runtime: Runtime = { fs, now: () => new Date().toISOString(), id: p => `${p}-${randomUUID()}`, boundary: () => {} };
 export const statePath = (relative: string): string => `.apprenticeship/${relative}`;
+/** Derived, deletable files live here; they are never canonical state and never pin a proposal. */
+export const advisoryDirectory = statePath('advisory');
 const heldLocks = new Map<string, string>();
 export function assertLock(root: string, rt = runtime): void {
   const token = heldLocks.get(root);

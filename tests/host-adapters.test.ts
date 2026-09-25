@@ -110,6 +110,18 @@ test('handoffs reject tampering, workspace changes, and mismatched roots without
   assert.throws(() => validateOnboardingHandoff(initialized, track), /file set changed/);
 });
 
+test('a derived advisory file does not stale a prepared onboarding handoff', async t => {
+  const adapter = new GenericCapabilityHostAdapter(); const root = workspace(t);
+  const init = decodeOnboardingHandoff(token(await adapter.invoke({ capability_id: 'onboarding', workspace: root, input })));
+  publishInit(root, init.input.proposal, bindApprovedInit(root, init.input.proposal, true));
+  const track = decodeOnboardingHandoff(token(await adapter.invoke({ capability_id: 'onboarding', workspace: root, input: { track_id: 'backend-engineering' } })));
+  fs.mkdirSync(path.join(root, '.apprenticeship/advisory')); fs.writeFileSync(path.join(root, '.apprenticeship/advisory/attention.yaml'), 'derived: true\n');
+  validateOnboardingHandoff(root, track);
+  fs.writeFileSync(path.join(root, '.apprenticeship/advisory/attention.yaml'), 'derived: changed\n');
+  validateOnboardingHandoff(root, track);
+  assert.ok(!Object.keys(track.expected_state_digests).some(file => file.includes('advisory')));
+});
+
 test('a handoff token is proposal-only outside a direct terminal', async t => {
   const root = workspace(t); const adapter = new GenericCapabilityHostAdapter();
   const result = await adapter.invoke({ capability_id: 'onboarding', workspace: root, input });

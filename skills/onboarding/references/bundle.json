@@ -200,8 +200,8 @@
     {
       "source": "skill-pack/runtime.md",
       "target": "references/runtime.md",
-      "source_sha256": "bd8b73fca6730569a440731609229787d30e931c4e1a5c9f08e6fa9767211774",
-      "bundled_sha256": "971346dc551b67c54ab2b46162bbb16274da77058d547f54a29b983bf5c089a2"
+      "source_sha256": "70e36fd8974897d8e85015252b0164d7576d00503f5fcad9f3e09f01b94ea6a9",
+      "bundled_sha256": "4d5057aef0507bc358c2877127b052e35338b3624b96d7d53c5955d3d5515672"
     },
     {
       "source": "skill-pack/proposals.md",
