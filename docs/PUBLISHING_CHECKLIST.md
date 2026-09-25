@@ -11,7 +11,7 @@ This is the release gate for Noetherkin's public repository. Complete the sectio
 | Security automation | Pre-publication verified | The main ruleset and CI are active. Public CodeQL, dependency review, secret scanning, and push protection require the later visibility change and another verification pass. |
 | npm name | Not applicable | ACP-012 retired registry publication. The name is deliberately unclaimed. |
 | License | Complete | Apache-2.0 is declared in `package.json`, linked from the README, and included as `LICENSE`. |
-| GitHub publication | **Blocked** | Cleaned history is on `main` and `release/dev`. `refs/pull/1`, `/2` and `/3` are no longer advertised by the remote and the pull requests no longer list, so the ref half appears complete. Awaiting GitHub Support confirmation that cached views are also purged. |
+| GitHub publication | Ready for visibility change | Cleaned history is on `main` and `release/dev`. GitHub Support confirmed the pull request 1-3 purge (owner-confirmed). Making the repository public is the remaining owner action. |
 | Release identity | Not applicable | No registry publication, so no npm owner, trusted publisher or release-environment approval is required. |
 | Brand rights | Confirmed | Owner completed name clearance and confirmed the right to distribute the Noetherkin logo assets. |
 
@@ -31,7 +31,7 @@ The source repository is published under Apache-2.0. There is no npm publication
 
 ## 2. Create and configure the GitHub repository
 
-- [ ] Ask [GitHub Support](https://support.github.com/) to dereference affected pull requests 1-3, remove cached views, and garbage-collect the old objects.
+- [x] Ask [GitHub Support](https://support.github.com/) to dereference affected pull requests 1-3, remove cached views, and garbage-collect the old objects.
 - [ ] Make the repository public only after GitHub Support confirms that purge is complete.
 - [x] Configure package metadata for `git+https://github.com/nanaagyei/noetherkin.git`.
 - [x] Update local `origin` to `https://github.com/nanaagyei/noetherkin.git` and verify it.

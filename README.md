@@ -182,7 +182,7 @@ These checks establish bounded structural and runtime properties. They do not pr
 | [Portable skills](docs/skills.md) | Installation, packaging, and skill boundaries |
 | [Contributor guide](CONTRIBUTING.md) | Development and architecture-change process |
 | [Security review](docs/SECURITY_REVIEW.md) | Release threat boundaries, controls, and residual findings |
-| [Publishing checklist](docs/PUBLISHING_CHECKLIST.md) | Repository, npm, security, and release gates |
+| [Publishing checklist](docs/PUBLISHING_CHECKLIST.md) | Repository, security, and release gates |
 
 ## Contributing
 

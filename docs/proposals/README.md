@@ -48,8 +48,8 @@ Every proposal must contain, in this order:
 4. **Rejected alternatives**: at least one, each with the tradeoff that caused the rejection.
 5. **Version impact**: schema identifiers, catalog versions and wire protocol versions affected.
 6. **Migration impact**: what happens to existing workspaces, and what is preserved byte-for-byte.
-7. **Conformance**: named new cases. New behavioral cases continue from `CF-33`; new failure and repair cases
-   continue from `FR-29`. Verify against `docs/architecture/conformance.md` before assigning IDs, because those
+7. **Conformance**: named new cases. New behavioral cases continue from `CF-52`; new failure and repair cases
+   continue from `FR-54` (IDs held by a staged proposal, such as ACP-014's, stay reserved). Verify against `docs/architecture/conformance.md` before assigning IDs, because those
    ranges move.
 8. **Open questions**: what this proposal deliberately leaves unresolved.
 
