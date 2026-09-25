@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { canonical, encode, Failure, requireThat, sha256, type ObjectValue } from './common.js';
+import { canonical, encode, Failure, requireThat, sha256, shellQuote, type ObjectValue } from './common.js';
 import { parse } from './parsing.js';
 import { catalogs, collect, inspectRecords, schemaFor } from './validation.js';
 import { digest, durable, exists, read, runtime, safePath, statePath, type Runtime } from './storage.js';
@@ -10,6 +10,7 @@ import { bindApprovedTransaction, makeTransaction, publishTransaction, type Acto
 import { contextDigest, validateRoleOutput, type RoleAdapter, type RoleInvocationResult } from './adapters.js';
 import { inspectSimulationSemantics, safeInvestigationGlob } from './semantics.js';
 import { forgePack, packOnlyFields, upstreamPack } from './packs.js';
+import { runnablePaths } from './tracks.js';
 
 const assets = fileURLToPath(new URL('../../', import.meta.url));
 const common = { schema_version: '3.0', data_class: 'live' };
@@ -506,14 +507,35 @@ export async function performanceReview(root: string, adapter: RoleAdapter, rt: 
   return { outcome: 'success', ...publish(root, 'manager', 'performance-review', profile.learner_id, { task_id: task.id, transcript }, new Map([[statePath(`reviews/performance/${id}.yaml`), encode(review)]]), [id], rt), review_id: id, review_outcome: result.output.outcome, findings: review.findings, next_task_preview: nextTaskPreview(root, task, rt) };
 }
 
+/** The exact command a learner can paste: program name, arguments and the resolved workspace. */
+export function runnableCommand(root: string, command: string | null): string | null {
+  return command === null ? null : `noetherkin ${command} --workspace ${shellQuote(root)}`;
+}
+
+/** How to bind a runnable path: forges start in a new directory, upstream projects are cloned into the workspace. */
+function selectCommand(path: ObjectValue): string {
+  return path.kind === 'forge' ? `project select ${path.id} --source ${path.id}` : `project select ${path.id} --clone-to source/${path.id}`;
+}
+
+function projectSelection(trackId: string): ObjectValue {
+  const candidates: ObjectValue[] = runnablePaths(trackId).map(path => ({ ...path, command: selectCommand(path) }));
+  if (!candidates.length) return { phase: 'PROJECT SELECTION', command: `projects --track ${trackId}`, candidates, explanation: `No bundled task pack targets ${trackId} yet. Attach any recommended project and use the portable task-assignment skill, or run \`noetherkin forges\` to pick a forge from another track.` };
+  return { phase: 'PROJECT SELECTION', command: candidates[0]!.command, candidates, explanation: `${candidates[0]!.name} has a runnable task pack for this track. Other runnable options are listed; \`projects --track ${trackId}\` shows every recommendation.` };
+}
+
 export function nextAction(root: string, rt: Runtime = runtime): ObjectValue {
+  const action = phaseAction(root, rt);
+  return { ...action, run: runnableCommand(root, action.command) };
+}
+
+function phaseAction(root: string, rt: Runtime): ObjectValue {
   const profile = record(root, 'profile.yaml', rt); const track = record(root, 'current-track.yaml', rt);
-  if (!track.track_id) return { phase: 'TRACK SELECTION', command: 'tracks' };
+  if (!track.track_id) return { phase: 'TRACK SELECTION', command: 'track select <track-id>', explanation: 'Choose a track. `noetherkin tracks` lists them.' };
   if (profile.onboarding !== 'complete') return { phase: 'ONBOARD', command: 'onboard' };
   if (track.alignment_status !== 'aligned') return { phase: 'TRACK ALIGNMENT', command: 'track align' };
-  const selection = record(root, 'current-project.yaml', rt); if (!selection.project_id) return { phase: 'PROJECT SELECTION', command: `projects --track ${track.track_id}` };
+  const selection = record(root, 'current-project.yaml', rt); if (!selection.project_id) return projectSelection(track.track_id);
   const templates = packTemplates(root, rt);
-  if (!templates.length) return { phase: 'PORTABLE TASK ASSIGNMENT', command: null, project_id: selection.project_id, handoff: 'Use the portable task-assignment skill; this project has no bundled curated task pack.' };
+  if (!templates.length) return { phase: 'PORTABLE TASK ASSIGNMENT', command: null, project_id: selection.project_id, handoff: 'Use the portable task-assignment skill; this project has no bundled curated task pack.', alternatives: runnablePaths(track.track_id).map(path => ({ ...path, command: selectCommand(path) })) };
   // An upstream codebase is mapped before its first task. A forge project starts empty, so there is nothing to map.
   if (selection.kind !== 'forge' && !exists(safePath(root, mapPath, rt), rt)) return { phase: 'CREATE CODEBASE MAP', command: 'map init' };
   if (selection.kind !== 'forge' && mapStatus(root, rt).status === 'incomplete') return { phase: 'CREATE CODEBASE MAP', command: 'map check' };
@@ -544,6 +566,6 @@ export async function advanceNext(root: string, adapter: RoleAdapter, rt: Runtim
   else if (navigation.command === 'review code') result = await codeReview(root, adapter, rt);
   else if (navigation.command === 'review task') result = await taskReview(root, adapter, rt);
   else if (navigation.command === 'review performance') result = await performanceReview(root, adapter, rt);
-  if (!result) return { ...navigation, invoked: false, explanation: 'This step needs learner input or explicit confirmation; run the shown command.' };
+  if (!result) return { explanation: 'This step needs learner input or explicit confirmation; run the shown command.', ...navigation, invoked: false };
   return { phase: navigation.phase, command: navigation.command, invoked: true, result, next: nextAction(root, rt) };
 }

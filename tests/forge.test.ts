@@ -44,7 +44,7 @@ test('CF-42: selecting a forge project binds an empty learner directory with no 
   assert.match(String(result.status_note), /draft/);
   assert.equal(inspectWorkspace('validate', root).outcome, 'success');
   assert.equal(selectForge(root, 'eval-ledger', 'source').outcome, 'no-change');
-  assert.deepEqual(nextAction(root), { phase: 'ASSIGN FIRST TASK', command: 'task assign' }, 'no codebase map is required before the first forge task');
+  assert.deepEqual(nextAction(root), { phase: 'ASSIGN FIRST TASK', command: 'task assign', run: `noetherkin task assign --workspace ${root}` }, 'no codebase map is required before the first forge task');
 });
 
 test('FR-44: a forge selection is never cloned and never lands on existing code', async t => {

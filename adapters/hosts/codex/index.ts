@@ -11,7 +11,7 @@ export class CodexCapabilityHostAdapter extends GenericCapabilityHostAdapter {
       degradation: 'If skill discovery or isolation is unavailable, return the generic proposal and terminal handoff.'
     });
   }
-  protected override targetRoot(capabilityId: string): string { return `.codex/skills/${capabilityId}`; }
+  protected override targetRoot(capabilityId: string): string { return `.agents/skills/${capabilityId}`; }
   protected override invocationSurface(capabilityId: string): string { return `$${capabilityId}`; }
   override probe(): HostProbe {
     const result = spawnSync(this.binary, ['--version'], { encoding: 'utf8', timeout: 5_000 });

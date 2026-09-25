@@ -130,7 +130,7 @@ test('every portable skill projects with identical bytes into each host location
   const manifest = JSON.parse(fs.readFileSync(path.join(repository, 'skill-pack/manifest.json'), 'utf8'));
   assert.equal(ids.length, manifest.skills.length);
   const adapters = [new GenericCapabilityHostAdapter(), new CodexCapabilityHostAdapter('missing'), new ClaudeCodeCapabilityHostAdapter('missing')];
-  const roots = ['skills', '.codex/skills', '.claude/skills'];
+  const roots = ['skills', '.agents/skills', '.claude/skills'];
   const surfaces = ['capability:', '$', '/'];
   for (const id of ids) {
     const projections = adapters.map(adapter => adapter.project(id));
@@ -180,7 +180,7 @@ test('skills CLI lists capabilities and installs them for a named host', t => {
   assert.ok(skills.every((skill: { description: string }) => skill.description.length > 0));
   const install = spawnSync(process.execPath, [cli, 'skills', 'install', '--host', 'codex', '--skill', 'teach', '--target', target, '--json'], { encoding: 'utf8' });
   assert.equal(install.status, 0, install.stdout);
-  assert.ok(fs.existsSync(path.join(target, '.codex/skills/teach/SKILL.md')));
+  assert.ok(fs.existsSync(path.join(target, '.agents/skills/teach/SKILL.md')));
   assert.equal(spawnSync(process.execPath, [cli, 'skills', 'install', '--host', 'cursor', '--target', target, '--json'], { encoding: 'utf8' }).status, 2);
   assert.equal(spawnSync(process.execPath, [cli, 'status', '--host', 'codex', '--json'], { encoding: 'utf8', cwd: target }).status, 2);
 });

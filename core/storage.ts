@@ -81,7 +81,7 @@ export function resolveWorkspace(input: string | undefined, initialize = false, 
   while (true) {
     if (exists(path.join(directory, '.apprenticeship'), rt) || exists(path.join(directory, '.apprenticeship.lock'), rt)) return directory;
     const parent = path.dirname(directory);
-    if (parent === directory) throw new Failure('WORKSPACE_NOT_FOUND', process.cwd(), 'Run init in an existing workspace directory or pass --workspace.');
+    if (parent === directory) throw new Failure('WORKSPACE_NOT_FOUND', process.cwd(), 'No Noetherkin workspace here or in any parent directory. Run `noetherkin setup` (or `noetherkin init`) to create one, or pass --workspace <directory>.');
     directory = parent;
   }
 }

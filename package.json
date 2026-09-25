@@ -17,6 +17,7 @@
   "files": ["dist/core", "dist/cli", "dist/adapters/runtime", "dist/adapters/hosts", "schemas", "catalog", "tasks", "skills", "docs/skills.md", "docs/cli.md", "docs/adapters.md", "docs/adapter-compatibility.md", "docs/bootstrap-runtime.md", "docs/deferred-validation.md", "docs/architecture", "CHANGELOG.md", "SECURITY.md", "NOTICE", "FOUNDATION_V1.md", "PROJECT_CHARTER.md", "noetherkin-logo.png", "noetherkin-logo-light.png"],
   "scripts": {
     "build": "tsc",
+    "prepare": "npm run build",
     "validate:foundation": "python3 evaluations/validate_foundation.py",
     "validate:freeze": "python3 evaluations/validate_freeze.py",
     "verify": "npm test && npm run skills:check && npm run validate:foundation && npm run validate:freeze",
