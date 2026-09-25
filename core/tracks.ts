@@ -124,3 +124,22 @@ export async function alignTrack(root: string, confirmed: boolean, adapter: Role
   const finalization = publish(root, 'learner', 'align-track', track.id, { assessment_id:assessment.id, review_id:review.id, scope_agreement:scopeArtifact }, new Map([[statePath('profile.yaml'),encode(profile)],[statePath('current-track.yaml'),encode(current)]]), [track.id], validate, rt);
   return { outcome:'success', assessment_id:assessment.id, review_id:review.id, assessment_publication:assessmentPublication, review_publication:reviewPublication, finalization, track:current };
 }
+
+/**
+ * What a learner on a track can run end to end in the CLI today: forges aligned to the track, then the track's
+ * recommended projects that carry a curated task pack. Derived from catalog data only; there is no per-track or
+ * per-project branch. An empty list means the track relies on the portable task-assignment skill.
+ */
+export function runnablePaths(trackId: string): ObjectValue[] {
+  const { tracks, projects, forges } = catalogs();
+  const track = tracks.find(item => item.id === trackId);
+  requireThat(track, 'TRACK_NOT_FOUND', trackId, 'Unknown track ID.');
+  const aligned = forges.filter(forge => forge.status !== 'deprecated' && forge.track_alignment.includes(trackId))
+    .map(forge => ({ kind: 'forge', id: forge.id, name: forge.name, status: forge.status, stage: null, languages: forge.primary_languages, minimum_level: forge.recommended_minimum_level, task_packs: forge.task_packs }));
+  const curated: ObjectValue[] = [];
+  for (const stage of ['early', 'intermediate', 'advanced']) for (const id of track.recommended_projects[stage] as string[]) {
+    const project = projects.find(item => item.id === id)!;
+    if (project.support?.attachable && project.support?.task_packs?.length && !curated.some(item => item.id === id)) curated.push({ kind: 'project', id, name: project.name, status: project.status, stage, languages: project.primary_languages, minimum_level: project.recommended_minimum_level, task_packs: project.support.task_packs });
+  }
+  return [...aligned, ...curated];
+}

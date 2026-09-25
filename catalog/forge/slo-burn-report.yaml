@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.0",
+  "data_class": "live",
+  "id": "slo-burn-report",
+  "name": "SLO Burn Report",
+  "description": "A command-line tool that reads request logs, computes service level indicators against a declared objective, reports the remaining error budget, and raises multiwindow burn-rate alerts that an on-call engineer can act on.",
+  "status": "draft",
+  "track_alignment": [
+    "site-reliability-engineering",
+    "observability-engineering",
+    "devops-engineering",
+    "platform-engineering"
+  ],
+  "competencies": [
+    "core.implementation",
+    "core.testing",
+    "core.debugging",
+    "core.git",
+    "core.technical-communication",
+    "core.ownership",
+    "python.language",
+    "python.testing",
+    "production.metrics",
+    "production.observability",
+    "observability.instrumentation",
+    "sre.slo-error-budgets",
+    "sre.incident-management"
+  ],
+  "recommended_minimum_level": "E0",
+  "ideal_level": "E1",
+  "primary_languages": [
+    "Python"
+  ],
+  "technologies": [
+    "Standard library",
+    "pytest"
+  ],
+  "external_services": [],
+  "problem": "A team says its service should be available 99.9% of the time, and then pages on every spike in the error rate. The objective and the alerting have nothing to do with each other. Short bursts page someone at night for errors that barely touch the monthly budget, while a slow leak that will exhaust the budget in a week never pages at all. When someone does look, they read raw graphs and argue about whether things are bad, because nobody can say how much of the budget is left, how fast it is burning, or whether the tool itself saw all the data. The failure is not a lack of metrics. It is that the objective is never turned into a number anyone can act on.",
+  "users": [
+    {
+      "who": "An on-call engineer deciding whether to act",
+      "needs": "To know whether the service is burning its error budget fast enough to justify waking someone, and to trust that the answer covers all the data."
+    },
+    {
+      "who": "A team deciding whether to ship risky changes this week",
+      "needs": "To see how much error budget remains in the current window and how it was spent."
+    }
+  ],
+  "success_criteria": [
+    {
+      "id": "SC-1",
+      "criterion": "The objective, its indicator definition and its window are declared in a data file. Changing the target or the latency threshold requires no code change.",
+      "verifiable_by": "Edit the objective file, run the tool on the same logs, and observe a different budget result. No source file was edited."
+    },
+    {
+      "id": "SC-2",
+      "criterion": "The report states the indicator value, the error budget consumed and remaining for the window, and the counts of good, bad, excluded and unparseable events.",
+      "verifiable_by": "Run the tool on a log with a known composition and check every count by hand."
+    },
+    {
+      "id": "SC-3",
+      "criterion": "A window with no valid events is reported as having no data, never as meeting or missing the objective.",
+      "verifiable_by": "Run the tool on an empty log and on a log whose events all fall outside the window."
+    },
+    {
+      "id": "SC-4",
+      "criterion": "Burn-rate alerts use at least two windows per severity, so a short burst alone does not page and a sustained burn does.",
+      "verifiable_by": "Replay a synthetic short spike and a synthetic slow leak. The spike does not raise a paging alert; the leak does, at a time the learner predicted before running."
+    },
+    {
+      "id": "SC-5",
+      "criterion": "The tool reports on its own input: lines read, lines rejected with a reason, and the time range actually covered.",
+      "verifiable_by": "Feed a log with malformed lines and a gap. The report names both."
+    },
+    {
+      "id": "SC-6",
+      "criterion": "Someone who did not write it can run it against the bundled synthetic logs and decide from the output whether to page.",
+      "verifiable_by": "Hand the repository to another person with only the README. They make and justify the decision."
+    }
+  ],
+  "non_goals": [
+    "A metrics database, dashboard, agent or long-running service. The tool reads files and exits.",
+    "Sending pages or notifications. The tool decides; a person or another system delivers.",
+    "Anomaly detection or forecasting beyond the declared burn-rate rules.",
+    "Distributed tracing or log shipping."
+  ],
+  "operational_requirements": {
+    "failure_modes": [
+      {
+        "failure": "Some log lines are malformed or missing required fields.",
+        "required_behavior": "Count and report them with a reason, exclude them from the indicator, and refuse to produce a verdict if the rejected share exceeds a declared threshold."
+      },
+      {
+        "failure": "Log lines arrive out of time order or overlap between files.",
+        "required_behavior": "Compute windows by event time, not by read order, and report duplicate events rather than counting them twice."
+      },
+      {
+        "failure": "The logs do not cover the whole window.",
+        "required_behavior": "Report the covered range and the gap, and label the verdict as partial."
+      },
+      {
+        "failure": "The objective file is malformed or its target is outside 0 to 100.",
+        "required_behavior": "Refuse to run, name the problem, and produce no report."
+      }
+    ],
+    "observability": [
+      "A one-line summary per run: indicator value, budget remaining, alert state, and the covered time range.",
+      "Counts of good, bad, excluded and rejected events, each reported separately.",
+      "The alert decision names which windows exceeded which burn-rate thresholds."
+    ],
+    "rollback": "The tool keeps no state between runs. Every report is recomputed from logs and the objective file, so reverting the tool or the objective and rerunning restores an earlier result. The operational note documents that changing the objective changes past reports too, and that a report cited in an incident record should be kept alongside the objective file it was computed from.",
+    "documentation": [
+      "A README with a quickstart that produces a report from the bundled synthetic logs in under a minute.",
+      "The objective file format and the indicator definition, including which events are excluded and why.",
+      "A runbook entry explaining what each alert means and what the on-call engineer should check first."
+    ]
+  },
+  "context_budget": {
+    "source_tokens_target": 12000,
+    "excludes": [
+      "tests",
+      "lockfiles",
+      "generated files",
+      "the synthetic log generator and its output"
+    ],
+    "rationale": "A system the learner can hold in context is a system the learner can hold in their head. The budget exists to force scope discipline on this specification, not to constrain the learner's style. This number is a starting target and should be revised against ACP-016 measurements."
+  },
+  "prerequisites": [
+    "Can run a Python program and install a package into a virtual environment.",
+    "Can read a structured log format such as JSON lines.",
+    "Has used a test runner at least once, even without writing tests before."
+  ],
+  "task_packs": [
+    "slo-burn-report-core"
+  ],
+  "caveats": [
+    "This is a first-party specification, not an upstream project. Completing it establishes no upstream contribution, maintainer relationship or endorsement.",
+    "The specification is owned by this repository. No solution, reference implementation or partial source is shipped with it.",
+    "All logs are synthetic and generated by the learner. The incident in the final task is a simulated exercise, not operation of a real service, and must be described as such.",
+    "Evidence derived from this work describes learner-authored software produced inside a simulated engineering process. The surrounding review, assignment and incident workflows are simulated and must be qualified as such.",
+    "The context budget is an authoring constraint on this specification and an advisory target for the learner. It is not an acceptance criterion and no task fails for exceeding it."
+  ],
+  "sources": [],
+  "checked_at": "2026-09-24T00:00:00Z"
+}

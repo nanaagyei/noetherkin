@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "id": "accessible-data-table-03-async-filter",
+  "forge_id": "accessible-data-table",
+  "pack_id": "accessible-data-table-core",
+  "sequence": 3,
+  "type": "PRODUCT",
+  "title": "Filter through an asynchronous data source without showing stale results",
+  "problem": "Once rows come from an asynchronous source, each filter keystroke can start a request. Responses arrive in any order, and a component that renders whatever arrives last will show results for a filter the user has already changed. The loading, empty and failed cases then collapse into one blank table.",
+  "context": "Builds on the sortable table. The caller now supplies a data source function that takes the current query and returns a promise of rows.",
+  "impact": "This is the state model the whole component depends on. An error here produces tables that are wrong in ways nobody notices, which is worse than tables that visibly fail.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-ownership",
+      "criterion": "The design states which state the component owns (query, sort, load status, rows) and which the caller owns, and every state transition is listed."
+    },
+    {
+      "id": "AC-stale",
+      "criterion": "A response for a superseded request is never rendered, whatever order responses arrive in."
+    },
+    {
+      "id": "AC-states",
+      "criterion": "Loading, empty, error and populated are distinct states, both visually and programmatically. An error is never shown as an empty table."
+    },
+    {
+      "id": "AC-retry",
+      "criterion": "After an error the controls remain usable and a retry reissues the current request."
+    },
+    {
+      "id": "AC-announce",
+      "criterion": "A polite live region announces the result count after a filter or sort settles, not on every keystroke."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests use a controllable fake data source to resolve responses out of order and to reject, and cover every listed transition. All pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains how staleness is detected, one rejected alternative, and what happens to an in-flight request when the component is removed from the page."
+    }
+  ],
+  "constraints": [
+    "The component itself uses no runtime dependencies. TypeScript, a test runner and a DOM implementation for tests are the only development dependencies.",
+    "No state management library. Timing in tests is controlled by the test, not by real timers or sleeps.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "frontend.state-management",
+    "core.implementation"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.debugging",
+    "frontend.accessibility"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "data loading",
+      "filter",
+      "component state"
+    ],
+    "description": "Component state, its transitions, and the asynchronous boundary."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "Which request is current, and what makes that knowable when a response arrives",
+    "Whether debouncing solves staleness or only makes it rarer",
+    "How to make asynchronous ordering deterministic inside a test"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design."
+  ],
+  "documentation_requirements": [
+    "Record the state ownership table and transition list in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Measure it at ten thousand rows and make it usable by someone who did not write it",
+    "summary": "Budgeted performance at scale, the example page, the README and an outside check."
+  }
+}

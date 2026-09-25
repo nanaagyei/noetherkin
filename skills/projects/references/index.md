@@ -20,6 +20,7 @@ Generated from the protocol 2.0 source manifest. Read the runtime guide and the 
 | `docs/architecture/judgment-validity.md` | [judgment-validity.md](judgment-validity.md) |
 | `docs/architecture/architectural-invariants.md` | [architectural-invariants.md](architectural-invariants.md) |
 | `docs/architecture/conformance.md` | [conformance.md](conformance.md) |
+| `docs/architecture/selection-model.md` | [selection-model.md](selection-model.md) |
 | `contracts/README.md` | [contract-README.md](contract-README.md) |
 | `schemas/apprenticeship-config.schema.json` | [apprenticeship-config.schema.json](apprenticeship-config.schema.json) |
 | `schemas/learner-profile.schema.json` | [learner-profile.schema.json](learner-profile.schema.json) |
@@ -33,6 +34,7 @@ Generated from the protocol 2.0 source manifest. Read the runtime guide and the 
 | `schemas/review.schema.json` | [review.schema.json](review.schema.json) |
 | `schemas/forge.schema.json` | [forge.schema.json](forge.schema.json) |
 | `schemas/competency-state.schema.json` | [competency-state.schema.json](competency-state.schema.json) |
+| `schemas/attention-advisory.schema.json` | [attention-advisory.schema.json](attention-advisory.schema.json) |
 | `catalog/competencies.yaml` | [competencies.yaml](competencies.yaml) |
 | `catalog/levels.yaml` | [levels.yaml](levels.yaml) |
 | `skill-pack/runtime.md` | [runtime.md](runtime.md) |

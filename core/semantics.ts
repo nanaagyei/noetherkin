@@ -3,6 +3,7 @@ import { canonical, diagnostic, requireThat, sha256, type Diagnostic, type Objec
 import { parse } from './parsing.js';
 import { exists, read, runtime, safePath, statePath, type Runtime } from './storage.js';
 import { transactionArtifactPath, validateTransactionEnvelope } from './transactions.js';
+import { templateById } from './packs.js';
 
 const roles = ['learner', 'onboarding-coordinator', 'project-curator', 'peer-engineer', 'team-lead', 'manager'];
 const allowed: Record<string, string[]> = {
@@ -120,6 +121,10 @@ export function inspectSimulationSemantics(records: Map<string, ObjectValue>, ro
     requireThat(value.author.role === 'team-lead' && value.assigned_by.role === 'team-lead', 'AUTHORITY_INVALID', file, 'Task creation and assignment require the team lead.');
     // ACP-016 FR-50: investigation globs are source-relative and may not climb out of the source root.
     for (const glob of value.investigation_paths ?? []) requireThat(safeInvestigationGlob(glob), 'UNSAFE_PATH', file, `Investigation path ${JSON.stringify(glob)} must be relative to the source root without traversal.`);
+    // FR-41: a task instantiated from a shipped template claims exactly the competencies that template exercises.
+    const origin = /^Instantiated curated template (\S+)\.$/.exec(value.transitions[0]?.reason ?? '')?.[1];
+    const template = origin ? templateById(origin) : undefined;
+    if (template) for (const key of ['primary_competencies', 'secondary_competencies']) requireThat(canonical([...value[key]].sort()) === canonical([...template[key]].sort()), 'SCOPE_FABRICATED', file, `Task ${key} must match template ${origin}; a task may not claim competencies its work does not exercise.`);
     const original = originalTask(root, value.id, rt); if (original) for (const key of frozen) requireThat(canonical(value[key]) === canonical(original[key]), 'TASK_MUTATED', file, `Frozen task field ${key} changed after assignment.`);
     let previous = 'absent'; let previousAt = 0;
     for (const item of value.transitions) {

@@ -16,6 +16,9 @@ if mode == "onboard":
     command = [node, executable, "onboard", "--workspace", workspace,
                "--constraint", "Java 17 available", "--codex-bin", extra[1], "--json"]
     marker = b'Type "onboard"'
+elif mode == "handoff":
+    command = [node, executable, "adapter-handoff", "--workspace", workspace, "--handoff", extra[1], "--json"]
+    marker = b'to approve: '
 elif mode == "track":
     command = [node, executable, "track", "select", "backend-engineering", "--workspace", workspace, "--json"]
     marker = b'Type "select"'

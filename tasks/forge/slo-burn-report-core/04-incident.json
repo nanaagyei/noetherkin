@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "id": "slo-burn-report-04-incident",
+  "forge_id": "slo-burn-report",
+  "pack_id": "slo-burn-report-core",
+  "sequence": 4,
+  "type": "PRODUCT",
+  "title": "Run a simulated incident with the tool and make it operable by someone else",
+  "problem": "A tool that has only been run by its author on known data has never been used for its purpose. Under pressure, the on-call engineer needs to trust the tool's own view of its input, act on its alerts, and leave a record someone else can follow.",
+  "context": "Final task of the pack. The learner generates a synthetic incident, uses the tool to detect and reason about it, and records the exercise. The service and the incident are simulated and must be described as such.",
+  "impact": "This is the difference between an alerting script and something a team would put in front of an on-call rotation.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-self-telemetry",
+      "criterion": "The tool reports on itself in machine-readable form: lines read, rejected by reason, duplicates, covered time range and processing duration. The design names the operational question each field answers."
+    },
+    {
+      "id": "AC-incident-record",
+      "criterion": "A timestamped incident record for the simulated incident covers detection (which alert, when), diagnosis, the mitigation decision and how the remaining budget justified it, and follow-up actions."
+    },
+    {
+      "id": "AC-runbook",
+      "criterion": "A runbook entry for each alert says what it means, what to check first, and when not to trust the tool, for example a high rejection count."
+    },
+    {
+      "id": "AC-quickstart",
+      "criterion": "A person with only the README goes from clone to a report on the bundled synthetic logs in under a minute."
+    },
+    {
+      "id": "AC-outside-check",
+      "criterion": "Someone other than the learner reads a report and the runbook, decides whether to page, and justifies the decision. The result is recorded, including where they hesitated."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover the self-telemetry fields and still cover the earlier scenarios, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains one decision in the incident record they would make differently, and the first thing that breaks when log volume grows a hundredfold."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "The incident is simulated from synthetic logs. Describing it as a real outage is fabricated evidence.",
+    "AC-outside-check requires a real person. A simulated or model-performed walkthrough does not satisfy it, and recording one as satisfied is fabricated evidence.",
+    "Do not push to a remote, publish a package or deploy anything as part of this task."
+  ],
+  "primary_competencies": [
+    "sre.incident-management",
+    "core.ownership",
+    "core.technical-communication"
+  ],
+  "secondary_competencies": [
+    "observability.instrumentation",
+    "core.testing",
+    "core.implementation"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "self-telemetry",
+      "incident record",
+      "runbook"
+    ],
+    "description": "Operability of the whole tool and one simulated incident exercise."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "What the on-call engineer must know about the tool's input before trusting its verdict",
+    "Which timestamps an incident record needs to reconstruct the decision later",
+    "Where a first-time reader of the runbook hesitates, which is discovered by watching one"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design.",
+    "Perform the quickstart on a clean clone before claiming AC-quickstart."
+  ],
+  "documentation_requirements": [
+    "README quickstart, objective file format, runbook and the incident record.",
+    "Record the outside check result verbatim, including where the person hesitated."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": null,
+  "attested_criteria": [
+    "AC-outside-check"
+  ]
+}

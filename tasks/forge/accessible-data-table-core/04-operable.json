@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "id": "accessible-data-table-04-operable",
+  "forge_id": "accessible-data-table",
+  "pack_id": "accessible-data-table-core",
+  "sequence": 4,
+  "type": "PRODUCT",
+  "title": "Measure it at ten thousand rows and make it usable by someone who did not write it",
+  "problem": "The component works for its author with twenty rows. At ten thousand rows a keystroke can re-render every row and stall the page, and nobody else can embed it without reading its source.",
+  "context": "Final task of the pack. This is where the component becomes something another developer can adopt, and where its performance claim has to be measured rather than assumed.",
+  "impact": "An unmeasured performance claim and an undocumented component are both guesses. This task replaces them with a number and a README someone else has used.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-budget",
+      "criterion": "Before changing anything, the learner states a budget for one named interaction at ten thousand rows, such as a filter keystroke to rendered result, and how it will be measured."
+    },
+    {
+      "id": "AC-measure",
+      "criterion": "The bottleneck is identified by measurement in a real browser, and the measurement method is recorded so it can be rerun."
+    },
+    {
+      "id": "AC-improve",
+      "criterion": "A targeted change is validated by the same measurement before and after, and the recorded numbers show whether the budget is met. A change that misses the budget is reported as missing it."
+    },
+    {
+      "id": "AC-accessible-at-scale",
+      "criterion": "Any technique used for speed, such as rendering only visible rows, keeps the table semantics and keyboard behavior from earlier tasks, and the design says how that was checked."
+    },
+    {
+      "id": "AC-example",
+      "criterion": "A bundled example page embeds the component with a data source and at least ten thousand rows."
+    },
+    {
+      "id": "AC-ops-note",
+      "criterion": "An operations note covers a failing data source, stale responses, the measured budget and which option changes break an embedding page."
+    },
+    {
+      "id": "AC-outside-check",
+      "criterion": "Someone other than the learner embeds the component with their own data using only the README, and operates it with the keyboard alone. The result is recorded, including where they got stuck."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests still pass at the submitted revision, including the accessibility and staleness tests from earlier tasks."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the bottleneck found, one rejected optimization, and what will break first at one hundred thousand rows."
+    }
+  ],
+  "constraints": [
+    "The component itself uses no runtime dependencies. TypeScript, a test runner and a DOM implementation for tests are the only development dependencies.",
+    "AC-outside-check requires a real person. A simulated or model-performed walkthrough does not satisfy it, and recording one as satisfied is fabricated evidence.",
+    "Do not report a measurement that was not taken. A number without a recorded method does not satisfy AC-measure.",
+    "Do not push to a remote, publish a package or deploy anything as part of this task."
+  ],
+  "primary_competencies": [
+    "frontend.performance",
+    "core.ownership",
+    "core.technical-communication"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.implementation",
+    "core.debugging"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "rendering performance",
+      "documentation"
+    ],
+    "description": "Performance and operability of the whole component, not a new feature."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "Where the time actually goes, which is found with the browser's profiler rather than by guessing",
+    "Which optimizations preserve native table semantics and which quietly break them",
+    "Where a first-time integrator gets stuck, which is discovered by watching one"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design.",
+    "Rerun the recorded performance measurement on the submitted revision before claiming AC-improve."
+  ],
+  "documentation_requirements": [
+    "README embedding guide, the accessibility requirement, and the operations note.",
+    "Record the before and after measurements with their method, and the outside check result verbatim."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": null,
+  "attested_criteria": [
+    "AC-outside-check"
+  ]
+}

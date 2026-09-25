@@ -38,4 +38,17 @@ Do not publish the package, choose a license, push commits, submit PRs, or modif
 
 Report suspected vulnerabilities through the private process in [SECURITY.md](SECURITY.md), never through a public issue. Release preparation follows [docs/PUBLISHING_CHECKLIST.md](docs/PUBLISHING_CHECKLIST.md). Contributors must not add registry credentials, signing keys, learner records, or secrets to the repository or its fixtures.
 
-Every release-affecting change should update [CHANGELOG.md](CHANGELOG.md). `npm run release:check` is intentionally stricter than ordinary CI and remains blocked until the repository has a selected license and every public-release gate is satisfied.
+Every release-affecting change should update [CHANGELOG.md](CHANGELOG.md). `npm run release:check` is intentionally stricter than ordinary CI.
+
+### Versions and releases
+
+Feature and fix branches merge into `release/dev`. A pull request from `release/dev` into `main` must carry exactly one release label, which the **Release label** check enforces:
+
+| Label | Meaning | Bump |
+| --- | --- | --- |
+| `release:major` | A breaking change: state, protocol or CLI behavior a learner relies on changes incompatibly | `1.4.2` → `2.0.0` |
+| `release:minor` | A new feature that keeps existing workspaces and commands working | `1.4.2` → `1.5.0` |
+| `release:patch` | A bug fix with no new behavior | `1.4.2` → `1.4.3` |
+| `release:none` | Docs, tests or tooling only; no release | none |
+
+When it merges, the **Release** workflow computes the next version from the latest `v*` tag, stamps it into the package, reruns `release:check`, and publishes a GitHub release with `noetherkin.tgz` attached. A push to `main` with no pull request falls back to Conventional Commit subjects (`feat:` minor, `fix:`/`perf:` patch, `!` or `BREAKING CHANGE:` major). Tags are the version source of truth, so the `version` in `package.json` is not bumped by hand. A maintainer can also run the workflow manually with an explicit bump. See ADR-018.

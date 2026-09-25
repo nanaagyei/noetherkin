@@ -40,7 +40,7 @@ for path in sorted((ROOT / 'schemas').glob('*.schema.json')):
     schema = json.loads(path.read_text())
     Draft202012Validator.check_schema(schema)
     schemas[path.name.removesuffix('.schema.json')] = Draft202012Validator(schema, format_checker=FormatChecker())
-assert len(schemas) == 12
+assert len(schemas) == 13
 
 def schema_for(path):
     if path.parent.name == 'work': return 'task'
@@ -50,6 +50,7 @@ def schema_for(path):
     if path.parent.name == 'projects': return 'project'
     if path.parent.name == 'tracks': return 'track'
     if path.parent.name == 'forge': return 'forge'
+    if path.parent.name == 'advisory': return 'attention-advisory'
     return {'config.yaml':'apprenticeship-config', 'profile.yaml':'learner-profile',
             'current-project.yaml':'current-project', 'current-track.yaml':'current-track',
             'competencies.yaml':'competency-state'}[path.name]

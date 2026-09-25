@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "id": "slo-burn-report-02-objective-budget",
+  "forge_id": "slo-burn-report",
+  "pack_id": "slo-burn-report-core",
+  "sequence": 2,
+  "type": "PRODUCT",
+  "title": "Declare the objective and report the error budget honestly",
+  "problem": "An objective like 99.9% means nothing until someone decides which events count, what makes one good, and over what window. Those choices are usually implicit in dashboard queries. When they are implicit, two people compute two different budgets from the same logs, and an empty window quietly reports perfect availability.",
+  "context": "Builds on the accounted-for event stream. The objective now lives in a data file the team can review.",
+  "impact": "The error budget is the number every operational decision in the rest of this project is justified by. If its definition is ambiguous, every later alert inherits the ambiguity.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-declared",
+      "criterion": "The objective file declares the target, the window, the latency threshold, and which events are excluded from the indicator. It is validated before use and a bad file produces no report."
+    },
+    {
+      "id": "AC-indicator",
+      "criterion": "The indicator is good events over valid events for the window, where valid excludes the declared exclusions. The design justifies each exclusion, for example whether client errors count against the service."
+    },
+    {
+      "id": "AC-budget",
+      "criterion": "The report states budget consumed and remaining, as a fraction of the allowed bad events for the window."
+    },
+    {
+      "id": "AC-no-data",
+      "criterion": "A window with no valid events reports no data. It never reports the objective as met or missed."
+    },
+    {
+      "id": "AC-partial",
+      "criterion": "When logs do not cover the whole window, the verdict is labeled partial and the gap is reported."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover a met objective, a missed one, an empty window, a partial window, and a malformed objective file. All pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains one exclusion decision, the rejected alternative, and one way this indicator could look healthy while users are having a bad experience."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "Do not implement burn-rate alerting yet.",
+    "Every count in the report must be traceable to the accounting from the previous task.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "sre.slo-error-budgets",
+    "production.metrics"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "python.testing"
+  ],
+  "recommended_level": "E0",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "objective file",
+      "indicator",
+      "budget report"
+    ],
+    "description": "The objective definition and the budget computed from it."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "What a good event is for this service, and who should get to decide",
+    "What aggregation hides: how a single window average can conceal a bad hour",
+    "How to report the absence of data without implying health"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design."
+  ],
+  "documentation_requirements": [
+    "Document the objective file format and the indicator definition, including every exclusion and why."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Alert on burn rate across multiple windows",
+    "summary": "Page on sustained budget burn, not on every spike, and show which windows fired."
+  }
+}

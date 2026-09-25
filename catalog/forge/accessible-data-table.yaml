@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0",
+  "data_class": "live",
+  "id": "accessible-data-table",
+  "name": "Accessible Data Table",
+  "description": "A dependency-free TypeScript table component that renders tabular data with native semantics, sorts and filters from the keyboard, survives out-of-order asynchronous loads, and stays responsive at ten thousand rows.",
+  "status": "draft",
+  "track_alignment": [
+    "frontend-engineering",
+    "full-stack-engineering"
+  ],
+  "competencies": [
+    "core.implementation",
+    "core.testing",
+    "core.debugging",
+    "core.git",
+    "core.technical-communication",
+    "core.ownership",
+    "frontend.web-platform",
+    "frontend.accessibility",
+    "frontend.state-management",
+    "frontend.performance"
+  ],
+  "recommended_minimum_level": "E0",
+  "ideal_level": "E1",
+  "primary_languages": [
+    "TypeScript"
+  ],
+  "technologies": [
+    "DOM",
+    "node:test",
+    "A DOM implementation for tests, such as jsdom",
+    "A real browser for performance measurement"
+  ],
+  "external_services": [],
+  "problem": "Most internal tools show data in a table, and most of those tables are built from generic div elements with click handlers. They look right to a sighted mouse user and are unusable for everyone else: a screen reader announces a flat list of text, the sort control cannot be reached from the keyboard, and nothing says which column is sorted or in which direction. The same tables also fail quietly in two other ways. A filter typed quickly fires several requests, and whichever answer arrives last wins even when it answers an older question. At a few thousand rows every keystroke re-renders the whole table and the page stalls. None of this shows up in a demo with twenty rows and a mouse.",
+  "users": [
+    {
+      "who": "A person who navigates with a keyboard or a screen reader",
+      "needs": "To learn what the table contains, which column is sorted and how, and to change the sort or filter without a mouse."
+    },
+    {
+      "who": "A developer embedding the component in an internal tool",
+      "needs": "To give it column definitions and a data source and get correct behavior without reading its source."
+    }
+  ],
+  "success_criteria": [
+    {
+      "id": "SC-1",
+      "criterion": "The table is exposed to assistive technology as a table, with a caption, column headers associated with their cells, and the current sort state announced on the sorted header.",
+      "verifiable_by": "Inspect the rendered DOM and the browser's accessibility tree. Headers are th elements with scope, the caption is present, and the sorted header carries aria-sort."
+    },
+    {
+      "id": "SC-2",
+      "criterion": "Every interactive feature, sorting and filtering included, can be operated with the keyboard alone, with a visible focus indicator.",
+      "verifiable_by": "Unplug the mouse. Sort by two different columns, reverse one, filter, and clear the filter."
+    },
+    {
+      "id": "SC-3",
+      "criterion": "Cell values are rendered as text. A value containing markup is displayed literally and never interpreted.",
+      "verifiable_by": "Load a row whose value is an HTML fragment with a script element. The fragment appears as visible text and nothing executes."
+    },
+    {
+      "id": "SC-4",
+      "criterion": "When asynchronous loads resolve out of order, the table always shows the result for the most recent request, and loading, empty and error states are distinct.",
+      "verifiable_by": "Use a data source whose first response is slower than its second. The table ends on the second response. An empty result and a failed load show different states."
+    },
+    {
+      "id": "SC-5",
+      "criterion": "A measured interaction at ten thousand rows is within a budget the learner states in advance, and the measurement method is recorded.",
+      "verifiable_by": "Rerun the recorded measurement in a real browser and compare against the stated budget."
+    },
+    {
+      "id": "SC-6",
+      "criterion": "Someone who did not write it can embed it in the bundled example page from the README alone.",
+      "verifiable_by": "Hand the repository to another person with only the README. They show their own data in the example page."
+    }
+  ],
+  "non_goals": [
+    "A general grid with cell editing, column resizing, drag-and-drop or row selection.",
+    "Support for a UI framework. The component uses the DOM directly; wrapping it for a framework is out of scope.",
+    "Server-side pagination or a backend. The data source is a function supplied by the caller.",
+    "Visual design beyond a legible default and a visible focus indicator."
+  ],
+  "operational_requirements": {
+    "failure_modes": [
+      {
+        "failure": "The data source rejects or throws.",
+        "required_behavior": "Show an error state that says the load failed, keep the controls usable, and allow a retry. Never show the failure as an empty table."
+      },
+      {
+        "failure": "Responses to two requests arrive in the opposite order to the requests.",
+        "required_behavior": "Discard the stale response. The displayed rows always correspond to the current sort and filter."
+      },
+      {
+        "failure": "A column definition names a field that some rows lack.",
+        "required_behavior": "Render those cells as an explicit empty value and sort them consistently to one end, documented as such. Never throw during render."
+      },
+      {
+        "failure": "A cell value contains markup.",
+        "required_behavior": "Render it as literal text."
+      }
+    ],
+    "observability": [
+      "The loading, empty, error and populated states are visually and programmatically distinct.",
+      "A polite live region announces the result count after a filter or sort changes, without announcing every keystroke.",
+      "The performance measurement is reproducible from a documented script or procedure."
+    ],
+    "rollback": "The component holds no persistent state. Reverting to an earlier version and reloading the page restores earlier behavior completely. The operational note documents that the component's public options are its compatibility surface and lists which option changes break an embedding page.",
+    "documentation": [
+      "A README showing how to embed the component with column definitions and a data source.",
+      "The accessibility requirement the component is tested against, named explicitly, and what was tested by hand versus automatically.",
+      "An operations note covering a failing data source, stale responses, and the measured performance budget."
+    ]
+  },
+  "context_budget": {
+    "source_tokens_target": 12000,
+    "excludes": [
+      "tests",
+      "lockfiles",
+      "generated files",
+      "the example page"
+    ],
+    "rationale": "A system the learner can hold in context is a system the learner can hold in their head. The budget exists to force scope discipline on this specification, not to constrain the learner's style. This number is a starting target and should be revised against ACP-016 measurements."
+  },
+  "prerequisites": [
+    "Can write and compile a small TypeScript program.",
+    "Has created DOM elements from script and attached an event listener.",
+    "Has used a test runner at least once, even without writing tests before."
+  ],
+  "task_packs": [
+    "accessible-data-table-core"
+  ],
+  "caveats": [
+    "This is a first-party specification, not an upstream project. Completing it establishes no upstream contribution, maintainer relationship or endorsement.",
+    "The specification is owned by this repository. No solution, reference implementation or partial source is shipped with it.",
+    "Automated accessibility checks cover structure only. Screen reader behavior must be checked by hand, and the learner's record must say which checks were manual.",
+    "Evidence derived from this work describes learner-authored software produced inside a simulated engineering process. The surrounding review, assignment and incident workflows are simulated and must be qualified as such.",
+    "The context budget is an authoring constraint on this specification and an advisory target for the learner. It is not an acceptance criterion and no task fails for exceeding it."
+  ],
+  "sources": [],
+  "checked_at": "2026-09-24T00:00:00Z"
+}

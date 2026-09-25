@@ -1,6 +1,6 @@
 # Portable apprenticeship skills
 
-The 21 directories under `skills/` contain individually installable procedures. Each includes focused references and a proposal template. Skills provide mentoring and inspection, direct the supported PetClinic CLI workflow, and retain drafts for operations outside that slice. Canonical writes go only through the CLI publisher.
+The 21 directories under `skills/` contain individually installable procedures. Each includes focused references and a proposal template. Skills provide mentoring and inspection, direct the supported CLI workflows (the curated PetClinic task and the forge projects), and retain drafts for operations outside them. Canonical writes go only through the CLI publisher.
 
 | Skill | Responsibility | Protocol role |
 | --- | --- | --- |
@@ -30,7 +30,7 @@ Roles are not created by skill installation. The reviewed CLI initialization reg
 
 ## Install a skill
 
-From the project where you want to use Noetherkin, install from the public GitHub repository:
+The simplest path is `noetherkin setup`, which detects your agents and offers to install the skills for each. `noetherkin skills install --global` does the same without the rest of setup. To use the Skills CLI instead, run this from the project where you want to use Noetherkin:
 
 ```sh
 npx skills add nanaagyei/noetherkin
@@ -53,9 +53,9 @@ This uses the documented GitHub-source, skill-selection, scope and agent-targeti
 
 Alternatively, copy one entire skill folder to the skills directory supported by your harness. Keep `SKILL.md`, `references/` and `assets/` together. No sibling skill, original checkout or model vendor is required to read the bundle. Invocation/discovery conventions still depend on the harness. The runtime includes local Codex and Claude Code role adapters plus the vendor-neutral adapter contract. Avoid overwriting an unrelated installed skill with the same short name.
 
-From a checkout, `noetherkin skills install --host <generic|codex|claude-code> --target <directory>` copies all 21 bundles, or those named with repeated `--skill`, into that host's skill directory with digest verification and no overwrites. The [capability host adapters](adapters.md) project the same portable bundle into generic, Codex and Claude Code host locations. A host expression such as `/onboarding` or `$onboarding` is an invocation surface, not the identity of the `onboarding` capability. Consent-bearing operations still use the trusted terminal handoff.
+`noetherkin skills install [--host <generic|codex|claude-code>] [--global | --target <directory>]` copies all 21 bundles, or those named with repeated `--skill`, into each host's skill directory with digest verification and no overwrites. Without `--host` it installs for every agent it detects; `--global` installs under `~/.claude/skills` (Claude Code) and `~/.agents/skills` (Codex). Whether each host then discovers the installed skills live has not been verified by the repository tests. The [capability host adapters](adapters.md) project the same portable bundle into generic, Codex and Claude Code host locations. A host expression such as `/onboarding` or `$onboarding` is an invocation surface, not the identity of the `onboarding` capability. Consent-bearing operations still use the trusted terminal handoff.
 
-Noetherkin is not published to a package registry. The CLI is built from a checkout and requires Node.js 24+; see the [CLI guide](cli.md). Installing a skill alone does not initialize a learner workspace or configure an agent harness.
+Noetherkin is not published to a package registry. The CLI installs with `npm install -g https://github.com/nanaagyei/noetherkin/releases/latest/download/noetherkin.tgz` and requires Node.js 24+; see the [CLI guide](cli.md). Installing a skill alone does not initialize a learner workspace or configure an agent harness.
 
 ## Persistent drafts
 
@@ -81,4 +81,4 @@ The full frozen schema/catalog set and shared protocol guidance are bundled with
 
 Generated Markdown changes local link locations, not protocol semantics. The reference index maps original source paths to installed files. Each `references/bundle.json` records source and output SHA-256 digests, the source-manifest digest and index digest. Explicitly listed historical/index citations remain plain repository context; an unlisted missing dependency fails generation. Check mode performs no writes and fails on drift, extra resources or broken installed links. Edit source guidance, regenerate and review; never hand-edit generated references.
 
-`npm pack` runs the bundle check before building; the tarball is retained as a portability check, not a release artifact. Tests copy skills away from the checkout, compile bundled schemas, inject broken references/content, and verify npm contents. Behavioral cases cover every skill, including authority, stale-input, fabricated-evidence, untrusted-artifact and draft-idempotency failures. These checks establish artifact portability and bounded behavior, not educational effectiveness. See [behavioral evaluation cases](../evaluations/skills-behavior.md) for the manual acceptance procedure.
+Packing locally (`npm pack`) runs the bundle check before building; the tarball is a portability check only, since Noetherkin is not published to a registry. Tests copy skills away from the checkout, compile bundled schemas, inject broken references/content, and verify npm contents. Behavioral cases cover every skill, including authority, stale-input, fabricated-evidence, untrusted-artifact and draft-idempotency failures. These checks establish artifact portability and bounded behavior, not educational effectiveness. See [behavioral evaluation cases](../evaluations/skills-behavior.md) for the manual acceptance procedure.

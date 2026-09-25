@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "id": "batch-ingest-03-late-corrections",
+  "forge_id": "batch-ingest",
+  "pack_id": "batch-ingest-core",
+  "sequence": 3,
+  "type": "PRODUCT",
+  "title": "Apply late and corrected records so load order never changes the result",
+  "problem": "Real sources send corrections, and files arrive late or out of order. If the latest file loaded wins, the final table depends on arrival order, and a rerun after an outage produces different data from the original run. Nobody notices until two reports disagree.",
+  "context": "Builds on idempotent, atomic loads. Records now carry the time the source changed them, and a key can appear again in a later batch with new values.",
+  "impact": "Determinism is what makes a rebuild a valid repair. Without it, every rerun is a new, unexplained version of the truth.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-rule",
+      "criterion": "The design states which version of a record wins, using the record's own change time rather than load order, and how ties are broken deterministically."
+    },
+    {
+      "id": "AC-superseded",
+      "criterion": "An older version arriving after a newer one is counted as superseded, not loaded, and the reconciliation still adds up."
+    },
+    {
+      "id": "AC-order-independent",
+      "criterion": "Loading the same set of batches in every order the test chooses produces identical final tables, compared with a SQL query."
+    },
+    {
+      "id": "AC-rebuild",
+      "criterion": "The table can be rebuilt from the retained batch files into a fresh database, producing the same contents."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover a correction, a late older version, a tie, and at least two load orders. All pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the winning rule, one rejected alternative such as last-loaded-wins, and a source behavior that would still break determinism."
+    }
+  ],
+  "constraints": [
+    "Standard library, including sqlite3 and csv, plus a test runner only. No ORM, dataframe or validation library.",
+    "Keep history out of scope unless the design justifies it. The table holds the current version of each record.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "data.batch-streaming",
+    "data.sql"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.debugging",
+    "design.data-modeling"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "version resolution",
+      "replay"
+    ],
+    "description": "Record version semantics and replay determinism."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "What event time and arrival time each mean for this data, and which one the source can be trusted for",
+    "How a SQL upsert can express the winning rule, and where it cannot",
+    "How to test order independence without enumerating every permutation"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design."
+  ],
+  "documentation_requirements": [
+    "Record the winning rule, the tie break and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Report data quality and make the pipeline operable by someone else",
+    "summary": "Reconcile every row, surface quality drift, and document how to operate and repair the pipeline."
+  }
+}

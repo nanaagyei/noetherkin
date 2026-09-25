@@ -8,9 +8,9 @@ From repository root, run:
 python3 evaluations/validate_foundation.py
 ```
 
-Requires Python with PyYAML and jsonschema already installed. The checker is read-only specification QA, not a simulator initializer, lifecycle engine, permission system or production validator. It validates all twelve schemas, structured examples, competency/level/project/track catalog integrity, local references, selected fixture semantics, contract section coverage and Markdown links. It constructs invalid specimens in memory without changing state.
+Requires Python with PyYAML and jsonschema already installed. The checker is read-only specification QA, not a simulator initializer, lifecycle engine, permission system or production validator. It validates all thirteen schemas, structured examples, competency/level/project/track catalog integrity, local references, selected fixture semantics, contract section coverage and Markdown links. It constructs invalid specimens in memory without changing state.
 
-Executable negative cases cover unknown fields and unsupported versions for all twelve schemas, invalid review role/kind/outcome, promotion author/authorization/dimension requirements, partially null project binding, invalid assistance range, skipped investigation, stale deliverable approval, failed acceptance criteria and missing completion evidence. A passing suite establishes these bounded artifact properties only.
+Executable negative cases cover unknown fields and unsupported versions for all thirteen schemas, invalid review role/kind/outcome, promotion author/authorization/dimension requirements, partially null project binding, invalid assistance range, skipped investigation, stale deliverable approval, failed acceptance criteria and missing completion evidence. A passing suite establishes these bounded artifact properties only.
 
 ## Behavioral conformance scenarios
 
@@ -116,12 +116,26 @@ Adopted with ACP-012 (Phase 11, see `FOUNDATION_CHANGELOG.md`). These are **exec
 
 CF-33, CF-34, CF-50, CF-51, FR-52 and FR-53 from ACP-012 describe the deferred controller bundling and are not registered.
 
+Adopted with ACP-014 (Phase 14, see `FOUNDATION_CHANGELOG.md` and [selection-model.md](selection-model.md)). All are executed offline. FR-38, CF-41 and FR-41 were confirmed non-vacuous by seeded defect.
+
+| ID | Setup | Required result | Covered by |
+| --- | --- | --- | --- |
+| CF-38 | Frontier computed with a populated graph and a partly demonstrated cache | The frontier contains exactly the in-scope competencies whose prerequisites are all demonstrated and whose own finding is `unassessed` or `developing`; contested findings go to remediation. | `tests/frontier.test.ts` CF-38 |
+| CF-39 | Advisory file deleted, then any command run | Every operation succeeds; its presence fails no validation; `next` regenerates it. | `tests/frontier.test.ts` CF-39 |
+| CF-40 | Failed design gate on a task with populated `primary_competencies` | Remediation names specific prerequisite competencies, not a general instruction to study. | `tests/frontier.test.ts` CF-40 |
+| CF-41 | Two competencies with identical evidence dates and context counts | Reported as tied; no synthetic tiebreak value. | `tests/frontier.test.ts` CF-41 |
+| FR-37 | Stored advisory view contradicts the derived cache | The cache wins; the contradiction is reported and the view regenerated, never reconciled. | `tests/frontier.test.ts` FR-37 |
+| FR-38 | A record cites the advisory view as an artifact | Reject (`ADVISORY_CITED`); the view is not an evidence record. | `tests/frontier.test.ts` FR-38 |
+| FR-39 | Advisory generation targets a canonical record | Reject the write (`ADVISORY_CANONICAL_WRITE`); canonical bytes are unchanged. | `tests/frontier.test.ts` FR-39 |
+| FR-40 | Advisory output rendered or stored | Contains no percentage, mastery value, decay coefficient or due date; the schema has no field for one. | `tests/frontier.test.ts` FR-40 |
+| FR-41 | Task instantiated from a template claims a competency the template does not exercise | Reject as fabricated scope (`SCOPE_FABRICATED`), whatever the ordering recommended. | `tests/frontier.test.ts` FR-41 |
+
 Adopted with ACP-015 (Phase 13, see `FOUNDATION_CHANGELOG.md`). All are executed offline except CF-44, which is agent behavior.
 
 | ID | Setup | Required result | Covered by |
 | --- | --- | --- | --- |
 | CF-42 | Forge project selected at E0 | Bind an empty learner-authored `source/`; never clone; no commit pin before code exists. | `tests/forge.test.ts` CF-42 |
-| CF-43 | Forge task assigned, completed and evidence recorded | The full lifecycle succeeds with no upstream repository present. | `tests/forge.test.ts` CF-43, all four `eval-ledger-core` tasks |
+| CF-43 | Forge task assigned, completed and evidence recorded | The full lifecycle succeeds with no upstream repository present. | `tests/forge.test.ts` CF-43, every task of every shipped forge pack |
 | CF-44 | `resume-evidence` invoked on completed forge work | Truthful description of learner-authored software, retaining simulation qualifiers for the surrounding process. | *behavioral* P21 |
 | CF-45 | Learner moves from a forge project to an upstream project | Prior forge evidence remains valid and citable; no re-baselining. | `tests/forge.test.ts` CF-45 |
 | FR-42 | Forge record with empty `task_packs` | Reject at catalog validation. | `tests/forge.test.ts` FR-42; `validate_foundation.py` |

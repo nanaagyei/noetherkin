@@ -11,7 +11,7 @@ This is the release gate for Noetherkin's public repository. Complete the sectio
 | Security automation | Pre-publication verified | The main ruleset and CI are active. Public CodeQL, dependency review, secret scanning, and push protection require the later visibility change and another verification pass. |
 | npm name | Not applicable | ACP-012 retired registry publication. The name is deliberately unclaimed. |
 | License | Complete | Apache-2.0 is declared in `package.json`, linked from the README, and included as `LICENSE`. |
-| GitHub publication | **Blocked** | Cleaned history is on `main` and `release/dev`. `refs/pull/1`, `/2` and `/3` are no longer advertised by the remote and the pull requests no longer list, so the ref half appears complete. Awaiting GitHub Support confirmation that cached views are also purged. |
+| GitHub publication | Ready for visibility change | Cleaned history is on `main` and `release/dev`. GitHub Support confirmed the pull request 1-3 purge (owner-confirmed). Making the repository public is the remaining owner action. |
 | Release identity | Not applicable | No registry publication, so no npm owner, trusted publisher or release-environment approval is required. |
 | Brand rights | Confirmed | Owner completed name clearance and confirmed the right to distribute the Noetherkin logo assets. |
 
@@ -31,8 +31,8 @@ The source repository is published under Apache-2.0. There is no npm publication
 
 ## 2. Create and configure the GitHub repository
 
-- [ ] Ask [GitHub Support](https://support.github.com/) to dereference affected pull requests 1-3, remove cached views, and garbage-collect the old objects.
-- [ ] Make the repository public only after GitHub Support confirms that purge is complete.
+- [x] Ask [GitHub Support](https://support.github.com/) to dereference affected pull requests 1-3, remove cached views, and garbage-collect the old objects.
+- [x] Make the repository public only after GitHub Support confirms that purge is complete (owner-confirmed 2026-09-24).
 - [x] Configure package metadata for `git+https://github.com/nanaagyei/noetherkin.git`.
 - [x] Update local `origin` to `https://github.com/nanaagyei/noetherkin.git` and verify it.
 - [x] Commit and push the reviewed initial history to `main`.
@@ -40,7 +40,7 @@ The source repository is published under Apache-2.0. There is no npm publication
 - [x] Confirm the clone, repository, homepage, issue, and badge URLs after the GitHub rename.
 - [x] Add repository-backed CI and CodeQL badges. Confirm they resolve after the initial push.
 - [x] Add a concise GitHub description and topics.
-- [ ] Add a social preview image. A 1280x640 card is prepared at `docs/assets/social-preview.png` (79KB, under the 1MB limit). GitHub exposes no API for this, so upload it manually under **Settings -> General -> Social preview**.
+- [x] Add a social preview image (owner-confirmed 2026-09-24). A 1280x640 card is prepared at `docs/assets/social-preview.png` (79KB, under the 1MB limit). GitHub exposes no API for this, so upload it manually under **Settings -> General -> Social preview**.
 - [x] Enable Issues and Discussions only if maintainers intend to support them. Issues on, Discussions off, Wiki disabled: an empty wiki tab on a public repository reads as abandonment, and a solo maintainer should not open a second inbox before the first one has traffic.
 - [x] Enable private vulnerability reporting under **Settings → Security → Code security** (owner-confirmed).
 - [x] Enable the dependency graph, Dependabot alerts, and Dependabot security updates (owner-confirmed).
@@ -58,15 +58,21 @@ ACP-012 is adopted: Noetherkin is **not published to a package registry**, and n
 publisher or release environment is required. The previous sections on npm setup, release candidates,
 publication and post-publication verification are removed rather than left as unreachable steps.
 
-- [x] Retire registry publication. `package.json` is `private`, `publishConfig` and `prepublishOnly` are gone,
-      and `.github/workflows/release.yml` keeps only its verification job.
-- [ ] Cut a GitHub release when a version is worth marking. Tag exactly `v<package-version>` from a reviewed
-      commit and use the changelog entry as release notes. The workflow verifies and retains a release
-      candidate for inspection; nothing is uploaded anywhere.
-- [ ] Keep `npm pack` green. The tarball is retained as a portability check, exercised by the package test,
-      and is not a release artifact.
+- [x] Retire registry publication. `package.json` is `private`, and `publishConfig` and `prepublishOnly` are gone.
+      `scripts/check-release.mjs` now requires `private: true`, so an accidental `npm publish` stays blocked.
+- [x] Ship the CLI as a release asset (ADR-017) and release automatically (ADR-018). Each push to `main` runs
+      `.github/workflows/release.yml`: `plan` reads the merged pull request's release label (or commit subjects),
+      `verify` stamps the version and runs `release:check`, audits and packs, and `publish`, the only job with write
+      access, tags and creates the release with `noetherkin-<version>.tgz`, a stable-named `noetherkin.tgz` and a
+      `.sha256` for each. Learners install
+      with `npm install -g https://github.com/nanaagyei/noetherkin/releases/latest/download/noetherkin.tgz`.
+- [ ] Make **Release label** a required status check on `main` (owner setting), so an unlabeled pull request
+      cannot merge.
+- [ ] After each release, run the install command above in a clean prefix and confirm `noetherkin --help` and
+      `noetherkin skills list`.
+- [ ] Keep `npm pack` green. The tarball is the release artifact and is exercised by the package test.
 
-Capabilities install with `npx skills add nanaagyei/noetherkin`. The CLI is built from a checkout, as the
-README describes. Bundling the CLI into the skill packages was proposed in ACP-012 section 3.7 and deferred:
+The CLI installs from the latest release tarball, and `noetherkin setup` installs the skills. `npx skills add nanaagyei/noetherkin`
+still works for the skills alone. Bundling the CLI into the skill packages was proposed in ACP-012 section 3.7 and deferred:
 with `yaml` retained under FR-21, it would mean vendoring a third-party parser into the repository and losing
 dependency updates on it.

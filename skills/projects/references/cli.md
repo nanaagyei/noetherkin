@@ -1,11 +1,16 @@
 # Protocol 3.0 CLI
 
-The executable requires Node.js 24+. Build with `npm ci` and `npm run build`, then run `node dist/cli/main.js` from the repository. Noetherkin is not published to a package registry and, under ACP-012, will not be: the capabilities install into an agent, and the controller is built from source.
+The executable requires Node.js 24+. Install it with `npm install -g https://github.com/nanaagyei/noetherkin/releases/latest/download/noetherkin.tgz`, the tarball attached to the latest GitHub release. From a checkout, `npm install` (the `prepare` script builds it) and `npm link` do the same; contributors can also use `npm ci` and `npm run build` and run `node dist/cli/main.js`. Noetherkin is not published to a package registry and, under ACP-012, will not be: the capabilities install into an agent, and the controller is built from source. A global install from a git URL (`npm install -g github:...`) currently fails under npm 11: the preparation install npm runs for a git dependency inherits the outer `--global`, links the temporary clone globally before any package script runs, and leaves a broken install. Reproduced 2026-09-24 with a local `git+file://` URL; not fixable from `package.json`. New learners start with `noetherkin setup`.
 
 ## Commands
 
 | Command | Behavior |
 | --- | --- |
+| `setup` | Report the environment (Node, platform, Git, role hosts and the bound project's toolchain), then, in a direct terminal and one confirmed step at a time, install the skills and start `init`. Noninteractive runs only report. Safe to rerun. |
+| `help [<command>]`, `<command> --help` | Show the overview or one command's usage. A usage error prints only that command's usage. |
+| `skills list`, `skills install [--host <id>] [--global \| --target <dir>] [--skill <id> ...]` | List the portable skills, or install them. Without `--host`, installs for every detected agent; `--global` targets `~/.claude/skills` and `~/.agents/skills`. Run inside the Noetherkin checkout without `--global` or `--target`, it refuses and says how to choose a target. |
+| `adapter-handoff --handoff <token>` | Review and approve an action an agent prepared; see below. |
+| `competency show <id>` | Show a competency and its advisory graph neighbours. |
 | `init` | Propose and, in a direct terminal after consent, publish bootstrap state. |
 | `status` | Show identity, mode, onboarding, current selection, record counts, and validation coverage. |
 | `tracks` | List the 34 versioned advisory tracks and their required competency scopes. |
@@ -24,19 +29,19 @@ The executable requires Node.js 24+. Build with `npm ci` and `npm run build`, th
 | `map init`, `map check`, `map status` | Create a project-derived template, check the learner-authored map, and report read-only whether this exact map was checked at the current source revision (`absent`, `incomplete`, `unchecked`, `checked`) with the paths it cites. |
 | `task assign`, `task begin` | Assign the next task from the bound project's curated pack (`pet-type-integrity` for PetClinic, or the next forge task in sequence), then start it. |
 | `task attest --criterion <id> --file <notes>` | Record a check only another person can perform, such as an outside quickstart, against the exact submitted work revision. Task review requires it for criteria the pack marks. |
-| `forges`, `project select <forge-id> --source <dir>` | List forge specifications, and bind one to a new or empty learner-authored directory. Nothing is cloned. |
+| `forges [--track <id>]`, `project select <forge-id> --source <dir>` | List forge specifications, optionally only those aligned to a track, and bind one to a new or empty learner-authored directory. Nothing is cloned. |
 | `task scope` | List the files the current task's frozen `investigation_paths` globs select inside the bound source; matches that resolve outside it are reported as rejected. |
 | `task submit-design`, `task submit-change`, `task test`, `task help` | Gate design, snapshot learner work, run focused tests, or request attributed help. A forge task snapshots every non-ignored file of the learner's repository and takes the learner's declared `--command`. |
 | `review code`, `review task`, `review performance` | Publish bound peer, team-lead and manager judgments. |
-| `next` | Derive the phase and invoke safe no-input handlers; otherwise report the explicit command needing learner input or confirmation. |
+| `next` | Derive the phase and invoke safe no-input handlers; otherwise report the explicit command needing learner input or confirmation. It also adds a labeled `advisory` block (ACP-014): the competencies tied for first attention and why, the forges or curated packs that exercise them, blocked and contested items, and any stale advisory it replaced. The block is derived, not evidence, and gates nothing; the full view is written to `.apprenticeship/advisory/attention.yaml`, which is safe to delete. |
 
 ## Role judgments
 
-`onboard`, `track align`, `task submit-design`, `task help`, `review *` and `next` ask a model for one bounded role judgment. Choose the model host with `--role-adapter codex|claude`, or set `NOETHERKIN_ROLE_ADAPTER`; the default is `codex`. `--model` pins a model for either adapter, and `--codex-bin` or `--claude-bin` (or `NOETHERKIN_CODEX_BIN`, `NOETHERKIN_CLAUDE_BIN`) points at a specific binary.
+`onboard`, `track align`, `task submit-design`, `task help`, `review *` and `next` ask a model for one bounded role judgment. Choose the model host with `--role-adapter codex|claude`, or set `NOETHERKIN_ROLE_ADAPTER`. Otherwise `--codex-bin` or `--claude-bin` implies that adapter, and failing that the CLI uses the first of `codex`, then `claude`, that it finds working. If none is available the command fails with `ROLE_ADAPTER_UNAVAILABLE` and says how to install one or choose one. The check runs before any consent prompt, so you never confirm an action that cannot run. In a terminal, a line on stderr says which role and adapter are being asked. `--model` pins a model for either adapter, and `--codex-bin` or `--claude-bin` (or `NOETHERKIN_CODEX_BIN`, `NOETHERKIN_CLAUDE_BIN`) points at a specific binary.
 
 Both adapters send the same prompt and closed output contract, run with tools disabled and without user or project settings, and return output the controller validates again before anything is published. The Claude adapter runs `claude --print --output-format json` in safe and restricted mode with `--tools ""`, an empty MCP configuration and no saved session. A role judgment is never consent and never publishes by itself.
 
-Every command accepts `--workspace <existing-directory>` and `--json`. Init defaults to the current directory. Inspection walks upward to the nearest workspace; an explicit path takes precedence. Track and project catalog browsing can run without a workspace.
+Every command accepts `--workspace <existing-directory>`, `--json` and `--help`. Init defaults to the current directory. Inspection walks upward to the nearest workspace; an explicit path takes precedence, and a directory that is not yet a workspace reports `WORKSPACE_NOT_INITIALIZED` with the command to create one. Track and project catalog browsing can run without a workspace. Human output is compact text; `--json` output keeps the documented shapes.
 
 Initialization creates an unselected `current-track.yaml`. Onboarding refuses to complete until the learner explicitly selects a track. Initial onboarding aligns universal core plus the track's required competencies. Switching later updates recommendations immediately but leaves evaluation scope pending; existing tasks remain valid and promotion is blocked until a fresh scope agreement, longitudinal assessment and manager performance review support alignment.
 
@@ -54,17 +59,19 @@ Without a terminal on stdin and stderr, complete inputs produce a proposal and e
 
 ## Capability adapter handoff
 
-Generic, Codex and Claude Code capability adapters may return an exact command of the form:
+Noninteractive `init`, `track select` and `onboard` return a proposal (exit 3) whose `data.next_action` has `kind: terminal-handoff` and an exact `command`. Generic, Codex and Claude Code capability adapters return the same kind of command:
 
 ```sh
 noetherkin adapter-handoff --workspace <workspace> --handoff <token>
 ```
 
-The handoff token binds the proposal to the resolved workspace and expected canonical state. It is transparent proposal data, not authorization. Run it in a direct learner-controlled terminal, review the displayed action and proposal digest, then type the requested confirmation. Noninteractive execution never publishes. If state changed since preparation, the controller rejects the stale handoff and the host must prepare a new one.
+The handoff token binds the proposal to the resolved workspace and expected canonical state. It is transparent proposal data, not authorization. Run it in a direct learner-controlled terminal, review the displayed action and proposal digest, then type the requested confirmation. Noninteractive execution never publishes. If state changed since preparation, the controller rejects the stale handoff and the host must prepare a new one. The derived advisory directory (`.apprenticeship/advisory/`) is excluded from that check, so regenerating the advisory never stales a handoff.
 
 Initialization writes only `.apprenticeship/` records and transaction artifacts. It does not edit AGENTS.md, clone a repository, create evidence or choose a project. Repeating intact commands returns no-change where the lifecycle already records the result. Conflicting identities, inputs, revisions or operation IDs are errors. Later state is never reset by init.
 
-The focused command is fixed to `./mvnw -pl spring-petclinic-customers-service test`. Its exact output, exit status, timestamps, selected base commit and submitted change revision are retained under `apprenticeship-artifacts/test-runs/`. Docker Compose and full-stack startup are outside TASK-001.
+The focused test command comes from the task pack: the PetClinic pack fixes it to `./mvnw -pl spring-petclinic-customers-service test`, and a forge task takes the command the learner declares with `task test --command`. Its exact output, exit status, timestamps, selected base commit or snapshot and submitted change revision are retained under `apprenticeship-artifacts/test-runs/`. Docker Compose and full-stack startup are outside the PetClinic task.
+
+A rework outcome from `task submit-design`, `task test`, `review code` or `review task` adds a `remediation` list: the prerequisite competencies of the task's primary competencies to revisit, from the competency graph ([selection model](selection-model.md)). It is advisory and records nothing.
 
 ## Output and validation coverage
 
