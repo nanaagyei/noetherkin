@@ -79,7 +79,7 @@ Noetherkin has two parts: a trusted local CLI that owns workspace state, and por
 
 3. **Open your agent** in that directory and ask it to use the Noetherkin onboarding skill.
 
-`npm install -g github:nanaagyei/noetherkin` does not work yet: with npm 11, the build step inside a git install runs without development dependencies and cannot find the TypeScript compiler. Use the checkout above. To install the skills without setup, run `noetherkin skills install` (add `--global` for your user account, or `--target <dir>` for one project). It verifies every file digest and never overwrites an existing file. `npx skills add nanaagyei/noetherkin` also works with the [Skills CLI](https://github.com/vercel-labs/skills).
+`npm install -g github:nanaagyei/noetherkin` does not work yet. npm 11 runs a git dependency's preparation install with the outer `--global` still set, so it links a temporary clone globally instead of building it, and the result is broken. The package itself cannot fix this. Use the checkout above. To install the skills without setup, run `noetherkin skills install` (add `--global` for your user account, or `--target <dir>` for one project). It verifies every file digest and never overwrites an existing file. `npx skills add nanaagyei/noetherkin` also works with the [Skills CLI](https://github.com/vercel-labs/skills).
 
 The skills teach an agent how to take part. The CLI is what writes state: it owns validation, consent, transactions, and every canonical record. An agent proposes; the CLI publishes.
 
