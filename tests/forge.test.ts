@@ -9,7 +9,7 @@ import { bindApprovedInit, proposeInit, publishInit } from '../core/bootstrap.js
 import { ScriptedRoleAdapter } from '../core/adapters.js';
 import { inspectWorkspace } from '../core/commands.js';
 import { runtime } from '../core/storage.js';
-import { selectTrack } from '../core/tracks.js';
+import { runnablePaths, selectTrack } from '../core/tracks.js';
 import { catalogs, validateDocument } from '../core/validation.js';
 import { forgePack, validateForgeRecord } from '../core/packs.js';
 import { assignTask, attestCriterion, beginTask, codeReview, currentTask, nextAction, onboard, selectCatalogProject, selectForge, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
@@ -23,10 +23,10 @@ function git(cwd: string, ...args: string[]) {
   const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr); return result.stdout.trim();
 }
-async function workspace(t: { after: (fn: () => void) => void }): Promise<string> {
+async function workspace(t: { after: (fn: () => void) => void }, trackId = 'ml-engineering'): Promise<string> {
   const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'noetherkin-forge-'))); t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const proposal = proposeInit({ display_name: 'Learner', goals: ['Build an evaluation harness'], assistance_default_max: 3 }); publishInit(root, proposal, bindApprovedInit(root, proposal, true));
-  selectTrack(root, 'ml-engineering', files => validateSimulationCandidate(root, files));
+  selectTrack(root, trackId, files => validateSimulationCandidate(root, files));
   await onboard(root, [], true, new ScriptedRoleAdapter([{ rationale: 'No inspected learner work exists.' }]));
   return root;
 }
@@ -58,14 +58,14 @@ test('FR-44: a forge selection is never cloned and never lands on existing code'
   assert.throws(() => selectForge(root, 'eval-ledger', '../outside'), { code: 'UNSAFE_PATH' });
 });
 
-test('CF-43 and CF-45: the whole forge pack runs with no upstream, then an upstream switch keeps forge evidence valid', async t => {
-  const root = await workspace(t);
-  selectForge(root, 'eval-ledger', 'source');
+for (const forge of catalogs().forges) test(`CF-43 and CF-45: the whole ${forge.id} pack runs with no upstream, then an upstream switch keeps forge evidence valid`, async t => {
+  const root = await workspace(t, forge.track_alignment[0]);
+  selectForge(root, forge.id, 'source');
   const source = path.join(root, 'source');
   git(source, 'init'); git(source, 'config', 'user.email', 'learner@example.invalid'); git(source, 'config', 'user.name', 'Learner');
   const design = path.join(root, 'design.md');
   fs.writeFileSync(design, '# Contract\nCases live in a data file.\n# Alternative\nHard-coded cases were rejected.\n# Tests\npython -m pytest\n# First failure\nA malformed case file.\n');
-  const templates = forgePack('eval-ledger-core');
+  const templates = forge.task_packs.flatMap((pack: string) => forgePack(pack));
   for (const [index, template] of templates.entries()) {
     const adapter = new ScriptedRoleAdapter([
       { decision: 'approve', rationale: 'The design names behavior, a rejected alternative, tests and a failure case.', risks: [] },
@@ -75,7 +75,7 @@ test('CF-43 and CF-45: the whole forge pack runs with no upstream, then an upstr
     const assigned = assignTask(root);
     assert.equal(assigned.outcome, 'success', JSON.stringify(assigned));
     const task = currentTask(root)!;
-    assert.equal(task.project_id, 'eval-ledger'); assert.equal(task.title, template.title);
+    assert.equal(task.project_id, forge.id); assert.equal(task.title, template.title);
     for (const key of ['forge_id', 'pack_id', 'sequence', 'attested_criteria', 'compatibility']) assert.ok(!(key in task), `${key} is pack-only`);
     beginTask(root); await submitDesign(root, design, adapter);
     fs.writeFileSync(path.join(source, `step_${index + 1}.py`), `STEP = ${index + 1}\n`);
@@ -83,16 +83,16 @@ test('CF-43 and CF-45: the whole forge pack runs with no upstream, then an upstr
     assert.throws(() => testTask(root, 'Tests pass.'), { code: 'INPUT_REQUIRED' }, 'a forge task declares its own test command');
     assert.equal(testTask(root, 'Tests pass.', runtime, 'test -f step_1.py').outcome, 'success');
     assert.equal((await codeReview(root, adapter)).review_outcome, 'approve');
-    if (template.attested_criteria) {
+    for (const criterion of template.attested_criteria ?? []) {
       await assert.rejects(taskReview(root, adapter), { code: 'ATTESTATION_MISSING' });
-      const notes = path.join(root, 'outside-check.md');
-      fs.writeFileSync(notes, 'A colleague who had not seen the code followed the README quickstart alone. They stalled once on the case file format.\n');
-      attestCriterion(root, 'AC-outside-check', notes);
+      const notes = path.join(root, `${criterion}.md`);
+      fs.writeFileSync(notes, 'A colleague who had not seen the code followed the README alone. They stalled once on the input format.\n');
+      attestCriterion(root, criterion, notes);
     }
     const review = await taskReview(root, adapter);
     assert.equal(review.outcome, 'success', JSON.stringify(review));
     const completed = currentTask(root)!;
-    if (template.attested_criteria) assert.match(completed.validation.find((item: { criterion_id: string }) => item.criterion_id === 'AC-outside-check').artifact.uri, /attestations/);
+    for (const criterion of template.attested_criteria ?? []) assert.match(completed.validation.find((item: { criterion_id: string }) => item.criterion_id === criterion).artifact.uri, /attestations/);
     git(source, 'add', '.'); git(source, 'commit', '-m', `step ${index + 1}`);
     assert.equal(nextAction(root).command, index + 1 < templates.length ? 'task assign' : 'review performance');
   }
@@ -113,6 +113,17 @@ test('CF-43 and CF-45: the whole forge pack runs with no upstream, then an upstr
   assert.equal(JSON.parse(fs.readFileSync(path.join(root, '.apprenticeship/current-project.yaml'), 'utf8')).kind, 'upstream');
   assert.deepEqual(fs.readdirSync(path.join(root, '.apprenticeship/evidence')).sort(), evidenceBefore);
   assert.equal(inspectWorkspace('validate', root).outcome, 'success', JSON.stringify(inspectWorkspace('validate', root).diagnostics));
+});
+
+test('every forge is routed from each track it aligns to, and exercises a required competency of each', () => {
+  const { forges, tracks } = catalogs();
+  for (const forge of forges) for (const trackId of forge.track_alignment) {
+    const track = tracks.find(item => item.id === trackId)!;
+    assert.ok(track.required_competencies.some((id: string) => forge.competencies.includes(id)), `${forge.id} exercises nothing ${trackId} requires`);
+    assert.ok(runnablePaths(trackId).some(item => item.kind === 'forge' && item.id === forge.id), `${trackId} does not route to ${forge.id}`);
+  }
+  const listed = spawnSync(process.execPath, [cli, 'forges', '--track', 'frontend-engineering', '--json'], { encoding: 'utf8' });
+  assert.deepEqual(JSON.parse(listed.stdout).data.forges.map((item: { id: string }) => item.id), ['accessible-data-table']);
 });
 
 test('FR-42 and FR-43: an empty task pack or an upstream identity is rejected', () => {

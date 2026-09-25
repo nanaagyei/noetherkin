@@ -40,7 +40,7 @@ Noetherkin currently includes:
 - a frozen V1 product foundation with wire protocol 3.0;
 - a deterministic, recoverable local state publisher;
 - 21 portable [Agent Skills](docs/skills.md);
-- 34 versioned learning tracks, 87 project catalog entries, and a forge specification (Eval Ledger) that E0 to E2 learners build from empty;
+- 34 versioned learning tracks, 87 project catalog entries, and four draft forge specifications (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest) that E0 to E2 learners build from empty;
 - an advisory competency graph and a map-first context budget;
 - generic, Codex, and Claude Code capability adapters, and Codex or Claude Code role adapters;
 - evidence, assistance, review, and promotion semantics designed to resist fabricated progress.

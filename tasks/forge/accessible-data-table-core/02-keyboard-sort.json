@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "id": "accessible-data-table-02-keyboard-sort",
+  "forge_id": "accessible-data-table",
+  "pack_id": "accessible-data-table-core",
+  "sequence": 2,
+  "type": "PRODUCT",
+  "title": "Sort by column from the keyboard and announce the sort state",
+  "problem": "A header that sorts on click is invisible to anyone who cannot use a mouse, and a sort that only changes the row order gives a screen reader user no way to know what happened or which column is now sorted.",
+  "context": "Builds on the static native table. Sorting happens in the component over the rows it was given.",
+  "impact": "Sorting is the first interactive feature. This is where the component either meets its accessibility requirement or starts accumulating exceptions to it.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-requirement",
+      "criterion": "The design names the explicit accessibility requirement being tested against, such as specific WCAG 2.2 success criteria, before implementation begins."
+    },
+    {
+      "id": "AC-keyboard",
+      "criterion": "Each sortable header contains a native button control. Activating it with Enter or Space sorts by that column, and activating it again reverses the direction."
+    },
+    {
+      "id": "AC-state",
+      "criterion": "The sorted header carries aria-sort with the current direction, and no other header claims a sort."
+    },
+    {
+      "id": "AC-stable",
+      "criterion": "Sorting is stable, and rows with missing values sort consistently to one documented end in both directions."
+    },
+    {
+      "id": "AC-focus",
+      "criterion": "Focus stays on the activated control after sorting, and the focus indicator is visible."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests drive sorting through keyboard events, not by calling internal functions, and cover direction reversal, stability and missing values. All pass at the submitted revision."
+    },
+    {
+      "id": "AC-manual",
+      "criterion": "The learner records a manual check with at least one screen reader, naming the reader and browser and what was announced."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains why a button inside the header was chosen over a clickable header cell, and one sort behavior that would still confuse a screen reader user."
+    }
+  ],
+  "constraints": [
+    "The component itself uses no runtime dependencies. TypeScript, a test runner and a DOM implementation for tests are the only development dependencies.",
+    "Sorting is in memory over the supplied rows. Do not introduce a data source or asynchronous loading yet.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "frontend.accessibility",
+    "frontend.web-platform"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.implementation"
+  ],
+  "recommended_level": "E0",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "sorting",
+      "header controls"
+    ],
+    "description": "Sort interaction, its programmatic state and its keyboard behavior."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "What the accessibility requirement actually says about name, role, value and keyboard operation",
+    "What aria-sort communicates and where it must and must not appear",
+    "Which parts of the behavior a DOM implementation in tests can verify and which only a real browser and screen reader can"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design."
+  ],
+  "documentation_requirements": [
+    "Record the accessibility requirement, what is tested automatically, and what was checked by hand."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Filter through an asynchronous data source without showing stale results",
+    "summary": "Own sort, filter and loading state so out-of-order responses never win."
+  }
+}

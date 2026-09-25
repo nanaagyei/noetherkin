@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "id": "slo-burn-report-01-events",
+  "forge_id": "slo-burn-report",
+  "pack_id": "slo-burn-report-core",
+  "sequence": 1,
+  "type": "PRODUCT",
+  "title": "Turn request logs into indicator events and account for every line",
+  "problem": "Every number the tool will produce is computed over events parsed from logs. If malformed lines vanish silently, duplicates count twice, or events are windowed by read order, the indicator is wrong before any objective is applied, and nothing in the output says so.",
+  "context": "This is the first task of a learner-authored forge project. No source exists yet. The learner creates the repository, writes a small synthetic log generator, and owns every design decision inside the specification's constraints.",
+  "impact": "The event stream is the population every later measurement is taken over. A tool that cannot account for its own input cannot be trusted during an incident.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-synthetic",
+      "criterion": "A synthetic log generator produces JSON-lines request logs with a timestamp, status, latency and request identifier, including deliberately malformed, duplicated and out-of-order lines. It is seeded so output is reproducible."
+    },
+    {
+      "id": "AC-accounting",
+      "criterion": "Every input line is accounted for as an accepted event, a duplicate, or a rejection with a reason. The counts add up to the lines read."
+    },
+    {
+      "id": "AC-event-time",
+      "criterion": "Events are ordered and windowed by their own timestamp, not by file position."
+    },
+    {
+      "id": "AC-coverage",
+      "criterion": "The parser reports the earliest and latest event time it accepted."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover a clean log, malformed lines, a duplicate, and out-of-order lines, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains how a duplicate is recognized, one rejected alternative, and what an indicator would show if rejected lines were silently dropped during an outage that corrupts logs."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "Do not implement objectives, budgets or alerts yet. This task ends at an accounted-for event stream.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "core.implementation",
+    "python.language"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.git"
+  ],
+  "recommended_level": "E0",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "log parsing",
+      "synthetic log generator"
+    ],
+    "description": "One input boundary, its accounting, and a reproducible test data source."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "What identifies an event well enough to recognize the same one twice",
+    "Which malformations a real logging pipeline produces, and which are worth modeling",
+    "What a reader of the output needs to know to trust the counts"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design."
+  ],
+  "documentation_requirements": [
+    "Record the log line format, the duplicate rule and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Declare the objective and report the error budget honestly",
+    "summary": "Compute the indicator and remaining error budget from a declared objective, and say no data when there is none."
+  }
+}

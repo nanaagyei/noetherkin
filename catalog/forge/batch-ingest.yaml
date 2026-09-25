@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0",
+  "data_class": "live",
+  "id": "batch-ingest",
+  "name": "Batch Ingest",
+  "description": "A batch loader that validates delimited files against a declared contract, loads them into SQLite idempotently, handles late and corrected records deterministically, and produces a data-quality report that reconciles every input row.",
+  "status": "draft",
+  "track_alignment": [
+    "data-engineering",
+    "database-engineering",
+    "data-analyst"
+  ],
+  "competencies": [
+    "core.implementation",
+    "core.testing",
+    "core.debugging",
+    "core.git",
+    "core.technical-communication",
+    "core.ownership",
+    "python.language",
+    "python.testing",
+    "backend.databases",
+    "design.data-modeling",
+    "data.sql",
+    "data.quality",
+    "data.batch-streaming"
+  ],
+  "recommended_minimum_level": "E0",
+  "ideal_level": "E1",
+  "primary_languages": [
+    "Python",
+    "SQL"
+  ],
+  "technologies": [
+    "Standard library",
+    "sqlite3",
+    "pytest"
+  ],
+  "external_services": [],
+  "problem": "A team receives a daily export as a delimited file and loads it into a database with a script someone wrote once. Rows that do not fit are dropped without a trace. Rerunning a failed load doubles the data. A correction sent two days later either overwrites newer data or is ignored, depending on the order files happened to arrive. Weeks later an analyst's numbers disagree with the source system, and nobody can say how many rows arrived, how many were loaded, or which were rejected and why. The failure is not the loading. It is that the pipeline cannot account for its own data.",
+  "users": [
+    {
+      "who": "An analyst querying the loaded table",
+      "needs": "To trust that the table is complete and current, and to know exactly what was excluded and why when it is not."
+    },
+    {
+      "who": "The engineer who reruns the pipeline after a failure",
+      "needs": "To rerun any batch safely, in any order, without duplicating or losing data."
+    }
+  ],
+  "success_criteria": [
+    {
+      "id": "SC-1",
+      "criterion": "The input contract, meaning columns, types, required fields and the record key, is declared in a data file. Changing it requires no code change.",
+      "verifiable_by": "Add an optional column to the contract, load a file containing it, and query it. No source file was edited."
+    },
+    {
+      "id": "SC-2",
+      "criterion": "Every input row is reconciled: rows read equals rows loaded plus rows rejected plus rows superseded, per batch.",
+      "verifiable_by": "Load a batch with known bad rows. The report's counts add up and each rejected row has a reason."
+    },
+    {
+      "id": "SC-3",
+      "criterion": "Loading the same batch twice leaves the database unchanged the second time.",
+      "verifiable_by": "Load a batch, copy the database file, load it again, and compare table contents."
+    },
+    {
+      "id": "SC-4",
+      "criterion": "Loading all batches in any order produces the same final table.",
+      "verifiable_by": "Load the bundled batches in two different orders into fresh databases and compare."
+    },
+    {
+      "id": "SC-5",
+      "criterion": "A load that fails midway leaves no partial batch in the database.",
+      "verifiable_by": "Interrupt a load after some rows are written. The table matches its state before that batch began."
+    },
+    {
+      "id": "SC-6",
+      "criterion": "Someone who did not write it can answer a stated question about the data using only the README and the quality report.",
+      "verifiable_by": "Hand the repository and a question to another person. They answer it and say how confident they are and why."
+    }
+  ],
+  "non_goals": [
+    "A scheduler, workflow engine or long-running service. Batches are loaded by running the tool.",
+    "Streaming ingestion. The design must say how late data is handled, but input arrives as files.",
+    "Any database server. SQLite through the standard library is the only store.",
+    "Dashboards or charts. The quality report is text or a structured file."
+  ],
+  "operational_requirements": {
+    "failure_modes": [
+      {
+        "failure": "A row violates the contract, for example a missing required field or an unparseable date.",
+        "required_behavior": "Reject that row with a reason and keep it in a quarantine output, load the valid rows, and refuse the whole batch if the rejected share exceeds a declared threshold."
+      },
+      {
+        "failure": "The file header does not match the contract.",
+        "required_behavior": "Refuse the batch before loading any row, and name the missing or unexpected columns."
+      },
+      {
+        "failure": "The same batch is loaded twice, or a load is retried after a failure.",
+        "required_behavior": "Produce the same final state as a single successful load, and record that the retry was recognized."
+      },
+      {
+        "failure": "A later batch contains an earlier version of a record that is already loaded.",
+        "required_behavior": "Apply the documented rule for which version wins, which must not depend on the order files were loaded."
+      },
+      {
+        "failure": "The process is killed partway through a batch.",
+        "required_behavior": "No rows from that batch are visible, and the next run can load it cleanly."
+      }
+    ],
+    "observability": [
+      "A one-line summary per batch: rows read, loaded, rejected, superseded, and whether the batch was new or a recognized retry.",
+      "A batch manifest in the database recording each batch's identity, content digest and outcome.",
+      "The quality report states null rates, duplicate keys and changes in value distributions between batches."
+    ],
+    "rollback": "Batches are identified by content, and the manifest records what each changed, so a bad batch can be identified after the fact. The operational note documents how to rebuild the table from the retained batch files and why rebuilding, not editing rows in place, is the supported repair.",
+    "documentation": [
+      "A README with a quickstart that loads the bundled batches and prints the quality report in under a minute.",
+      "The input contract format, the record key and the rule for which version of a record wins.",
+      "An operations note covering a rejected batch, a retried load, an interrupted load and a rebuild."
+    ]
+  },
+  "context_budget": {
+    "source_tokens_target": 12000,
+    "excludes": [
+      "tests",
+      "lockfiles",
+      "generated files",
+      "the bundled sample batches"
+    ],
+    "rationale": "A system the learner can hold in context is a system the learner can hold in their head. The budget exists to force scope discipline on this specification, not to constrain the learner's style. This number is a starting target and should be revised against ACP-016 measurements."
+  },
+  "prerequisites": [
+    "Can run a Python program and install a package into a virtual environment.",
+    "Can write a SELECT with a WHERE clause and a GROUP BY.",
+    "Has used a test runner at least once, even without writing tests before."
+  ],
+  "task_packs": [
+    "batch-ingest-core"
+  ],
+  "caveats": [
+    "This is a first-party specification, not an upstream project. Completing it establishes no upstream contribution, maintainer relationship or endorsement.",
+    "The specification is owned by this repository. No solution, reference implementation or partial source is shipped with it.",
+    "All batches are synthetic and generated by the learner. No real source system or analyst depends on the output.",
+    "Evidence derived from this work describes learner-authored software produced inside a simulated engineering process. The surrounding review, assignment and incident workflows are simulated and must be qualified as such.",
+    "The context budget is an authoring constraint on this specification and an advisory target for the learner. It is not an acceptance criterion and no task fails for exceeding it."
+  ],
+  "sources": [],
+  "checked_at": "2026-09-24T00:00:00Z"
+}

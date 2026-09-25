@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "id": "slo-burn-report-03-burn-alerts",
+  "forge_id": "slo-burn-report",
+  "pack_id": "slo-burn-report-core",
+  "sequence": 3,
+  "type": "PRODUCT",
+  "title": "Alert on burn rate across multiple windows",
+  "problem": "Alerting on the raw error rate pages for short bursts that barely touch the budget and stays silent for slow leaks that exhaust it. Burn rate fixes the unit, but a single window still trades false pages against slow detection. The tool has to make that trade-off explicit.",
+  "context": "Builds on the declared objective and budget. Alert rules are declared in the objective file.",
+  "impact": "This is the output an on-call engineer acts on. A tool that pages wrongly gets muted, and a muted tool detects nothing.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-burn-rate",
+      "criterion": "Burn rate is computed as the observed bad-event ratio divided by the ratio the objective allows, for each configured window."
+    },
+    {
+      "id": "AC-multiwindow",
+      "criterion": "Each alert severity requires both a long and a short window to exceed its threshold. Thresholds and windows are declared data, not code."
+    },
+    {
+      "id": "AC-scenarios",
+      "criterion": "Synthetic scenarios cover a short spike that must not page, a sustained burn that must page, and a slow leak that must raise a ticket-level alert. Before running each one, the learner writes down when they expect it to fire."
+    },
+    {
+      "id": "AC-explainable",
+      "criterion": "Every alert names which windows exceeded which thresholds and with what values."
+    },
+    {
+      "id": "AC-recovery",
+      "criterion": "An alert clears when the short window recovers, and the report says it cleared rather than simply disappearing."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests replay each scenario and assert the alert state over time. All pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner compares the predicted and actual firing times, explains any gap, and names one situation where these rules still page wrongly or stay silent."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "No alert delivery. The tool reports a decision; it does not notify anyone.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "sre.slo-error-budgets",
+    "production.observability"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.debugging"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "alert rules",
+      "burn-rate evaluation"
+    ],
+    "description": "Alert evaluation over the event stream and its explanation."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "How long a given burn rate takes to exhaust the whole budget, and what that implies for thresholds",
+    "Why a short window is needed alongside the long one",
+    "What evidence an on-call engineer needs in the alert text to decide in under a minute"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design."
+  ],
+  "documentation_requirements": [
+    "Record the alert thresholds and windows, the predictions and the actual firing times in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Run a simulated incident with the tool and make it operable by someone else",
+    "summary": "Instrument the tool itself, run a timestamped incident exercise, and write the runbook."
+  }
+}

@@ -121,7 +121,7 @@ Adopted with ACP-015 (Phase 13, see `FOUNDATION_CHANGELOG.md`). All are executed
 | ID | Setup | Required result | Covered by |
 | --- | --- | --- | --- |
 | CF-42 | Forge project selected at E0 | Bind an empty learner-authored `source/`; never clone; no commit pin before code exists. | `tests/forge.test.ts` CF-42 |
-| CF-43 | Forge task assigned, completed and evidence recorded | The full lifecycle succeeds with no upstream repository present. | `tests/forge.test.ts` CF-43, all four `eval-ledger-core` tasks |
+| CF-43 | Forge task assigned, completed and evidence recorded | The full lifecycle succeeds with no upstream repository present. | `tests/forge.test.ts` CF-43, every task of every shipped forge pack |
 | CF-44 | `resume-evidence` invoked on completed forge work | Truthful description of learner-authored software, retaining simulation qualifiers for the surrounding process. | *behavioral* P21 |
 | CF-45 | Learner moves from a forge project to an upstream project | Prior forge evidence remains valid and citable; no re-baselining. | `tests/forge.test.ts` CF-45 |
 | FR-42 | Forge record with empty `task_packs` | Reject at catalog validation. | `tests/forge.test.ts` FR-42; `validate_foundation.py` |
