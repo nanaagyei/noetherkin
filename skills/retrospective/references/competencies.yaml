@@ -240,14 +240,20 @@
       "domain": "production",
       "name": "logging",
       "observable_behavior": "Record actionable context while excluding secrets.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "core.implementation"
+      ]
     },
     {
       "id": "production.metrics",
       "domain": "production",
       "name": "metrics",
       "observable_behavior": "Choose measurements tied to behavior and explain aggregation limits.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "core.implementation"
+      ]
     },
     {
       "id": "production.tracing",
@@ -263,7 +269,9 @@
       "observable_behavior": "Combine signals to distinguish competing failure hypotheses.",
       "required_core": false,
       "prerequisites": [
-        "core.debugging"
+        "core.debugging",
+        "production.metrics",
+        "production.logging"
       ]
     },
     {
@@ -390,7 +398,11 @@
       "domain": "python",
       "name": "testing",
       "observable_behavior": "Design Python tests with controlled fixtures and meaningful failure cases.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "python.language",
+        "core.testing"
+      ]
     },
     {
       "id": "python.performance",
@@ -663,7 +675,10 @@
       "domain": "data",
       "name": "SQL",
       "observable_behavior": "Write and validate queries whose joins, aggregation and null handling match the analytical question.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "core.implementation"
+      ]
     },
     {
       "id": "data.analytics",
@@ -684,7 +699,11 @@
       "domain": "data",
       "name": "data quality",
       "observable_behavior": "Detect and explain missing, inconsistent, duplicated or drifting data before relying on it.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "data.sql",
+        "core.testing"
+      ]
     },
     {
       "id": "research.reproducibility",
@@ -824,28 +843,43 @@
       "domain": "frontend",
       "name": "web platform",
       "observable_behavior": "Implement browser behavior using documented platform semantics and verify compatibility boundaries.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "core.implementation"
+      ]
     },
     {
       "id": "frontend.accessibility",
       "domain": "frontend",
       "name": "accessibility",
       "observable_behavior": "Test keyboard, semantic, and assistive-technology behavior against an explicit accessibility requirement.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "frontend.web-platform",
+        "core.testing"
+      ]
     },
     {
       "id": "frontend.state-management",
       "domain": "frontend",
       "name": "state management",
       "observable_behavior": "Model client state ownership and demonstrate correct transitions under asynchronous updates.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "frontend.web-platform",
+        "core.debugging"
+      ]
     },
     {
       "id": "frontend.performance",
       "domain": "frontend",
       "name": "frontend performance",
       "observable_behavior": "Measure a user-facing performance bottleneck and validate a targeted improvement.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "frontend.web-platform",
+        "core.debugging"
+      ]
     },
     {
       "id": "fullstack.end-to-end-delivery",
@@ -866,14 +900,21 @@
       "domain": "data",
       "name": "batch and streaming",
       "observable_behavior": "Choose batch or streaming semantics and test lateness, replay, and ordering assumptions.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "data.quality"
+      ]
     },
     {
       "id": "database.query-planning",
       "domain": "database",
       "name": "query planning",
       "observable_behavior": "Explain a query plan and validate an index or rewrite against measured behavior.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "backend.databases",
+        "data.sql"
+      ]
     },
     {
       "id": "database.storage-engines",
@@ -887,7 +928,10 @@
       "domain": "sre",
       "name": "SLOs and error budgets",
       "observable_behavior": "Define a measurable service objective and use its error budget to justify an operational decision.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "production.metrics"
+      ]
     },
     {
       "id": "sre.capacity-planning",
@@ -901,14 +945,22 @@
       "domain": "sre",
       "name": "incident management",
       "observable_behavior": "Coordinate diagnosis, mitigation, and follow-up using a timestamped incident record.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "production.observability",
+        "core.technical-communication"
+      ]
     },
     {
       "id": "observability.instrumentation",
       "domain": "observability",
       "name": "instrumentation",
       "observable_behavior": "Add telemetry that answers a stated operational question without misleading cardinality or sampling.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "production.metrics",
+        "production.logging"
+      ]
     },
     {
       "id": "observability.telemetry-pipelines",

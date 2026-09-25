@@ -28,7 +28,7 @@ Initialize only missing config/profile/null current-project/unselected current-t
 
 ## Allowed Actions
 
-Ask the learner to state goals, choose a track and confirm recorded constraints; identify prerequisites; request a team-lead baseline. Mark onboarding complete only after learner confirmation and aligned scope publication.
+Ask the learner to state goals, choose a track and confirm recorded constraints; identify prerequisites; request a team-lead baseline. Mark onboarding complete only after learner confirmation and aligned scope publication. When probing for the baseline, prefer the advisory view's `probe_candidates`, the competencies whose observation constrains the most of the graph, falling back to the core competencies when the graph has no edges (see [selection model](../docs/architecture/selection-model.md)). A probe that produces no artifact produces no finding, and an all-`unassessed` baseline remains valid.
 
 ## Forbidden Actions
 

@@ -12,7 +12,7 @@ import { inspectWorkspace, listProjects } from '../core/commands.js';
 import { alignTrack, listTracks, runnablePaths, selectTrack, trackAlignmentProposal } from '../core/tracks.js';
 import { migrateTo3, planMigration } from '../core/migration.js';
 import { exists, lockStatus, read, reclaimDeadLock, resolveWorkspace, runtime, safePath, statePath, withLock } from '../core/storage.js';
-import { advanceNext, assignTask, attestCriterion, beginTask, checkMap, investigationScope, mapStatus, nextAction, selectForge, cloneCatalogProject, codeReview, initMap, onboard, performanceReview, requestHelp, selectCatalogProject, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
+import { advanceNext, assignTask, attestCriterion, beginTask, checkMap, currentTask, investigationScope, mapStatus, nextAction, selectForge, cloneCatalogProject, codeReview, initMap, onboard, performanceReview, requestHelp, selectCatalogProject, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
 import { coreChecks, toolchainChecks, type EnvironmentCheck } from '../core/environment.js';
 import { lazyRoleAdapter, probeRoleHost, roleAdapterNames, roleHostChecks, type LazyRoleAdapter } from '../adapters/runtime/select.js';
 import { decodeOnboardingHandoff, prepareOnboarding, validateOnboardingHandoff } from '../adapters/hosts/generic/onboarding.js';
@@ -22,6 +22,8 @@ import { ClaudeCodeCapabilityHostAdapter } from '../adapters/hosts/claude-code/i
 import { planTransactionRecovery, recoverTransaction } from '../core/transactions.js';
 import { competencyGraph, competencyNeighbourhood } from '../core/graph.js';
 import { catalogs } from '../core/validation.js';
+import { forgePack, upstreamPack } from '../core/packs.js';
+import { advisoryFile, refreshAdvisory, taskRemediation } from '../core/advisory.js';
 import { parse } from '../core/parsing.js';
 import { commandNames, overview, usageOf } from './help.js';
 import { render, renderEnvironment, renderNextAction } from './render.js';
@@ -267,13 +269,13 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       else if (action === 'submit-change') data = submitChange(root);
       else if (action === 'test') data = testTask(root, values.prediction!, runtime, values.command);
       else data = await requestHelp(root, values.question!, adapter);
-      emit({ command, outcome: data.outcome === 'rework' ? 'incomplete' : 'success', coverage: 'simulation', data, diagnostics: [] }); return;
+      emit({ command, outcome: data.outcome === 'rework' ? 'incomplete' : 'success', coverage: 'simulation', data: withRemediation(root, data), diagnostics: [] }); return;
     }
     if (command === 'review') {
       const data = positionals[1] === 'code' ? await codeReview(root, adapter) : positionals[1] === 'task' ? await taskReview(root, adapter) : await performanceReview(root, adapter);
-      emit({ command, outcome: data.outcome === 'rework' ? 'incomplete' : 'success', coverage: 'simulation', data, diagnostics: [] }); return;
+      emit({ command, outcome: data.outcome === 'rework' ? 'incomplete' : 'success', coverage: 'simulation', data: withRemediation(root, data), diagnostics: [] }); return;
     }
-    if (command === 'next') { emit({ command, outcome: 'success', coverage: 'simulation', data: await advanceNext(root, adapter), diagnostics: [] }); return; }
+    if (command === 'next') { const data = await advanceNext(root, adapter); emit({ command, outcome: 'success', coverage: 'simulation', data: { ...data, advisory: advisorySummary(root) }, diagnostics: [] }); return; }
     if (command === 'doctor') {
       if (!interactive) { emit({ command, outcome: 'proposal', coverage: 'none', data: { workspace: root }, diagnostics: [{ code: 'DIRECT_CONSENT_REQUIRED', path: root, message: 'Run doctor --recover in a direct learner-controlled terminal.' }] }); return; }
       const rl = createInterface({ input: stdin, output: stderr });
@@ -305,6 +307,40 @@ function installSkills(values: Values): ObjectValue {
   const reports = chosen.map(host => installCapabilities(hosts[host]!(), target, values.skill ?? portableSkillIds()));
   // One host keeps the original report shape; several are listed.
   return reports.length === 1 ? reports[0]! as unknown as ObjectValue : { installs: reports };
+}
+
+/** CF-40: a rework outcome names the specific prerequisite competencies to revisit (ACP-014 remediation). */
+function withRemediation(root: string, data: ObjectValue): ObjectValue {
+  if (data.outcome !== 'rework') return data;
+  const task = currentTask(root);
+  return task ? { ...data, remediation: taskRemediation(root, task) } : data;
+}
+
+/** Forges and curated packs whose tasks exercise a competency, so the advisory can point at runnable work. */
+function exercisedBy(competencyId: string): string[] {
+  const { forges, projects } = catalogs();
+  const exercises = (templates: ObjectValue[]) => templates.some(template => [...template.primary_competencies, ...template.secondary_competencies].includes(competencyId));
+  return [
+    ...forges.filter(forge => forge.status !== 'deprecated' && exercises(forge.task_packs.flatMap((pack: string) => forgePack(pack)))).map(forge => forge.id),
+    ...projects.filter(project => project.support?.task_packs?.length && exercises(project.support.task_packs.flatMap((pack: string) => upstreamPack(pack)))).map(project => project.id),
+  ];
+}
+
+/** ACP-014: the labeled advisory block `next` adds. The full view is the derived file; this is its head. */
+function advisorySummary(root: string): ObjectValue {
+  const refreshed = refreshAdvisory(root);
+  const view = refreshed.view;
+  const top = (view?.attention ?? []).filter((item: ObjectValue) => item.rank === 1);
+  return {
+    label: 'Advisory only: derived from your competency cache and graph. Not evidence; it gates nothing; the cache wins any disagreement.',
+    file: refreshed.written ? advisoryFile : null,
+    top: top.slice(0, 5).map((item: ObjectValue) => ({ competency_id: item.competency_id, position: item.position, reasons: item.reasons, exercised_by: exercisedBy(item.competency_id) })),
+    tied_at_top: top.length,
+    blocked: (view?.blocked ?? []).slice(0, 5),
+    remediation: view?.remediation ?? [],
+    contradictions: refreshed.contradictions,
+    diagnostics: refreshed.diagnostics,
+  };
 }
 
 function initSummary(root: string, proposal: ObjectValue): string {

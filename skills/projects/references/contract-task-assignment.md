@@ -28,11 +28,11 @@ One task initially at backlog, then assigned with append-only transitions. Owns 
 
 ## Allowed Actions
 
-Define TRAINING (simulated exercise), PRODUCT (learner-local product improvement) or UPSTREAM (intended contribution, no submission authorization). Set unique criterion IDs, test expectations and investigation areas.
+Define TRAINING (simulated exercise), PRODUCT (learner-local product improvement) or UPSTREAM (intended contribution, no submission authorization). Set unique criterion IDs, test expectations and investigation areas. Where the choice is otherwise open, use the advisory attention view (see [selection model](selection-model.md)): prefer one assignment that genuinely exercises several high-attention competencies over several narrow ones, prefer high-attention competencies from dissimilar domains within one assignment, and when a high-attention competency is blocked by a missing prerequisite, prefer unblocked frontier work and name the gap so the learner decides whether to detour.
 
 ## Forbidden Actions
 
-Include a solution, invent upstream demand, promise contribution acceptance, change any frozen assignment field or promote a learner.
+Include a solution, invent upstream demand, promise contribution acceptance, change any frozen assignment field or promote a learner. List a competency the work does not genuinely exercise, whatever the attention ordering recommends; that is fabricated scope. Treat the advisory view as evidence, as a gate, or as a substitute for the team lead's assignment decision.
 
 ## Required Outputs
 

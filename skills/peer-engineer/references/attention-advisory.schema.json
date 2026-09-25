@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://engineering-apprenticeship.example/schemas/3.0/attention-advisory.schema.json",
+  "title": "attention-advisory",
+  "description": "ACP-014. NON-CANONICAL derived view at .apprenticeship/advisory/attention.yaml. It orders competencies for a human to look at and establishes nothing: it is never evidence, never gates any transition, and loses to the competency cache on any disagreement. It may be deleted at any time. It deliberately has no field for a percentage, mastery value, decay coefficient or due date.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "data_class",
+    "canonical",
+    "generated_at",
+    "source",
+    "notice",
+    "attention",
+    "blocked",
+    "remediation",
+    "probe_candidates"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "enum": ["1.0"] },
+    "data_class": { "enum": ["live", "fixture"] },
+    "canonical": { "const": false },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "source": {
+      "type": "object",
+      "required": ["competency_catalog_version", "cache_generated_at", "cache_digest", "evidence_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "competency_catalog_version": { "type": "string", "minLength": 1 },
+        "cache_generated_at": { "type": "string", "format": "date-time" },
+        "cache_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "evidence_ids": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+      }
+    },
+    "notice": { "type": "string", "minLength": 1 },
+    "attention": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["competency_id", "finding", "position", "rank", "tied_with", "last_observed_at", "contexts", "reasons"],
+        "additionalProperties": false,
+        "properties": {
+          "competency_id": { "type": "string", "minLength": 1 },
+          "finding": { "enum": ["unassessed", "developing", "demonstrated"] },
+          "position": { "enum": ["frontier", "demonstrated"] },
+          "rank": { "type": "integer", "minimum": 1 },
+          "tied_with": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "last_observed_at": { "type": ["string", "null"], "format": "date-time" },
+          "contexts": { "type": "integer", "minimum": 0 },
+          "reasons": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+        }
+      }
+    },
+    "blocked": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["competency_id", "finding", "missing_prerequisites"],
+        "additionalProperties": false,
+        "properties": {
+          "competency_id": { "type": "string", "minLength": 1 },
+          "finding": { "enum": ["unassessed", "developing"] },
+          "missing_prerequisites": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1, "uniqueItems": true }
+        }
+      }
+    },
+    "remediation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["competency_id", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "competency_id": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "probe_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["competency_id", "constrains"],
+        "additionalProperties": false,
+        "properties": {
+          "competency_id": { "type": "string", "minLength": 1 },
+          "constrains": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+        }
+      }
+    }
+  }
+}

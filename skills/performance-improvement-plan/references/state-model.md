@@ -15,6 +15,7 @@ State is UTF-8 YAML 1.2 restricted to JSON-compatible values. Reject duplicate m
 | `assessments/<assessment-id>.yaml` | assessment | Canonical baseline or technical competency judgment |
 | `reviews/<kind>/<review-id>.yaml` | review | Canonical code, task, performance or promotion review |
 | `competencies.yaml` | competency-state | Derived cache; can be deleted and rebuilt without losing a decision |
+| `advisory/attention.yaml` | attention-advisory | Derived advisory view; establishes nothing; deletable. Not canonical: never validated as state, never cited, never read by the cache derivation ([selection model](selection-model.md)) |
 | `knowledge/*.md` | No machine schema | Learner-authored notes, authoritative only for what they literally record. `knowledge/codebase-map.md` is located by the derived, read-only `map status` pointer (ACP-016), which reports whether that exact text was checked at the current source revision; the pointer adds no canonical field and no authority |
 | `evidence/resume-evidence.md` | No machine schema | Optional derived export; cite live evidence and describe simulation limits |
 

@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from './parsing.js';
 import { canonical, diagnostic, encode, requireThat, sha256, validId, type Diagnostic, type ObjectValue } from './common.js';
-import { exists, read, runtime, safePath, statePath, type Runtime } from './storage.js';
+import { advisoryDirectory, exists, read, runtime, safePath, statePath, type Runtime } from './storage.js';
 import { compileSchema, errorsText } from './schema.js';
 import { validateCompetencyGraph } from './graph.js';
 import { loadForgeRecords } from './packs.js';
@@ -71,7 +71,8 @@ export function collect(root: string, rt = runtime): Map<string, ObjectValue> {
     for (const entry of rt.fs.readdirSync(safePath(root, relative ? statePath(relative) : '.apprenticeship', rt), { withFileTypes: true })) {
       const name = relative ? `${relative}/${entry.name}` : entry.name;
       const target = safePath(root, statePath(name), rt);
-      if (entry.isDirectory()) { if (!['snapshots', 'authorizations', 'operations'].includes(name)) walk(name); continue; }
+      // advisory/ holds the derived ACP-014 view: not canonical state, so it is neither validated nor required.
+      if (entry.isDirectory()) { if (!['snapshots', 'authorizations', 'operations', 'advisory'].includes(name)) walk(name); continue; }
       requireThat(entry.isFile(), 'UNSAFE_PATH', statePath(name), 'Workspace state must contain regular files or directories.');
       if (name.endsWith('.yaml') || name.endsWith('.yml')) {
         requireThat(schemaFor(name), 'UNKNOWN_RECORD', statePath(name), 'Unknown structured state location; preserve it and inspect the producer.');
@@ -152,6 +153,9 @@ export function inspectRecords(records: Map<string, ObjectValue>, root?: string,
             requireThat(/^workspace:\/[^/]/.test(child), 'UNSAFE_PATH', file, 'Use workspace:/relative/path artifact URIs.');
             const relative = decodeURIComponent(child.slice('workspace:/'.length).split(/[?#]/)[0]!);
             safePath(root ?? '/', relative, rt);
+            // FR-38: the advisory view is not an evidence record and no record may cite it.
+            const cited = path.posix.normalize(relative);
+            requireThat(cited !== advisoryDirectory && !cited.startsWith(`${advisoryDirectory}/`), 'ADVISORY_CITED', file, 'The advisory attention view is not evidence and cannot be cited by any record.');
           }
         }
         walk(child);

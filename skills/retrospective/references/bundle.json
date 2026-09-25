@@ -2,7 +2,7 @@
   "format_version": 2,
   "protocol_version": "3.0",
   "skill": "retrospective",
-  "manifest_sha256": "5d1aa9ba8e526fe6d4f4ae6f93604d2749649adddf55594c054426790da61e97",
+  "manifest_sha256": "a82552a5e92b46ec62a59a14a1dc0efacfae48b3569a4cbd9a27bde4ee68b1ff",
   "context_only_links": {
     "SPEC.md": "Repository index; required protocol documents are bundled directly.",
     "archive/protocol-1.0/FOUNDATION_V1.md": "Historical protocol 1.0, not current authority.",
@@ -32,8 +32,8 @@
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "4c6d2343e9389a63a14d1f8decc5edd6983515a5c5c912a7c8bf1e952bd54da3",
-      "bundled_sha256": "4c6d2343e9389a63a14d1f8decc5edd6983515a5c5c912a7c8bf1e952bd54da3"
+      "source_sha256": "f9c563445e8ed7deebc0b3a8d41ab29abe38aec7de11cba4959cd239b4899575",
+      "bundled_sha256": "f9c563445e8ed7deebc0b3a8d41ab29abe38aec7de11cba4959cd239b4899575"
     },
     {
       "source": "docs/architecture/overview.md",
@@ -56,8 +56,8 @@
     {
       "source": "docs/architecture/state-model.md",
       "target": "references/state-model.md",
-      "source_sha256": "594538470961e13af5b0df8ff5af1c27bb32d72dcb3842861ef5586a25013bdc",
-      "bundled_sha256": "594538470961e13af5b0df8ff5af1c27bb32d72dcb3842861ef5586a25013bdc"
+      "source_sha256": "b0bb33f88bc508fbc7c2e4b1839841a4bdf9e1db7044286fbbdfff5eb01c1cc1",
+      "bundled_sha256": "b0bb33f88bc508fbc7c2e4b1839841a4bdf9e1db7044286fbbdfff5eb01c1cc1"
     },
     {
       "source": "docs/architecture/simulation-lifecycle.md",
@@ -104,8 +104,14 @@
     {
       "source": "docs/architecture/conformance.md",
       "target": "references/conformance.md",
-      "source_sha256": "a65aa14dfc336c90ec194c9366b8d4e5e1545a4f9046805ae9ff944df146452c",
-      "bundled_sha256": "a65aa14dfc336c90ec194c9366b8d4e5e1545a4f9046805ae9ff944df146452c"
+      "source_sha256": "7de91044019dc67544b70204a4b35effb8ff84ab0d6aadbe7aac9d7e3632d906",
+      "bundled_sha256": "7de91044019dc67544b70204a4b35effb8ff84ab0d6aadbe7aac9d7e3632d906"
+    },
+    {
+      "source": "docs/architecture/selection-model.md",
+      "target": "references/selection-model.md",
+      "source_sha256": "4194de5772684da9935aa93ab1fd2c79fdf1315f4718be9ce3b4fe89572cec1d",
+      "bundled_sha256": "b0ec47bb9a192d12b19abdf52a06e223617127348b0ab7a8321d7704b156e4c5"
     },
     {
       "source": "contracts/README.md",
@@ -186,10 +192,16 @@
       "bundled_sha256": "077f17c98d5b892052f566c25509d13726b3c9455378108c3b709a6d070981e6"
     },
     {
+      "source": "schemas/attention-advisory.schema.json",
+      "target": "references/attention-advisory.schema.json",
+      "source_sha256": "4d4849e8fdb0cc07cdef0c031a0964b43d7e0644f440178bbdf7d33be17095ef",
+      "bundled_sha256": "4d4849e8fdb0cc07cdef0c031a0964b43d7e0644f440178bbdf7d33be17095ef"
+    },
+    {
       "source": "catalog/competencies.yaml",
       "target": "references/competencies.yaml",
-      "source_sha256": "d000f9ff044e774fd96b25061fa45b2834269a7510fbb63daf70b5b141ede73f",
-      "bundled_sha256": "d000f9ff044e774fd96b25061fa45b2834269a7510fbb63daf70b5b141ede73f"
+      "source_sha256": "1b02b0d123fff1bd4d11d55b8e57786846eb4db31828b0deac73604b5d82e8f0",
+      "bundled_sha256": "1b02b0d123fff1bd4d11d55b8e57786846eb4db31828b0deac73604b5d82e8f0"
     },
     {
       "source": "catalog/levels.yaml",
@@ -234,5 +246,5 @@
       "bundled_sha256": "0113a10ef0706c042524f7feda6c2bd7a5e107ac8cd461b6199d9e9d7e9f45b4"
     }
   ],
-  "index_sha256": "59dff7af06471e935992d9a2bb904c61fe2c117c71aff2d287c7a44cad02ff6a"
+  "index_sha256": "4583d9e77e35ac9b86394c2e0121069ee1857b26b5e2780fcd0be93b64777414"
 }

@@ -28,7 +28,7 @@ The executable requires Node.js 24+. Build with `npm ci` and `npm run build`, th
 | `task scope` | List the files the current task's frozen `investigation_paths` globs select inside the bound source; matches that resolve outside it are reported as rejected. |
 | `task submit-design`, `task submit-change`, `task test`, `task help` | Gate design, snapshot learner work, run focused tests, or request attributed help. A forge task snapshots every non-ignored file of the learner's repository and takes the learner's declared `--command`. |
 | `review code`, `review task`, `review performance` | Publish bound peer, team-lead and manager judgments. |
-| `next` | Derive the phase and invoke safe no-input handlers; otherwise report the explicit command needing learner input or confirmation. |
+| `next` | Derive the phase and invoke safe no-input handlers; otherwise report the explicit command needing learner input or confirmation. It also adds a labeled `advisory` block (ACP-014): the competencies tied for first attention and why, the forges or curated packs that exercise them, blocked and contested items, and any stale advisory it replaced. The block is derived, not evidence, and gates nothing; the full view is written to `.apprenticeship/advisory/attention.yaml`, which is safe to delete. |
 
 ## Role judgments
 

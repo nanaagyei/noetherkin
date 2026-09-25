@@ -35,7 +35,7 @@ const stateRoot = path.join(root, 'examples/spring-petclinic/.apprenticeship');
 const stateSchema = file => ({
   'config.yaml': 'apprenticeship-config', 'profile.yaml': 'learner-profile', 'current-project.yaml': 'current-project',
   'current-track.yaml': 'current-track', 'competencies.yaml': 'competency-state',
-}[path.basename(file)] ?? { projects: 'project', work: 'task', evidence: 'evidence', assessments: 'assessment', reviews: 'review' }[path.basename(path.dirname(file))]
+}[path.basename(file)] ?? { projects: 'project', work: 'task', evidence: 'evidence', assessments: 'assessment', reviews: 'review', advisory: 'attention-advisory' }[path.basename(path.dirname(file))]
   ?? (path.basename(path.dirname(path.dirname(file))) === 'reviews' ? 'review' : null));
 
 function walk(directory) {

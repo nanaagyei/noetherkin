@@ -94,7 +94,30 @@ function renderSkills(data: ObjectValue): string {
   }).join('\n');
 }
 
+function renderAdvisory(advisory: ObjectValue | undefined): string {
+  if (!advisory) return '';
+  const lines = ['', 'Advisory (derived; not evidence; gates nothing):'];
+  if (advisory.top.length) {
+    const names = advisory.top.map((item: ObjectValue) => item.competency_id).join(', ');
+    lines.push(advisory.tied_at_top > 1 ? `  Tied for first attention (${advisory.tied_at_top}): ${names}${advisory.tied_at_top > advisory.top.length ? ', ...' : ''}` : `  First attention: ${names}`);
+    const first = advisory.top[0];
+    lines.push(`  Why: ${first.reasons.join(' ')}`);
+    const runnable = [...new Set(advisory.top.flatMap((item: ObjectValue) => item.exercised_by))];
+    if (runnable.length) lines.push(`  Exercised by: ${runnable.join(', ')}`);
+  }
+  for (const item of advisory.remediation) lines.push(`  Explain before practicing: ${item.competency_id} (${item.reason})`);
+  if (advisory.blocked.length) lines.push(`  Waiting on a prerequisite: ${advisory.blocked.map((item: ObjectValue) => `${item.competency_id} (needs ${item.missing_prerequisites.join(', ')})`).join('; ')}`);
+  for (const text of advisory.contradictions) lines.push(`  Replaced a stale advisory: ${text}`);
+  for (const item of advisory.diagnostics) lines.push(`  Advisory unavailable: ${item.message}`);
+  if (advisory.file) lines.push(`  Full view: ${advisory.file} (safe to delete)`);
+  return `\n${lines.join('\n')}`;
+}
+
 function renderNext(data: ObjectValue): string {
+  return renderNextBody(data) + renderAdvisory(data.advisory);
+}
+
+function renderNextBody(data: ObjectValue): string {
   if (!data.invoked) return renderNextAction(data);
   const result = data.result as ObjectValue;
   const summary = result.review_outcome ?? result.outcome ?? 'done';

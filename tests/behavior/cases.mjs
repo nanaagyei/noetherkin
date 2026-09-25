@@ -138,7 +138,8 @@ export function initialFiles(c) {
     const dir = path.join(root, 'examples/spring-petclinic/.apprenticeship');
     const visit = (d, prefix) => { for (const entry of fs.readdirSync(d, { withFileTypes: true })) {
       const name = `${prefix}/${entry.name}`;
-      if (entry.isDirectory()) visit(path.join(d, entry.name), name);
+      // The derived ACP-014 advisory is not canonical state; keep the behavioral corpus exactly as it was before it existed.
+      if (entry.isDirectory()) { if (name !== '.apprenticeship/advisory') visit(path.join(d, entry.name), name); }
       else files[name] = fs.readFileSync(path.join(d, entry.name), 'utf8');
     } }; visit(dir, '.apprenticeship');
     if (c.pending || c.bootstrapRoles) {
