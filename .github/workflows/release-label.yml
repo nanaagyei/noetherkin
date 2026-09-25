@@ -1,0 +1,30 @@
+name: Release label
+
+# A pull request into main must carry exactly one release label, which decides the version bump when it merges
+# (ADR-018): release:major (breaking), release:minor (feature), release:patch (bug fix) or release:none.
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+jobs:
+  label:
+    name: Release label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Require exactly one release label
+        env:
+          LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: |
+          node --input-type=module -e "
+            import { bumpFromLabels } from './scripts/release-plan.mjs';
+            const bump = bumpFromLabels(JSON.parse(process.env.LABELS));
+            console.log('Merging this pull request releases a ' + bump + ' change.');
+          "

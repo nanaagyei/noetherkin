@@ -60,13 +60,16 @@ publication and post-publication verification are removed rather than left as un
 
 - [x] Retire registry publication. `package.json` is `private`, and `publishConfig` and `prepublishOnly` are gone.
       `scripts/check-release.mjs` now requires `private: true`, so an accidental `npm publish` stays blocked.
-- [x] Ship the CLI as a release asset (ADR-017). Publishing a GitHub release runs `.github/workflows/release.yml`:
-      the `verify` job runs `release:check`, audits and packs; the `attach` job, the only one with write access,
-      uploads `noetherkin-<version>.tgz`, a stable-named `noetherkin.tgz` and a `.sha256` for each. Learners install
+- [x] Ship the CLI as a release asset (ADR-017) and release automatically (ADR-018). Each push to `main` runs
+      `.github/workflows/release.yml`: `plan` reads the merged pull request's release label (or commit subjects),
+      `verify` stamps the version and runs `release:check`, audits and packs, and `publish`, the only job with write
+      access, tags and creates the release with `noetherkin-<version>.tgz`, a stable-named `noetherkin.tgz` and a
+      `.sha256` for each. Learners install
       with `npm install -g https://github.com/nanaagyei/noetherkin/releases/latest/download/noetherkin.tgz`.
-- [ ] Cut a GitHub release when a version is worth marking. Tag exactly `v<package-version>` on a reviewed
-      `main` commit and use the changelog entry as release notes. After the workflow finishes, run the install
-      command above in a clean prefix and confirm `noetherkin --help` and `noetherkin skills list`.
+- [ ] Make **Release label** a required status check on `main` (owner setting), so an unlabeled pull request
+      cannot merge.
+- [ ] After each release, run the install command above in a clean prefix and confirm `noetherkin --help` and
+      `noetherkin skills list`.
 - [ ] Keep `npm pack` green. The tarball is the release artifact and is exercised by the package test.
 
 The CLI installs from the latest release tarball, and `noetherkin setup` installs the skills. `npx skills add nanaagyei/noetherkin`
