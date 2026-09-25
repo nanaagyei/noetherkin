@@ -48,8 +48,8 @@ Every proposal must contain, in this order:
 4. **Rejected alternatives**: at least one, each with the tradeoff that caused the rejection.
 5. **Version impact**: schema identifiers, catalog versions and wire protocol versions affected.
 6. **Migration impact**: what happens to existing workspaces, and what is preserved byte-for-byte.
-7. **Conformance**: named new cases. New behavioral cases continue from `CF-52`; new failure and repair cases
-   continue from `FR-54` (IDs held by a staged proposal stay reserved). Verify against `docs/architecture/conformance.md` before assigning IDs, because those
+7. **Conformance**: named new cases. New behavioral cases continue from `CF-58`; new failure and repair cases
+   continue from `FR-61` (IDs held by a staged proposal stay reserved). Verify against `docs/architecture/conformance.md` before assigning IDs, because those
    ranges move.
 8. **Open questions**: what this proposal deliberately leaves unresolved.
 
@@ -61,6 +61,7 @@ Every proposal must contain, in this order:
 | [ACP-013](ACP-013-competency-graph.md) | Competency prerequisite and encompassing graph | `ADOPTED`, 2026-09-23 |
 | [ACP-014](ACP-014-frontier-selection.md) | Advisory attention signal and frontier-guided selection | `ADOPTED`, 2026-09-24 |
 | [ACP-015](ACP-015-forge-projects.md) | First-party forge projects | `ADOPTED`, 2026-09-23 |
+| [ACP-017](ACP-017-human-mentor-mode.md) | Human mentor mode: signed human judgments for reviewing roles | `PROPOSED`, 2026-09-24 |
 | [ACP-016](ACP-016-context-budget.md) | Context budget discipline | `ADOPTED`, 2026-09-23 |
 
 ACP-01 through ACP-11 were adopted before this directory existed. They are recorded in
