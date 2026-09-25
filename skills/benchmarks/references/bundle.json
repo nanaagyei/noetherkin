@@ -2,7 +2,7 @@
   "format_version": 2,
   "protocol_version": "3.0",
   "skill": "benchmarks",
-  "manifest_sha256": "5d1aa9ba8e526fe6d4f4ae6f93604d2749649adddf55594c054426790da61e97",
+  "manifest_sha256": "a82552a5e92b46ec62a59a14a1dc0efacfae48b3569a4cbd9a27bde4ee68b1ff",
   "context_only_links": {
     "SPEC.md": "Repository index; required protocol documents are bundled directly.",
     "archive/protocol-1.0/FOUNDATION_V1.md": "Historical protocol 1.0, not current authority.",
@@ -26,14 +26,14 @@
     {
       "source": "OPEN_QUESTIONS.md",
       "target": "references/OPEN_QUESTIONS.md",
-      "source_sha256": "e532c44cd902cdae9af049a6cc387e7efd49f310f1586bb0349ef584fd625268",
-      "bundled_sha256": "e532c44cd902cdae9af049a6cc387e7efd49f310f1586bb0349ef584fd625268"
+      "source_sha256": "25379ff4b7928924381cfb1f607a4e28b7c3a2ecf985831bd669bc628a48d01b",
+      "bundled_sha256": "25379ff4b7928924381cfb1f607a4e28b7c3a2ecf985831bd669bc628a48d01b"
     },
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "4c6d2343e9389a63a14d1f8decc5edd6983515a5c5c912a7c8bf1e952bd54da3",
-      "bundled_sha256": "4c6d2343e9389a63a14d1f8decc5edd6983515a5c5c912a7c8bf1e952bd54da3"
+      "source_sha256": "daa81c9184074ebe3b681bb3c0b946bd0707c0005f3e35ff5b54c499f0f4d355",
+      "bundled_sha256": "2ac713e747ec7d12c5a30b1eda319feb51969c55e9cd27bb7960b711e5d2d6b7"
     },
     {
       "source": "docs/architecture/overview.md",
@@ -56,8 +56,8 @@
     {
       "source": "docs/architecture/state-model.md",
       "target": "references/state-model.md",
-      "source_sha256": "594538470961e13af5b0df8ff5af1c27bb32d72dcb3842861ef5586a25013bdc",
-      "bundled_sha256": "594538470961e13af5b0df8ff5af1c27bb32d72dcb3842861ef5586a25013bdc"
+      "source_sha256": "b0bb33f88bc508fbc7c2e4b1839841a4bdf9e1db7044286fbbdfff5eb01c1cc1",
+      "bundled_sha256": "b0bb33f88bc508fbc7c2e4b1839841a4bdf9e1db7044286fbbdfff5eb01c1cc1"
     },
     {
       "source": "docs/architecture/simulation-lifecycle.md",
@@ -104,8 +104,14 @@
     {
       "source": "docs/architecture/conformance.md",
       "target": "references/conformance.md",
-      "source_sha256": "6fc7dded82254ebe86b853e9228b2726031cf75e8d9b77bae9d359a0662b4bb6",
-      "bundled_sha256": "6fc7dded82254ebe86b853e9228b2726031cf75e8d9b77bae9d359a0662b4bb6"
+      "source_sha256": "7de91044019dc67544b70204a4b35effb8ff84ab0d6aadbe7aac9d7e3632d906",
+      "bundled_sha256": "7de91044019dc67544b70204a4b35effb8ff84ab0d6aadbe7aac9d7e3632d906"
+    },
+    {
+      "source": "docs/architecture/selection-model.md",
+      "target": "references/selection-model.md",
+      "source_sha256": "4194de5772684da9935aa93ab1fd2c79fdf1315f4718be9ce3b4fe89572cec1d",
+      "bundled_sha256": "b0ec47bb9a192d12b19abdf52a06e223617127348b0ab7a8321d7704b156e4c5"
     },
     {
       "source": "contracts/README.md",
@@ -186,10 +192,16 @@
       "bundled_sha256": "077f17c98d5b892052f566c25509d13726b3c9455378108c3b709a6d070981e6"
     },
     {
+      "source": "schemas/attention-advisory.schema.json",
+      "target": "references/attention-advisory.schema.json",
+      "source_sha256": "4d4849e8fdb0cc07cdef0c031a0964b43d7e0644f440178bbdf7d33be17095ef",
+      "bundled_sha256": "4d4849e8fdb0cc07cdef0c031a0964b43d7e0644f440178bbdf7d33be17095ef"
+    },
+    {
       "source": "catalog/competencies.yaml",
       "target": "references/competencies.yaml",
-      "source_sha256": "d000f9ff044e774fd96b25061fa45b2834269a7510fbb63daf70b5b141ede73f",
-      "bundled_sha256": "d000f9ff044e774fd96b25061fa45b2834269a7510fbb63daf70b5b141ede73f"
+      "source_sha256": "1b02b0d123fff1bd4d11d55b8e57786846eb4db31828b0deac73604b5d82e8f0",
+      "bundled_sha256": "1b02b0d123fff1bd4d11d55b8e57786846eb4db31828b0deac73604b5d82e8f0"
     },
     {
       "source": "catalog/levels.yaml",
@@ -200,8 +212,8 @@
     {
       "source": "skill-pack/runtime.md",
       "target": "references/runtime.md",
-      "source_sha256": "bd8b73fca6730569a440731609229787d30e931c4e1a5c9f08e6fa9767211774",
-      "bundled_sha256": "971346dc551b67c54ab2b46162bbb16274da77058d547f54a29b983bf5c089a2"
+      "source_sha256": "70e36fd8974897d8e85015252b0164d7576d00503f5fcad9f3e09f01b94ea6a9",
+      "bundled_sha256": "4d5057aef0507bc358c2877127b052e35338b3624b96d7d53c5955d3d5515672"
     },
     {
       "source": "skill-pack/proposals.md",
@@ -234,5 +246,5 @@
       "bundled_sha256": "fc91b5691eb7b9bec503fc934eb8d948d2c7c456272189d886c004eba9cc4060"
     }
   ],
-  "index_sha256": "cd5cafd820849b3024a9c196fd09cf6c24957f70b7b7b437d8af76b19c7f6b17"
+  "index_sha256": "32c0a06e3e0c91d011709c767038e43b0090b33b8ccadd6c876df775907df309"
 }

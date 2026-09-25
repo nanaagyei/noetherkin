@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "id": "accessible-data-table-01-semantic-table",
+  "forge_id": "accessible-data-table",
+  "pack_id": "accessible-data-table-core",
+  "sequence": 1,
+  "type": "PRODUCT",
+  "title": "Render data as a native table from declarative column definitions",
+  "problem": "A table built from generic elements looks like a table and is not one. Assistive technology cannot announce which header a cell belongs to, and a component that writes cell values as markup turns any data it displays into something that can execute.",
+  "context": "This is the first task of a learner-authored forge project. No source exists yet. The learner creates the repository, chooses its structure, and owns every design decision inside the specification's constraints.",
+  "impact": "Every later feature, sorting, filtering and performance work included, is built on this structure. If the structure is wrong, every later feature is inaccessible no matter how well it works.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-declarative",
+      "criterion": "Columns are described by data (a field or accessor, a header label, and an optional formatter). Adding a column requires no change to the component."
+    },
+    {
+      "id": "AC-semantics",
+      "criterion": "The output is a native table with a caption, th header cells with an explicit scope, and one row element per data row."
+    },
+    {
+      "id": "AC-text-only",
+      "criterion": "Every cell value is rendered as text. A value containing markup is displayed literally."
+    },
+    {
+      "id": "AC-missing-field",
+      "criterion": "A row that lacks a column's field renders an explicit empty value and does not throw."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover the rendered structure, a markup-bearing value, and a missing field, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the column definition shape, one rejected alternative, and what an assistive technology user loses if the header scope is omitted."
+    }
+  ],
+  "constraints": [
+    "The component itself uses no runtime dependencies. TypeScript, a test runner and a DOM implementation for tests are the only development dependencies.",
+    "Do not implement sorting, filtering or asynchronous loading yet. This task ends at a correct static render.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "core.implementation",
+    "frontend.web-platform"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.git"
+  ],
+  "recommended_level": "E0",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "table rendering"
+    ],
+    "description": "One render function and its public column definition shape."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "Which native table elements and attributes carry meaning to assistive technology, and which are presentational",
+    "How a DOM API choice decides whether a value is interpreted as markup",
+    "What the smallest column definition is that a caller can extend without a component change"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design."
+  ],
+  "documentation_requirements": [
+    "Record the column definition shape and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Sort by column from the keyboard and announce the sort state",
+    "summary": "Make every column sortable with keyboard-operable controls and a programmatic sort state."
+  }
+}

@@ -27,7 +27,7 @@ test('CF-35: the shipped catalog is an acyclic graph exposed to a 4.0 workspace'
   assert.doesNotThrow(() => validateCompetencyGraph(competencies));
   const graph = competencyGraph(competencies, '4.0');
   assert.deepEqual(graph.prerequisites['core.debugging'], ['core.codebase-navigation', 'core.testing']);
-  assert.deepEqual(competencyNeighbourhood(graph, 'core.testing').required_by, ['backend.authentication-authorization', 'backend.concurrency', 'core.debugging', 'core.ownership']);
+  assert.deepEqual(competencyNeighbourhood(graph, 'core.testing').required_by, ['backend.authentication-authorization', 'backend.concurrency', 'core.debugging', 'core.ownership', 'data.quality', 'frontend.accessibility', 'python.testing']);
 });
 
 test('CF-36: an unedged competency is always reachable and shows no edges', () => {
@@ -69,13 +69,18 @@ test('FR-34: a core competency cannot require a non-core prerequisite', () => {
 
 test('FR-36: no code that derives standing or the competency cache can read the graph', () => {
   // Only the graph module, the catalog validator and the read-only CLI may mention edges or import the graph.
-  const allowed = new Set(['core/graph.ts', 'core/validation.ts', 'cli/main.ts']);
+  // ACP-014 adds the advisory modules, which read edges but write only the derived advisory file.
+  const allowed = new Set(['core/graph.ts', 'core/validation.ts', 'cli/main.ts', 'core/frontier.ts', 'core/advisory.ts']);
   const sources = ['core', 'cli', 'adapters/runtime', 'adapters/hosts'].flatMap(directory => fs.readdirSync(path.join(repository, directory), { recursive: true, encoding: 'utf8' }).filter(file => file.endsWith('.ts')).map(file => `${directory}/${file}`));
   for (const file of sources.filter(file => !allowed.has(file))) {
     const text = fs.readFileSync(path.join(repository, file), 'utf8');
     // The track listing copies a project's own `prerequisites` field, unrelated to competency edges; nothing else may.
     const edgeAccess = text.replaceAll('prerequisites: project.prerequisites', '');
     assert.doesNotMatch(edgeAccess, /\bprerequisites\b|\bencompasses\b|from '[./]*graph\.js'/, `${file} must not read competency edges`);
+  }
+  // Nothing but the CLI may import the advisory modules, so no publisher or cache derivation can reach them.
+  for (const file of sources.filter(file => !['cli/main.ts', 'core/advisory.ts'].includes(file))) {
+    assert.doesNotMatch(fs.readFileSync(path.join(repository, file), 'utf8'), /from '[./]*(advisory|frontier)\.js'/, `${file} must not import the advisory view`);
   }
   const validation = fs.readFileSync(path.join(repository, 'core/validation.ts'), 'utf8');
   assert.deepEqual([...validation.matchAll(/\b(prerequisites|encompasses|validateCompetencyGraph)\b/g)].map(match => match[1]).filter(name => name !== 'validateCompetencyGraph'), ['prerequisites', 'encompasses'], 'validation.ts may only name the fields in its allowed-key list');

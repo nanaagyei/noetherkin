@@ -48,7 +48,7 @@ test('each skill works as a standalone file bundle with locally compilable schem
     assert.ok(files.includes('assets/proposal.md'));
     assert.ok(files.includes(`references/contract-${name}.md`));
     const schemas = files.filter(file => file.endsWith('.schema.json'));
-    assert.equal(schemas.length, 12);
+    assert.equal(schemas.length, 13);
     const ajv = new Ajv2020({ strict: false, validateFormats: true });
     addFormats(ajv);
     for (const file of schemas) ajv.compile(JSON.parse(fs.readFileSync(path.join(installed, file), 'utf8')));

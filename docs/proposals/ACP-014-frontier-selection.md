@@ -2,16 +2,16 @@
 
 | Field | Value |
 | --- | --- |
-| Status | `PROPOSED` |
+| Status | `ADOPTED`, 2026-09-24 |
 | Date | 2026-09-21 (America/Chicago) |
 | Depends on | ACP-013 (competency graph), ACP-015 (content to select from) |
 | Blocks | none |
 | Supersedes | none |
 
-> **Deferred, 2026-09-23.** Remains `PROPOSED` by owner decision. ACP-013 and ACP-015 are now adopted, so its
-> dependencies are met, but the only content to select among is one upstream task and one four-task forge pack. As
-> section 7 warns, adopting it now would adopt a scheduler with a nearly empty queue. Revisit when several authored
-> packs exist and the competency graph covers more than one track.
+> **Adopted, 2026-09-24.** The authoritative record is Phase 14 in [FOUNDATION_CHANGELOG.md](../../FOUNDATION_CHANGELOG.md)
+> and the normative text is [selection-model.md](../architecture/selection-model.md), not this file. It was deferred on
+> 2026-09-23 until several packs existed and the graph covered more than one track; four forge packs, the PetClinic
+> pack and edges for the frontend, SRE, observability and data competencies now satisfy that condition.
 
 Noetherkin gains a derived, advisory view that answers "what should this learner work on next, and why." It
 computes a knowledge frontier from the competency graph, orders competencies by how much attention they

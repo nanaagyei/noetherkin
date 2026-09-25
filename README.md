@@ -40,7 +40,7 @@ Noetherkin currently includes:
 - a frozen V1 product foundation with wire protocol 3.0;
 - a deterministic, recoverable local state publisher;
 - 21 portable [Agent Skills](docs/skills.md);
-- 34 versioned learning tracks, 87 project catalog entries, and a forge specification (Eval Ledger) that E0 to E2 learners build from empty;
+- 34 versioned learning tracks, 87 project catalog entries, and four draft forge specifications (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest) that E0 to E2 learners build from empty;
 - an advisory competency graph and a map-first context budget;
 - generic, Codex, and Claude Code capability adapters, and Codex or Claude Code role adapters;
 - evidence, assistance, review, and promotion semantics designed to resist fabricated progress.
@@ -58,64 +58,87 @@ Progress is based on attributable evidence, not points, streaks, task counts, or
 
 ## Install
 
-Noetherkin has two portable parts: capabilities for your AI agent, and a trusted local CLI that owns workspace state. They install separately and neither authorizes the other.
+Noetherkin has two parts: a trusted local CLI that owns workspace state, and portable skills that teach your AI agent how to take part. The CLI installs the skills for you. It needs Node.js 24 or newer and Git.
 
-### 1. Install the capabilities
+1. **Install the CLI** from the latest release:
 
-Run this inside the project where you want to use Noetherkin:
+   ```sh
+   npm install -g https://github.com/nanaagyei/noetherkin/releases/latest/download/noetherkin.tgz
+   ```
 
-```sh
-npx skills add nanaagyei/noetherkin
-```
+   This puts `noetherkin` on your PATH. Rerun the same command to update. Noetherkin is not on the npm registry; each GitHub release carries the package as `noetherkin.tgz`, with a `.sha256` checksum beside it.
 
-The [Skills CLI](https://github.com/vercel-labs/skills) discovers the bundled capabilities and lets you choose the target agent and skills. From a built checkout (step 2), `noetherkin skills install --host claude-code --target .` (or `--host codex`) does the same without the Skills CLI, verifies every file digest, and never overwrites an existing file. To install only onboarding:
+2. **Run setup** from the directory you want to learn in:
 
-```sh
-npx skills add nanaagyei/noetherkin --skill onboarding
-```
+   ```sh
+   noetherkin setup
+   ```
 
-### 2. Build the CLI
+   Setup checks your machine (Node, Git, and an agent CLI such as Claude Code or Codex for role judgments), offers to install the skills for every agent it finds, and offers to start a workspace. Every step asks first, and it is safe to rerun.
 
-The CLI is not published to a package registry. Build it from a checkout, which needs Node.js 24 or newer:
+3. **Open your agent** in that directory and ask it to use the Noetherkin onboarding skill.
 
-```sh
-git clone https://github.com/nanaagyei/noetherkin.git
-cd noetherkin
-npm ci
-npm run build
-```
+To work on Noetherkin itself, clone it instead: `git clone https://github.com/nanaagyei/noetherkin.git`, then `npm install` (which builds) and `npm link`. Don't use `npm install -g github:nanaagyei/noetherkin`: under npm 11 a git-URL global install links a temporary clone and leaves a broken install. To install the skills without setup, run `noetherkin skills install` (add `--global` for your user account, or `--target <dir>` for one project). It verifies every file digest and never overwrites an existing file. `npx skills add nanaagyei/noetherkin` also works with the [Skills CLI](https://github.com/vercel-labs/skills).
 
-That produces the executable at `dist/cli/main.js`. The examples below assume a shell alias:
-
-```sh
-alias noetherkin="node $PWD/dist/cli/main.js"
-```
-
-`npx skills add` installs instructions that teach an agent how to participate. The CLI is what actually writes state: it owns validation, consent, transactions, and every canonical record. An agent proposes; the CLI publishes.
+The skills teach an agent how to take part. The CLI is what writes state: it owns validation, consent, transactions, and every canonical record. An agent proposes; the CLI publishes.
 
 ## Start a workspace
 
+`noetherkin setup` can do this for you. By hand:
+
 ```sh
-mkdir -p /absolute/path/to/workspace
-noetherkin init --workspace /absolute/path/to/workspace
-noetherkin tracks
-noetherkin track select backend-engineering \
-  --workspace /absolute/path/to/workspace
-noetherkin onboard --workspace /absolute/path/to/workspace
-noetherkin next --workspace /absolute/path/to/workspace
+mkdir my-apprenticeship && cd my-apprenticeship
+noetherkin init                  # review, then type "initialize"
+noetherkin tracks                # which tracks have a runnable path
+noetherkin track select frontend-engineering
+noetherkin onboard               # records an all-unassessed baseline
+noetherkin next                  # prints the exact next command to run
 ```
 
-Initialization requires direct terminal review and consent. Commands that need a role judgment use Codex by default; add `--role-adapter claude` (or set `NOETHERKIN_ROLE_ADAPTER=claude`) to use Claude Code instead. Track selection guides project discovery but never owns skills, evidence, or promotion decisions. All CLI commands support `--json`; see the [CLI and recovery guide](docs/cli.md).
+Commands find the nearest workspace above the current directory; pass `--workspace <dir>` to choose another. Initialization and other consent steps need you at a terminal. Commands that need a role judgment use the first working agent CLI (Codex, then Claude Code); choose one with `--role-adapter claude` or `NOETHERKIN_ROLE_ADAPTER=claude`. A track guides recommendations but never owns skills, evidence, or promotion decisions. `next` also shows an advisory block naming which competencies to look at first and which forge or project exercises them; it is derived, not evidence, and gates nothing. Every command supports `--json` and `--help`; see the [CLI and recovery guide](docs/cli.md).
 
-## Use with an AI agent
+Twelve tracks have a runnable path today: forge projects you build from an empty directory (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest, all still `draft`) and the curated Spring PetClinic task. The other tracks use the portable task-assignment skill on any attachable catalog project.
 
-Open the learner workspace in your agent and ask naturally:
+## Where everything lives
 
-> Use the installed Noetherkin onboarding capability for this workspace. Ask for missing information one question at a time. When terminal consent is required, give me the exact handoff command and wait for its result.
+Noetherkin has three parts, and each lives in one place:
 
-Agents with native Agent Skills support can discover the installed capability automatically. For an agent without native discovery, provide the complete installed skill folder and direct it to follow `SKILL.md`; keep its `references/` and `assets/` directories beside it. The capability is still `onboarding` regardless of whether the host exposes it through natural language, a slash command, a palette action, or another interface.
+| Part | Where it lives | How often you install it |
+| --- | --- | --- |
+| The `noetherkin` CLI | Your global npm packages, installed from the release tarball | Once per machine |
+| The agent skills | `~/.claude/skills` (Claude Code) and `~/.agents/skills` (Codex), or one folder with `--target` | Once per machine |
+| Your workspace | A folder you choose. Its `.apprenticeship/` subfolder is your record | Once per apprenticeship |
 
-The agent may inspect state, gather inputs, prepare proposals, and resume after a terminal handoff. Chat text and model output never count as consent: canonical writes remain in the learner-controlled CLI.
+You never install Noetherkin into a project, including an open-source repository. The code you work on lives **inside** your workspace, next to your record:
+
+```text
+~/apprenticeship/                      your workspace: open your agent here
+├── .apprenticeship/                   your record; only the CLI writes it
+├── accessible-data-table/             a forge project: your own new Git repository
+└── spring-petclinic-microservices/    an open-source clone, if you attach one
+```
+
+- **Forge projects.** You build these from nothing. `noetherkin project select accessible-data-table --source accessible-data-table` binds an empty folder in the workspace. You run `git init` there and write every line yourself. Nothing is cloned.
+- **Open-source projects.** `noetherkin project select <project-id> --clone-to <folder>` clones a catalog project into the workspace after you confirm. `--source <folder>` attaches a clean clone you already put there. Noetherkin pins the commit and never pushes, and your clone stays free of Noetherkin files. Spring PetClinic has a curated task pack. Other attachable projects get their tasks from the portable task-assignment skill.
+
+One workspace follows one learner through tracks and projects. A later project goes into the same workspace, so your evidence and history carry forward.
+
+## Working with an AI agent
+
+Open your agent (Claude Code, Codex, or another agent that supports skills) in the workspace folder or any folder inside it, and ask naturally:
+
+> Use Noetherkin. Where am I in my apprenticeship, and what should I do next?
+
+What happens in each session:
+
+1. **The agent reads your state.** The skills tell it to run `noetherkin status --json` and `noetherkin next --json`. The CLI finds the workspace by walking up from the current folder, so a session opened inside your project folder works too.
+2. **The agent teaches.** It mentors, reviews and asks questions within your assistance ceiling. It does not write your code unless you explicitly ask. Help you request through `noetherkin task help` is recorded against the task, so reviews can weigh it.
+3. **You approve in your own terminal.** When a step changes your record, such as initializing, selecting a track, onboarding or recovering, the agent gives you an exact `noetherkin ...` command, and you type the confirmation yourself. Chat text never counts as consent.
+4. **Simulated colleagues judge the work.** Design gates and code, task and performance reviews come from a separate, tool-less run of Codex or Claude Code started by the CLI. Your chat session is never the reviewer.
+
+Sessions carry no memory, and they don't need to. Everything lives in `.apprenticeship/`, so you can close the agent, come back days later, or switch between Claude Code and Codex, and the next session picks up from the same record. Without an agent, `noetherkin next` in a terminal always tells you the next step and the exact command to run.
+
+Agents with native Agent Skills support discover the installed skills automatically. For an agent without native discovery, give it the complete installed skill folder and have it follow `SKILL.md`, keeping `references/` and `assets/` beside it.
 
 ## Portable capabilities
 
@@ -182,7 +205,7 @@ These checks establish bounded structural and runtime properties. They do not pr
 | [Portable skills](docs/skills.md) | Installation, packaging, and skill boundaries |
 | [Contributor guide](CONTRIBUTING.md) | Development and architecture-change process |
 | [Security review](docs/SECURITY_REVIEW.md) | Release threat boundaries, controls, and residual findings |
-| [Publishing checklist](docs/PUBLISHING_CHECKLIST.md) | Repository, npm, security, and release gates |
+| [Publishing checklist](docs/PUBLISHING_CHECKLIST.md) | Repository, security, and release gates |
 
 ## Contributing
 

@@ -34,6 +34,14 @@ export function forgePack(packId: string, base = assets): ObjectValue[] {
   return templates;
 }
 
+/** Every shipped task template, upstream or forge, by template ID. Used to check a task against its origin. */
+export function templateById(id: string, base = assets): ObjectValue | undefined {
+  const upstream = fs.readdirSync(path.join(base, 'tasks')).filter(file => file.endsWith('.json')).map(file => JSON.parse(fs.readFileSync(path.join(base, 'tasks', file), 'utf8')));
+  const forgeRoot = path.join(base, 'tasks/forge');
+  const forge = fs.existsSync(forgeRoot) ? fs.readdirSync(forgeRoot).flatMap(pack => fs.readdirSync(path.join(forgeRoot, pack)).filter(file => file.endsWith('.json')).map(file => JSON.parse(fs.readFileSync(path.join(forgeRoot, pack, file), 'utf8')))) : [];
+  return [...upstream, ...forge].find(template => template.id === id);
+}
+
 export interface ForgeContext { competencyIds: Set<string>; coreCompetencyIds: Set<string>; tracks: ObjectValue[]; base?: string }
 
 export function validateForgeRecord(record: ObjectValue, file: string, context: ForgeContext): void {

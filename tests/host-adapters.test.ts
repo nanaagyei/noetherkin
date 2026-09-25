@@ -110,6 +110,18 @@ test('handoffs reject tampering, workspace changes, and mismatched roots without
   assert.throws(() => validateOnboardingHandoff(initialized, track), /file set changed/);
 });
 
+test('a derived advisory file does not stale a prepared onboarding handoff', async t => {
+  const adapter = new GenericCapabilityHostAdapter(); const root = workspace(t);
+  const init = decodeOnboardingHandoff(token(await adapter.invoke({ capability_id: 'onboarding', workspace: root, input })));
+  publishInit(root, init.input.proposal, bindApprovedInit(root, init.input.proposal, true));
+  const track = decodeOnboardingHandoff(token(await adapter.invoke({ capability_id: 'onboarding', workspace: root, input: { track_id: 'backend-engineering' } })));
+  fs.mkdirSync(path.join(root, '.apprenticeship/advisory')); fs.writeFileSync(path.join(root, '.apprenticeship/advisory/attention.yaml'), 'derived: true\n');
+  validateOnboardingHandoff(root, track);
+  fs.writeFileSync(path.join(root, '.apprenticeship/advisory/attention.yaml'), 'derived: changed\n');
+  validateOnboardingHandoff(root, track);
+  assert.ok(!Object.keys(track.expected_state_digests).some(file => file.includes('advisory')));
+});
+
 test('a handoff token is proposal-only outside a direct terminal', async t => {
   const root = workspace(t); const adapter = new GenericCapabilityHostAdapter();
   const result = await adapter.invoke({ capability_id: 'onboarding', workspace: root, input });
@@ -130,7 +142,7 @@ test('every portable skill projects with identical bytes into each host location
   const manifest = JSON.parse(fs.readFileSync(path.join(repository, 'skill-pack/manifest.json'), 'utf8'));
   assert.equal(ids.length, manifest.skills.length);
   const adapters = [new GenericCapabilityHostAdapter(), new CodexCapabilityHostAdapter('missing'), new ClaudeCodeCapabilityHostAdapter('missing')];
-  const roots = ['skills', '.codex/skills', '.claude/skills'];
+  const roots = ['skills', '.agents/skills', '.claude/skills'];
   const surfaces = ['capability:', '$', '/'];
   for (const id of ids) {
     const projections = adapters.map(adapter => adapter.project(id));
@@ -180,7 +192,7 @@ test('skills CLI lists capabilities and installs them for a named host', t => {
   assert.ok(skills.every((skill: { description: string }) => skill.description.length > 0));
   const install = spawnSync(process.execPath, [cli, 'skills', 'install', '--host', 'codex', '--skill', 'teach', '--target', target, '--json'], { encoding: 'utf8' });
   assert.equal(install.status, 0, install.stdout);
-  assert.ok(fs.existsSync(path.join(target, '.codex/skills/teach/SKILL.md')));
+  assert.ok(fs.existsSync(path.join(target, '.agents/skills/teach/SKILL.md')));
   assert.equal(spawnSync(process.execPath, [cli, 'skills', 'install', '--host', 'cursor', '--target', target, '--json'], { encoding: 'utf8' }).status, 2);
   assert.equal(spawnSync(process.execPath, [cli, 'status', '--host', 'codex', '--json'], { encoding: 'utf8', cwd: target }).status, 2);
 });

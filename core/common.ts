@@ -27,6 +27,8 @@ export function canonical(value: unknown): string {
   return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical((value as ObjectValue)[key])}`).join(',')}}`;
 }
 export const encode = (value: unknown): string => canonical(value) + '\n';
+/** POSIX single-quote quoting, so a printed command can be pasted into a shell unchanged. */
+export function shellQuote(value: string): string { return /^[\w@%+=:,./-]+$/.test(value) ? value : `'${value.replaceAll("'", "'\\''")}'`; }
 export const sha256 = (bytes: string | Buffer): string => createHash('sha256').update(bytes).digest('hex');
 export const uuidPattern = '[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}';
 export const validId = (value: unknown, prefix: string): boolean => typeof value === 'string' && new RegExp(`^${prefix}-${uuidPattern}$`, 'i').test(value);

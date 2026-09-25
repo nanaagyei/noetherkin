@@ -9,6 +9,7 @@ Start with [the foundation authority](FOUNDATION_V1.md) and [the charter](PROJEC
 | Files, identity, mutation, versioning | [State](docs/architecture/state-model.md) |
 | Facts, interpretation, verification | [Evidence](docs/architecture/evidence-model.md) |
 | Specialization and assessments | [Competencies](docs/architecture/competency-model.md), [catalog](catalog/competencies.yaml) |
+| Advisory selection | [Selection model](docs/architecture/selection-model.md): derived frontier and attention ordering; not evidence, gates nothing |
 | Advisory tracks and project pathways | `catalog/tracks/`, [state](docs/architecture/state-model.md), [projects contract](contracts/projects.md) |
 | Forge specifications (learner-built projects, E0–E2) | `catalog/forge/`, `tasks/forge/`, [forge schema](schemas/forge.schema.json), [charter section 2](PROJECT_CHARTER.md) |
 | E0–E5 expectations | [Leveling](docs/architecture/leveling-framework.md), [rubric](catalog/levels.yaml) |

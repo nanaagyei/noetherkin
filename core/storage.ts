@@ -13,6 +13,8 @@ export interface Runtime {
 }
 export const runtime: Runtime = { fs, now: () => new Date().toISOString(), id: p => `${p}-${randomUUID()}`, boundary: () => {} };
 export const statePath = (relative: string): string => `.apprenticeship/${relative}`;
+/** Derived, deletable files live here; they are never canonical state and never pin a proposal. */
+export const advisoryDirectory = statePath('advisory');
 const heldLocks = new Map<string, string>();
 export function assertLock(root: string, rt = runtime): void {
   const token = heldLocks.get(root);
@@ -81,7 +83,7 @@ export function resolveWorkspace(input: string | undefined, initialize = false, 
   while (true) {
     if (exists(path.join(directory, '.apprenticeship'), rt) || exists(path.join(directory, '.apprenticeship.lock'), rt)) return directory;
     const parent = path.dirname(directory);
-    if (parent === directory) throw new Failure('WORKSPACE_NOT_FOUND', process.cwd(), 'Run init in an existing workspace directory or pass --workspace.');
+    if (parent === directory) throw new Failure('WORKSPACE_NOT_FOUND', process.cwd(), 'No Noetherkin workspace here or in any parent directory. Run `noetherkin setup` (or `noetherkin init`) to create one, or pass --workspace <directory>.');
     directory = parent;
   }
 }
