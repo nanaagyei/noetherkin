@@ -1,0 +1,7 @@
+# Check out text with LF everywhere so content digests (skill bundles, catalogs, snapshots) are identical on
+# every platform, including Windows where Git defaults to CRLF checkouts.
+* text=auto eol=lf
+*.png binary
+*.gif binary
+*.jpg binary
+*.ico binary
