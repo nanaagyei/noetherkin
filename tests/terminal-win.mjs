@@ -17,7 +17,7 @@ const [node, executable, workspace, answer, ...extra] = process.argv.slice(2);
 const mode = extra[0] ?? 'init';
 let args; let marker;
 if (mode === 'onboard') { args = ['onboard', '--workspace', workspace, '--constraint', 'Java 17 available', '--codex-bin', extra[1], '--json']; marker = 'Type "onboard"'; }
-else if (mode === 'handoff') { args = ['adapter-handoff', '--workspace', workspace, '--handoff', extra[1], '--json']; marker = 'to approve: '; }
+else if (mode === 'handoff') { args = ['adapter-handoff', '--workspace', workspace, '--handoff', extra[1], '--json']; marker = 'to approve:'; }  // ConPTY drops trailing spaces, so the marker has none.
 else if (mode === 'track') { args = ['track', 'select', 'backend-engineering', '--workspace', workspace, '--json']; marker = 'Type "select"'; }
 else { args = ['init', '--workspace', workspace, '--name', 'Test learner', '--goal', 'Understand initialization', '--assistance-max', '3', '--json']; marker = 'Type "initialize"'; }
 
