@@ -3,7 +3,8 @@ import { createHash, randomUUID } from 'node:crypto';
 /** Schema-validated protocol objects. Schemas, rather than duplicated TS models, own their shape. */
 export type ObjectValue = Record<string, any>;
 export type Coverage = 'bootstrap' | 'structural' | 'simulation' | 'catalog' | 'none';
-export interface Diagnostic { code: string; path: string; message: string }
+/** `detail` holds raw supporting output (for example a host's stderr). It appears in `--json` only, never in human output. */
+export interface Diagnostic { code: string; path: string; message: string; detail?: string }
 export interface Result {
   command: string;
   outcome: 'success' | 'no-change' | 'proposal' | 'invalid' | 'incomplete' | 'recovery-required';
@@ -12,13 +13,13 @@ export interface Result {
   diagnostics: Diagnostic[];
 }
 export class Failure extends Error {
-  constructor(public code: string, public path: string, message: string, public exitCode = 1) { super(message); }
+  constructor(public code: string, public path: string, message: string, public exitCode = 1, public detail?: string) { super(message); }
 }
 export function requireThat(condition: unknown, code: string, path: string, message: string): asserts condition {
   if (!condition) throw new Failure(code, path, message);
 }
 export function diagnostic(error: unknown): Diagnostic {
-  return error instanceof Failure ? { code: error.code, path: error.path, message: error.message }
+  return error instanceof Failure ? { code: error.code, path: error.path, message: error.message, ...(error.detail ? { detail: error.detail } : {}) }
     : { code: 'IO_ERROR', path: '', message: error instanceof Error ? error.message : String(error) };
 }
 export function canonical(value: unknown): string {

@@ -8,7 +8,30 @@ export { roleOutputContract } from './output-contract.js';
 
 export interface CodexAdapterOptions { binary?: string; model?: string; timeout_ms?: number }
 
-function extractOutput(stdout: string): { output: ObjectValue; model: string | null } {
+const authMarkers = /\b401\b|unauthori[sz]ed|not (?:signed|logged) in|codex login/i;
+const detailLimit = 8_000;
+
+/**
+ * A short, actionable failure for the learner. The raw host output goes into `detail`, which only `--json` shows:
+ * Codex's errors are often multi-line websocket traces that mean nothing to someone who just ran `onboard`.
+ */
+export function codexFailure(binary: string, exit: number | null, stdout: string, stderr: string): Failure {
+  // Only stderr and Codex's own error events are classified; agent messages on stdout may legitimately mention a 401.
+  const events = stdout.split('\n').filter(line => {
+    try { return ['error', 'turn.failed'].includes(JSON.parse(line)?.type); } catch { return false; }
+  });
+  const raw = [stderr.trim(), ...events].filter(Boolean).join('\n');
+  const detail = raw.length > detailLimit ? `${raw.slice(0, detailLimit)}\n[truncated]` : raw;
+  if (authMarkers.test(raw)) {
+    return new Failure('ADAPTER_AUTH_REQUIRED', 'codex',
+      `Codex at ${binary} is not signed in. Run \`codex login\`, or choose another with --codex-bin or --role-adapter claude.`, 1, detail || undefined);
+  }
+  const last = raw.split('\n').map(line => line.trim()).filter(Boolean).at(-1)?.replace(/[.\s]+$/, '');
+  const summary = last ? `: ${last.length > 200 ? `${last.slice(0, 200)}…` : last}` : '';
+  return new Failure('ADAPTER_FAILED', 'codex', `Codex at ${binary} failed${exit === null ? '' : ` (exit ${exit})`}${summary}. Run with --json for the full output.`, 1, detail || undefined);
+}
+
+function extractOutput(stdout: string, binary: string): { output: ObjectValue; model: string | null } {
   let text: string | undefined;
   let model: string | null = null;
   for (const line of stdout.split('\n').filter(Boolean)) {
@@ -16,7 +39,7 @@ function extractOutput(stdout: string): { output: ObjectValue; model: string | n
     try { event = JSON.parse(line); } catch { continue; }
     if (event.type === 'thread.started') model = event.model ?? model;
     if (event.type === 'item.completed' && event.item?.type === 'agent_message') text = event.item.text;
-    if (event.type === 'turn.failed' || event.type === 'error') throw new Failure('ADAPTER_FAILED', 'codex', JSON.stringify(event));
+    if (event.type === 'turn.failed' || event.type === 'error') throw codexFailure(binary, null, line, '');
   }
   requireThat(text, 'ADAPTER_INVALID', 'codex', 'Codex returned no completed agent message.');
   const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1] ?? text;
@@ -52,10 +75,10 @@ export class CodexRoleAdapter implements RoleAdapter {
       const timer = setTimeout(() => { child.kill('SIGTERM'); reject(new Failure('ADAPTER_TIMEOUT', 'codex', 'Codex role invocation exceeded its deadline.')); }, this.timeout);
       child.stdout.on('data', chunk => { stdout += chunk; }); child.stderr.on('data', chunk => { stderr += chunk; });
       child.on('error', error => { clearTimeout(timer); reject(error); });
-      child.on('close', code => { clearTimeout(timer); code === 0 ? resolve(stdout) : reject(new Failure('ADAPTER_FAILED', 'codex', stderr || `Codex exited ${code}.`)); });
+      child.on('close', code => { clearTimeout(timer); code === 0 ? resolve(stdout) : reject(codexFailure(this.binary, code, stdout, stderr)); });
       child.stdin.end(prompt);
     });
-    const parsed = extractOutput(transcript);
+    const parsed = extractOutput(transcript, this.binary);
     const result = { ...parsed, transcript, context_digest: contextDigest(request.context) };
     validateRoleOutput(result, request.output_keys);
     return result;

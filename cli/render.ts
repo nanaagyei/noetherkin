@@ -127,6 +127,7 @@ function renderNextBody(data: ObjectValue): string {
   return lines.join('\n');
 }
 
+// A diagnostic's `detail` (raw host output) is deliberately left out of human output; `--json` carries it.
 function renderDiagnostics(diagnostics: Diagnostic[]): string {
   return diagnostics.map(item => item.code === 'USAGE' ? item.message.trimEnd() : `${item.code}${item.path && !item.message.includes(item.path) ? ` [${item.path}]` : ''}: ${item.message}`).join('\n');
 }
