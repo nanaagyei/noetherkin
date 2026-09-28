@@ -4,6 +4,14 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// npm is a .cmd shim on Windows, which Node will not start without a shell. Under an npm script, run npm's own CLI
+// with this Node instead; otherwise fall back to the shell (the arguments here are fixed strings).
+function npm(args, options) {
+  return process.env.npm_execpath
+    ? spawnSync(process.execPath, [process.env.npm_execpath, ...args], options)
+    : spawnSync('npm', args, { ...options, shell: process.platform === 'win32' });
+}
+
 const root = fileURLToPath(new URL('../', import.meta.url));
 const manifestPath = process.argv[2];
 let raw;
@@ -12,7 +20,7 @@ if (manifestPath) {
   raw = fs.readFileSync(path.resolve(root, manifestPath), 'utf8');
 } else {
   const cache = process.env.NOETHERKIN_NPM_CACHE || path.join(os.tmpdir(), 'noetherkin-package-check-npm-cache');
-  const packed = spawnSync('npm', ['pack', '--dry-run', '--ignore-scripts', '--json', '--cache', cache], {
+  const packed = npm(['pack', '--dry-run', '--ignore-scripts', '--json', '--cache', cache], {
     cwd: root,
     encoding: 'utf8',
   });
