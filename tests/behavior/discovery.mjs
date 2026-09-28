@@ -136,7 +136,9 @@ export async function main(argv = process.argv.slice(2)) {
   if (!options.out) throw new Error('Pass --out <new directory>, outside the checkout.');
   const out = path.resolve(options.out);
   if (fs.existsSync(out)) throw new Error(`${out} already exists; use a new directory so runs never mix.`);
-  if (!path.relative(repo, out).startsWith('..')) throw new Error('Write probe output outside the checkout; raw transcripts must never be committed.');
+  // On Windows a path on another drive has no relative form: path.relative returns it absolute, and it is outside.
+  const relative = path.relative(repo, out);
+  if (relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative))) throw new Error('Write probe output outside the checkout; raw transcripts must never be committed.');
   const chosenHosts = (options.host ?? 'claude-code,codex').split(',');
   const scopes = (options.scope ?? 'project,user').split(',');
   for (const host of chosenHosts) if (!hosts[host]) throw new Error(`Unknown host ${host}; choose claude-code or codex.`);
