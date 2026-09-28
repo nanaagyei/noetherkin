@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { resolveCodexBinary } from '../adapters/runtime/codex-binary.js';
+import { probeRoleHost, roleHostChecks } from '../adapters/runtime/select.js';
 
 // Fake binaries only: nothing here runs a real Codex. The bundled path is injected so the tests never depend on
 // whether the ChatGPT app is installed on the machine running them.
@@ -58,4 +59,19 @@ test('a PATH entry that is a symlink to the bundled binary is not listed as a se
   fs.mkdirSync(path.join(directory, 'bin'));
   fs.symlinkSync(bundled, path.join(directory, 'bin/codex'));
   assert.deepEqual(resolveCodexBinary(undefined, { env: { PATH: path.join(directory, 'bin') }, bundled }).alternatives, []);
+});
+
+test('setup and doctor detection name the chosen codex, why it was chosen, and the other candidate', t => {
+  const { make } = sandbox(t);
+  const onPath = make('bin/codex');
+  const bundled = make('ChatGPT.app/codex');
+  const lookup = { env: { PATH: path.dirname(onPath) }, bundled };
+  const probe = probeRoleHost('codex', {}, lookup);
+  assert.equal(probe.binary, onPath); assert.equal(probe.source, 'path'); assert.deepEqual(probe.alternatives, [bundled]);
+  assert.equal(probe.healthy, true); assert.equal(probe.version, 'codex-cli 0.0.0-fake');
+  const codex = roleHostChecks({ claude_bin: path.join(path.dirname(onPath), 'no-claude') }, lookup).find(check => check.check === 'role-host:codex');
+  assert.equal(codex?.status, 'ok');
+  assert.equal(codex?.detail, `codex-cli 0.0.0-fake (${onPath}, from PATH; also found ${bundled})`);
+  const fallback = roleHostChecks({}, { env: { PATH: '' }, bundled }).find(check => check.check === 'role-host:codex');
+  assert.match(fallback?.detail ?? '', /bundled with the ChatGPT app\)$/);
 });
