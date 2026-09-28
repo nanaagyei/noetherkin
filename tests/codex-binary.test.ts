@@ -5,18 +5,15 @@ import path from 'node:path';
 import test from 'node:test';
 import { resolveCodexBinary } from '../adapters/runtime/codex-binary.js';
 import { probeRoleHost, roleHostChecks } from '../adapters/runtime/select.js';
+import { writeProgram } from './support.js';
 
 // Fake binaries only: nothing here runs a real Codex. The bundled path is injected so the tests never depend on
 // whether the ChatGPT app is installed on the machine running them.
 function sandbox(t: { after: (fn: () => void) => void }) {
   const directory = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'noetherkin-codex-bin-')));
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
-  const make = (relative: string, mode = 0o755): string => {
-    const file = path.join(directory, relative);
-    fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, '#!/bin/sh\necho "codex-cli 0.0.0-fake"\n', { mode });
-    return file;
-  };
+  // Returns the path a lookup should find: the file itself on POSIX, its .cmd shim on Windows.
+  const make = (relative: string): string => writeProgram(path.join(directory, relative), "console.log('codex-cli 0.0.0-fake');\n");
   return { directory, make };
 }
 
@@ -47,9 +44,10 @@ test('NOETHERKIN_CODEX_BIN overrides PATH and the bundle, and --codex-bin overri
   assert.equal(resolveCodexBinary(flag, { env, bundled }).binary, flag);
 });
 
-test('with no candidate the plain command name is returned, and non-executable files on PATH are skipped', t => {
-  const { directory, make } = sandbox(t);
-  make('bin/codex', 0o644);
+test('with no candidate the plain command name is returned, and files Windows or POSIX cannot run are skipped', t => {
+  const { directory } = sandbox(t);
+  // Not executable on POSIX; on Windows an extensionless file (npm's POSIX shell shim) is never a candidate.
+  fs.mkdirSync(path.join(directory, 'bin')); fs.writeFileSync(path.join(directory, 'bin/codex'), '#!/bin/sh\n', { mode: 0o644 });
   assert.deepEqual(resolveCodexBinary(undefined, { env: { PATH: path.join(directory, 'bin') }, bundled: path.join(directory, 'missing') }), { binary: 'codex', source: 'default', alternatives: [] });
 });
 
@@ -57,7 +55,7 @@ test('a PATH entry that is a symlink to the bundled binary is not listed as a se
   const { directory, make } = sandbox(t);
   const bundled = make('ChatGPT.app/codex');
   fs.mkdirSync(path.join(directory, 'bin'));
-  fs.symlinkSync(bundled, path.join(directory, 'bin/codex'));
+  fs.symlinkSync(bundled, path.join(directory, 'bin', path.basename(bundled)));
   assert.deepEqual(resolveCodexBinary(undefined, { env: { PATH: path.join(directory, 'bin') }, bundled }).alternatives, []);
 });
 

@@ -12,6 +12,7 @@ import { canonical, encode } from '../core/common.js';
 import { parse } from '../core/parsing.js';
 import { reclaimDeadLock, runtime, safePath, withLock } from '../core/storage.js';
 import { collect, inspectRecords, validateDocument } from '../core/validation.js';
+import { assertKilled } from './support.js';
 
 const cli = fileURLToPath(new URL('../cli/main.js', import.meta.url));
 const worker = fileURLToPath(new URL('./worker.js', import.meta.url));
@@ -247,7 +248,7 @@ for (let boundary = 1; boundary <= 16; boundary++) {
   test(`SIGKILL at publication boundary ${boundary} preserves recoverable or explicitly blocked state`, t => {
     const root = workspace(t);
     const run = spawnSync(process.execPath, [worker, root, 'kill', String(boundary)], { encoding: 'utf8' });
-    assert.equal(run.signal, 'SIGKILL', run.stderr);
+    assertKilled(run);
     assert.equal(execute(root, 'status').status, 3);
     reclaimDeadLock(root);
     if (boundary === 1) { assert.equal(fs.existsSync(path.join(root, '.apprenticeship')), false); return; }
@@ -272,7 +273,7 @@ test('damaged staged snapshot rolls back only unpublished creations, including a
   const snapshot = manifest.changes[0].new_snapshot.uri.slice('workspace:/'.length);
   fs.writeFileSync(path.join(root, snapshot), 'damaged');
   assert.equal(planRecovery(root).action, 'rollback');
-  const killed = spawnSync(process.execPath, [worker, root, 'recover-kill', '0']); assert.equal(killed.signal, 'SIGKILL');
+  const killed = spawnSync(process.execPath, [worker, root, 'recover-kill', '0'], { encoding: 'utf8' }); assertKilled(killed);
   reclaimDeadLock(root); const plan = planRecovery(root); assert.equal(plan.action, 'rollback'); recover(root, plan);
   assert.equal(fs.existsSync(path.join(root, '.apprenticeship')), false);
   init(root); assert.equal(execute(root, 'validate').status, 0);

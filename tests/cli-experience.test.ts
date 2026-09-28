@@ -6,10 +6,10 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { selectRoleAdapter } from '../adapters/runtime/select.js';
+import { inTerminal, writeProgram } from './support.js';
 
 const repo = fileURLToPath(new URL('../../', import.meta.url));
 const cli = fileURLToPath(new URL('../cli/main.js', import.meta.url));
-const terminal = path.join(repo, 'tests/terminal.py');
 
 function temporary(t: { after: (f: () => void) => void }, prefix = 'noetherkin-cli-'): string {
   const directory = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), prefix)));
@@ -21,9 +21,7 @@ function run(args: string[], options: { cwd?: string; env?: NodeJS.ProcessEnv } 
   return { ...result, json: args.includes('--json') && result.stdout ? JSON.parse(result.stdout) : undefined };
 }
 function fakeHost(directory: string, name: string): string {
-  const file = path.join(directory, name);
-  fs.writeFileSync(file, '#!/bin/sh\necho "fake 1.0"\n'); fs.chmodSync(file, 0o755);
-  return file;
+  return writeProgram(path.join(directory, name), "console.log('fake 1.0');\n");
 }
 const noHosts = { NOETHERKIN_CODEX_BIN: '/nonexistent/codex', NOETHERKIN_CLAUDE_BIN: '/nonexistent/claude' };
 
@@ -56,6 +54,7 @@ test('doctor reports the environment without a workspace', t => {
   const doctor = run(['doctor', '--json'], { cwd });
   const checks = doctor.json.data.environment.map((item: { check: string }) => item.check);
   assert.deepEqual(checks, ['node', 'platform', 'git']);
+  assert.equal(doctor.json.data.environment[1].status, 'ok', 'macOS, Linux and Windows are all supported platforms');
   assert.deepEqual(doctor.json.data.runtime_hosts.map((item: { check: string }) => item.check), ['role-host:codex', 'role-host:claude']);
 });
 
@@ -76,11 +75,11 @@ test('role adapter selection prefers explicit choice, then a healthy detected ho
 
 test('onboarding checks the role host before asking for confirmation', t => {
   const root = temporary(t);
-  const init = spawnSync('python3', [terminal, process.execPath, cli, root, 'initialize'], { encoding: 'utf8', timeout: 20000 });
+  const init = inTerminal(process.execPath, cli, root, 'initialize');
   assert.equal(JSON.parse(init.stdout).exit, 0, init.stdout);
-  const track = spawnSync('python3', [terminal, process.execPath, cli, root, 'select', 'track'], { encoding: 'utf8', timeout: 20000 });
+  const track = inTerminal(process.execPath, cli, root, 'select', 'track');
   assert.equal(JSON.parse(track.stdout).exit, 0, track.stdout);
-  const onboard = spawnSync('python3', [terminal, process.execPath, cli, root, 'onboard', 'onboard', path.join(root, 'missing-codex')], { encoding: 'utf8', timeout: 20000 });
+  const onboard = inTerminal(process.execPath, cli, root, 'onboard', 'onboard', path.join(root, 'missing-codex'));
   const result = JSON.parse(onboard.stdout);
   assert.equal(result.prompt_seen, false, 'no confirmation is requested when no judgment can run');
   assert.equal(result.output.diagnostics[0].code, 'ROLE_ADAPTER_UNAVAILABLE');
@@ -93,7 +92,7 @@ test('a noninteractive agent receives a handoff the learner approves in a termin
   const handoff = proposal.json.data.next_action;
   assert.equal(handoff.kind, 'terminal-handoff'); assert.match(handoff.command, /^noetherkin adapter-handoff --workspace /);
   assert.deepEqual(fs.readdirSync(root), [], 'a proposal writes nothing');
-  const approved = spawnSync('python3', [terminal, process.execPath, cli, root, 'initialize', 'handoff', handoff.token], { encoding: 'utf8', timeout: 20000 });
+  const approved = inTerminal(process.execPath, cli, root, 'initialize', 'handoff', handoff.token);
   const result = JSON.parse(approved.stdout);
   assert.equal(result.exit, 0, approved.stdout); assert.equal(result.output.data.action, 'initialize');
   assert.equal(result.output.data.next_action.phase, 'TRACK SELECTION');

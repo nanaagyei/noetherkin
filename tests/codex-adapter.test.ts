@@ -7,21 +7,19 @@ import { CodexRoleAdapter, roleOutputContract } from '../adapters/runtime/codex.
 import { contextDigest, type RoleInvocation } from '../core/adapters.js';
 import { diagnostic } from '../core/common.js';
 import { render } from '../cli/render.js';
+import { writeProgram } from './support.js';
 
 // A fake codex that writes canned stdout and stderr and exits. It never calls a model.
 function fakeCodex(t: { after: (fn: () => void) => void }, output: { stdout?: string; stderr?: string; exit: number }): string {
   const directory = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'noetherkin-fake-codex-')));
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
-  const binary = path.join(directory, 'codex');
-  fs.writeFileSync(binary, `#!${process.execPath}
-process.stdin.resume();
+  return writeProgram(path.join(directory, 'codex'), `process.stdin.resume();
 process.stdin.on('end', () => {
   process.stdout.write(${JSON.stringify(output.stdout ?? '')});
   process.stderr.write(${JSON.stringify(output.stderr ?? '')});
   process.exitCode = ${output.exit};
 });
-`, { mode: 0o755 });
-  return binary;
+`);
 }
 
 function request(workspace: string): RoleInvocation {

@@ -28,6 +28,10 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci --ignore-scripts
+      # Terminal consent tests drive the CLI through ConPTY on Windows. node-pty ships prebuilt Windows binaries, so no
+      # install script runs; it is not a project dependency because Linux would have to compile it.
+      - if: runner.os == 'Windows'
+        run: npm install --no-save --ignore-scripts node-pty@1.1.0
       - run: npm test
       - run: npm run skills:check
 
