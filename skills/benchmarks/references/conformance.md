@@ -171,4 +171,13 @@ Adopted with ACP-016 (Phase 12, see `FOUNDATION_CHANGELOG.md`). Rows marked *beh
 | FR-50 | Investigation glob escapes the source root by traversal or symlink | Reject traversal at validation; report symlink matches as rejected and never in scope. | `tests/context-budget.test.ts` FR-50 cases |
 | FR-51 | Investigation scope widened in place after assignment | Reject as a frozen-field change; only a replacement task changes scope. | `tests/context-budget.test.ts` FR-51 case |
 
+Adopted with ACP-018 (Phase 15, see `FOUNDATION_CHANGELOG.md`). CF-58 is executed by the Windows CI job; the FR cases are executed offline, FR-62 and FR-63 on Windows only.
+
+| ID | Setup | Required result | Covered by |
+| --- | --- | --- | --- |
+| CF-58 | The full runtime suite, including the sixteen process-kill publication boundaries, interrupted rollback, and terminal consent, runs on Windows | Every case passes with the same recoverable or blocked outcomes as on POSIX. | CI `Runtime (windows-latest)` |
+| FR-61 | Publication on a volume without hard links or file fsync | Fail closed with `DURABILITY_UNSUPPORTED` before any canonical record; `init` yields a proposal. | `tests/bootstrap.test.ts` FR-61 |
+| FR-62 | A state path passes through a Windows directory junction | Reject as a symbolic link. | `tests/windows.test.ts` FR-62 |
+| FR-63 | A source checkout on a different Windows drive | Reject with `UNSAFE_PATH`. | `tests/windows.test.ts` FR-63 |
+
 Confirmed: the freeze supplies explicit protocol resolutions for the independent review's blocker/high issues. Unknown until implementation and evaluation: secure enforcement, recovery correctness, cross-harness behavior and educational validity. The historical self-review above is not a second independent audit of this revision.

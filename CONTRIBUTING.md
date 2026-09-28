@@ -20,7 +20,13 @@ python3 -m pip install --requirement requirements-validation.txt
 npm run verify
 ```
 
-The package test installs a freshly packed tarball offline into a temporary directory. Its pretest step resolves the declared production dependency ranges in a disposable directory, reusing the active npm cache and fetching missing registry artifacts when necessary; the actual tarball installation remains offline. Run installation and tests with the same npm cache. If your cache is elsewhere, pass `--cache /your/cache` to both npm commands. Runtime tests create disposable workspaces and include actual SIGKILL, lock contention, injected filesystem failures, and a pseudo-terminal test of learner consent. They do not evaluate an actual learner or run an upstream project.
+On Windows, the terminal consent tests drive the CLI through ConPTY rather than Python's POSIX-only `pty`. Install the harness's one extra package first. It is not a project dependency, because Linux would have to compile it:
+
+```sh
+npm install --no-save --ignore-scripts node-pty@1.1.0
+```
+
+The package test installs a freshly packed tarball offline into a temporary directory. Its pretest step resolves the declared production dependency ranges in a disposable directory, reusing the active npm cache and fetching missing registry artifacts when necessary; the actual tarball installation remains offline. Run installation and tests with the same npm cache. If your cache is elsewhere, pass `--cache /your/cache` to both npm commands. Runtime tests create disposable workspaces and include actual process kills (SIGKILL on POSIX, TerminateProcess on Windows), lock contention, injected filesystem failures, and a pseudo-terminal test of learner consent. CI runs them on Ubuntu, macOS and Windows. They do not evaluate an actual learner or run an upstream project.
 
 The unchanged foundation link checker traverses every Markdown file, including ignored dependency directories. If dependency documentation causes unrelated broken-link failures, run it against a clean source snapshot without `node_modules/`, or temporarily move build dependencies aside and restore them afterward. Do not weaken foundation checks to accommodate third-party documentation.
 

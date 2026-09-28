@@ -58,7 +58,7 @@ Progress is based on attributable evidence, not points, streaks, task counts, or
 
 ## Install
 
-Noetherkin has two parts: a trusted local CLI that owns workspace state, and portable skills that teach your AI agent how to take part. The CLI installs the skills for you. It needs Node.js 24 or newer and Git.
+Noetherkin has two parts: a trusted local CLI that owns workspace state, and portable skills that teach your AI agent how to take part. The CLI installs the skills for you. It needs Node.js 24 or newer and Git, on macOS, Linux or Windows. On Windows, keep your workspace on a local NTFS drive, or use WSL 2 and follow the Linux instructions; see [Filesystem limits](docs/cli.md#filesystem-limits).
 
 1. **Install the CLI** from the latest release:
 
