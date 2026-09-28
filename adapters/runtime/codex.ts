@@ -1,8 +1,8 @@
-import fs from 'node:fs';
 import { spawn } from 'node:child_process';
 import { contextDigest, validateRoleOutput, type RoleAdapter, type RoleInvocation, type RoleInvocationResult } from '../../core/adapters.js';
 import { Failure, requireThat, type ObjectValue } from '../../core/common.js';
 import { rolePrompt } from './output-contract.js';
+import { resolveCodexBinary } from './codex-binary.js';
 
 export { roleOutputContract } from './output-contract.js';
 
@@ -30,8 +30,7 @@ export class CodexRoleAdapter implements RoleAdapter {
   private readonly model?: string;
   private readonly timeout: number;
   constructor(options: CodexAdapterOptions = {}) {
-    const bundled = '/Applications/ChatGPT.app/Contents/Resources/codex';
-    this.binary = options.binary ?? process.env.NOETHERKIN_CODEX_BIN ?? (fs.existsSync(bundled) ? bundled : 'codex');
+    this.binary = options.binary ?? resolveCodexBinary().binary;
     this.model = options.model;
     this.timeout = options.timeout_ms ?? 300_000;
   }

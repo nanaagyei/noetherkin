@@ -1,9 +1,9 @@
-import fs from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { Failure } from '../../core/common.js';
 import type { RoleAdapter } from '../../core/adapters.js';
 import { CodexRoleAdapter } from './codex.js';
 import { ClaudeRoleAdapter } from './claude.js';
+import { resolveCodexBinary } from './codex-binary.js';
 
 export type RoleAdapterName = 'codex' | 'claude';
 export const roleAdapterNames: RoleAdapterName[] = ['codex', 'claude'];
@@ -18,12 +18,10 @@ export interface RoleAdapterRequest {
 /** `spawnable`: the binary starts at all. `healthy`: it also answered `--version` successfully. */
 export interface RoleHostProbe { adapter: RoleAdapterName; binary: string; spawnable: boolean; healthy: boolean; version: string | null }
 
-const bundledCodex = '/Applications/ChatGPT.app/Contents/Resources/codex';
-
 /** The binary each adapter would run, resolved exactly as the adapter constructors resolve it. */
 export function roleBinary(name: RoleAdapterName, request: RoleAdapterRequest = {}): string {
   if (name === 'claude') return request.claude_bin ?? process.env.NOETHERKIN_CLAUDE_BIN ?? 'claude';
-  return request.codex_bin ?? process.env.NOETHERKIN_CODEX_BIN ?? (fs.existsSync(bundledCodex) ? bundledCodex : 'codex');
+  return resolveCodexBinary(request.codex_bin).binary;
 }
 
 /**
