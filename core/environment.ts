@@ -1,5 +1,6 @@
-import { spawnSync } from 'node:child_process';
 import type { ObjectValue } from './common.js';
+import { spawnCommandSync } from './process.js';
+import { publicationSupported } from './storage.js';
 
 export type CheckStatus = 'ok' | 'missing' | 'warn';
 export interface EnvironmentCheck { check: string; status: CheckStatus; detail: string; remedy: string | null }
@@ -25,7 +26,7 @@ const toolchains: Record<string, { binary: string; args: string[]; remedy: strin
 
 export type Spawner = (binary: string, args: string[]) => { ok: boolean; output: string };
 export const defaultSpawner: Spawner = (binary, args) => {
-  const result = spawnSync(binary, args, { encoding: 'utf8', timeout: 5_000 });
+  const result = spawnCommandSync(binary, args, { encoding: 'utf8', timeout: 5_000 });
   return { ok: !result.error && result.status === 0, output: `${result.stdout ?? ''}${result.stderr ?? ''}`.trim().split('\n')[0] ?? '' };
 };
 
@@ -34,7 +35,7 @@ export function coreChecks(spawn: Spawner = defaultSpawner): EnvironmentCheck[] 
   const git = spawn('git', ['--version']);
   return [
     { check: 'node', status: major >= 24 ? 'ok' : 'missing', detail: `Node.js ${process.versions.node}`, remedy: major >= 24 ? null : 'Install Node.js 24 or newer from https://nodejs.org.' },
-    { check: 'platform', status: ['darwin', 'linux'].includes(process.platform) ? 'ok' : 'missing', detail: process.platform, remedy: ['darwin', 'linux'].includes(process.platform) ? null : 'Canonical publication runs on macOS or Linux. On Windows, use WSL.' },
+    { check: 'platform', status: publicationSupported() ? 'ok' : 'missing', detail: process.platform, remedy: publicationSupported() ? null : 'Canonical publication runs on macOS, Linux or Windows.' },
     { check: 'git', status: git.ok ? 'ok' : 'missing', detail: git.ok ? git.output : 'git was not found on PATH', remedy: git.ok ? null : 'Install git; project selection, cloning and work snapshots need it.' }
   ];
 }
