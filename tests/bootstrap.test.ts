@@ -217,10 +217,18 @@ test('unavailable durability primitives preserve proposal-only state while inspe
   assert.equal(inspectWorkspace('validate', root, rt).outcome, 'success');
 });
 
+// FR-61 (ACP-018): FAT32, exFAT and ReFS volumes have no hard links; the probe must fail closed before any record.
+test('FR-61: a volume without hard links yields a proposal, never partial canonical state', t => {
+  const root = workspace(t); const proposal = proposeInit(request);
+  const rt = { ...runtime, fs: { ...fs, linkSync: () => { throw Object.assign(new Error('hard links unsupported'), { code: 'EPERM' }); } } as typeof fs };
+  assert.throws(() => publishInit(root, proposal, bindApprovedInit(root, proposal, true), rt), { code: 'DURABILITY_UNSUPPORTED' });
+  assert.deepEqual(fs.readdirSync(root), [], 'the lock is released and nothing canonical was written');
+});
+
 test('a file appearing at the final publication syscall is never clobbered', t => {
   const root = workspace(t); const proposal = proposeInit(request);
   const rt = { ...runtime, fs: { ...fs, linkSync: (old: fs.PathLike, target: fs.PathLike) => {
-    if (String(target).endsWith('/config.yaml')) fs.writeFileSync(target, 'concurrent external content');
+    if (path.basename(String(target)) === 'config.yaml') fs.writeFileSync(target, 'concurrent external content');
     fs.linkSync(old, target);
   } } as typeof fs };
   assert.throws(() => publishInit(root, proposal, bindApprovedInit(root, proposal, true), rt), /not overwritten/);

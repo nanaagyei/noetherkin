@@ -24,7 +24,7 @@
     "package:check": "node scripts/check-package.mjs",
     "release:check": "node scripts/check-release.mjs && npm run verify && npm run package:check",
     "pretest": "node scripts/prime-package-cache.mjs",
-    "test": "npm run build && node --test dist/tests/*.test.js tests/*.test.mjs",
+    "test": "npm run build && node --test --test-timeout=300000 dist/tests/*.test.js tests/*.test.mjs",
     "skills:bundle": "node scripts/package-skills.mjs",
     "skills:check": "node scripts/package-skills.mjs --check",
     "evals:check": "node tests/behavior/run.mjs check",

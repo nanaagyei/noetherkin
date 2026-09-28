@@ -24,14 +24,14 @@ test('publication is supported on macOS, Linux and Windows only', () => {
   assert.equal(publicationSupported('freebsd'), false);
 });
 
-test('a directory junction in a state path is rejected like a symbolic link', windowsOnly, t => {
+test('FR-62: a directory junction in a state path is rejected like a symbolic link', windowsOnly, t => {
   const root = workspace(t);
   const outside = workspace(t);
   fs.symlinkSync(outside, path.join(root, 'escape'), 'junction');
   assert.throws(() => safePath(root, 'escape/file'), /symbolic links/);
 });
 
-test('a source checkout on another drive is refused, not treated as inside the workspace', windowsOnly, t => {
+test('FR-63: a source checkout on another drive is refused, not treated as inside the workspace', windowsOnly, t => {
   const root = workspace(t);
   const otherDrive = ['C:\\', 'D:\\'].find(drive => fs.existsSync(drive) && path.parse(root).root.toUpperCase() !== drive);
   if (!otherDrive) { t.skip('no second drive on this machine'); return; }

@@ -178,7 +178,8 @@ export function publishInit(root: string, proposal: InitProposal, capability: ob
     requireThat(!exists(safePath(root, '.apprenticeship', rt), rt), 'STATE_CONFLICT', root, 'Workspace appeared since the proposal; inspect it before retrying.');
     try {
       syncDirectory(root, rt);
-      const fd = rt.fs.openSync(safePath(root, '.apprenticeship.lock/owner.json', rt), 'r');
+      // Opened for writing because Windows refuses FlushFileBuffers on a read-only handle.
+      const fd = rt.fs.openSync(safePath(root, '.apprenticeship.lock/owner.json', rt), 'r+');
       try { rt.fs.fsyncSync(fd); } finally { rt.fs.closeSync(fd); }
       const probe = safePath(root, '.apprenticeship.lock/link-probe', rt);
       try { rt.fs.linkSync(safePath(root, '.apprenticeship.lock/owner.json', rt), probe); }

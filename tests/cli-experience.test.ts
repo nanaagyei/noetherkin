@@ -103,7 +103,7 @@ test('a noninteractive agent receives a handoff the learner approves in a termin
 test('skills install detects agents, supports a user-level install, and refuses the checkout', t => {
   const home = temporary(t);
   const directory = temporary(t);
-  const global = run(['skills', 'install', '--host', 'claude-code', '--global', '--skill', 'teach', '--json'], { env: { HOME: home } });
+  const global = run(['skills', 'install', '--host', 'claude-code', '--global', '--skill', 'teach', '--json'], { env: { HOME: home, USERPROFILE: home } });
   assert.equal(global.status, 0, global.stdout); assert.ok(fs.existsSync(path.join(home, '.claude/skills/teach/SKILL.md')));
   const none = run(['skills', 'install', '--target', directory, '--json'], { env: noHosts });
   assert.equal(none.json.diagnostics[0].code, 'NO_AGENT_DETECTED');
@@ -113,7 +113,7 @@ test('skills install detects agents, supports a user-level install, and refuses 
   assert.ok(!fs.existsSync(path.join(directory, '.agents')), 'an undetected agent gets nothing');
   const checkout = run(['skills', 'install', '--host', 'generic', '--json'], { cwd: repo });
   assert.equal(checkout.json.diagnostics[0].code, 'INSTALL_TARGET_CHECKOUT');
-  assert.equal(run(['skills', 'install', '--host', 'generic', '--global', '--json'], { env: { HOME: home } }).status, 2);
+  assert.equal(run(['skills', 'install', '--host', 'generic', '--global', '--json'], { env: { HOME: home, USERPROFILE: home } }).status, 2);
 });
 
 test('noninteractive setup reports and writes nothing', t => {
