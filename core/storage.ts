@@ -13,6 +13,14 @@ export interface Runtime {
 }
 export const runtime: Runtime = { fs, now: () => new Date().toISOString(), id: p => `${p}-${randomUUID()}`, boundary: () => {} };
 export const statePath = (relative: string): string => `.apprenticeship/${relative}`;
+/**
+ * Platforms whose local filesystems publication is tested on. Windows means a local NTFS volume: file data is flushed
+ * with fsync (FlushFileBuffers), but Windows cannot fsync a directory, so directory entries rely on NTFS metadata
+ * journaling instead (ACP-018 and docs/bootstrap-runtime.md).
+ */
+export const publicationPlatforms: readonly NodeJS.Platform[] = ['darwin', 'linux', 'win32'];
+export const publicationSupported = (platform: NodeJS.Platform = process.platform): boolean => publicationPlatforms.includes(platform);
+const isWindows = process.platform === 'win32';
 /** Derived, deletable files live here; they are never canonical state and never pin a proposal. */
 export const advisoryDirectory = statePath('advisory');
 const heldLocks = new Map<string, string>();
@@ -44,7 +52,22 @@ export function read(root: string, relative: string, rt = runtime): Buffer {
 export function digest(root: string, relative: string, rt = runtime): string | null {
   return exists(safePath(root, relative, rt), rt) ? sha256(read(root, relative, rt)) : null;
 }
+/**
+ * Windows transiently refuses to rename or delete a file another process (often a virus scanner or indexer) has just
+ * opened. Those errors are retried briefly there; every other error, and every error on POSIX, is thrown at once.
+ */
+export function retryTransient<T>(action: () => T): T {
+  for (let attempt = 0; ; attempt++) {
+    try { return action(); }
+    catch (e) {
+      if (!isWindows || attempt >= 8 || !['EPERM', 'EACCES', 'EBUSY'].includes(String((e as NodeJS.ErrnoException).code))) throw e;
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 10 * 2 ** attempt);
+    }
+  }
+}
+/** A no-op on Windows, which has no directory fsync; see `publicationPlatforms`. */
 export function syncDirectory(directory: string, rt = runtime): void {
+  if (isWindows) return;
   const fd = rt.fs.openSync(directory, 'r');
   try { rt.fs.fsyncSync(fd); } finally { rt.fs.closeSync(fd); }
 }
@@ -67,12 +90,12 @@ export function durable(root: string, relative: string, bytes: string | Buffer, 
     // Atomic no-clobber publication: a file appearing after the digest check wins.
     try { rt.fs.linkSync(temp, target); }
     catch (e) { if ((e as NodeJS.ErrnoException).code === 'EEXIST') { rt.fs.unlinkSync(temp); throw new Failure('STALE_READ', relative, 'A file appeared during publication; it was not overwritten.'); } throw e; }
-    rt.fs.unlinkSync(temp);
-  } else rt.fs.renameSync(temp, target);
+    retryTransient(() => rt.fs.unlinkSync(temp));
+  } else retryTransient(() => rt.fs.renameSync(temp, target));
   syncDirectory(path.dirname(target), rt);
 }
 export function remove(root: string, relative: string, rt = runtime): void {
-  rt.fs.unlinkSync(safePath(root, relative, rt));
+  retryTransient(() => rt.fs.unlinkSync(safePath(root, relative, rt)));
   syncDirectory(path.dirname(safePath(root, relative, rt)), rt);
 }
 
@@ -105,8 +128,8 @@ export function withLock<T>(root: string, action: () => T, rt = runtime): T {
     const owner = JSON.parse(read(root, '.apprenticeship.lock/owner.json', rt).toString());
     requireThat(owner.token === token, 'LOCK_LOST', lock, 'Lock ownership changed; inspect pending publication.');
     heldLocks.delete(root);
-    rt.fs.unlinkSync(safePath(root, '.apprenticeship.lock/owner.json', rt));
-    rt.fs.rmdirSync(lock);
+    retryTransient(() => rt.fs.unlinkSync(safePath(root, '.apprenticeship.lock/owner.json', rt)));
+    retryTransient(() => rt.fs.rmdirSync(lock));
   }
 }
 

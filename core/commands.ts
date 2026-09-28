@@ -1,7 +1,7 @@
 import { diagnostic, type ObjectValue, type Result } from './common.js';
 import { assertNoPending, pendingPath, planRecovery, verifyBootstrapHistory } from './bootstrap.js';
 import { catalogs, collect, inspectRecords } from './validation.js';
-import { exists, safePath, withLock, runtime, type Runtime } from './storage.js';
+import { exists, publicationSupported, safePath, withLock, runtime, type Runtime } from './storage.js';
 import { inspectSimulationSemantics } from './semantics.js';
 import { nextAction, runnableCommand } from './simulation.js';
 
@@ -28,7 +28,7 @@ export function inspectWorkspace(command: 'status' | 'validate' | 'doctor', root
       command, outcome: invalid ? 'invalid' : 'success', coverage: advanced ? 'simulation' : 'bootstrap',
       data: { workspace: root, workspace_id: config?.workspace_id ?? null, mode: config?.mode ?? null, onboarding: profile?.onboarding ?? null, track: records.get('current-track.yaml') ?? null, selection: records.get('current-project.yaml') ?? null, record_counts: counts, metadata_verified: certified,
         ...(certified ? { standing: { last_awarded_level: cache?.last_awarded_level ?? 'E0', effective_level: cache?.effective_level ?? 'E0', standing: cache?.standing ?? 'current', basis: advanced ? 'Derived from canonical assessment cache; one completed task cannot grant promotion.' : 'Administrative placement only; no demonstrated competency.' }, next_action: advanced ? nextAction(root, rt) : bootstrapNext(root, rt) } : {}),
-        ...(command === 'doctor' ? { runtime: process.version, platform: process.platform, publication_supported_platform: ['darwin', 'linux'].includes(process.platform), filesystem_assumption: 'Single user, local filesystem with durable fsync and atomic rename; network filesystems are unsupported.', lock: 'acquired', pending: false, receipt_history: invalid ? 'not-verified' : 'verified' } : {}) }, diagnostics
+        ...(command === 'doctor' ? { runtime: process.version, platform: process.platform, publication_supported_platform: publicationSupported(), filesystem_assumption: process.platform === 'win32' ? 'Single user, local NTFS volume with durable file fsync, hard links and atomic rename; directory entries rely on NTFS journaling; network, FAT and ReFS volumes are unsupported.' : 'Single user, local filesystem with durable fsync and atomic rename; network filesystems are unsupported.', lock: 'acquired', pending: false, receipt_history: invalid ? 'not-verified' : 'verified' } : {}) }, diagnostics
     };
   }, rt);
 }

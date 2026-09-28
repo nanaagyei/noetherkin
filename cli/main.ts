@@ -11,7 +11,7 @@ import { bindApprovedInit, existingInit, planRecovery, proposeInit, publishInit,
 import { inspectWorkspace, listProjects } from '../core/commands.js';
 import { alignTrack, listTracks, runnablePaths, selectTrack, trackAlignmentProposal } from '../core/tracks.js';
 import { migrateTo3, planMigration } from '../core/migration.js';
-import { exists, lockStatus, read, reclaimDeadLock, resolveWorkspace, runtime, safePath, statePath, withLock } from '../core/storage.js';
+import { exists, lockStatus, publicationSupported, read, reclaimDeadLock, resolveWorkspace, runtime, safePath, statePath, withLock } from '../core/storage.js';
 import { advanceNext, assignTask, attestCriterion, beginTask, checkMap, currentTask, investigationScope, mapStatus, nextAction, selectForge, cloneCatalogProject, codeReview, initMap, onboard, performanceReview, requestHelp, selectCatalogProject, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
 import { coreChecks, toolchainChecks, type EnvironmentCheck } from '../core/environment.js';
 import { lazyRoleAdapter, probeRoleHost, roleAdapterNames, roleHostChecks, type LazyRoleAdapter } from '../adapters/runtime/select.js';
@@ -396,7 +396,7 @@ async function initFlow(root: string, values: Values, interactive: boolean, shar
       if (values['assistance-max'] === undefined) stderr.write(assistanceScale);
       request = { display_name, goals, assistance_default_max: ceiling(values['assistance-max'] ?? await rl!.question('Assistance ceiling (0-7, 3 is a common start): ')) };
     }
-    if (!interactive || !['darwin', 'linux'].includes(process.platform)) {
+    if (!interactive || !publicationSupported()) {
       const handoff = handoffFor(root, { display_name: request.display_name, goals: request.goals, assistance_default_max: request.assistance_default_max, operation_id: values['operation-id'] }, 'initialize');
       const proposal = handoff ? decodeOnboardingHandoff(handoff.token).input.proposal : proposeInit(request, values['operation-id']);
       return { command, outcome: 'proposal', coverage: 'none', data: { workspace: root, proposal, next_action: handoff }, diagnostics: [{ code: 'DIRECT_CONSENT_REQUIRED', path: root, message: `Run init in a direct learner-controlled terminal to review and bind this operation${handoff ? ', or give the learner the handoff command in next_action' : ''}.` }] };
