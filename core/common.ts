@@ -28,8 +28,14 @@ export function canonical(value: unknown): string {
   return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical((value as ObjectValue)[key])}`).join(',')}}`;
 }
 export const encode = (value: unknown): string => canonical(value) + '\n';
-/** POSIX single-quote quoting, so a printed command can be pasted into a shell unchanged. */
-export function shellQuote(value: string): string { return /^[\w@%+=:,./-]+$/.test(value) ? value : `'${value.replaceAll("'", "'\\''")}'`; }
+/**
+ * Quotes a value for a command the learner copies into their shell. POSIX shells get single quotes. Windows cmd.exe
+ * and PowerShell both read double quotes, and a Windows path cannot contain one; backslashes need no quoting there.
+ */
+export function shellQuote(value: string, platform: NodeJS.Platform = process.platform): string {
+  if (platform === 'win32') return /^[\w@+=:,.\\/-]+$/.test(value) ? value : `"${value}"`;
+  return /^[\w@%+=:,./-]+$/.test(value) ? value : `'${value.replaceAll("'", "'\\''")}'`;
+}
 export const sha256 = (bytes: string | Buffer): string => createHash('sha256').update(bytes).digest('hex');
 export const uuidPattern = '[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}';
 export const validId = (value: unknown, prefix: string): boolean => typeof value === 'string' && new RegExp(`^${prefix}-${uuidPattern}$`, 'i').test(value);

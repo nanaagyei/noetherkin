@@ -23,10 +23,11 @@ else { args = ['init', '--workspace', workspace, '--name', 'Test learner', '--go
 
 const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'noetherkin-terminal-'));
 const out = path.join(scratch, 'stdout.json');
-// No argument here contains a double quote, so quoting each one is enough for cmd.exe.
+// No argument here contains a double quote, so quoting each one is enough for cmd.exe. The arguments go to node-pty
+// as one string, which it passes verbatim; an array would be re-quoted for the C runtime and garble cmd's line.
 const quote = value => `"${value}"`;
 const line = `${[node, executable, ...args].map(quote).join(' ')} > ${quote(out)}`;
-const child = pty.spawn(process.env.comspec ?? 'cmd.exe', ['/d', '/s', '/c', `"${line}"`], { cols: 4000, rows: 50, cwd: scratch, env: process.env });
+const child = pty.spawn(process.env.comspec ?? 'cmd.exe', `/d /s /c "${line}"`, { cols: 4000, rows: 50, cwd: scratch, env: process.env });
 
 let transcript = '';
 let sent = false;

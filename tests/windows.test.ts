@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { shellQuote } from '../core/common.js';
 import { inspectCatalogProject } from '../core/simulation.js';
 import { durable, publicationSupported, retryTransient, safePath } from '../core/storage.js';
 import { isWindows } from './support.js';
@@ -22,6 +23,13 @@ test('publication is supported on macOS, Linux and Windows only', () => {
   assert.equal(publicationSupported('darwin'), true);
   assert.equal(publicationSupported('linux'), true);
   assert.equal(publicationSupported('freebsd'), false);
+});
+
+test('printed commands quote paths for the learner\'s shell: single quotes on POSIX, double quotes on Windows', () => {
+  assert.equal(shellQuote('C:\\Users\\me\\ws', 'win32'), 'C:\\Users\\me\\ws');
+  assert.equal(shellQuote('C:\\Users\\RUNNER~1\\my ws', 'win32'), '"C:\\Users\\RUNNER~1\\my ws"');
+  assert.equal(shellQuote('/home/me/my ws', 'linux'), "'/home/me/my ws'");
+  assert.equal(shellQuote("it's", 'darwin'), "'it'\\''s'");
 });
 
 test('FR-62: a directory junction in a state path is rejected like a symbolic link', windowsOnly, t => {
