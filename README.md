@@ -203,6 +203,7 @@ These checks establish bounded structural and runtime properties. They do not pr
 | [Implementation status](IMPLEMENTATION_STATUS.md) | Implemented scope, evidence, and limits |
 | [CLI guide](docs/cli.md) | Commands, consent, recovery, and JSON output |
 | [Portable skills](docs/skills.md) | Installation, packaging, and skill boundaries |
+| [Skill discovery check](docs/skill-discovery-check.md) | How to verify that agents find installed skills, and recorded results |
 | [Contributor guide](CONTRIBUTING.md) | Development and architecture-change process |
 | [Forge authoring](docs/forge-authoring.md) | Writing a forge specification and checking it with `noetherkin forge check` |
 | [Security review](docs/SECURITY_REVIEW.md) | Release threat boundaries, controls, and residual findings |
