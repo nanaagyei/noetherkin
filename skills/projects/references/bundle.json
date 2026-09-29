@@ -32,8 +32,8 @@
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "4ff795df699ff0572b5ef5dc1ab74a38084472de625c4c6f459d582f25ea4677",
-      "bundled_sha256": "be8f93b6cf4375f436d002c11fa3d67ec809ed4af3e78937503bb69d58cc56c6"
+      "source_sha256": "b87141e2438217a3fb4f9ab2f2f375412f8c294c7fa74ddedd7605e644be8a0a",
+      "bundled_sha256": "2ef772ec95986353fdefbf430ae345e86ccae2947b409d9911217d532acf8746"
     },
     {
       "source": "docs/architecture/overview.md",
@@ -212,8 +212,8 @@
     {
       "source": "skill-pack/runtime.md",
       "target": "references/runtime.md",
-      "source_sha256": "70e36fd8974897d8e85015252b0164d7576d00503f5fcad9f3e09f01b94ea6a9",
-      "bundled_sha256": "4d5057aef0507bc358c2877127b052e35338b3624b96d7d53c5955d3d5515672"
+      "source_sha256": "aee985b26c351fc0752530b45b59785853286b729e2d2df24c802a0ac14d9f54",
+      "bundled_sha256": "86522bc86bd5c9d28b884c2222b7363a1b6b11c252e2eecc1d2360fa6c322eb2"
     },
     {
       "source": "skill-pack/proposals.md",
@@ -236,8 +236,8 @@
     {
       "source": "contracts/onboarding.md",
       "target": "references/contract-onboarding.md",
-      "source_sha256": "3fed108ffd98574d39ded7f809628c1bbbc7b5e821ef87cccb2459e66ccffd14",
-      "bundled_sha256": "9804b926c294b044bfae70847215d57bda9968abbc1543aad7506b9592ee93de"
+      "source_sha256": "4986adb940587c56d64ad156c97778d057ab8f21795550ac7b654884a616d437",
+      "bundled_sha256": "5690b3a44e4c7f0342e3a338394befb6d678d4f6cd9c22bed4058333a55bf670"
     },
     {
       "source": "contracts/task-assignment.md",

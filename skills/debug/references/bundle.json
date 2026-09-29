@@ -32,8 +32,8 @@
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "4ff795df699ff0572b5ef5dc1ab74a38084472de625c4c6f459d582f25ea4677",
-      "bundled_sha256": "be8f93b6cf4375f436d002c11fa3d67ec809ed4af3e78937503bb69d58cc56c6"
+      "source_sha256": "b87141e2438217a3fb4f9ab2f2f375412f8c294c7fa74ddedd7605e644be8a0a",
+      "bundled_sha256": "2ef772ec95986353fdefbf430ae345e86ccae2947b409d9911217d532acf8746"
     },
     {
       "source": "docs/architecture/overview.md",
@@ -212,8 +212,8 @@
     {
       "source": "skill-pack/runtime.md",
       "target": "references/runtime.md",
-      "source_sha256": "70e36fd8974897d8e85015252b0164d7576d00503f5fcad9f3e09f01b94ea6a9",
-      "bundled_sha256": "4d5057aef0507bc358c2877127b052e35338b3624b96d7d53c5955d3d5515672"
+      "source_sha256": "aee985b26c351fc0752530b45b59785853286b729e2d2df24c802a0ac14d9f54",
+      "bundled_sha256": "86522bc86bd5c9d28b884c2222b7363a1b6b11c252e2eecc1d2360fa6c322eb2"
     },
     {
       "source": "skill-pack/proposals.md",
@@ -242,8 +242,8 @@
     {
       "source": "contracts/teach.md",
       "target": "references/contract-teach.md",
-      "source_sha256": "3b0ba307589f56050ca540396ccdd9c7722765f8e5de876f76993ec20f2308ce",
-      "bundled_sha256": "bbbd1bdfea96384566df234c5542be8e7ffb5ea835892797fb253adc832db183"
+      "source_sha256": "b0968a92cbe86cb3123142fd74134ca0f0cc3634dbaaf00ca0bd53663f1c4a36",
+      "bundled_sha256": "b75bc257d146cb9d3dcc186ecdd8d3bed2a50d740bdf8c717dd15a3c54de8ffd"
     },
     {
       "source": "contracts/code-review.md",

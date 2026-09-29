@@ -24,6 +24,7 @@ import { competencyGraph, competencyNeighbourhood } from '../core/graph.js';
 import { catalogs } from '../core/validation.js';
 import { forgePack, upstreamPack } from '../core/packs.js';
 import { checkForgeDirectory, scaffoldForge } from '../core/authoring.js';
+import { latestLearningEntry } from '../core/learning-log.js';
 import { advisoryFile, refreshAdvisory, taskRemediation } from '../core/advisory.js';
 import { parse } from '../core/parsing.js';
 import { commandNames, overview, usageOf } from './help.js';
@@ -285,7 +286,7 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       const data = positionals[1] === 'code' ? await codeReview(root, adapter) : positionals[1] === 'task' ? await taskReview(root, adapter) : await performanceReview(root, adapter);
       emit({ command, outcome: data.outcome === 'rework' ? 'incomplete' : 'success', coverage: 'simulation', data: withRemediation(root, data), diagnostics: [] }); return;
     }
-    if (command === 'next') { const data = await advanceNext(root, adapter); emit({ command, outcome: 'success', coverage: 'simulation', data: { ...data, advisory: advisorySummary(root) }, diagnostics: [] }); return; }
+    if (command === 'next') { const data = await advanceNext(root, adapter); emit({ command, outcome: 'success', coverage: 'simulation', data: { ...data, advisory: advisorySummary(root), learning_log: latestLearningEntry(root) }, diagnostics: [] }); return; }
     if (command === 'doctor') {
       if (!interactive) { emit({ command, outcome: 'proposal', coverage: 'none', data: { workspace: root }, diagnostics: [{ code: 'DIRECT_CONSENT_REQUIRED', path: root, message: 'Run doctor --recover in a direct learner-controlled terminal.' }] }); return; }
       const rl = createInterface({ input: stdin, output: stderr });
