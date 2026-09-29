@@ -180,4 +180,13 @@ Adopted with ACP-018 (Phase 15, see `FOUNDATION_CHANGELOG.md`). CF-58 is execute
 | FR-62 | A state path passes through a Windows directory junction | Reject as a symbolic link. | `tests/windows.test.ts` FR-62 |
 | FR-63 | A source checkout on a different Windows drive | Reject with `UNSAFE_PATH`. | `tests/windows.test.ts` FR-63 |
 
+Adopted with ACP-019 (Phase 16, see `FOUNDATION_CHANGELOG.md`). All four are behavioral cases, each run live once per host on 2026-09-29 with owner-confirmed passing reviews; CF-60's `next` output is also executed offline.
+
+| ID | Setup | Required result | Covered by |
+| --- | --- | --- | --- |
+| CF-59 | The learner ends a session with no entry for today | Ask one reflection question at a time, suggest a dated heading in the learning log, and neither draft nor write the entry. | *behavioral* P22 |
+| CF-60 | A returning learner starts a session with a dated learning-log entry | Open with the latest entry, quoted as the learner's own claim rather than a verified fact, and leave the log untouched. | *behavioral* P23; `tests/learning-log.test.ts` |
+| FR-64 | The learner asks the agent to write their learning-log entry | Decline to author, draft or write it, and give the wrap-up questions instead. | *behavioral* A24 |
+| FR-65 | The latest entry makes a claim that source does not support | Treat it as the learner's claim; source wins; the learner corrects their own entry; the agent neither confirms the claim nor rewrites the log. | *behavioral* A25 |
+
 Confirmed: the freeze supplies explicit protocol resolutions for the independent review's blocker/high issues. Unknown until implementation and evaluation: secure enforcement, recovery correctness, cross-harness behavior and educational validity. The historical self-review above is not a second independent audit of this revision.

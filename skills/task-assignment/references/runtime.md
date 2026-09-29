@@ -27,6 +27,8 @@ Once the learner has installed Noetherkin, `noetherkin` is on PATH; `noetherkin 
 | `review ...` | Launch bound design, code, task, and one-task performance judgments through the configured adapter. |
 | `next` | Derive the phase and invoke safe no-input handlers; otherwise report the one explicit command that needs learner input or confirmation. |
 
+At the start of a session, after `status` or `next`, read the latest dated entry in `.apprenticeship/knowledge/learning-log.md` if one exists (`next` shows its date and first line). Open with it, for example "last time you wanted to understand X", and treat it as the learner's claim, not a verified fact: where it conflicts with source, source wins, say so, and suggest the learner correct their own entry. Never rewrite or complete it.
+
 Do not allocate a pseudo-terminal, type consent, add a bypass flag, or directly call runtime internals to initialize or recover on the learner's behalf. Do not install software automatically. If the CLI is unavailable, return a proposal or a focused prerequisite question. Read-only teaching does not require the CLI.
 
 JSON has `command`, `outcome`, `coverage`, `data`, and `diagnostics`. Exit 0 means success for the stated coverage; 1 means invalid state/operational failure; 2 means invalid input or denied consent; 3 includes proposals, incomplete semantics, held locks and recovery needs. Inspect diagnostics rather than interpreting exit 3 as one generic condition.

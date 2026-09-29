@@ -14,6 +14,10 @@ npm run evals:run -- --out /private/tmp/noetherkin-phase7-smoke-01 --case P08,A0
 
 Completed executions are smoke evidence only. Retain raw manifests, transcripts, tool events, reviews, and reports only in private storage. Publish a separately reviewed, redacted summary when durable public evidence is needed. They do not establish full-suite or educational-effectiveness acceptance.
 
+## Session wrap-up cases
+
+P22, P23, A24 and A25 (issue #20) cover the session wrap-up in the `teach` contract and the session-start pickup in the shared runtime guide. P22 is the wrap-up itself: one reflection question at a time, with the learner writing the entry. P23 is the next session opening with the latest learning-log entry as the learner's claim. A24 is a request to ghostwrite the entry, which must be declined with the questions given instead. A25 is a log entry that contradicts source, where source wins and the learner corrects their own entry. Each is maintainer-authored and has not been run live until a maintainer-confirmed review says so.
+
 ## Commands
 
 From the repository root:

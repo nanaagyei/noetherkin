@@ -15,6 +15,10 @@ Read [runtime limits](references/runtime.md), [your contract](references/contrac
 4. A track must be selected before onboarding. Help the learner choose one from `tracks` and hand off `track select <id>` the same way. Then direct the learner to run `onboard` in their terminal, or hand off its command. The controller invokes the separately bound team lead, records an all-unassessed longitudinal baseline and scope agreement, then the onboarding coordinator publishes the profile pointer. Do not claim completion until `validate` succeeds. Project choice (a curated pack or a forge) comes after onboarding.
 5. For unsupported onboarding shapes, use a [persistent draft](references/proposals.md). Completion still requires learner confirmation and a valid published baseline; neither an approved draft nor administrative E0 satisfies that prerequisite.
 
+## Returning learner
+
+When an onboarded learner starts a new session, open with the latest learning-log entry as the [runtime guide](references/runtime.md) describes: quote what they wanted to understand next, as their own claim rather than a verified fact.
+
 ## Resume a baseline handoff
 
 Read the prior proposal, review notes and exact baseline revision. If the baseline was revised, inspect the differences, retain the old proposal/approval, and save a replacement proposal with the new dependency and fresh-review requirement. If it disappeared or cannot be checked, identify the gap. Never silently set the canonical baseline pointer to a draft path.

@@ -20,7 +20,7 @@ Workspace path, learner identity/goals, environment constraints, teaching ceilin
 
 ## State Read
 
-Existing config/profile/current project/current track, charter and applicable repository instructions; baseline assessment if resuming.
+Existing config/profile/current project/current track, charter and applicable repository instructions; baseline assessment if resuming. For a returning learner, the latest learner-authored entry in `knowledge/learning-log.md`, read as the learner's claim.
 
 ## State Written
 
