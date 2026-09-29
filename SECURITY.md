@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Noetherkin is currently pre-release. Security fixes are applied to the latest code on the default branch. A supported-version table will be added after the first stable release.
+Noetherkin is early (0.x) software. Security fixes are applied to the latest code on the default branch and shipped in the next release; only the latest release is supported. A supported-version table will be added at 1.0.
 
 ## Reporting a vulnerability
 

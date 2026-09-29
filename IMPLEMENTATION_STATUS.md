@@ -9,7 +9,7 @@ Foundational specification phase: complete. Phase 6 PetClinic vertical runtime: 
 - [x] `docs/launch/launch-post-outline.md`: structure and claims for the maintainer to write from, each linked to its evidence, with `[VERIFY]` on anything unsupported.
 - [x] Fixes found while recording, each tested: the design artifact's description was hardcoded to the PetClinic task for every project (the real design review flagged the mismatch); a missing `--target` directory reported a raw `ENOENT` instead of `NOT_DIRECTORY`; `project select` and `task submit-design` printed raw YAML, and now print compact views that name the simulated reviewer and end on the verdict.
 
-Limits: the recording is of an unreleased build and should be regenerated against the next release before launch (the outline's checklist says so). It assumes Claude Code signed in and the Codex CLI on PATH, as the tape header states. The optional HyperFrames launch video was produced outside the repository and is not committed.
+Limits: the recording was regenerated against the published v0.2.0 tarball on 2026-09-29 (its checksum matched the published `.sha256`); the design review in that run also ended in approval, and each future render may word it differently. It assumes Claude Code signed in and the Codex CLI on PATH, as the tape header states. The optional HyperFrames launch video was produced outside the repository and is attached to the v0.2.0 release as `noetherkin-launch-v0.2.0.mp4`; its footage and closing card predate the release and say "pre-release".
 
 ## Curated upstream packs (2026-09-29)
 

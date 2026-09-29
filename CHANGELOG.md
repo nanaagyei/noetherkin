@@ -4,6 +4,12 @@ All notable changes will be documented in this file. The format follows [Keep a 
 
 ## [Unreleased]
 
+### Changed
+
+- The README status badge now shows the latest published release, and the pre-release note, `SECURITY.md` and the demo recording are updated for v0.2.0.
+
+## [0.2.0] - 2026-09-29
+
 ### Added
 
 - Launch assets (#21): a reproducible terminal recording (`vhs docs/demo/setup.tape`, rendered to `docs/assets/noetherkin-demo.gif`) shown as the README hero with a caption stating what is real and what is simulated, and a launch-post outline in `docs/launch/` that links evidence for every claim. Recording the demo surfaced three fixes: design artifacts named the PetClinic task whatever the project was, `setup --target` with a missing directory printed a raw `ENOENT`, and `project select` and the design verdict printed raw YAML; each is fixed with a test.
@@ -14,6 +20,22 @@ All notable changes will be documented in this file. The format follows [Keep a 
 - Forge authoring kit (#17): `noetherkin forge new` scaffolds a forge record and first task template, `noetherkin forge check` validates an authored directory against the existing forge rules and reports every problem at once with a remedy, and [docs/forge-authoring.md](docs/forge-authoring.md) explains what makes a good forge. No protocol rule is added.
 - A skill discovery check (#24): `docs/skill-discovery-check.md` records how to verify that Claude Code and Codex find installed skills, and the first results. On 2026-09-28, both hosts discovered and routed `onboarding` at user and project level. `npm run evals:discovery` is a live-only probe that installs with `skills install`, runs the same three prompts, and classifies each transcript; its classifier is tested offline. `docs/adapter-compatibility.md` now names the Codex skill folder correctly, as `.agents/skills`, not `.codex/skills`.
 - Native Windows support (ACP-018, #23). The CLI installs and publishes canonical state on a local NTFS volume. Role hosts installed as `.cmd` shims are resolved through `PATHEXT` and started through `cmd.exe` with escaped arguments, and a timed-out host is ended with its whole process tree. Declared forge test commands run in the platform shell. The full runtime suite, including process-kill crash recovery and ConPTY terminal consent, runs on `windows-latest` in CI. Directory-entry durability on Windows rests on NTFS journaling, which has not been tested against power loss; FAT32, exFAT and ReFS fail closed to a proposal. WSL 2 remains supported.
+
+### Fixed
+
+- With the ChatGPT desktop app installed, the Codex role adapter always ran the app's bundled `codex`, ignoring a signed-in `codex` on PATH, and a sign-in failure printed Codex's raw websocket trace (#22). Codex now resolves as `--codex-bin`, `NOETHERKIN_CODEX_BIN`, `codex` on PATH, then the bundled binary; `setup` and `doctor` say which binary was chosen and why, and list the other candidate; and a sign-in failure is `ADAPTER_AUTH_REQUIRED` with a `codex login` hint, the raw output kept in a JSON-only diagnostic `detail`.
+
+## [0.1.0] - 2026-09-25
+
+- Frozen V1 apprenticeship semantics with protocol 3.0 state.
+- Deterministic local CLI and recoverable single-writer transactions.
+- Twenty-one portable mentoring and engineering skills.
+- Thirty-four learning tracks and eighty-seven project catalog records.
+- Generic, Codex, and Claude Code onboarding adapter projections.
+- Curated Spring PetClinic vertical journey and adversarial behavioral evaluation harness.
+
+### Added
+
 - Initial public-release documentation, CI, security policy, release automation, and publication gates.
 - Apache License 2.0 and a contributor-facing AI-agent policy.
 - First-party JSON Schema Draft 2020-12 subset validator (`core/schema.ts`) covering the closed keyword set the eleven protocol schemas use, with unsupported keywords and formats rejected at load time.
@@ -54,17 +76,6 @@ All notable changes will be documented in this file. The format follows [Keep a 
 
 ### Fixed
 
-- With the ChatGPT desktop app installed, the Codex role adapter always ran the app's bundled `codex`, ignoring a signed-in `codex` on PATH, and a sign-in failure printed Codex's raw websocket trace (#22). Codex now resolves as `--codex-bin`, `NOETHERKIN_CODEX_BIN`, `codex` on PATH, then the bundled binary; `setup` and `doctor` say which binary was chosen and why, and list the other candidate; and a sign-in failure is `ADAPTER_AUTH_REQUIRED` with a `codex login` hint, the raw output kept in a JSON-only diagnostic `detail`.
 - The release gate required a non-private package, contradicting ACP-012's `private: true`, so no release could pass verification. It now requires `private`.
-
 - The packed CLI now ships `skill-pack/manifest.json`, so `skills install` and `setup` work from an installed package and not only from a checkout. A package test now installs a skill from the packed executable.
 - Onboarding handoffs ignore the derived advisory directory, so regenerating the advisory never stales a prepared handoff.
-
-## [0.1.0] - Unreleased
-
-- Frozen V1 apprenticeship semantics with protocol 3.0 state.
-- Deterministic local CLI and recoverable single-writer transactions.
-- Twenty-one portable mentoring and engineering skills.
-- Thirty-four learning tracks and eighty-seven project catalog records.
-- Generic, Codex, and Claude Code onboarding adapter projections.
-- Curated Spring PetClinic vertical journey and adversarial behavioral evaluation harness.
