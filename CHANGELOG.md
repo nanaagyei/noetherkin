@@ -46,6 +46,7 @@ All notable changes will be documented in this file. The format follows [Keep a 
 
 ### Fixed
 
+- With the ChatGPT desktop app installed, the Codex role adapter always ran the app's bundled `codex`, ignoring a signed-in `codex` on PATH, and a sign-in failure printed Codex's raw websocket trace (#22). Codex now resolves as `--codex-bin`, `NOETHERKIN_CODEX_BIN`, `codex` on PATH, then the bundled binary; `setup` and `doctor` say which binary was chosen and why, and list the other candidate; and a sign-in failure is `ADAPTER_AUTH_REQUIRED` with a `codex login` hint, the raw output kept in a JSON-only diagnostic `detail`.
 - The release gate required a non-private package, contradicting ACP-012's `private: true`, so no release could pass verification. It now requires `private`.
 
 - The packed CLI now ships `skill-pack/manifest.json`, so `skills install` and `setup` work from an installed package and not only from a checkout. A package test now installs a skill from the packed executable.

@@ -39,6 +39,8 @@ The executable requires Node.js 24+. Install it with `npm install -g https://git
 
 `onboard`, `track align`, `task submit-design`, `task help`, `review *` and `next` ask a model for one bounded role judgment. Choose the model host with `--role-adapter codex|claude`, or set `NOETHERKIN_ROLE_ADAPTER`. Otherwise `--codex-bin` or `--claude-bin` implies that adapter, and failing that the CLI uses the first of `codex`, then `claude`, that it finds working. If none is available the command fails with `ROLE_ADAPTER_UNAVAILABLE` and says how to install one or choose one. The check runs before any consent prompt, so you never confirm an action that cannot run. In a terminal, a line on stderr says which role and adapter are being asked. `--model` pins a model for either adapter, and `--codex-bin` or `--claude-bin` (or `NOETHERKIN_CODEX_BIN`, `NOETHERKIN_CLAUDE_BIN`) points at a specific binary.
 
+The Codex binary is resolved in this order: `--codex-bin`, then `NOETHERKIN_CODEX_BIN`, then `codex` on `PATH`, then the binary bundled with the ChatGPT desktop app (`/Applications/ChatGPT.app/Contents/Resources/codex`) as a last resort. `setup` and `doctor` show which binary each role host uses, why it was chosen, and any other installed binary for that host. If Codex answers that it is not signed in, the command fails with `ADAPTER_AUTH_REQUIRED` and tells you to run `codex login` or choose another binary or adapter; Codex's raw output is kept in the diagnostic's `detail`, shown only with `--json`.
+
 Both adapters send the same prompt and closed output contract, run with tools disabled and without user or project settings, and return output the controller validates again before anything is published. The Claude adapter runs `claude --print --output-format json` in safe and restricted mode with `--tools ""`, an empty MCP configuration and no saved session. A role judgment is never consent and never publishes by itself.
 
 Every command accepts `--workspace <existing-directory>`, `--json` and `--help`. Init defaults to the current directory. Inspection walks upward to the nearest workspace; an explicit path takes precedence, and a directory that is not yet a workspace reports `WORKSPACE_NOT_INITIALIZED` with the command to create one. Track and project catalog browsing can run without a workspace. Human output is compact text; `--json` output keeps the documented shapes.
@@ -75,7 +77,7 @@ A rework outcome from `task submit-design`, `task test`, `review code` or `revie
 
 ## Output and validation coverage
 
-JSON output is one object on stdout with `command`, `outcome`, `coverage`, `data`, and `diagnostics`. Interactive prompts use stderr. Diagnostics contain `code`, `path`, and `message`.
+JSON output is one object on stdout with `command`, `outcome`, `coverage`, `data`, and `diagnostics`. Interactive prompts use stderr. Diagnostics contain `code`, `path`, and `message`, and may carry a `detail` with raw supporting output, such as a role host's error text. Human output never prints `detail`.
 
 | Exit | Meaning |
 | --- | --- |

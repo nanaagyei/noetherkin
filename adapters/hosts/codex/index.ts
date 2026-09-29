@@ -1,9 +1,9 @@
 import { spawnSync } from 'node:child_process';
-import fs from 'node:fs';
+import { resolveCodexBinary } from '../../runtime/codex-binary.js';
 import { GenericCapabilityHostAdapter, type HostProbe } from '../generic/index.js';
 
 export class CodexCapabilityHostAdapter extends GenericCapabilityHostAdapter {
-  constructor(private readonly binary = fs.existsSync('/Applications/ChatGPT.app/Contents/Resources/codex') ? '/Applications/ChatGPT.app/Contents/Resources/codex' : 'codex') {
+  constructor(private readonly binary = resolveCodexBinary().binary) {
     super({
       host: 'codex', installation: ['Agent Skills directory'],
       arguments: 'both', workspace_context: 'both',
