@@ -11,6 +11,15 @@ Foundational specification phase: complete. Phase 6 PetClinic vertical runtime: 
 
 Limits: none of the three forges has been built end to end by a real learner, so they ship as `draft`, and their task wording is untested against learners. The four new edges are an authored judgment awaiting owner review. Agent Trace Eval's safety slice uses deterministic scenarios over simulated tools; it says nothing about the safety of a real model. Drift Monitor aligns to `ai-engineering` through `production.observability` in its incident replay task; a reviewer should confirm that the task exercises it honestly.
 
+## Forge authoring kit (2026-09-29)
+
+- [x] `noetherkin forge check <directory>` (issue #17): applies the existing forge rules to an authored directory and reports every problem at once, each with a `Try:` line. It covers record and template schemas (templates are validated against a schema derived from `task.schema.json`, so the two cannot drift), catalog competencies, track alignment per aligned track, the record-to-task competency union, sequencing and file prefixes, pack and forge ownership, FR-45 JSON-only packs, ID collisions with catalog projects and other forges' packs and tasks, attestation references, push and publish constraints, draft status for new forges, and leftover TODO markers. Warnings flag unattested criteria that need another person, a missing `AC-explanation`, and unreferenced packs. No protocol rule is added.
+- [x] `noetherkin forge new <id> [<directory>] --track <track-id>`: scaffolds a record and first task that fail `forge check` only on TODO markers, and never overwrites.
+- [x] `docs/forge-authoring.md`, linked from the README and CONTRIBUTING, with Eval Ledger as the annotated example.
+- [x] `tests/forge-authoring.test.ts`: each shipped forge passes when copied into a temporary directory, the scaffold fails only on TODO markers and passes once they are replaced, and each of the 21 rules has a seeded fixture producing its own diagnostic.
+
+Limits: the authored layout mirrors the repository (`catalog/forge/`, `tasks/forge/`) rather than the flatter layout sketched in #17, so a directory drops into a checkout unchanged. A shipped forge ID is checked as an edit of that forge, not a collision. The push and publish checks match constraint wording (a negation plus "push", "publish" or "deploy"), so they catch omissions, not every paraphrase. The attestation warning matches a fixed set of phrases. No outside contributor has yet authored a forge with the kit.
+
 ## Windows support (2026-09-28)
 
 - [x] Native Windows (ACP-018 adopted, Phase 15; issue #23): canonical publication on local NTFS volumes, `.cmd` role hosts started through `cmd.exe` with escaped arguments, process-tree termination on timeout, platform-shell forge test commands, and Windows-quoted `run` commands.

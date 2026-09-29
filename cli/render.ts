@@ -84,6 +84,13 @@ function renderForges(data: ObjectValue): string {
   return data.forges.map((forge: ObjectValue) => `${forge.id} (${forge.status}): ${forge.name}\n  ${forge.description}\n  Tracks: ${forge.track_alignment.join(', ')}  Languages: ${forge.primary_languages.join(', ')}  Level: ${forge.recommended_minimum_level}-${forge.ideal_level}\n  Start: noetherkin project select ${forge.id} --source ${forge.id}`).join('\n\n');
 }
 
+function renderForgeCheck(data: ObjectValue): string {
+  const count = (severity: string): number => data.problems.filter((problem: ObjectValue) => problem.severity === severity).length;
+  const lines = data.problems.map((problem: ObjectValue) => `${problem.severity.padEnd(7)} ${problem.code} [${problem.path}]\n        ${problem.message}\n        Try: ${problem.try}`);
+  const checked = data.forges.length ? `Checked ${data.forges.join(', ')} in ${data.directory}` : `Checked ${data.directory}`;
+  return `${lines.length ? `${lines.join('\n')}\n\n` : ''}${checked}: ${count('error')} error(s), ${count('warning')} warning(s).${count('error') ? '' : ' Ready for review.'}`;
+}
+
 function renderSkills(data: ObjectValue): string {
   if (data.skills) return `${data.skills.map((skill: ObjectValue) => `${skill.name.padEnd(28)} ${skill.description.split('. ')[0]}.`).join('\n')}\n\nInstall: noetherkin skills install --global`;
   const reports = (data.installs ?? [data]) as ObjectValue[];
@@ -143,6 +150,8 @@ export function render(result: Result): string {
   else if (command === 'track' && data.tracks?.length === 1 && !data.outcome) body = renderTrack(data.tracks[0]);
   else if (command === 'projects' && data.projects) body = renderProjects(data);
   else if (command === 'forges') body = renderForges(data);
+  else if (command === 'forge' && data.problems) body = renderForgeCheck(data);
+  else if (command === 'forge' && data.files) body = `Wrote ${data.files.join(' and ')} under ${data.directory}.\nReplace every TODO marker, then run: ${data.next}`;
   else if (command === 'skills') body = renderSkills(data);
   else if (command === 'next') body = renderNext(data);
   else { const { next_action: _next, summary: _summary, ...rest } = data; body = stringify(rest, { lineWidth: 0 }).trimEnd(); }

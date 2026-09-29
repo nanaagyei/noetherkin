@@ -74,8 +74,9 @@ test('FR-36: no code that derives standing or the competency cache can read the 
   const sources = ['core', 'cli', 'adapters/runtime', 'adapters/hosts'].flatMap(directory => fs.readdirSync(path.join(repository, directory), { recursive: true, encoding: 'utf8' }).filter(file => file.endsWith('.ts')).map(file => `${directory}/${file}`));
   for (const file of sources.filter(file => !allowed.has(file))) {
     const text = fs.readFileSync(path.join(repository, file), 'utf8');
-    // The track listing copies a project's own `prerequisites` field, unrelated to competency edges; nothing else may.
-    const edgeAccess = text.replaceAll('prerequisites: project.prerequisites', '');
+    // The track listing copies a project's own `prerequisites` field, and the forge scaffold writes a forge record's
+    // prose `prerequisites`; both are unrelated to competency edges. Nothing else may mention them.
+    const edgeAccess = text.replaceAll('prerequisites: project.prerequisites', '').replaceAll("prerequisites: ['TODO: something the learner must already be able to do.']", '');
     assert.doesNotMatch(edgeAccess, /\bprerequisites\b|\bencompasses\b|from '[./]*graph\.js'/, `${file} must not read competency edges`);
   }
   // Nothing but the CLI may import the advisory modules, so no publisher or cache derivation can reach them.
