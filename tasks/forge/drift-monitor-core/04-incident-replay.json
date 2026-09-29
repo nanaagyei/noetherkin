@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "id": "drift-monitor-04-incident-replay",
+  "forge_id": "drift-monitor",
+  "pack_id": "drift-monitor-core",
+  "sequence": 4,
+  "type": "PRODUCT",
+  "title": "Alert, write the runbook and replay a synthetic incident",
+  "problem": "Signals only help if they reach a person as a decision. An on-call responder woken by \"drift detected\" needs to know whether inputs shifted, labels are late, the model degraded or a pipeline broke, because each has a different first action. Only a replay of a known incident shows whether the monitor says the right thing.",
+  "context": "Final task of the pack. The learner scripts a synthetic incident with injected causes, for example a pipeline fault, then gradual input drift, then a label delay, and replays it through the monitor. This is where production readiness has something real to assess.",
+  "impact": "A monitor that pages without telling the responder what to do is noise. This task is the difference.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-alerts",
+      "criterion": "Alerts distinguish input drift, prediction drift, performance degradation, missing labels and a malformed batch, and each alert names the evidence behind it (statistics, coverage, rejected rows)."
+    },
+    {
+      "id": "AC-combined",
+      "criterion": "Where signals overlap, the alert logic combines them to separate competing explanations; for example prediction drift with no input drift and a recent pipeline fault is not reported as model degradation."
+    },
+    {
+      "id": "AC-replay",
+      "criterion": "A scripted synthetic incident with at least three injected causes is replayed end to end, and the alerts raised match the injected causes in order."
+    },
+    {
+      "id": "AC-runbook",
+      "criterion": "A runbook gives, for each alert kind, what it means, the evidence to look at first, and the first action."
+    },
+    {
+      "id": "AC-quickstart",
+      "criterion": "A person with only the README can run the incident replay and see the alerts in under a minute."
+    },
+    {
+      "id": "AC-outside-check",
+      "criterion": "Someone other than the learner reads one alert from the replay and the runbook, decides the first action, and justifies it. The result is recorded, including where they hesitated."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests run the replay and check the alert sequence, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains how overlapping signals are combined into one alert, one rejected alternative (for example an alert per statistic), and which real incident the replay would handle badly."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only. No alerting service or scheduler.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "AC-outside-check requires a real person. A simulated or model-performed walkthrough does not satisfy it, and recording one as satisfied is fabricated evidence.",
+    "Do not push to a remote, publish a package or deploy anything as part of this task."
+  ],
+  "primary_competencies": [
+    "production.observability",
+    "core.technical-communication"
+  ],
+  "secondary_competencies": [
+    "core.ownership",
+    "ml.model-lifecycle"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "cross-component",
+    "components": [
+      "alerting",
+      "runbook",
+      "incident replay"
+    ],
+    "description": "Turning signals into decisions and proving it on a replayed incident."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "Which combination of signals points at each cause, and which combinations are ambiguous",
+    "What a responder needs in the first thirty seconds of reading an alert",
+    "Where a first-time reader actually hesitates, discovered by watching one"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout.",
+    "Perform the quickstart on a clean clone before claiming AC-quickstart."
+  ],
+  "documentation_requirements": [
+    "README quickstart, alert runbook and the operations note.",
+    "Record the outside walkthrough result verbatim, including where the person hesitated."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "attested_criteria": [
+    "AC-outside-check"
+  ],
+  "next_task_preview": null
+}

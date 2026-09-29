@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "id": "agent-trace-eval-02-bounded-loop-and-checks",
+  "forge_id": "agent-trace-eval",
+  "pack_id": "agent-trace-eval-core",
+  "sequence": 2,
+  "type": "PRODUCT",
+  "title": "Build a bounded agent loop and check each trace",
+  "problem": "An agent loop without an explicit budget and termination condition runs until something external stops it, and a checker that only reads final answers cannot see a forbidden attempt that was denied and retried. Both have to be designed, not assumed.",
+  "context": "Builds on the trace format. The policy that chooses the next tool is a pluggable deterministic function; scripted policies stand in for a model. Tools are simulated functions over in-memory state.",
+  "impact": "This is where the agent is bounded and its behavior first judged. Everything after it depends on traces being complete and checks being honest.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-registry",
+      "criterion": "Tools are registered explicitly with names and argument checks. A request for an unregistered tool is recorded as such and never executed."
+    },
+    {
+      "id": "AC-budget",
+      "criterion": "The loop enforces a step budget and a termination condition, and records which ended the run. A policy that never finishes is stopped at the budget with a complete trace."
+    },
+    {
+      "id": "AC-forbidden",
+      "criterion": "A declared set of forbidden tools is denied at call time, and every attempt is recorded in the trace even when denied."
+    },
+    {
+      "id": "AC-checks",
+      "criterion": "Each trace is evaluated for task success against the scenario's expected end state, budget exhaustion, and forbidden attempts. A scenario that succeeds after a denied forbidden attempt reports both."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover a successful scenario, a non-terminating policy, an unknown tool, and a success after a denied forbidden attempt, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the termination design, one rejected alternative (for example a wall-clock timeout), and what breaks first if a tool has a side effect the loop cannot observe."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only. No agent framework.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "Tools simulate effects in memory. Nothing touches the filesystem, network or shell.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "ai.agent-design",
+    "ml.evaluation"
+  ],
+  "secondary_competencies": [
+    "python.testing",
+    "core.implementation"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "agent loop",
+      "trace checks"
+    ],
+    "description": "A bounded loop that emits traces and a checker over them."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "What must be true for a loop to be guaranteed to stop",
+    "Where a forbidden action should be blocked, and why blocking alone is not enough",
+    "How task success is defined from end state rather than from the final message"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout."
+  ],
+  "documentation_requirements": [
+    "Record the loop design, the check definitions and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Score an adversarial slice where success means refusal",
+    "summary": "Scenarios where the correct outcome is refusing, scored separately from ordinary failures and unsafe completions."
+  }
+}

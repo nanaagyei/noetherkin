@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0",
+  "data_class": "live",
+  "id": "agent-trace-eval",
+  "name": "Agent Trace Eval",
+  "description": "A deterministic tool-using agent loop and an evaluator that judges its recorded traces: task success, step budget, forbidden tool attempts, and adversarial scenarios where the right outcome is refusal, with a static viewer for reading a failure.",
+  "status": "draft",
+  "track_alignment": [
+    "ai-engineering",
+    "ml-engineering"
+  ],
+  "competencies": [
+    "core.implementation",
+    "python.language",
+    "core.testing",
+    "core.git",
+    "ai.agent-design",
+    "ml.evaluation",
+    "python.testing",
+    "ai.safety-evaluation",
+    "core.debugging",
+    "production.observability",
+    "core.technical-communication",
+    "core.ownership"
+  ],
+  "recommended_minimum_level": "E1",
+  "ideal_level": "E2",
+  "primary_languages": [
+    "Python"
+  ],
+  "technologies": [
+    "Standard library",
+    "pytest"
+  ],
+  "external_services": [],
+  "problem": "A tool-using agent is usually judged by whether its final answer looks right. The failures that matter happen in between: it calls the wrong tool, loops until something stops it, or attempts an action it must never take and retries after being denied. A final-answer check passes all of these. Without a trace format, per-trace checks and a way to read a trace, nobody can say whether an agent that 'worked' actually behaved acceptably, or tell a refusal that was correct from a failure.",
+  "users": [
+    {
+      "who": "Someone changing an agent's tools, policy or prompt",
+      "needs": "To know which scenarios changed behavior, including unsafe attempts that were denied, not just whether final answers still look right."
+    },
+    {
+      "who": "A reviewer investigating one failed scenario",
+      "needs": "To read a single trace and see which step went wrong and why, without running the agent."
+    }
+  ],
+  "success_criteria": [
+    {
+      "id": "SC-1",
+      "criterion": "Traces follow a declared format of steps, tool calls, arguments, results and termination reason, and a trace that violates it is refused with the offending step named.",
+      "verifiable_by": "Feed a trace with a tool result missing its call. The loader refuses it and names the step."
+    },
+    {
+      "id": "SC-2",
+      "criterion": "The bundled agent loop is bounded: an explicit tool registry, a step budget and a termination condition, and it records a trace for every run including failures.",
+      "verifiable_by": "Run a scenario whose policy never finishes. The run stops at the budget and the trace records budget exhaustion as its termination reason."
+    },
+    {
+      "id": "SC-3",
+      "criterion": "Each trace is checked for task success, step budget, and forbidden tool attempts, and a forbidden attempt is reported even when the tool layer denied it.",
+      "verifiable_by": "Run a scenario where the policy attempts a forbidden tool, is denied, and then succeeds. The report shows success and the forbidden attempt."
+    },
+    {
+      "id": "SC-4",
+      "criterion": "Adversarial scenarios where the correct outcome is refusal are scored separately: a correct refusal, an unsafe completion, and an ordinary failure are three distinct outcomes.",
+      "verifiable_by": "Run the adversarial slice with a policy that complies with one unsafe request. The report names that scenario as an unsafe completion, not a failure."
+    },
+    {
+      "id": "SC-5",
+      "criterion": "A static HTML view of one trace lets a reader identify the failing step and the check it violated without reading the source.",
+      "verifiable_by": "Open the generated view for a failed trace. A reader names the step and the reason."
+    },
+    {
+      "id": "SC-6",
+      "criterion": "Someone who did not write it can run the scenarios, open a failed trace, and explain the failure using only the README.",
+      "verifiable_by": "Hand the repository to another person with only the README. They explain one failure."
+    }
+  ],
+  "non_goals": [
+    "Calling a hosted model. The agent policy is a pluggable deterministic function; a learner may plug a model in, but nothing requires network access or an API key.",
+    "Executing real side effects. Tools are simulated functions over in-memory state; nothing touches the filesystem, network or shell.",
+    "A general agent framework. The loop exists to produce honest traces for evaluation.",
+    "A dynamic web application. The viewer is static HTML generated from a trace.",
+    "Scoring the quality of prose in answers."
+  ],
+  "operational_requirements": {
+    "failure_modes": [
+      {
+        "failure": "The policy never terminates.",
+        "required_behavior": "Stop at the step budget, record budget exhaustion as the termination reason, and evaluate the trace as a budget failure rather than losing it."
+      },
+      {
+        "failure": "The policy requests a tool that is not registered.",
+        "required_behavior": "Record the attempt as a step with an unknown-tool result, continue or stop according to the declared policy, and report it in the checks."
+      },
+      {
+        "failure": "A forbidden tool is attempted and denied.",
+        "required_behavior": "Record the attempt and the denial in the trace. The evaluation reports the attempt even if the scenario later succeeds."
+      },
+      {
+        "failure": "A tool raises an exception.",
+        "required_behavior": "Record the exception as the step result, never as a successful result, and let the evaluation see it."
+      }
+    ],
+    "observability": [
+      "A one-line summary per scenario run with counts of successes, failures, budget exhaustions, forbidden attempts, correct refusals and unsafe completions.",
+      "Every step of every trace recorded with its tool, arguments, result or error, and elapsed step count.",
+      "A static trace view that marks the step each failing check points at."
+    ],
+    "rollback": "Traces and evaluation results are written as new files per run and never edited, so there is nothing to undo. Reverting the policy or a tool and rerunning produces new traces; earlier ones remain readable. The operations note states that deleting a trace removes the only record of that run's behavior.",
+    "documentation": [
+      "A README quickstart that runs the bundled scenarios and opens one failed trace in the viewer in under a minute.",
+      "The trace format and the check definitions documented as a stable contract.",
+      "An operations note covering a non-terminating policy, an unknown tool, and how to read a denied forbidden attempt."
+    ]
+  },
+  "context_budget": {
+    "source_tokens_target": 18000,
+    "excludes": [
+      "tests",
+      "lockfiles",
+      "generated files",
+      "generated trace views",
+      "the bundled scenarios"
+    ],
+    "rationale": "A bounded loop, a checker, a safety slice and a static viewer are each small. Keeping the whole near Eval Ledger's size stops the agent loop from growing into a framework. This is a starting target to revise against ACP-016 measurements."
+  },
+  "prerequisites": [
+    "Can write and test a Python module with a virtual environment and a test runner.",
+    "Can read and write JSON data files.",
+    "Has seen an agent or chatbot call a tool, even without building one."
+  ],
+  "task_packs": [
+    "agent-trace-eval-core"
+  ],
+  "caveats": [
+    "This is a first-party specification, not an upstream project. Completing it establishes no upstream contribution, maintainer relationship or endorsement.",
+    "The specification is owned by this repository. No solution, reference implementation or partial source is shipped with it.",
+    "Tools, scenarios and policies are synthetic and deterministic. Results describe the bundled agent loop and scenarios, not the safety of any real model or deployed agent.",
+    "Evidence derived from this work describes learner-authored software produced inside a simulated engineering process. The surrounding review, assignment and incident workflows are simulated and must be qualified as such.",
+    "The context budget is an authoring constraint on this specification and an advisory target for the learner. It is not an acceptance criterion and no task fails for exceeding it."
+  ],
+  "sources": [],
+  "checked_at": "2026-09-29T00:00:00Z"
+}

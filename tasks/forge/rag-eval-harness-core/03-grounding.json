@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "id": "rag-eval-harness-03-grounding",
+  "forge_id": "rag-eval-harness",
+  "pack_id": "rag-eval-harness-core",
+  "sequence": 3,
+  "type": "PRODUCT",
+  "title": "Check that answers are grounded in the passages they cite",
+  "problem": "Good retrieval does not make a good answer. A generator can ignore the retrieved passages, cite a passage that does not say what it claims, or cite nothing at all. These are different failures with different fixes, and a single accuracy number merges them.",
+  "context": "Builds on scored retrieval runs. The generator is a pluggable function returning an answer and the passage IDs it cites; the harness ships a deterministic example generator. The support check is the learner's design, for example required-phrase matching or a simple entailment rule, stated and tested.",
+  "impact": "This is what distinguishes a retrieval-augmented system that is grounded from one that merely sounds right.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-classify",
+      "criterion": "Each answer is classified as grounded (every cited passage exists and supports the answer by the stated rule), ungrounded (a cited passage is missing or does not support it), or uncited (no citation). The three counts are reported separately and never merged."
+    },
+    {
+      "id": "AC-fabricated",
+      "criterion": "A citation of a passage ID absent from the corpus is reported as a fabricated citation and makes the answer ungrounded."
+    },
+    {
+      "id": "AC-rule",
+      "criterion": "The support rule is written down in the design and implemented as a function with tests. Its known false positives and false negatives are listed."
+    },
+    {
+      "id": "AC-separate",
+      "criterion": "The run record keeps retrieval results and grounding results for a question separate, so either can be read without the other."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover each classification, a fabricated citation, and at least one case the support rule gets wrong, marked as a known limitation, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the support rule, one rejected alternative (for example exact-match or word-overlap), and one way an answer can pass the rule while still misleading a reader."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "Do not call a model to judge grounding. The rule is deterministic and inspectable.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "ai.retrieval-augmentation",
+    "ml.evaluation"
+  ],
+  "secondary_competencies": [
+    "core.debugging",
+    "python.testing"
+  ],
+  "recommended_level": "E2",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "grounding checks"
+    ],
+    "description": "A deterministic classifier over answers, citations and passages."
+  },
+  "difficulty": "complex",
+  "investigation_areas": [
+    "What evidence a support rule can use without a model, and what it will miss",
+    "How an answer that is correct but cites the wrong passage should be classified, and why",
+    "How a reader of the record tells a retrieval failure from a generation failure for one question"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout."
+  ],
+  "documentation_requirements": [
+    "Record the support rule, its known failure cases and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Make it comparable and operable by someone who did not write it",
+    "summary": "Per-question comparison of two runs, a changed-corpus guard, the quickstart, the operations note and an outside check."
+  }
+}
