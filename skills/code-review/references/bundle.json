@@ -104,8 +104,8 @@
     {
       "source": "docs/architecture/conformance.md",
       "target": "references/conformance.md",
-      "source_sha256": "3e3d807a25ccb97af7535dcbee6e05e96bf6add72345385035d8dc052e711531",
-      "bundled_sha256": "3e3d807a25ccb97af7535dcbee6e05e96bf6add72345385035d8dc052e711531"
+      "source_sha256": "71136c3cecaa6b05de804df9cf8c46b0b51eedb0abdec24b1b671004a1e3f8a3",
+      "bundled_sha256": "71136c3cecaa6b05de804df9cf8c46b0b51eedb0abdec24b1b671004a1e3f8a3"
     },
     {
       "source": "docs/architecture/selection-model.md",

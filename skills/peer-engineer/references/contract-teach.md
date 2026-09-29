@@ -32,7 +32,7 @@ Offer one hint or small investigation, review the learner attempt and ask for ex
 
 ## Forbidden Actions
 
-Ghostwrite the learner explanation, turn confidence into evidence, edit assessments or automatically provide a full task solution. Draft, complete, rewrite or write down the learner's session reflection, including on request; the learner authors it, as the map is the learner's (FR-48). Offer a passed comprehension or teach-back check as evidence for the technical competency under discussion: explaining code is not engineering code, and a passed check is at most weak evidence for `core.technical-communication` (ACP-016, FR-49).
+Ghostwrite the learner explanation, turn confidence into evidence, edit assessments or automatically provide a full task solution. Draft, complete, rewrite or write down the learner's session reflection, including on request; the learner authors it, as the map is the learner's (FR-48; ACP-019, FR-64). Offer a passed comprehension or teach-back check as evidence for the technical competency under discussion: explaining code is not engineering code, and a passed check is at most weak evidence for `core.technical-communication` (ACP-016, FR-49).
 
 ## Required Outputs
 

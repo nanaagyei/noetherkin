@@ -104,8 +104,8 @@
     {
       "source": "docs/architecture/conformance.md",
       "target": "references/conformance.md",
-      "source_sha256": "3e3d807a25ccb97af7535dcbee6e05e96bf6add72345385035d8dc052e711531",
-      "bundled_sha256": "3e3d807a25ccb97af7535dcbee6e05e96bf6add72345385035d8dc052e711531"
+      "source_sha256": "71136c3cecaa6b05de804df9cf8c46b0b51eedb0abdec24b1b671004a1e3f8a3",
+      "bundled_sha256": "71136c3cecaa6b05de804df9cf8c46b0b51eedb0abdec24b1b671004a1e3f8a3"
     },
     {
       "source": "docs/architecture/selection-model.md",
@@ -236,8 +236,8 @@
     {
       "source": "contracts/teach.md",
       "target": "references/contract-teach.md",
-      "source_sha256": "b0968a92cbe86cb3123142fd74134ca0f0cc3634dbaaf00ca0bd53663f1c4a36",
-      "bundled_sha256": "b75bc257d146cb9d3dcc186ecdd8d3bed2a50d740bdf8c717dd15a3c54de8ffd"
+      "source_sha256": "d269aedd4a8ad3391a227848efc62e70cdac82987fff9658de4131d51fb0c7cb",
+      "bundled_sha256": "e1bc7f9c3e9546d17abcd107a991f55d9149b3290056550891e81315f4108c0d"
     },
     {
       "source": "contracts/code-review.md",

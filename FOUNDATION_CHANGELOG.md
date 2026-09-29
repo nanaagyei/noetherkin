@@ -1,8 +1,18 @@
 # Foundation changelog
 
+## Phase 16 session wrap-up, 2026-09-29 (America/Chicago)
+
+### ACP-019: learner-written session wrap-up, adopted
+
+Adopted on the project owner's explicit authorization. The learning from a session no longer has to evaporate: the `teach` contract gains a session wrap-up, and the next session opens with what the learner wrote. The normative text is the `teach` contract's Session wrap-up section and the session-start paragraph of the shared runtime guide.
+
+What changes. When the learner ends a session or a task gate completes, the agent asks two or three short reflection questions, one at a time, and the learner writes the answers, conventionally under a dated heading in `.apprenticeship/knowledge/learning-log.md`. Drafting, completing, rewriting or writing the reflection is a forbidden action, including on request, on the FR-48 principle. A wrap-up is not evidence for any technical competency (FR-49, restated). At session start every skill reads the latest dated entry after `status` or `next` and treats it as the learner's claim, not a verified fact (CF-47): source wins on conflict, and the learner corrects their own entry. The onboarding contract's state read names that entry for a returning learner. `next` shows its date and first line as a read-only derived view.
+
+No normative text was contradicted; the change adds obligations and a forbidden action to a versioned contract, which is why it is recorded here. Rejected alternatives are those in the proposal: an agent-written summary, a canonical session record, counting a wrap-up as communication evidence, and a mandatory wrap-up before a session may end. Schema impact: none. Catalog impact: none. `next --json` gains the additive `learning_log` field. Migration: none; a workspace without a dated learning-log entry behaves exactly as before. Conformance: CF-59, CF-60, FR-64 and FR-65 are registered as behavioral cases P22, P23, A24 and A25, each run live once per host with owner-confirmed passing reviews; CF-60's `next` output is also executed offline. No archived byte or frozen assertion changed.
+
 ## Catalog content: ML and AI forges, 2026-09-29 (America/Chicago)
 
-Three draft forges (`rag-eval-harness`, `agent-trace-eval`, `drift-monitor`) are added to forge catalog 1.0 under the ACP-015 rules, with no schema or rule change. Graph extension (ACP-013 edges, flagged for owner review): `ai.retrieval-augmentation`, `ai.safety-evaluation` and `ml.model-lifecycle` require `ml.evaluation`, and `ai.agent-design` requires `core.implementation`. No ID was renamed, no behavior reworded, no core flag flipped, and no core competency gained a non-core prerequisite. The catalog stays 4.0 for the reasons in ADR-016: edges never reach a judgment (FR-36), and a 4.0 workspace sees them in advisory output only. Migration: none.
+Three draft forges (`rag-eval-harness`, `agent-trace-eval`, `drift-monitor`) are added to forge catalog 1.0 under the ACP-015 rules, with no schema or rule change. Graph extension (ACP-013 edges, approved by the project owner on 2026-09-29): `ai.retrieval-augmentation`, `ai.safety-evaluation` and `ml.model-lifecycle` require `ml.evaluation`, and `ai.agent-design` requires `core.implementation`. No ID was renamed, no behavior reworded, no core flag flipped, and no core competency gained a non-core prerequisite. The catalog stays 4.0 for the reasons in ADR-016: edges never reach a judgment (FR-36), and a 4.0 workspace sees them in advisory output only. Migration: none.
 
 ## Phase 15 Windows publication, 2026-09-28 (America/Chicago)
 
