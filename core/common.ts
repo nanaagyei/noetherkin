@@ -3,7 +3,8 @@ import { createHash, randomUUID } from 'node:crypto';
 /** Schema-validated protocol objects. Schemas, rather than duplicated TS models, own their shape. */
 export type ObjectValue = Record<string, any>;
 export type Coverage = 'bootstrap' | 'structural' | 'simulation' | 'catalog' | 'none';
-export interface Diagnostic { code: string; path: string; message: string }
+/** `detail` holds raw supporting output (for example a host's stderr). It appears in `--json` only, never in human output. */
+export interface Diagnostic { code: string; path: string; message: string; detail?: string }
 export interface Result {
   command: string;
   outcome: 'success' | 'no-change' | 'proposal' | 'invalid' | 'incomplete' | 'recovery-required';
@@ -12,13 +13,13 @@ export interface Result {
   diagnostics: Diagnostic[];
 }
 export class Failure extends Error {
-  constructor(public code: string, public path: string, message: string, public exitCode = 1) { super(message); }
+  constructor(public code: string, public path: string, message: string, public exitCode = 1, public detail?: string) { super(message); }
 }
 export function requireThat(condition: unknown, code: string, path: string, message: string): asserts condition {
   if (!condition) throw new Failure(code, path, message);
 }
 export function diagnostic(error: unknown): Diagnostic {
-  return error instanceof Failure ? { code: error.code, path: error.path, message: error.message }
+  return error instanceof Failure ? { code: error.code, path: error.path, message: error.message, ...(error.detail ? { detail: error.detail } : {}) }
     : { code: 'IO_ERROR', path: '', message: error instanceof Error ? error.message : String(error) };
 }
 export function canonical(value: unknown): string {
@@ -27,8 +28,14 @@ export function canonical(value: unknown): string {
   return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical((value as ObjectValue)[key])}`).join(',')}}`;
 }
 export const encode = (value: unknown): string => canonical(value) + '\n';
-/** POSIX single-quote quoting, so a printed command can be pasted into a shell unchanged. */
-export function shellQuote(value: string): string { return /^[\w@%+=:,./-]+$/.test(value) ? value : `'${value.replaceAll("'", "'\\''")}'`; }
+/**
+ * Quotes a value for a command the learner copies into their shell. POSIX shells get single quotes. Windows cmd.exe
+ * and PowerShell both read double quotes, and a Windows path cannot contain one; backslashes need no quoting there.
+ */
+export function shellQuote(value: string, platform: NodeJS.Platform = process.platform): string {
+  if (platform === 'win32') return /^[\w@+=:,.\\/-]+$/.test(value) ? value : `"${value}"`;
+  return /^[\w@%+=:,./-]+$/.test(value) ? value : `'${value.replaceAll("'", "'\\''")}'`;
+}
 export const sha256 = (bytes: string | Buffer): string => createHash('sha256').update(bytes).digest('hex');
 export const uuidPattern = '[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}';
 export const validId = (value: unknown, prefix: string): boolean => typeof value === 'string' && new RegExp(`^${prefix}-${uuidPattern}$`, 'i').test(value);

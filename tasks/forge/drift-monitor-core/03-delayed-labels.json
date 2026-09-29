@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "id": "drift-monitor-03-delayed-labels",
+  "forge_id": "drift-monitor",
+  "pack_id": "drift-monitor-core",
+  "sequence": 3,
+  "type": "PRODUCT",
+  "title": "Track performance as delayed labels arrive",
+  "problem": "Labels for a prediction arrive days later, and some never arrive. A monitor that reports the last known accuracy looks healthy exactly when it knows nothing, and one that computes accuracy over the few labels that have arrived reports a number biased toward whatever gets labeled first.",
+  "context": "Builds on drift statistics. Labels arrive as their own synthetic stream keyed to predictions, with a declared expected delay.",
+  "impact": "This is what turns drift from a hint into evidence of degradation, and what stops the monitor from reporting health it cannot know.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-join",
+      "criterion": "Labels are joined to predictions by identity as they arrive. A label for an unknown prediction is reported, not silently dropped."
+    },
+    {
+      "id": "AC-coverage",
+      "criterion": "Performance for a period is computed only over labeled predictions and is always reported with its label coverage."
+    },
+    {
+      "id": "AC-unknown",
+      "criterion": "A period with no labels, or coverage below a declared minimum, reports performance as unknown, never as the last known value or as healthy."
+    },
+    {
+      "id": "AC-late",
+      "criterion": "When late labels arrive, the affected period's performance is recomputed and the change recorded, without rewriting the earlier result."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover a fully labeled period, a period with no labels, a low-coverage period, a late label that changes a result, and a label for an unknown prediction, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the coverage rule, one rejected alternative (for example imputing missing labels), and how label arrival order could bias the reported performance."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "Do not implement alerting or the runbook yet.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "ml.model-lifecycle",
+    "production.metrics"
+  ],
+  "secondary_competencies": [
+    "python.testing",
+    "core.implementation"
+  ],
+  "recommended_level": "E2",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "label tracking",
+      "performance metrics"
+    ],
+    "description": "A join of delayed labels to predictions and an honest performance metric over it."
+  },
+  "difficulty": "complex",
+  "investigation_areas": [
+    "What a performance number means when only some labels have arrived",
+    "Which labels tend to arrive first in practice, and how that biases early numbers",
+    "How a recomputed period is recorded without losing what was reported before"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout."
+  ],
+  "documentation_requirements": [
+    "Record the join, the coverage rule, the recomputation policy and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Alert, write the runbook and replay a synthetic incident",
+    "summary": "Alerts that separate drift, missing labels and pipeline faults, a runbook, an incident replay and an outside check."
+  }
+}

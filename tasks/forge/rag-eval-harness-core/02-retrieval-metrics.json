@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "id": "rag-eval-harness-02-retrieval-metrics",
+  "forge_id": "rag-eval-harness",
+  "pack_id": "rag-eval-harness-core",
+  "sequence": 2,
+  "type": "PRODUCT",
+  "title": "Score retrieval per question and record each run immutably",
+  "problem": "A mean retrieval score that rises can hide questions whose gold passage fell out of the top k. Retrieval has to be scored per question, against a retriever the harness does not own, and each run kept so a later change can be compared with it.",
+  "context": "Builds on the validated corpus and question set. The retriever is a function the learner defines the interface for; the harness ships a deterministic example retriever such as keyword overlap, which is enough to exercise the metrics.",
+  "impact": "This is the first measurement the harness produces. If it is wrong or mutable, every comparison built on it is wrong.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-pluggable",
+      "criterion": "The retriever is supplied through a documented function interface. Swapping it requires no change to scoring code."
+    },
+    {
+      "id": "AC-metrics",
+      "criterion": "Each question records the ranked passage IDs returned, recall@k for a declared k, and reciprocal rank of the first gold passage (0 when none is returned)."
+    },
+    {
+      "id": "AC-errored",
+      "criterion": "A retriever that raises on one question records that question as errored with the exception type and message, and the remaining questions are still scored."
+    },
+    {
+      "id": "AC-immutable",
+      "criterion": "Each run writes a new record containing the corpus identity, the retriever identity, k, per-question results and the time. No run overwrites or edits an earlier record."
+    },
+    {
+      "id": "AC-summary",
+      "criterion": "Each run prints a one-line summary with mean recall@k, mean reciprocal rank and the errored count."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests check recall@k and reciprocal rank against hand-computed values for a retriever with known output, including a question whose gold passage is never returned, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains why these two metrics were chosen, one question where they disagree and what each is telling, and what breaks first if k changes between runs."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only. No vector database or embedding library.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "Do not implement answer generation or grounding yet.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "ml.evaluation",
+    "ai.retrieval-augmentation"
+  ],
+  "secondary_competencies": [
+    "python.testing",
+    "core.implementation"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "retrieval scoring",
+      "run records"
+    ],
+    "description": "A scoring loop over a pluggable retriever and its immutable record."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "What a question with several gold passages means for recall@k and for reciprocal rank",
+    "How the retriever is identified so two different retrievers are never confused in records",
+    "Why a mean over questions can improve while an important question regresses"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout."
+  ],
+  "documentation_requirements": [
+    "Record the retriever interface, the metric definitions and the record format in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Check that answers are grounded in the passages they cite",
+    "summary": "Classify each answer as grounded, ungrounded or uncited, and never count a fabricated citation as support."
+  }
+}

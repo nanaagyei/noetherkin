@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "id": "rag-eval-harness-04-operable",
+  "forge_id": "rag-eval-harness",
+  "pack_id": "rag-eval-harness-core",
+  "sequence": 4,
+  "type": "PRODUCT",
+  "title": "Make it comparable and operable by someone who did not write it",
+  "problem": "The harness works for its author on one run. Its purpose is comparing configurations, which needs a per-question comparison that separates retrieval from grounding changes, and it is only useful if someone else can run it.",
+  "context": "Final task of the pack. This is where the project becomes something another person can use to judge a change, and where production readiness has something real to assess.",
+  "impact": "A harness nobody else can run is a script. This task is the difference.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-compare",
+      "criterion": "Comparing two runs lists, per question, the change in retrieval (gold passage gained or lost in the top k, reciprocal rank change) and the change in grounding class, reported separately."
+    },
+    {
+      "id": "AC-corpus-guard",
+      "criterion": "Comparing two runs over different corpus identities says so and refuses to present per-question changes as like-for-like."
+    },
+    {
+      "id": "AC-missing-run",
+      "criterion": "A comparison against an unknown run ID names the missing ID and lists the IDs that exist."
+    },
+    {
+      "id": "AC-quickstart",
+      "criterion": "A person with only the README can produce a comparison of two configurations on the bundled synthetic corpus in under a minute."
+    },
+    {
+      "id": "AC-docs",
+      "criterion": "The run record format and grounding classes are documented as a stable contract, and an operations note covers a changed corpus, an errored question and a fabricated citation."
+    },
+    {
+      "id": "AC-outside-check",
+      "criterion": "Someone other than the learner runs the quickstart, compares two configurations and explains one question's change using only the README and the output. The result is recorded, including where they got stuck."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover the comparison, the corpus guard and the missing-run case, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains how the comparison attributes a change to retrieval or to generation, one rejected alternative, and what breaks first when the question set grows tenfold."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "AC-outside-check requires a real person. A simulated or model-performed walkthrough does not satisfy it, and recording one as satisfied is fabricated evidence.",
+    "Do not push to a remote, publish a package or deploy anything as part of this task."
+  ],
+  "primary_competencies": [
+    "core.ownership",
+    "core.technical-communication"
+  ],
+  "secondary_competencies": [
+    "ml.evaluation",
+    "core.testing"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "comparison",
+      "documentation"
+    ],
+    "description": "Comparison and operability of the whole harness, not a new metric."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "What a reader needs to see first to decide whether a change helped",
+    "Which corpus differences make a comparison meaningless and which are tolerable",
+    "Where a first-time reader actually gets stuck, discovered by watching one"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout.",
+    "Perform the quickstart on a clean clone before claiming AC-quickstart."
+  ],
+  "documentation_requirements": [
+    "README quickstart, run record contract and the operations note.",
+    "Record the outside walkthrough result verbatim, including where the person got stuck."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "attested_criteria": [
+    "AC-outside-check"
+  ],
+  "next_task_preview": null
+}

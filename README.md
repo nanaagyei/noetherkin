@@ -27,6 +27,12 @@
 
 ## What is Noetherkin?
 
+<p align="center">
+  <img src="docs/assets/noetherkin-demo.gif" alt="A terminal session: installing Noetherkin, running setup (skills, workspace, the frontend-engineering track, onboarding), selecting the Accessible Data Table forge, noetherkin next assigning and starting the first task with its advisory block, and a learner design reviewed by a simulated team lead." width="880">
+</p>
+
+<p align="center"><sub>A real 82-second session, recorded with <a href="docs/demo/setup.tape">VHS</a> from a build of the unreleased <code>release/dev</code> branch. The onboarding baseline and the design review are genuine model judgments through Claude Code; the team lead who gives them is a simulated role, not a person. The learner, Ada, and her design are written for the demo.</sub></p>
+
 Noetherkin is an agent-agnostic apprenticeship protocol and local CLI for practicing engineering through real open-source systems. It surrounds learner-authored work with onboarding, investigation, task assignment, progressive assistance, design review, code review, evidence capture, performance review, and promotion discipline.
 
 The name combines Emmy Noether's mathematical legacy with *kin*: people learning and building as a community.
@@ -40,7 +46,7 @@ Noetherkin currently includes:
 - a frozen V1 product foundation with wire protocol 3.0;
 - a deterministic, recoverable local state publisher;
 - 21 portable [Agent Skills](docs/skills.md);
-- 34 versioned learning tracks, 87 project catalog entries, and four draft forge specifications (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest) that E0 to E2 learners build from empty;
+- 34 versioned learning tracks, 87 project catalog entries, and seven draft forge specifications (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest, RAG Eval Harness, Agent Trace Eval, Drift Monitor) that E0 to E2 learners build from empty;
 - an advisory competency graph and a map-first context budget;
 - generic, Codex, and Claude Code capability adapters, and Codex or Claude Code role adapters;
 - evidence, assistance, review, and promotion semantics designed to resist fabricated progress.
@@ -58,7 +64,7 @@ Progress is based on attributable evidence, not points, streaks, task counts, or
 
 ## Install
 
-Noetherkin has two parts: a trusted local CLI that owns workspace state, and portable skills that teach your AI agent how to take part. The CLI installs the skills for you. It needs Node.js 24 or newer and Git.
+Noetherkin has two parts: a trusted local CLI that owns workspace state, and portable skills that teach your AI agent how to take part. The CLI installs the skills for you. It needs Node.js 24 or newer and Git, on macOS, Linux or Windows. On Windows, keep your workspace on a local NTFS drive, or use WSL 2 and follow the Linux instructions; see [Filesystem limits](docs/cli.md#filesystem-limits).
 
 1. **Install the CLI** from the latest release:
 
@@ -97,7 +103,7 @@ noetherkin next                  # prints the exact next command to run
 
 Commands find the nearest workspace above the current directory; pass `--workspace <dir>` to choose another. Initialization and other consent steps need you at a terminal. Commands that need a role judgment use the first working agent CLI (Codex, then Claude Code); choose one with `--role-adapter claude` or `NOETHERKIN_ROLE_ADAPTER=claude`. A track guides recommendations but never owns skills, evidence, or promotion decisions. `next` also shows an advisory block naming which competencies to look at first and which forge or project exercises them; it is derived, not evidence, and gates nothing. Every command supports `--json` and `--help`; see the [CLI and recovery guide](docs/cli.md).
 
-Twelve tracks have a runnable path today: forge projects you build from an empty directory (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest, all still `draft`) and the curated Spring PetClinic task. The other tracks use the portable task-assignment skill on any attachable catalog project.
+Sixteen tracks have a runnable path today: forge projects you build from an empty directory (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest, RAG Eval Harness, Agent Trace Eval and Drift Monitor, all still `draft`) and curated tasks on pinned upstream projects (Spring PetClinic, pytest and textlint). The other tracks use the portable task-assignment skill on any attachable catalog project.
 
 ## Where everything lives
 
@@ -119,7 +125,7 @@ You never install Noetherkin into a project, including an open-source repository
 ```
 
 - **Forge projects.** You build these from nothing. `noetherkin project select accessible-data-table --source accessible-data-table` binds an empty folder in the workspace. You run `git init` there and write every line yourself. Nothing is cloned.
-- **Open-source projects.** `noetherkin project select <project-id> --clone-to <folder>` clones a catalog project into the workspace after you confirm. `--source <folder>` attaches a clean clone you already put there. Noetherkin pins the commit and never pushes, and your clone stays free of Noetherkin files. Spring PetClinic has a curated task pack. Other attachable projects get their tasks from the portable task-assignment skill.
+- **Open-source projects.** `noetherkin project select <project-id> --clone-to <folder>` clones a catalog project into the workspace after you confirm. `--source <folder>` attaches a clean clone you already put there. Noetherkin pins the commit and never pushes, and your clone stays free of Noetherkin files. Spring PetClinic, pytest and textlint have curated task packs, each checked against a pinned release. Other attachable projects get their tasks from the portable task-assignment skill.
 
 One workspace follows one learner through tracks and projects. A later project goes into the same workspace, so your evidence and history carry forward.
 
@@ -203,7 +209,9 @@ These checks establish bounded structural and runtime properties. They do not pr
 | [Implementation status](IMPLEMENTATION_STATUS.md) | Implemented scope, evidence, and limits |
 | [CLI guide](docs/cli.md) | Commands, consent, recovery, and JSON output |
 | [Portable skills](docs/skills.md) | Installation, packaging, and skill boundaries |
+| [Skill discovery check](docs/skill-discovery-check.md) | How to verify that agents find installed skills, and recorded results |
 | [Contributor guide](CONTRIBUTING.md) | Development and architecture-change process |
+| [Forge authoring](docs/forge-authoring.md) | Writing a forge specification and checking it with `noetherkin forge check` |
 | [Security review](docs/SECURITY_REVIEW.md) | Release threat boundaries, controls, and residual findings |
 | [Publishing checklist](docs/PUBLISHING_CHECKLIST.md) | Repository, security, and release gates |
 

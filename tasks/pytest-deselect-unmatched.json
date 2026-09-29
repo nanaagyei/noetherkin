@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "id": "deselect-unmatched",
+  "project_id": "pytest",
+  "type": "TRAINING",
+  "title": "Report a --deselect argument that matches no collected test",
+  "problem": "pytest --deselect removes tests whose node ID starts with the given prefix. A prefix that matches nothing, usually a typo such as test_x.py::test_typo, is silently ignored: the run passes and deselects nothing, so the user believes a test was excluded when it was not.",
+  "context": "This is a learner-local TRAINING exercise against the pinned 9.1.1 revision of pytest, not an upstream issue or contribution request. Nothing here implies the change would be accepted upstream.",
+  "impact": "A silent no-op on an exclusion flag hides mistakes in CI configuration and local runs. Reporting it turns a misleading success into an actionable message.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-report",
+      "criterion": "When a --deselect prefix matches no collected item, the run reports that prefix to the user. The learner's design states whether this is a warning or an error and why."
+    },
+    {
+      "id": "AC-matching",
+      "criterion": "Prefixes that do match still deselect exactly the items they did before, and the deselected count is unchanged."
+    },
+    {
+      "id": "AC-partial",
+      "criterion": "With several --deselect prefixes, only the unmatched ones are reported, each named."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Focused automated tests cover a matching prefix, an unmatched prefix, and a mix of both, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the chosen reporting behavior, one rejected alternative (for example failing the run), and what breaks first if collection is itself filtered by -k or a plugin before deselection runs."
+    }
+  ],
+  "constraints": [
+    "Keep the change inside src/_pytest/ and the focused tests under testing/.",
+    "Do not change how matching prefixes are selected or the pytest_deselected hook contract.",
+    "Do not push, open an upstream pull request, or publish a package as part of this task."
+  ],
+  "primary_competencies": [
+    "core.implementation",
+    "python.testing"
+  ],
+  "secondary_competencies": [
+    "core.codebase-navigation",
+    "tooling.cli-design"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "pytest collection (src/_pytest/main.py)"
+    ],
+    "description": "One command-line option's diagnostics and its focused tests."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "How --deselect prefixes are applied during collection",
+    "How pytest reports warnings and errors to the terminal during a run",
+    "Existing --deselect tests"
+  ],
+  "investigation_paths": [
+    "src/_pytest/main.py",
+    "src/_pytest/warning_types.py",
+    "src/_pytest/terminal.py",
+    "testing/test_session.py",
+    "testing/test_main.py"
+  ],
+  "testing_expectations": [
+    "From the repository root, in a virtual environment with pytest installed in editable mode (python -m venv .venv, activate it, then pip install -e .), run python -m pytest testing/test_session.py testing/test_main.py."
+  ],
+  "focused_test": {
+    "program": "python",
+    "args": [
+      "-m",
+      "pytest",
+      "testing/test_session.py",
+      "testing/test_main.py"
+    ]
+  },
+  "investigation_prompt": "Run pytest with a --deselect argument that names a test that does not exist, and predict what the output says. Then trace where deselection happens and decide how an unmatched prefix should be reported. Do not change code until your design is reviewed.",
+  "documentation_requirements": [
+    "Record the reporting contract, the rejected alternative, and the first likely failure case in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [
+      "pyproject.toml",
+      "src/_pytest/main.py",
+      "testing/test_session.py"
+    ],
+    "required_fragments": [
+      "def pytest_collection_modifyitems",
+      "deselect_prefixes",
+      "\"--deselect\"",
+      "def test_deselect"
+    ]
+  },
+  "next_task_preview": {
+    "title": "Explain the unmatched --deselect report in the changelog and docs",
+    "summary": "Describe the new behavior for users in pytest's documentation style, without changing the implementation from the first task."
+  }
+}

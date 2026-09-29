@@ -1,5 +1,29 @@
 # Foundation changelog
 
+## Phase 16 session wrap-up, 2026-09-29 (America/Chicago)
+
+### ACP-019: learner-written session wrap-up, adopted
+
+Adopted on the project owner's explicit authorization. The learning from a session no longer has to evaporate: the `teach` contract gains a session wrap-up, and the next session opens with what the learner wrote. The normative text is the `teach` contract's Session wrap-up section and the session-start paragraph of the shared runtime guide.
+
+What changes. When the learner ends a session or a task gate completes, the agent asks two or three short reflection questions, one at a time, and the learner writes the answers, conventionally under a dated heading in `.apprenticeship/knowledge/learning-log.md`. Drafting, completing, rewriting or writing the reflection is a forbidden action, including on request, on the FR-48 principle. A wrap-up is not evidence for any technical competency (FR-49, restated). At session start every skill reads the latest dated entry after `status` or `next` and treats it as the learner's claim, not a verified fact (CF-47): source wins on conflict, and the learner corrects their own entry. The onboarding contract's state read names that entry for a returning learner. `next` shows its date and first line as a read-only derived view.
+
+No normative text was contradicted; the change adds obligations and a forbidden action to a versioned contract, which is why it is recorded here. Rejected alternatives are those in the proposal: an agent-written summary, a canonical session record, counting a wrap-up as communication evidence, and a mandatory wrap-up before a session may end. Schema impact: none. Catalog impact: none. `next --json` gains the additive `learning_log` field. Migration: none; a workspace without a dated learning-log entry behaves exactly as before. Conformance: CF-59, CF-60, FR-64 and FR-65 are registered as behavioral cases P22, P23, A24 and A25, each run live once per host with owner-confirmed passing reviews; CF-60's `next` output is also executed offline. No archived byte or frozen assertion changed.
+
+## Catalog content: ML and AI forges, 2026-09-29 (America/Chicago)
+
+Three draft forges (`rag-eval-harness`, `agent-trace-eval`, `drift-monitor`) are added to forge catalog 1.0 under the ACP-015 rules, with no schema or rule change. Graph extension (ACP-013 edges, approved by the project owner on 2026-09-29): `ai.retrieval-augmentation`, `ai.safety-evaluation` and `ml.model-lifecycle` require `ml.evaluation`, and `ai.agent-design` requires `core.implementation`. No ID was renamed, no behavior reworded, no core flag flipped, and no core competency gained a non-core prerequisite. The catalog stays 4.0 for the reasons in ADR-016: edges never reach a judgment (FR-36), and a 4.0 workspace sees them in advisory output only. Migration: none.
+
+## Phase 15 Windows publication, 2026-09-28 (America/Chicago)
+
+### ACP-018: canonical publication on Windows, adopted
+
+Adopted on the project owner's explicit authorization. A native Windows process may now publish canonical state on a local NTFS volume; before this, Windows was proposal-only and learners were sent to WSL. The normative text is the Filesystem limits section of `docs/cli.md` and the Windows filesystem assumptions in `docs/bootstrap-runtime.md`.
+
+What changes. `darwin`, `linux` and `win32` are the publication platforms (`publicationPlatforms` in `core/storage.ts`). On Windows the directory fsync after each install is skipped, because Windows cannot fsync a directory. Directory-entry durability rests instead on NTFS metadata journaling, which is stated as an assumption that has not been tested against power loss. Everything else is unchanged on every platform: file data is fsynced before install, creations use an atomic hard link, replacements an atomic rename, and the single-writer lock, pending manifest, receipt-last commit and recovery are the same. The existing publication probe still fails closed, so FAT32, exFAT and ReFS volumes, which lack hard links, yield a proposal. On Windows only, `EPERM`, `EACCES` and `EBUSY` from rename, unlink and rmdir are retried for about 2.5 seconds, for scanner and indexer sharing violations. Directory junctions are rejected like symbolic links, and a source checkout on another drive is refused.
+
+The contradiction was `docs/cli.md`'s "single-user local macOS/Linux filesystems supporting file and directory fsync", together with the code gate that enforced it. Rejected alternatives are those in the proposal: keeping Windows WSL-only, flushing the whole volume (which needs administrator rights), a native write-through rename addon (a compiled dependency), and copy-then-delete (not atomic). Open questions remain open: power-loss ordering on NTFS is assumed rather than measured, ReFS and Dev Drive stay unsupported, and the legacy console host was not tested. Schema impact: none. Catalog impact: none. Migration: none; a workspace created on Windows is the same bytes as one created elsewhere, with LF line endings and forward-slash paths in records. Conformance: CF-58 and FR-61 to FR-63 are registered. CF-58 runs in the Windows CI job; FR-61 runs offline everywhere, and FR-62 and FR-63 on Windows. No archived byte or frozen assertion changed.
+
 ## Phase 14 advisory selection, 2026-09-24 (America/Chicago)
 
 ### ACP-014: advisory attention signal and frontier-guided selection, adopted

@@ -1,7 +1,7 @@
 import { canonical, closed, encode, Failure, requireThat, sha256, validId, type ObjectValue } from './common.js';
 import { parse } from './parsing.js';
 import { bootstrapFiles, collect, inspectRecords } from './validation.js';
-import { assertLock, digest, durable, exists, read, remove, runtime, safePath, statePath, syncDirectory, withLock, type Runtime } from './storage.js';
+import { assertLock, digest, durable, exists, publicationSupported, read, remove, runtime, safePath, statePath, syncDirectory, withLock, type Runtime } from './storage.js';
 
 export interface InitRequest { display_name: string; goals: string[]; assistance_default_max: number }
 export interface InitProposal {
@@ -173,12 +173,13 @@ export function publishInit(root: string, proposal: InitProposal, capability: ob
   const binding = approvals.get(capability);
   requireThat(binding?.root === root && binding.proposal === canonical(proposal), 'BINDING_REQUIRED', root, 'A direct controller must bind the reviewed request; declared actor fields are insufficient.');
   approvals.delete(capability);
-  requireThat(['darwin', 'linux'].includes(process.platform), 'DURABILITY_UNSUPPORTED', root, 'Publication is supported only on tested macOS/Linux local filesystems.');
+  requireThat(publicationSupported(), 'DURABILITY_UNSUPPORTED', root, 'Publication is supported only on tested macOS, Linux and Windows local filesystems.');
   return withLock(root, () => {
     requireThat(!exists(safePath(root, '.apprenticeship', rt), rt), 'STATE_CONFLICT', root, 'Workspace appeared since the proposal; inspect it before retrying.');
     try {
       syncDirectory(root, rt);
-      const fd = rt.fs.openSync(safePath(root, '.apprenticeship.lock/owner.json', rt), 'r');
+      // Opened for writing because Windows refuses FlushFileBuffers on a read-only handle.
+      const fd = rt.fs.openSync(safePath(root, '.apprenticeship.lock/owner.json', rt), 'r+');
       try { rt.fs.fsyncSync(fd); } finally { rt.fs.closeSync(fd); }
       const probe = safePath(root, '.apprenticeship.lock/link-probe', rt);
       try { rt.fs.linkSync(safePath(root, '.apprenticeship.lock/owner.json', rt), probe); }

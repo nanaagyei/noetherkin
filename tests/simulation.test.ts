@@ -8,6 +8,7 @@ import { bindApprovedInit, proposeInit, publishInit } from '../core/bootstrap.js
 import { ScriptedRoleAdapter, type RoleAdapter, type RoleInvocation } from '../core/adapters.js';
 import { inspectWorkspace } from '../core/commands.js';
 import { selectTrack } from '../core/tracks.js';
+import { writeProgram } from './support.js';
 import { advanceNext, assignTask, checkMap, codeReview, initMap, nextAction, onboard, performanceReview, selectPetClinic, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
 
 function run(cwd: string, command: string, args: string[]) {
@@ -19,7 +20,7 @@ function setup(t: { after: (fn: () => void) => void }): string {
   const source = path.join(root, 'source'); fs.mkdirSync(path.join(source, 'spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/web'), { recursive: true });
   fs.writeFileSync(path.join(source, 'pom.xml'), '<module>spring-petclinic-customers-service</module>\n');
   fs.writeFileSync(path.join(source, 'spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/web/PetResource.java'), 'class PetResource { void save(){ findPetTypeById(); } void findPetTypeById(){} }\n');
-  fs.writeFileSync(path.join(source, 'mvnw'), '#!/bin/sh\necho "focused tests passed"\nexit 0\n', { mode: 0o755 });
+  writeProgram(path.join(source, 'mvnw'), "console.log('focused tests passed');\n");
   run(source, 'git', ['init']); run(source, 'git', ['config', 'user.email', 'learner@example.invalid']); run(source, 'git', ['config', 'user.name', 'Learner']);
   run(source, 'git', ['remote', 'add', 'origin', 'https://github.com/spring-petclinic/spring-petclinic-microservices.git']); run(source, 'git', ['add', '.']); run(source, 'git', ['commit', '-m', 'fixture base']);
   const proposal = proposeInit({ display_name: 'Prince', goals: ['Learn Spring systems'], assistance_default_max: 3 }); publishInit(root, proposal, bindApprovedInit(root, proposal, true));

@@ -165,6 +165,12 @@ test('capabilities without a host bridge report blocked instead of pretending to
   await assert.rejects(new GenericCapabilityHostAdapter().invoke({ capability_id: 'not-a-skill', workspace: workspace(t), input: {} }), { code: 'UNSUPPORTED_CAPABILITY' });
 });
 
+test('a missing install target is reported as such, not as a raw filesystem error', t => {
+  const missing = path.join(workspace(t), 'not-created-yet');
+  assert.throws(() => installCapabilities(new ClaudeCodeCapabilityHostAdapter('missing'), missing, ['teach']), { code: 'NOT_DIRECTORY', message: /must be an existing directory/ });
+  assert.ok(!fs.existsSync(missing), 'nothing is created');
+});
+
 test('install copies verified bundles, is idempotent, and never overwrites a differing file', t => {
   const target = workspace(t);
   const adapter = new ClaudeCodeCapabilityHostAdapter('missing');

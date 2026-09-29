@@ -32,8 +32,8 @@
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "daa81c9184074ebe3b681bb3c0b946bd0707c0005f3e35ff5b54c499f0f4d355",
-      "bundled_sha256": "2ac713e747ec7d12c5a30b1eda319feb51969c55e9cd27bb7960b711e5d2d6b7"
+      "source_sha256": "4bcb318704a91223a99f24ff3f47a03b3ff6f9f0e10d88bf3168ef3e6406d66a",
+      "bundled_sha256": "77f0e223acf9319cd1a2aa2e28f5ff3525828c2af47b0896eca12dba2fab2c1a"
     },
     {
       "source": "docs/architecture/overview.md",
@@ -104,8 +104,8 @@
     {
       "source": "docs/architecture/conformance.md",
       "target": "references/conformance.md",
-      "source_sha256": "7de91044019dc67544b70204a4b35effb8ff84ab0d6aadbe7aac9d7e3632d906",
-      "bundled_sha256": "7de91044019dc67544b70204a4b35effb8ff84ab0d6aadbe7aac9d7e3632d906"
+      "source_sha256": "71136c3cecaa6b05de804df9cf8c46b0b51eedb0abdec24b1b671004a1e3f8a3",
+      "bundled_sha256": "71136c3cecaa6b05de804df9cf8c46b0b51eedb0abdec24b1b671004a1e3f8a3"
     },
     {
       "source": "docs/architecture/selection-model.md",
@@ -200,8 +200,8 @@
     {
       "source": "catalog/competencies.yaml",
       "target": "references/competencies.yaml",
-      "source_sha256": "1b02b0d123fff1bd4d11d55b8e57786846eb4db31828b0deac73604b5d82e8f0",
-      "bundled_sha256": "1b02b0d123fff1bd4d11d55b8e57786846eb4db31828b0deac73604b5d82e8f0"
+      "source_sha256": "0dec33cce4dde896bff65b9ad2e4da4f94dcfe01c8c45031d955afbfc534a390",
+      "bundled_sha256": "0dec33cce4dde896bff65b9ad2e4da4f94dcfe01c8c45031d955afbfc534a390"
     },
     {
       "source": "catalog/levels.yaml",
@@ -212,8 +212,8 @@
     {
       "source": "skill-pack/runtime.md",
       "target": "references/runtime.md",
-      "source_sha256": "70e36fd8974897d8e85015252b0164d7576d00503f5fcad9f3e09f01b94ea6a9",
-      "bundled_sha256": "4d5057aef0507bc358c2877127b052e35338b3624b96d7d53c5955d3d5515672"
+      "source_sha256": "f26464f0894464f84848f95d8910c34f72320509e0368127f8c1c6e9b6435f73",
+      "bundled_sha256": "172b75cd3c3f4acca5b110ddfd0cc7ca992165ccdaf2d366b0d2a1780365adf3"
     },
     {
       "source": "skill-pack/proposals.md",
@@ -236,8 +236,8 @@
     {
       "source": "contracts/onboarding.md",
       "target": "references/contract-onboarding.md",
-      "source_sha256": "3fed108ffd98574d39ded7f809628c1bbbc7b5e821ef87cccb2459e66ccffd14",
-      "bundled_sha256": "9804b926c294b044bfae70847215d57bda9968abbc1543aad7506b9592ee93de"
+      "source_sha256": "4986adb940587c56d64ad156c97778d057ab8f21795550ac7b654884a616d437",
+      "bundled_sha256": "5690b3a44e4c7f0342e3a338394befb6d678d4f6cd9c22bed4058333a55bf670"
     },
     {
       "source": "contracts/task-assignment.md",

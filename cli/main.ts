@@ -3,15 +3,15 @@ import { parseArgs } from 'node:util';
 import { createInterface, type Interface } from 'node:readline/promises';
 import { stdin, stderr } from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { realpathSync } from 'node:fs';
+import { existsSync, readFileSync, realpathSync, renameSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { diagnostic, Failure, requireThat, validId, type ObjectValue, type Result } from '../core/common.js';
+import { diagnostic, Failure, requireThat, shellQuote, validId, type ObjectValue, type Result } from '../core/common.js';
 import { bindApprovedInit, existingInit, planRecovery, proposeInit, publishInit, recover, type InitRequest } from '../core/bootstrap.js';
 import { inspectWorkspace, listProjects } from '../core/commands.js';
 import { alignTrack, listTracks, runnablePaths, selectTrack, trackAlignmentProposal } from '../core/tracks.js';
 import { migrateTo3, planMigration } from '../core/migration.js';
-import { exists, lockStatus, read, reclaimDeadLock, resolveWorkspace, runtime, safePath, statePath, withLock } from '../core/storage.js';
+import { exists, lockStatus, publicationSupported, read, reclaimDeadLock, resolveWorkspace, runtime, safePath, statePath, withLock } from '../core/storage.js';
 import { advanceNext, assignTask, attestCriterion, beginTask, checkMap, currentTask, investigationScope, mapStatus, nextAction, selectForge, cloneCatalogProject, codeReview, initMap, onboard, performanceReview, requestHelp, selectCatalogProject, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
 import { coreChecks, toolchainChecks, type EnvironmentCheck } from '../core/environment.js';
 import { lazyRoleAdapter, probeRoleHost, roleAdapterNames, roleHostChecks, type LazyRoleAdapter } from '../adapters/runtime/select.js';
@@ -23,6 +23,10 @@ import { planTransactionRecovery, recoverTransaction } from '../core/transaction
 import { competencyGraph, competencyNeighbourhood } from '../core/graph.js';
 import { catalogs } from '../core/validation.js';
 import { forgePack, upstreamPack } from '../core/packs.js';
+import { checkForgeDirectory, scaffoldForge } from '../core/authoring.js';
+import { latestLearningEntry } from '../core/learning-log.js';
+import { buildReport } from '../core/report.js';
+import { generatorMarker, renderReportHtml, renderReportMarkdown } from './report-render.js';
 import { advisoryFile, refreshAdvisory, taskRemediation } from '../core/advisory.js';
 import { parse } from '../core/parsing.js';
 import { commandNames, overview, usageOf } from './help.js';
@@ -49,6 +53,8 @@ function shapeOk(command: string, p: string[], v: Values): boolean {
   switch (command) {
     case 'init': case 'onboard': case 'status': case 'validate': case 'next': case 'tracks': case 'projects': case 'setup': case 'doctor': return one;
     case 'forges': return one;
+    case 'report': return one && [undefined, 'html', 'md', 'json'].includes(v.format);
+    case 'forge': return (p[1] === 'check' && p.length === 3) || (p[1] === 'new' && (p.length === 3 || p.length === 4) && typeof v.track === 'string');
     case 'adapter-handoff': return one && v.handoff !== undefined;
     case 'migrate': return one && v.to === '3.0';
     case 'competency': return p[1] === 'show' && p.length === 3;
@@ -73,11 +79,31 @@ function shapeOk(command: string, p: string[], v: Values): boolean {
 
 /** Options that belong to one command only. Anything else is rejected with that command's usage. */
 const ownedOptions: Record<string, string[]> = {
-  init: ['name', 'goal', 'assistance-max', 'operation-id'], doctor: ['recover'], skills: ['host', 'skill', 'global'], 'adapter-handoff': ['handoff']
+  init: ['name', 'goal', 'assistance-max', 'operation-id'], doctor: ['recover'], report: ['out', 'format', 'include-drafts'], skills: ['host', 'skill', 'global'], 'adapter-handoff': ['handoff']
 };
 function optionsOk(command: string, values: Values): boolean {
   for (const [owner, keys] of Object.entries(ownedOptions)) if (owner !== command && keys.some(key => key in values)) return false;
   return !('target' in values) || ['skills', 'setup'].includes(command);
+}
+
+/**
+ * Writes the derived progress report to one file outside `.apprenticeship/`. It replaces only a file that an earlier
+ * report wrote, recognized by its generator marker, so a mistyped --out never clobbers the learner's own file.
+ */
+function writeReport(root: string, values: Values): Result {
+  const format = (values.format ?? 'html') as 'html' | 'md' | 'json';
+  const report = buildReport(root, { includeDrafts: values['include-drafts'] ?? false });
+  const out = path.resolve(values.out ?? `noetherkin-report.${format}`);
+  const parent = realpathSync(path.dirname(out));
+  const state = path.join(root, '.apprenticeship');
+  const inside = (base: string) => { const relative = path.relative(base, path.join(parent, path.basename(out))); return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative)); };
+  requireThat(!inside(state) && !inside(`${state}.lock`) && !inside(`${state}.reclaim`), 'UNSAFE_PATH', out, 'The report is a derived export and is never written inside the workspace state. Choose an --out path outside .apprenticeship/.');
+  if (existsSync(out)) requireThat(readFileSync(out, 'utf8').slice(0, 2_000).includes(generatorMarker) || readFileSync(out, 'utf8').slice(0, 200).includes('"report_version"'), 'OUTPUT_EXISTS', out, 'A file that Noetherkin did not write already exists here. Choose another --out path.');
+  const body = format === 'json' ? `${JSON.stringify(report, null, 2)}\n` : format === 'md' ? renderReportMarkdown(report) : renderReportHtml(report);
+  const temporary = `${out}.${process.pid}.tmp`;
+  writeFileSync(temporary, body, { flag: 'wx' }); renameSync(temporary, out);
+  const counts = Object.fromEntries(Object.entries(report.competencies).map(([finding, items]) => [finding, items.length]));
+  return { command: 'report', outcome: 'success', coverage: 'simulation', data: { out, format, fixture: report.workspace.fixture, valid: report.workspace.validation.valid, competencies: counts, evidence: report.evidence.length, tasks: report.tasks.length, summary: `Wrote ${out}${report.workspace.fixture ? ' (fixture workspace)' : ''}: ${Object.entries(counts).map(([finding, count]) => `${count} ${finding}`).join(', ')}; ${report.evidence.length} evidence record(s), ${report.tasks.length} completed task(s).${report.workspace.validation.valid ? '' : ' The workspace has validation problems; the report lists them under Limits.'}` }, diagnostics: [] };
 }
 
 function capabilityHosts(): Record<string, () => GenericCapabilityHostAdapter> {
@@ -120,7 +146,8 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
         constraint: { type: 'string', multiple: true }, source: { type: 'string' }, 'clone-to': { type: 'string' }, revision: { type: 'string' },
         track: { type: 'string' }, stage: { type: 'string' }, to: { type: 'string' }, 'dry-run': { type: 'boolean' },
         file: { type: 'string' }, prediction: { type: 'string' }, question: { type: 'string' }, model: { type: 'string' }, 'codex-bin': { type: 'string' }, 'claude-bin': { type: 'string' }, 'role-adapter': { type: 'string' },
-        handoff: { type: 'string' }, command: { type: 'string' }, criterion: { type: 'string' }, host: { type: 'string' }, skill: { type: 'string', multiple: true }, target: { type: 'string' }, global: { type: 'boolean' }
+        handoff: { type: 'string' }, command: { type: 'string' }, criterion: { type: 'string' }, host: { type: 'string' }, skill: { type: 'string', multiple: true }, target: { type: 'string' }, global: { type: 'boolean' },
+        out: { type: 'string' }, format: { type: 'string' }, 'include-drafts': { type: 'boolean' }
       }, allowPositionals: true, strict: true });
     } catch (error) {
       const known = commandNames.includes(command) ? command : 'help';
@@ -163,6 +190,14 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       if (values.track) listTracks(values.track);
       const forges = catalogs().forges.filter(forge => !values.track || forge.track_alignment.includes(values.track));
       emit({ command, outcome: 'success', coverage: 'catalog', data: { forges: forges.map(({ id, name, status, description, track_alignment, recommended_minimum_level, ideal_level, primary_languages, task_packs, context_budget }) => ({ id, name, status, description, track_alignment, recommended_minimum_level, ideal_level, primary_languages, task_packs, context_budget })) }, diagnostics: [] });
+      return;
+    }
+    if (command === 'forge') {
+      // Authoring runs on a directory, never a workspace. An error fails the check; warnings and notes do not.
+      if (values.workspace) throw usage(command);
+      if (positionals[1] === 'new') { const scaffold = scaffoldForge(positionals[2]!, positionals[3] ?? positionals[2]!, values.track!); emit({ command, outcome: 'success', coverage: 'none', data: { ...scaffold, next: `noetherkin forge check ${shellQuote(scaffold.directory)}` }, diagnostics: [] }); return; }
+      const check = checkForgeDirectory(positionals[2]!);
+      emit({ command, outcome: check.problems.some(problem => problem.severity === 'error') ? 'invalid' : 'success', coverage: 'catalog', data: check, diagnostics: [] });
       return;
     }
     if (command === 'tracks') { emit({ command, outcome: 'success', coverage: 'catalog', data: listTracks(), diagnostics: [] }); return; }
@@ -219,6 +254,7 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       } finally { rl.close(); }
     }
 
+    if (command === 'report') { emit(writeReport(root, values)); return; }
     if (command === 'init') { emit(await initFlow(root, values, interactive)); return; }
     if (command === 'onboard') { emit(await onboardFlow(root, values.constraint ?? [], interactive, adapter)); return; }
     if (command === 'track' && positionals[1] === 'select') { emit(await trackSelectFlow(root, positionals[2]!, interactive)); return; }
@@ -275,7 +311,7 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       const data = positionals[1] === 'code' ? await codeReview(root, adapter) : positionals[1] === 'task' ? await taskReview(root, adapter) : await performanceReview(root, adapter);
       emit({ command, outcome: data.outcome === 'rework' ? 'incomplete' : 'success', coverage: 'simulation', data: withRemediation(root, data), diagnostics: [] }); return;
     }
-    if (command === 'next') { const data = await advanceNext(root, adapter); emit({ command, outcome: 'success', coverage: 'simulation', data: { ...data, advisory: advisorySummary(root) }, diagnostics: [] }); return; }
+    if (command === 'next') { const data = await advanceNext(root, adapter); emit({ command, outcome: 'success', coverage: 'simulation', data: { ...data, advisory: advisorySummary(root), learning_log: latestLearningEntry(root) }, diagnostics: [] }); return; }
     if (command === 'doctor') {
       if (!interactive) { emit({ command, outcome: 'proposal', coverage: 'none', data: { workspace: root }, diagnostics: [{ code: 'DIRECT_CONSENT_REQUIRED', path: root, message: 'Run doctor --recover in a direct learner-controlled terminal.' }] }); return; }
       const rl = createInterface({ input: stdin, output: stderr });
@@ -396,7 +432,7 @@ async function initFlow(root: string, values: Values, interactive: boolean, shar
       if (values['assistance-max'] === undefined) stderr.write(assistanceScale);
       request = { display_name, goals, assistance_default_max: ceiling(values['assistance-max'] ?? await rl!.question('Assistance ceiling (0-7, 3 is a common start): ')) };
     }
-    if (!interactive || !['darwin', 'linux'].includes(process.platform)) {
+    if (!interactive || !publicationSupported()) {
       const handoff = handoffFor(root, { display_name: request.display_name, goals: request.goals, assistance_default_max: request.assistance_default_max, operation_id: values['operation-id'] }, 'initialize');
       const proposal = handoff ? decodeOnboardingHandoff(handoff.token).input.proposal : proposeInit(request, values['operation-id']);
       return { command, outcome: 'proposal', coverage: 'none', data: { workspace: root, proposal, next_action: handoff }, diagnostics: [{ code: 'DIRECT_CONSENT_REQUIRED', path: root, message: `Run init in a direct learner-controlled terminal to review and bind this operation${handoff ? ', or give the learner the handoff command in next_action' : ''}.` }] };

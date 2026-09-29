@@ -7,21 +7,20 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { contextDigest, type RoleInvocation } from '../core/adapters.js';
 import { ClaudeRoleAdapter, claudeRoleArgs, extractClaudeOutput } from '../adapters/runtime/claude.js';
+import { writeProgram } from './support.js';
 
 // The fake binary records its argv and stdin, then prints the canned reply. It never calls a model.
 function fakeClaude(t: { after: (fn: () => void) => void }, reply: string, options: { exit?: number; delay_ms?: number } = {}) {
   const directory = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'noetherkin-fake-claude-')));
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
-  const binary = path.join(directory, 'claude');
-  fs.writeFileSync(binary, `#!${process.execPath}
-const fs = require('node:fs');
+  const binary = writeProgram(path.join(directory, 'claude'), `const fs = require('node:fs');
 let input = '';
 process.stdin.on('data', chunk => { input += chunk; });
 process.stdin.on('end', () => {
   fs.writeFileSync(${JSON.stringify(path.join(directory, 'call.json'))}, JSON.stringify({ argv: process.argv.slice(2), input, cwd: process.cwd() }));
   setTimeout(() => { process.stdout.write(${JSON.stringify(reply)}); process.exit(${options.exit ?? 0}); }, ${options.delay_ms ?? 0});
 });
-`, { mode: 0o755 });
+`);
   return { binary, directory, call: () => JSON.parse(fs.readFileSync(path.join(directory, 'call.json'), 'utf8')) };
 }
 

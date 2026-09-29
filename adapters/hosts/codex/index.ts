@@ -1,9 +1,9 @@
-import { spawnSync } from 'node:child_process';
-import fs from 'node:fs';
+import { spawnCommandSync } from '../../../core/process.js';
+import { resolveCodexBinary } from '../../runtime/codex-binary.js';
 import { GenericCapabilityHostAdapter, type HostProbe } from '../generic/index.js';
 
 export class CodexCapabilityHostAdapter extends GenericCapabilityHostAdapter {
-  constructor(private readonly binary = fs.existsSync('/Applications/ChatGPT.app/Contents/Resources/codex') ? '/Applications/ChatGPT.app/Contents/Resources/codex' : 'codex') {
+  constructor(private readonly binary = resolveCodexBinary().binary) {
     super({
       host: 'codex', installation: ['Agent Skills directory'],
       arguments: 'both', workspace_context: 'both',
@@ -14,7 +14,7 @@ export class CodexCapabilityHostAdapter extends GenericCapabilityHostAdapter {
   protected override targetRoot(capabilityId: string): string { return `.agents/skills/${capabilityId}`; }
   protected override invocationSurface(capabilityId: string): string { return `$${capabilityId}`; }
   override probe(): HostProbe {
-    const result = spawnSync(this.binary, ['--version'], { encoding: 'utf8', timeout: 5_000 });
+    const result = spawnCommandSync(this.binary, ['--version'], { encoding: 'utf8', timeout: 5_000 });
     return { host: this.profile.host, available: result.status === 0, version: result.status === 0 ? (result.stdout || result.stderr).trim() || null : null, limitations: [this.profile.degradation] };
   }
 }

@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { spawnCommand, terminate } from '../../core/process.js';
 import { contextDigest, validateRoleOutput, type RoleAdapter, type RoleInvocation, type RoleInvocationResult } from '../../core/adapters.js';
 import { Failure, requireThat, type ObjectValue } from '../../core/common.js';
 import { rolePrompt } from './output-contract.js';
@@ -39,9 +39,9 @@ export class ClaudeRoleAdapter implements RoleAdapter {
   async invoke(request: RoleInvocation): Promise<RoleInvocationResult> {
     requireThat(request.context_digest === contextDigest(request.context), 'CONTEXT_CHANGED', request.skill, 'Role context no longer matches its bound digest.');
     const transcript = await new Promise<string>((resolve, reject) => {
-      const child = spawn(this.binary, claudeRoleArgs(this.model), { cwd: request.workspace, stdio: ['pipe', 'pipe', 'pipe'] });
+      const child = spawnCommand(this.binary, claudeRoleArgs(this.model), { cwd: request.workspace });
       let stdout = '', stderr = '';
-      const timer = setTimeout(() => { child.kill('SIGTERM'); reject(new Failure('ADAPTER_TIMEOUT', 'claude', 'Claude role invocation exceeded its deadline.')); }, this.timeout);
+      const timer = setTimeout(() => { terminate(child); reject(new Failure('ADAPTER_TIMEOUT', 'claude', 'Claude role invocation exceeded its deadline.')); }, this.timeout);
       child.stdout.on('data', chunk => { stdout += chunk; }); child.stderr.on('data', chunk => { stderr += chunk; });
       child.on('error', error => { clearTimeout(timer); reject(error); });
       child.on('close', code => { clearTimeout(timer); code === 0 ? resolve(stdout) : reject(new Failure('ADAPTER_FAILED', 'claude', stderr || stdout.slice(0, 2_000) || `Claude exited ${code}.`)); });

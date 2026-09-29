@@ -3,7 +3,12 @@ import path from 'node:path';
 import { parseEvents } from '../../tests/behavior/lib.mjs';
 import { root } from '../../tests/behavior/cases.mjs';
 export const name = 'codex';
-export const defaultBinary = fs.existsSync('/Applications/ChatGPT.app/Contents/Resources/codex') ? '/Applications/ChatGPT.app/Contents/Resources/codex' : 'codex';
+// Same order as adapters/runtime/codex-binary.ts (which this runner cannot import): codex on PATH first, then the
+// ChatGPT app's bundled binary. An explicit --codex-bin still overrides both.
+const bundledCodex = '/Applications/ChatGPT.app/Contents/Resources/codex';
+const codexOnPath = (process.env.PATH ?? '').split(path.delimiter).filter(Boolean).map(directory => path.join(directory, 'codex'))
+  .find(file => { try { fs.accessSync(file, fs.constants.X_OK); return fs.statSync(file).isFile(); } catch { return false; } });
+export const defaultBinary = codexOnPath ?? (fs.existsSync(bundledCodex) ? bundledCodex : 'codex');
 export const requiredFlags = ['--ignore-user-config','--ignore-rules','--json','--model'];
 export const features = ['shell_tool','hooks','multi_agent','plugins','skill_search','skip_host_skill_discovery','memories','browser_use','browser_use_external','in_app_browser','image_generation','view_image'];
 export function args({workspace, model, sessionId, audit}) {

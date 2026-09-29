@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0",
+  "data_class": "live",
+  "id": "rag-eval-harness",
+  "name": "RAG Eval Harness",
+  "description": "A harness that scores a retrieval-augmented system per question: whether retrieval found the gold passages, and whether each answer is grounded in the passages it cites, recorded run by run so two configurations can be compared.",
+  "status": "draft",
+  "track_alignment": [
+    "ai-engineering",
+    "ml-engineering",
+    "llm-systems"
+  ],
+  "competencies": [
+    "core.implementation",
+    "python.language",
+    "core.testing",
+    "core.git",
+    "ml.evaluation",
+    "ai.retrieval-augmentation",
+    "python.testing",
+    "core.debugging",
+    "core.ownership",
+    "core.technical-communication"
+  ],
+  "recommended_minimum_level": "E1",
+  "ideal_level": "E2",
+  "primary_languages": [
+    "Python"
+  ],
+  "technologies": [
+    "Standard library",
+    "pytest"
+  ],
+  "external_services": [],
+  "problem": "Changes to a retrieval-augmented system, such as a new chunk size, a different embedding or a reworded prompt, are usually judged by asking a few questions and reading the answers. A fluent answer looks right whether or not retrieval found the passage that actually contains the answer, and an answer can cite a passage that does not say what the answer claims. Without per-question records of what was retrieved and what was cited, nobody can tell a retrieval regression from a generation regression, or a grounded answer from a confident guess.",
+  "users": [
+    {
+      "who": "Someone changing a retrieval-augmented system",
+      "needs": "To see, per question, whether the change moved retrieval or grounding, and in which direction, without rereading every answer."
+    },
+    {
+      "who": "A reviewer of a claimed improvement",
+      "needs": "To check which questions improved and which regressed from recorded runs, without rerunning the system."
+    }
+  ],
+  "success_criteria": [
+    {
+      "id": "SC-1",
+      "criterion": "The corpus and the question set, including each question's gold passage IDs, are declared as data. Adding a question requires no code change.",
+      "verifiable_by": "Add a question with a gold passage to the data file, run, and observe it scored in the output. No source file was edited."
+    },
+    {
+      "id": "SC-2",
+      "criterion": "Retrieval is scored per question with recall@k and reciprocal rank against the gold passages, over a retriever supplied as a pluggable function.",
+      "verifiable_by": "Plug in a retriever that returns the gold passage at rank 3 for a known question. The record shows reciprocal rank 1/3 and recall@k consistent with k."
+    },
+    {
+      "id": "SC-3",
+      "criterion": "Each answer is classified as grounded, ungrounded (cites passages that do not support it) or uncited (cites nothing), and the three counts are never merged.",
+      "verifiable_by": "Supply a generator that produces one of each for known questions. The summary shows three distinct counts and names the questions."
+    },
+    {
+      "id": "SC-4",
+      "criterion": "A run is recorded immutably with the configuration identity, per-question results and time. A later run never overwrites an earlier one.",
+      "verifiable_by": "Run twice with different configurations. Two records exist and the first is byte-identical to before the second run."
+    },
+    {
+      "id": "SC-5",
+      "criterion": "Comparing two runs reports per-question changes in retrieval and in grounding separately, so a retrieval regression is distinguishable from a generation regression.",
+      "verifiable_by": "Change only the retriever so one question loses its gold passage. The comparison attributes the change to retrieval for that question."
+    },
+    {
+      "id": "SC-6",
+      "criterion": "Someone who did not write it can run it against the bundled synthetic corpus and read a comparison without reading the source.",
+      "verifiable_by": "Hand the repository to another person with only the README. They produce and explain a comparison."
+    }
+  ],
+  "non_goals": [
+    "Building a production retriever, vector store or embedding model. The retriever and generator are pluggable functions; simple deterministic ones are enough.",
+    "Calling a hosted model. A learner may plug one in, but nothing in the specification requires network access or an API key.",
+    "Judging answer quality beyond grounding, such as style, helpfulness or tone.",
+    "Statistical significance testing across runs.",
+    "Any web interface or long-running service."
+  ],
+  "operational_requirements": {
+    "failure_modes": [
+      {
+        "failure": "The question set references a gold passage ID that is not in the corpus.",
+        "required_behavior": "Refuse to run, name the question and the missing passage ID, and write no run record."
+      },
+      {
+        "failure": "The retriever or generator raises on one question.",
+        "required_behavior": "Record that question as errored with the exception type and message, continue the rest, and count errored separately from failed."
+      },
+      {
+        "failure": "An answer cites a passage ID that does not exist in the corpus.",
+        "required_behavior": "Classify the answer as ungrounded with the fabricated citation named. Never treat an unknown citation as support."
+      },
+      {
+        "failure": "The corpus changes between two runs being compared.",
+        "required_behavior": "Detect the differing corpus identity and say so in the comparison instead of reporting per-question changes as if the population were the same."
+      }
+    ],
+    "observability": [
+      "A one-line summary per run with mean recall@k, mean reciprocal rank, and counts of grounded, ungrounded, uncited and errored answers.",
+      "Per-question retrieved passage IDs, ranks, citations and classification in the run record.",
+      "The corpus identity and the configuration identity recorded in every run, so two runs over different corpora are never silently compared."
+    ],
+    "rollback": "Run records are immutable and addressed by run ID, so there is no state to undo. Reverting a configuration and running again produces a new record; every earlier comparison remains reproducible from stored records. The operations note states that deleting a record is the only destructive action and breaks any comparison citing it.",
+    "documentation": [
+      "A README quickstart that produces a comparison of two configurations on the bundled synthetic corpus in under a minute.",
+      "The run record format documented as a stable contract, including the grounding classification rules.",
+      "An operations note covering a changed corpus, an errored question, and what a fabricated citation looks like in the record."
+    ]
+  },
+  "context_budget": {
+    "source_tokens_target": 18000,
+    "excludes": [
+      "tests",
+      "lockfiles",
+      "generated files",
+      "the bundled synthetic corpus and question set"
+    ],
+    "rationale": "Retrieval scoring, grounding checks and comparison are three small, separable components. A budget near Eval Ledger's keeps each one small enough to hold in mind and discourages building a retriever instead of evaluating one. This is a starting target to revise against ACP-016 measurements."
+  },
+  "prerequisites": [
+    "Can write and test a Python module with a virtual environment and a test runner.",
+    "Can read and write JSON data files.",
+    "Knows what a search result ranking is; no prior information-retrieval coursework is assumed."
+  ],
+  "task_packs": [
+    "rag-eval-harness-core"
+  ],
+  "caveats": [
+    "This is a first-party specification, not an upstream project. Completing it establishes no upstream contribution, maintainer relationship or endorsement.",
+    "The specification is owned by this repository. No solution, reference implementation or partial source is shipped with it.",
+    "The corpus, questions and gold passages are synthetic and authored by the learner. Scores describe the bundled synthetic set, not any real retrieval system.",
+    "Evidence derived from this work describes learner-authored software produced inside a simulated engineering process. The surrounding review, assignment and incident workflows are simulated and must be qualified as such.",
+    "The context budget is an authoring constraint on this specification and an advisory target for the learner. It is not an acceptance criterion and no task fails for exceeding it."
+  ],
+  "sources": [],
+  "checked_at": "2026-09-29T00:00:00Z"
+}
