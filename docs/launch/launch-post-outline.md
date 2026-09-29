@@ -47,8 +47,9 @@ One short paragraph per point, each with one link:
 ## 3. Show it
 
 - Embed the recording: [noetherkin-demo.gif](../assets/noetherkin-demo.gif), regenerated with
-  `vhs docs/demo/setup.tape` ([setup.tape](../demo/setup.tape)). Keep its caption: a real session on an unreleased
-  build, genuine Claude Code judgments, a simulated reviewer, a demo learner and design.
+  `vhs docs/demo/setup.tape` ([setup.tape](../demo/setup.tape)). Keep its caption: a real session on the v0.2.0 release,
+  genuine Claude Code judgments, a simulated reviewer, a demo learner and design. A 60-second launch video is attached
+  to the [v0.2.0 release](https://github.com/nanaagyei/noetherkin/releases/tag/v0.2.0).
 - Optionally the shareable report: `noetherkin report` output from a real workspace. Evidence:
   [cli.md](../cli.md) (`report`).
 
@@ -83,6 +84,6 @@ Link straight to the limits rather than summarizing them away. Evidence:
 ## Before posting
 
 - [ ] Every `[VERIFY]` resolved or cut.
-- [ ] The release that contains these features is published, and the recording is regenerated against it
+- [x] The release that contains these features is published (v0.2.0), and the recording is regenerated against it
       (`NOETHERKIN_TGZ=https://github.com/nanaagyei/noetherkin/releases/latest/download/noetherkin.tgz vhs docs/demo/setup.tape`).
 - [ ] No number appears without a linked source.
