@@ -32,6 +32,7 @@
     "evals:continue": "node tests/behavior/run.mjs continue",
     "evals:report": "node tests/behavior/run.mjs report",
     "evals:review-template": "node tests/behavior/run.mjs review-template",
+    "evals:discovery": "npm run build && node tests/behavior/discovery.mjs",
     "check": "tsc --noEmit",
     "prepack": "npm run skills:check && npm run build"
   },
