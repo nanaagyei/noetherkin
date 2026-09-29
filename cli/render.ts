@@ -152,6 +152,7 @@ export function render(result: Result): string {
   else if (command === 'forges') body = renderForges(data);
   else if (command === 'forge' && data.problems) body = renderForgeCheck(data);
   else if (command === 'forge' && data.files) body = `Wrote ${data.files.join(' and ')} under ${data.directory}.\nReplace every TODO marker, then run: ${data.next}`;
+  else if (command === 'report') body = data.summary;
   else if (command === 'skills') body = renderSkills(data);
   else if (command === 'next') body = renderNext(data);
   else { const { next_action: _next, summary: _summary, ...rest } = data; body = stringify(rest, { lineWidth: 0 }).trimEnd(); }
