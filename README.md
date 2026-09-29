@@ -204,6 +204,7 @@ These checks establish bounded structural and runtime properties. They do not pr
 | [CLI guide](docs/cli.md) | Commands, consent, recovery, and JSON output |
 | [Portable skills](docs/skills.md) | Installation, packaging, and skill boundaries |
 | [Contributor guide](CONTRIBUTING.md) | Development and architecture-change process |
+| [Forge authoring](docs/forge-authoring.md) | Writing a forge specification and checking it with `noetherkin forge check` |
 | [Security review](docs/SECURITY_REVIEW.md) | Release threat boundaries, controls, and residual findings |
 | [Publishing checklist](docs/PUBLISHING_CHECKLIST.md) | Repository, security, and release gates |
 
