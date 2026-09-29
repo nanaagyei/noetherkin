@@ -13,6 +13,8 @@ import { runnablePaths, selectTrack } from '../core/tracks.js';
 import { catalogs, validateDocument } from '../core/validation.js';
 import { forgePack, validateForgeRecord } from '../core/packs.js';
 import { assignTask, attestCriterion, beginTask, codeReview, currentTask, nextAction, onboard, selectCatalogProject, selectForge, submitChange, submitDesign, taskReview, testTask, validateSimulationCandidate } from '../core/simulation.js';
+import { shellQuote } from '../core/common.js';
+import { writeProgram } from './support.js';
 
 // ACP-015 conformance: CF-42, CF-43, CF-45 and FR-42 to FR-46. CF-44 (resume-evidence wording) is a behavioral case.
 
@@ -44,7 +46,7 @@ test('CF-42: selecting a forge project binds an empty learner directory with no 
   assert.match(String(result.status_note), /draft/);
   assert.equal(inspectWorkspace('validate', root).outcome, 'success');
   assert.equal(selectForge(root, 'eval-ledger', 'source').outcome, 'no-change');
-  assert.deepEqual(nextAction(root), { phase: 'ASSIGN FIRST TASK', command: 'task assign', run: `noetherkin task assign --workspace ${root}` }, 'no codebase map is required before the first forge task');
+  assert.deepEqual(nextAction(root), { phase: 'ASSIGN FIRST TASK', command: 'task assign', run: `noetherkin task assign --workspace ${shellQuote(root)}` }, 'no codebase map is required before the first forge task');
 });
 
 test('FR-44: a forge selection is never cloned and never lands on existing code', async t => {
@@ -81,7 +83,7 @@ for (const forge of catalogs().forges) test(`CF-43 and CF-45: the whole ${forge.
     fs.writeFileSync(path.join(source, `step_${index + 1}.py`), `STEP = ${index + 1}\n`);
     submitChange(root);
     assert.throws(() => testTask(root, 'Tests pass.'), { code: 'INPUT_REQUIRED' }, 'a forge task declares its own test command');
-    assert.equal(testTask(root, 'Tests pass.', runtime, 'test -f step_1.py').outcome, 'success');
+    assert.equal(testTask(root, 'Tests pass.', runtime, `node -e "require('fs').accessSync('step_1.py')"`).outcome, 'success');
     assert.equal((await codeReview(root, adapter)).review_outcome, 'approve');
     for (const criterion of template.attested_criteria ?? []) {
       await assert.rejects(taskReview(root, adapter), { code: 'ATTESTATION_MISSING' });
@@ -104,7 +106,7 @@ for (const forge of catalogs().forges) test(`CF-43 and CF-45: the whole ${forge.
   const customers = 'spring-petclinic-customers-service/src/main/java/org/springframework/samples/petclinic/customers/web';
   fs.mkdirSync(path.join(upstream, customers), { recursive: true });
   fs.writeFileSync(path.join(upstream, 'pom.xml'), '<module>spring-petclinic-customers-service</module>\n');
-  fs.writeFileSync(path.join(upstream, 'mvnw'), '#!/bin/sh\nexit 0\n', { mode: 0o755 });
+  writeProgram(path.join(upstream, 'mvnw'), '');
   fs.writeFileSync(path.join(upstream, customers, 'PetResource.java'), 'class PetResource { void findPetTypeById(){} }\n');
   git(upstream, 'init'); git(upstream, 'config', 'user.email', 'learner@example.invalid'); git(upstream, 'config', 'user.name', 'Learner');
   git(upstream, 'remote', 'add', 'origin', 'https://github.com/spring-petclinic/spring-petclinic-microservices.git'); git(upstream, 'add', '.'); git(upstream, 'commit', '-m', 'base');

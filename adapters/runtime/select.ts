@@ -1,4 +1,4 @@
-import { spawnSync } from 'node:child_process';
+import { spawnCommandSync } from '../../core/process.js';
 import { Failure } from '../../core/common.js';
 import type { RoleAdapter } from '../../core/adapters.js';
 import { CodexRoleAdapter } from './codex.js';
@@ -40,7 +40,7 @@ export function roleBinary(name: RoleAdapterName, request: RoleAdapterRequest = 
  */
 export function probeRoleHost(name: RoleAdapterName, request: RoleAdapterRequest = {}, lookup: CodexLookup = {}): RoleHostProbe {
   const { binary, source, alternatives } = resolveRoleBinary(name, request, lookup);
-  const result = spawnSync(binary, ['--version'], { encoding: 'utf8', timeout: 5_000 });
+  const result = spawnCommandSync(binary, ['--version'], { encoding: 'utf8', timeout: 5_000 });
   // A timeout means the process started, so only a failure to launch at all marks the host unavailable.
   const code = (result.error as NodeJS.ErrnoException | undefined)?.code;
   const spawnable = !result.error || !['ENOENT', 'EACCES', 'ENOTDIR'].includes(String(code));

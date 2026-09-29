@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { spawnCommand, terminate } from '../../core/process.js';
 import { contextDigest, validateRoleOutput, type RoleAdapter, type RoleInvocation, type RoleInvocationResult } from '../../core/adapters.js';
 import { Failure, requireThat, type ObjectValue } from '../../core/common.js';
 import { rolePrompt } from './output-contract.js';
@@ -70,9 +70,9 @@ export class CodexRoleAdapter implements RoleAdapter {
     };
     const args = ['exec', '--ignore-user-config', '--ignore-rules', '--skip-git-repo-check', '--json', ...Object.entries(config).flatMap(([key, value]) => ['-c', `${key}=${JSON.stringify(value)}`]), ...(this.model ? ['--model', this.model] : []), '-'];
     const transcript = await new Promise<string>((resolve, reject) => {
-      const child = spawn(this.binary, args, { cwd: request.workspace, stdio: ['pipe', 'pipe', 'pipe'] });
+      const child = spawnCommand(this.binary, args, { cwd: request.workspace });
       let stdout = '', stderr = '';
-      const timer = setTimeout(() => { child.kill('SIGTERM'); reject(new Failure('ADAPTER_TIMEOUT', 'codex', 'Codex role invocation exceeded its deadline.')); }, this.timeout);
+      const timer = setTimeout(() => { terminate(child); reject(new Failure('ADAPTER_TIMEOUT', 'codex', 'Codex role invocation exceeded its deadline.')); }, this.timeout);
       child.stdout.on('data', chunk => { stdout += chunk; }); child.stderr.on('data', chunk => { stderr += chunk; });
       child.on('error', error => { clearTimeout(timer); reject(error); });
       child.on('close', code => { clearTimeout(timer); code === 0 ? resolve(stdout) : reject(codexFailure(this.binary, code, stdout, stderr)); });

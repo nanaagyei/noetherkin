@@ -22,12 +22,18 @@ function realpath(file: string): string {
   try { return fs.realpathSync(file); } catch { return file; }
 }
 
-/** The first executable named `name` on PATH, resolved the way a shell would. */
+/**
+ * The first executable named `name` on PATH, resolved the way a shell would. On Windows only PATHEXT names count
+ * (`codex.cmd`, `codex.exe`): npm also writes an extensionless POSIX shell script there, which Windows cannot run.
+ */
 export function findOnPath(name: string, env: NodeJS.ProcessEnv = process.env): string | null {
-  for (const directory of (env.PATH ?? '').split(path.delimiter)) {
+  const extensions = process.platform === 'win32' ? (env.PATHEXT ?? '.COM;.EXE;.BAT;.CMD').split(';').filter(Boolean).map(extension => extension.toLowerCase()) : [''];
+  for (const directory of (env.PATH ?? env.Path ?? '').split(path.delimiter)) {
     if (!directory) continue;
-    const candidate = path.join(directory, name);
-    if (executable(candidate)) return candidate;
+    for (const extension of extensions) {
+      const candidate = path.join(directory, name + extension);
+      if (executable(candidate)) return candidate;
+    }
   }
   return null;
 }

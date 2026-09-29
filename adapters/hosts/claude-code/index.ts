@@ -1,4 +1,4 @@
-import { spawnSync } from 'node:child_process';
+import { spawnCommandSync } from '../../../core/process.js';
 import { GenericCapabilityHostAdapter, type HostProbe } from '../generic/index.js';
 
 export class ClaudeCodeCapabilityHostAdapter extends GenericCapabilityHostAdapter {
@@ -13,7 +13,7 @@ export class ClaudeCodeCapabilityHostAdapter extends GenericCapabilityHostAdapte
   protected override targetRoot(capabilityId: string): string { return `.claude/skills/${capabilityId}`; }
   protected override invocationSurface(capabilityId: string): string { return `/${capabilityId}`; }
   override probe(): HostProbe {
-    const result = spawnSync(this.binary, ['--version'], { encoding: 'utf8', timeout: 5_000 });
+    const result = spawnCommandSync(this.binary, ['--version'], { encoding: 'utf8', timeout: 5_000 });
     return { host: this.profile.host, available: result.status === 0, version: result.status === 0 ? (result.stdout || result.stderr).trim() || null : null, limitations: [this.profile.degradation] };
   }
 }

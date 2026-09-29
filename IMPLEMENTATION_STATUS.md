@@ -2,6 +2,13 @@
 
 Foundational specification phase: complete. Phase 6 PetClinic vertical runtime: implemented and offline-verified. Twenty-one portable skill packages: implemented with focused per-skill bundles. Behavioral eval runner: expanded for Phase 7; the full dual-harness matrix remains deferred. Phase 8.1 versioned learning tracks, project entry metadata, generic attachment, and post-switch alignment publication: implemented. Phase 9 additive project catalog expansion: implemented. Phase 10 portable capability adapter onboarding slice: implemented and offline-verified for generic, Codex and Claude Code projections. Promotion execution remains proposal-only. Runtime schema validation is now first-party and dependency-free; `ajv` is retained only as a test oracle. ACP-012 is adopted in part: registry publication is retired and capability routing is an enforced requirement. ACP-016 (context budget), ACP-013 (competency graph), ACP-015 (forge projects) and ACP-014 (advisory selection) are adopted. Codex and Claude Code both serve as role adapters, detected automatically, and all 21 capabilities project into generic, Codex and Claude Code hosts. Four draft forge packs and the curated PetClinic pack give twelve of the 34 tracks a runnable path. A new learner installs from a checkout and runs `noetherkin setup`.
 
+## Windows support (2026-09-28)
+
+- [x] Native Windows (ACP-018 adopted, Phase 15; issue #23): canonical publication on local NTFS volumes, `.cmd` role hosts started through `cmd.exe` with escaped arguments, process-tree termination on timeout, platform-shell forge test commands, and Windows-quoted `run` commands.
+- [x] CI runs the full runtime suite on `windows-latest` (198 tests, none skipped), including the sixteen process-kill publication boundaries, interrupted rollback, ConPTY terminal consent and the packed-tarball journey. CF-58 and FR-61 to FR-63 are registered.
+
+Limits: directory-entry durability on Windows rests on NTFS journaling and has not been tested against power loss. ReFS (Dev Drive), FAT32 and exFAT fail closed to a proposal. The legacy console host, PowerShell-launched agents and a live Codex or Claude Code on Windows were not exercised; the role adapters were tested with fake `.cmd` hosts. No real learner has used Noetherkin on Windows.
+
 ## Learner experience (2026-09-24)
 
 - [x] Housekeeping (WS0): the P21 fixture now reports one passing test, and stale status, changelog, README, skills and proposal-index text was refreshed.

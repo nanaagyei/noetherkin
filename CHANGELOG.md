@@ -6,6 +6,7 @@ All notable changes will be documented in this file. The format follows [Keep a 
 
 ### Added
 
+- Native Windows support (ACP-018, #23). The CLI installs and publishes canonical state on a local NTFS volume. Role hosts installed as `.cmd` shims are resolved through `PATHEXT` and started through `cmd.exe` with escaped arguments, and a timed-out host is ended with its whole process tree. Declared forge test commands run in the platform shell. The full runtime suite, including process-kill crash recovery and ConPTY terminal consent, runs on `windows-latest` in CI. Directory-entry durability on Windows rests on NTFS journaling, which has not been tested against power loss; FAT32, exFAT and ReFS fail closed to a proposal. WSL 2 remains supported.
 - Initial public-release documentation, CI, security policy, release automation, and publication gates.
 - Apache License 2.0 and a contributor-facing AI-agent policy.
 - First-party JSON Schema Draft 2020-12 subset validator (`core/schema.ts`) covering the closed keyword set the eleven protocol schemas use, with unsupported keywords and formats rejected at load time.

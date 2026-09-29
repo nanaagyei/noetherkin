@@ -12,6 +12,7 @@ import { canonical, encode } from '../core/common.js';
 import { parse } from '../core/parsing.js';
 import { reclaimDeadLock, runtime, safePath, withLock } from '../core/storage.js';
 import { collect, inspectRecords, validateDocument } from '../core/validation.js';
+import { assertKilled } from './support.js';
 
 const cli = fileURLToPath(new URL('../cli/main.js', import.meta.url));
 const worker = fileURLToPath(new URL('./worker.js', import.meta.url));
@@ -216,10 +217,18 @@ test('unavailable durability primitives preserve proposal-only state while inspe
   assert.equal(inspectWorkspace('validate', root, rt).outcome, 'success');
 });
 
+// FR-61 (ACP-018): FAT32, exFAT and ReFS volumes have no hard links; the probe must fail closed before any record.
+test('FR-61: a volume without hard links yields a proposal, never partial canonical state', t => {
+  const root = workspace(t); const proposal = proposeInit(request);
+  const rt = { ...runtime, fs: { ...fs, linkSync: () => { throw Object.assign(new Error('hard links unsupported'), { code: 'EPERM' }); } } as typeof fs };
+  assert.throws(() => publishInit(root, proposal, bindApprovedInit(root, proposal, true), rt), { code: 'DURABILITY_UNSUPPORTED' });
+  assert.deepEqual(fs.readdirSync(root), [], 'the lock is released and nothing canonical was written');
+});
+
 test('a file appearing at the final publication syscall is never clobbered', t => {
   const root = workspace(t); const proposal = proposeInit(request);
   const rt = { ...runtime, fs: { ...fs, linkSync: (old: fs.PathLike, target: fs.PathLike) => {
-    if (String(target).endsWith('/config.yaml')) fs.writeFileSync(target, 'concurrent external content');
+    if (path.basename(String(target)) === 'config.yaml') fs.writeFileSync(target, 'concurrent external content');
     fs.linkSync(old, target);
   } } as typeof fs };
   assert.throws(() => publishInit(root, proposal, bindApprovedInit(root, proposal, true), rt), /not overwritten/);
@@ -247,7 +256,7 @@ for (let boundary = 1; boundary <= 16; boundary++) {
   test(`SIGKILL at publication boundary ${boundary} preserves recoverable or explicitly blocked state`, t => {
     const root = workspace(t);
     const run = spawnSync(process.execPath, [worker, root, 'kill', String(boundary)], { encoding: 'utf8' });
-    assert.equal(run.signal, 'SIGKILL', run.stderr);
+    assertKilled(run);
     assert.equal(execute(root, 'status').status, 3);
     reclaimDeadLock(root);
     if (boundary === 1) { assert.equal(fs.existsSync(path.join(root, '.apprenticeship')), false); return; }
@@ -272,7 +281,7 @@ test('damaged staged snapshot rolls back only unpublished creations, including a
   const snapshot = manifest.changes[0].new_snapshot.uri.slice('workspace:/'.length);
   fs.writeFileSync(path.join(root, snapshot), 'damaged');
   assert.equal(planRecovery(root).action, 'rollback');
-  const killed = spawnSync(process.execPath, [worker, root, 'recover-kill', '0']); assert.equal(killed.signal, 'SIGKILL');
+  const killed = spawnSync(process.execPath, [worker, root, 'recover-kill', '0'], { encoding: 'utf8' }); assertKilled(killed);
   reclaimDeadLock(root); const plan = planRecovery(root); assert.equal(plan.action, 'rollback'); recover(root, plan);
   assert.equal(fs.existsSync(path.join(root, '.apprenticeship')), false);
   init(root); assert.equal(execute(root, 'validate').status, 0);

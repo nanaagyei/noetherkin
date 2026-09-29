@@ -33,7 +33,18 @@ Snapshot and candidate files are written privately, fsynced and atomically insta
 
 The receipt is durable only after all candidate files and snapshots. A remaining pending marker alongside a valid committed receipt needs cleanup, not another publication. Recovery checks hashes, exact candidate reconstruction, current-file correspondence, safe paths and the reviewed checkpoint fingerprint. Manual changes conflict. Rollback restores exact retained old bytes in reverse publication order and removes only matching transaction creations; it never regenerates old snapshots.
 
-Known limits are documented in [CLI recovery](cli.md). A valid checksum does not defend against a filesystem owner deliberately rewriting both records and receipts. Crash tests exercise process termination and injected I/O failure, not physical power loss or every filesystem implementation.
+### Windows filesystem assumptions
+
+Windows publication (ACP-018) uses the same protocol, with these differences, each stated as an assumption rather than a verified guarantee:
+
+- **Directory entries.** Node cannot fsync a directory on Windows, so the directory fsync after each install is skipped. A completed rename or hard link is expected to survive power loss through NTFS metadata journaling, which replays metadata operations in order. This has not been tested against power loss.
+- **File data** is still flushed with `fsync` (`FlushFileBuffers`) before a file is installed, and installs still use an atomic rename (`MoveFileEx`, replacing the existing file) or an atomic hard link.
+- **Volumes.** Only local NTFS is supported. FAT32, exFAT and ReFS (including Dev Drive) have no hard links, so the publication probe fails closed and `init` returns a proposal. Network shares are unsupported, as on POSIX.
+- **Sharing violations.** A virus scanner or indexer may hold a new file open for a moment. On Windows only, `EPERM`, `EACCES` and `EBUSY` from rename, unlink and rmdir are retried for about 2.5 seconds, then reported.
+- **Locks** record the process ID, hostname and token as on POSIX. `process.kill(pid, 0)` reports liveness on Windows too, and age alone never permits reclamation.
+- **Paths.** Directory junctions are rejected like symbolic links. A source checkout on another drive is refused.
+
+Known limits are documented in [CLI recovery](cli.md). A valid checksum does not defend against a filesystem owner deliberately rewriting both records and receipts. Crash tests exercise process termination (SIGKILL on POSIX, TerminateProcess on Windows) and injected I/O failure, not physical power loss or every filesystem implementation.
 
 ## Phase 6 boundary
 

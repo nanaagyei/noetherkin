@@ -32,8 +32,8 @@
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "05e1f45e8b9b19ef9f1552d40c1c24a7df47552e6a1ebb2eed68452df6bd83b6",
-      "bundled_sha256": "baf4d1e96099cc34f649fd3533f73b4f53ae36cc88abb07111c4953f9abd1814"
+      "source_sha256": "05c732f796b638ddab7b2f7c01910fef1a3fb41ac03a81c11e1dfc19b699804c",
+      "bundled_sha256": "0ca7946ad1a266cda4b1b71167a38116dd62bbc0b4fadba2763005ea3d85bf0b"
     },
     {
       "source": "docs/architecture/overview.md",
@@ -104,8 +104,8 @@
     {
       "source": "docs/architecture/conformance.md",
       "target": "references/conformance.md",
-      "source_sha256": "7de91044019dc67544b70204a4b35effb8ff84ab0d6aadbe7aac9d7e3632d906",
-      "bundled_sha256": "7de91044019dc67544b70204a4b35effb8ff84ab0d6aadbe7aac9d7e3632d906"
+      "source_sha256": "3e3d807a25ccb97af7535dcbee6e05e96bf6add72345385035d8dc052e711531",
+      "bundled_sha256": "3e3d807a25ccb97af7535dcbee6e05e96bf6add72345385035d8dc052e711531"
     },
     {
       "source": "docs/architecture/selection-model.md",

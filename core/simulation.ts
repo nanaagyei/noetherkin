@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { spawnCommandSync } from './process.js';
 import { fileURLToPath } from 'node:url';
 import { canonical, encode, Failure, requireThat, sha256, shellQuote, type ObjectValue } from './common.js';
 import { parse } from './parsing.js';
@@ -101,8 +102,9 @@ function git(root: string, source: string, args: string[]): string {
 }
 function relativeSource(root: string, source: string): string {
   const resolved = fs.realpathSync(path.resolve(root, source));
+  // On Windows a path on another drive has no relative form, and path.relative returns it absolute.
   const relative = path.relative(root, resolved).split(path.sep).join('/');
-  requireThat(relative && !relative.startsWith('../') && relative !== '.apprenticeship' && !relative.startsWith('.apprenticeship/'), 'UNSAFE_PATH', source, 'Source checkout must be inside the workspace and outside .apprenticeship.');
+  requireThat(relative && !path.isAbsolute(relative) && !/^[A-Za-z]:/.test(relative) && relative !== '..' && !relative.startsWith('../') && relative !== '.apprenticeship' && !relative.startsWith('.apprenticeship/'), 'UNSAFE_PATH', source, 'Source checkout must be inside the workspace and outside .apprenticeship.');
   return relative;
 }
 function normalizedRemote(value: string): string { return value.replace(/^git@github\.com:/, 'https://github.com/').replace(/\.git$/, '').replace(/\/$/, ''); }
@@ -132,7 +134,7 @@ export function cloneCatalogProject(root: string, projectId: string, destination
   const target = path.resolve(root, destination);
   requireThat(!fs.existsSync(target), 'SOURCE_CONFLICT', destination, 'Clone destination must be absent; partial clones are preserved for inspection.');
   const relative = path.relative(root, target).split(path.sep).join('/');
-  requireThat(relative && !relative.startsWith('../'), 'UNSAFE_PATH', destination, 'Clone destination must be inside the workspace.');
+  requireThat(relative && !path.isAbsolute(relative) && !/^[A-Za-z]:/.test(relative) && relative !== '..' && !relative.startsWith('../'), 'UNSAFE_PATH', destination, 'Clone destination must be inside the workspace.');
   const args = ['clone', '--depth', '1']; if (revision) args.push('--branch', revision); args.push(project.repository_url, target);
   const run = spawnSync('git', args, { cwd: root, encoding: 'utf8' });
   requireThat(run.status === 0, 'CLONE_FAILED', relative, `${(run.stderr || run.stdout).trim()} Partial clone contents, if any, were preserved.`);
@@ -401,8 +403,10 @@ export function testTask(root: string, prediction: string, rt: Runtime = runtime
   const fixed = templateForTask(root, task, rt).focused_test;
   requireThat(fixed ? command === undefined : typeof command === 'string' && command.trim().length > 0, 'INPUT_REQUIRED', 'command', fixed ? 'This curated task fixes its focused test command.' : 'Declare the test command your design names with --command.');
   const started = rt.now();
-  const run = fixed ? spawnSync(path.join(source, fixed.program), fixed.args, { cwd: source, encoding: 'utf8', timeout: 900_000, maxBuffer: 20 * 1024 * 1024 })
-    : spawnSync('/bin/sh', ['-c', command!], { cwd: source, encoding: 'utf8', timeout: 900_000, maxBuffer: 20 * 1024 * 1024 });
+  // A fixed program such as ./mvnw resolves to its .cmd twin on Windows. A declared command runs in the platform
+  // shell: /bin/sh on macOS and Linux, cmd.exe on Windows.
+  const run = fixed ? spawnCommandSync(path.join(source, fixed.program), fixed.args, { cwd: source, encoding: 'utf8', timeout: 900_000, maxBuffer: 20 * 1024 * 1024 })
+    : spawnSync(command!, { cwd: source, encoding: 'utf8', timeout: 900_000, maxBuffer: 20 * 1024 * 1024, shell: true });
   const observed = { task_id: task.id, work_revision: task.work_artifact.revision, base_revision: selection.source_revision, command: fixed ? [fixed.program, ...fixed.args].join(' ') : command, prediction, started_at: started, completed_at: rt.now(), exit_code: run.status, signal: run.signal, stdout: run.stdout, stderr: run.stderr };
   const testArtifact = writeArtifact(root, 'test-runs', encode(observed), 'Observed focused test run', rt);
   if (run.status === 0) transition(task, 'code-review', actor(root, 'learner', rt), `Focused tests passed; artifact ${testArtifact.uri}.`, observed.completed_at);
