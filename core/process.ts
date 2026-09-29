@@ -51,7 +51,8 @@ export function commandLine(command: string, args: readonly string[]): { file: s
   const resolved = resolveCommand(command);
   if (!/\.(cmd|bat)$/i.test(resolved)) return { file: resolved, args: [...args] };
   const doubleEscape = forwardsArguments(resolved);
-  const line = [resolved.replace(metaCharacters, '^$1'), ...args.map(argument => escapeArgument(argument, doubleEscape))].join(' ');
+  // The unquoted program path also ends at `=`, a cmd delimiter that cross-spawn's set leaves out; arguments are quoted.
+  const line = [resolved.replace(metaCharacters, '^$1').replace(/=/g, '^='), ...args.map(argument => escapeArgument(argument, doubleEscape))].join(' ');
   return { file: process.env.comspec ?? 'cmd.exe', args: ['/d', '/s', '/c', `"${line}"`], windowsVerbatimArguments: true };
 }
 
