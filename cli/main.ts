@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { realpathSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { diagnostic, Failure, requireThat, validId, type ObjectValue, type Result } from '../core/common.js';
+import { diagnostic, Failure, requireThat, shellQuote, validId, type ObjectValue, type Result } from '../core/common.js';
 import { bindApprovedInit, existingInit, planRecovery, proposeInit, publishInit, recover, type InitRequest } from '../core/bootstrap.js';
 import { inspectWorkspace, listProjects } from '../core/commands.js';
 import { alignTrack, listTracks, runnablePaths, selectTrack, trackAlignmentProposal } from '../core/tracks.js';
@@ -23,6 +23,7 @@ import { planTransactionRecovery, recoverTransaction } from '../core/transaction
 import { competencyGraph, competencyNeighbourhood } from '../core/graph.js';
 import { catalogs } from '../core/validation.js';
 import { forgePack, upstreamPack } from '../core/packs.js';
+import { checkForgeDirectory, scaffoldForge } from '../core/authoring.js';
 import { advisoryFile, refreshAdvisory, taskRemediation } from '../core/advisory.js';
 import { parse } from '../core/parsing.js';
 import { commandNames, overview, usageOf } from './help.js';
@@ -49,6 +50,7 @@ function shapeOk(command: string, p: string[], v: Values): boolean {
   switch (command) {
     case 'init': case 'onboard': case 'status': case 'validate': case 'next': case 'tracks': case 'projects': case 'setup': case 'doctor': return one;
     case 'forges': return one;
+    case 'forge': return (p[1] === 'check' && p.length === 3) || (p[1] === 'new' && (p.length === 3 || p.length === 4) && typeof v.track === 'string');
     case 'adapter-handoff': return one && v.handoff !== undefined;
     case 'migrate': return one && v.to === '3.0';
     case 'competency': return p[1] === 'show' && p.length === 3;
@@ -163,6 +165,14 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       if (values.track) listTracks(values.track);
       const forges = catalogs().forges.filter(forge => !values.track || forge.track_alignment.includes(values.track));
       emit({ command, outcome: 'success', coverage: 'catalog', data: { forges: forges.map(({ id, name, status, description, track_alignment, recommended_minimum_level, ideal_level, primary_languages, task_packs, context_budget }) => ({ id, name, status, description, track_alignment, recommended_minimum_level, ideal_level, primary_languages, task_packs, context_budget })) }, diagnostics: [] });
+      return;
+    }
+    if (command === 'forge') {
+      // Authoring runs on a directory, never a workspace. An error fails the check; warnings and notes do not.
+      if (values.workspace) throw usage(command);
+      if (positionals[1] === 'new') { const scaffold = scaffoldForge(positionals[2]!, positionals[3] ?? positionals[2]!, values.track!); emit({ command, outcome: 'success', coverage: 'none', data: { ...scaffold, next: `noetherkin forge check ${shellQuote(scaffold.directory)}` }, diagnostics: [] }); return; }
+      const check = checkForgeDirectory(positionals[2]!);
+      emit({ command, outcome: check.problems.some(problem => problem.severity === 'error') ? 'invalid' : 'success', coverage: 'catalog', data: check, diagnostics: [] });
       return;
     }
     if (command === 'tracks') { emit({ command, outcome: 'success', coverage: 'catalog', data: listTracks(), diagnostics: [] }); return; }

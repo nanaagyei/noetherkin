@@ -40,6 +40,10 @@ The unchanged foundation link checker traverses every Markdown file, including i
 
 Do not publish the package, choose a license, push commits, submit PRs, or modify remote infrastructure as part of a local implementation change without the relevant authorization.
 
+## Authoring a forge
+
+Forge specifications are the easiest way to grow the catalog. Follow the [forge authoring guide](docs/forge-authoring.md): scaffold with `noetherkin forge new <id> <directory> --track <track-id>`, and run `noetherkin forge check <directory>` until it reports no errors before opening a pull request.
+
 ## Security and releases
 
 Report suspected vulnerabilities through the private process in [SECURITY.md](SECURITY.md), never through a public issue. Release preparation follows [docs/PUBLISHING_CHECKLIST.md](docs/PUBLISHING_CHECKLIST.md). Contributors must not add registry credentials, signing keys, learner records, or secrets to the repository or its fixtures.

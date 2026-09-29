@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { parse } from './parsing.js';
 import { canonical, diagnostic, encode, requireThat, sha256, validId, type Diagnostic, type ObjectValue } from './common.js';
 import { advisoryDirectory, exists, read, runtime, safePath, statePath, type Runtime } from './storage.js';
-import { compileSchema, errorsText } from './schema.js';
+import { compileSchema, errorsText, type SchemaError } from './schema.js';
 import { validateCompetencyGraph } from './graph.js';
 import { loadForgeRecords } from './packs.js';
 
@@ -18,6 +18,12 @@ export function validateDocument(value: ObjectValue, schema: string, file: strin
   requireThat(validator, 'UNKNOWN_RECORD', file, 'No protocol schema exists for this record location.');
   const errors = validator(value);
   requireThat(errors.length === 0, 'SCHEMA_INVALID', file, errorsText(errors));
+}
+/** Every schema violation, for callers that report all problems at once instead of failing on the first. */
+export function schemaErrors(value: ObjectValue, schema: string): SchemaError[] {
+  const validator = validators.get(schema);
+  requireThat(validator, 'UNKNOWN_RECORD', schema, 'No protocol schema exists for this record location.');
+  return validator(value);
 }
 export function catalogs(): { projects: ObjectValue[]; tracks: ObjectValue[]; forges: ObjectValue[]; competencies: ObjectValue[]; competencyIds: Set<string>; coreCompetencyIds: Set<string> } {
   const competencies = parse(fs.readFileSync(path.join(assets, 'catalog/competencies.yaml')), 'catalog/competencies.yaml');
