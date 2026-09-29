@@ -1,0 +1,722 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "noetherkin report (test fixture, not a protocol schema)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_version",
+    "generated_at",
+    "include_drafts",
+    "workspace",
+    "identity",
+    "competencies",
+    "evidence",
+    "tasks",
+    "timeline",
+    "limits"
+  ],
+  "$defs": {
+    "actor": {
+      "type": "object",
+      "required": [
+        "role",
+        "simulated"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "simulated": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "properties": {
+    "report_version": {
+      "const": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "include_drafts": {
+      "type": "boolean"
+    },
+    "workspace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_id",
+        "data_class",
+        "fixture",
+        "mode",
+        "validation"
+      ],
+      "properties": {
+        "workspace_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_class": {
+          "type": "string"
+        },
+        "fixture": {
+          "type": "boolean"
+        },
+        "mode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "valid",
+            "problems"
+          ],
+          "properties": {
+            "valid": {
+              "type": "boolean"
+            },
+            "problems": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "code",
+                  "path",
+                  "message"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "detail": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_name",
+        "track_id",
+        "track_alignment",
+        "project_id",
+        "project_kind",
+        "effective_level",
+        "last_awarded_level",
+        "standing"
+      ],
+      "properties": {
+        "display_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "track_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "track_alignment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "project_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "project_kind": {
+          "enum": [
+            "forge",
+            "upstream",
+            null
+          ]
+        },
+        "effective_level": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "last_awarded_level": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "standing": {
+          "enum": [
+            "current",
+            "unresolved",
+            null
+          ]
+        }
+      }
+    },
+    "competencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "demonstrated",
+        "developing",
+        "contested",
+        "unassessed"
+      ],
+      "properties": {
+        "demonstrated": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "competency_id",
+              "name",
+              "finding",
+              "demonstrated_level",
+              "evidence_ids",
+              "assessment_ids",
+              "stale"
+            ],
+            "properties": {
+              "competency_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "finding": {
+                "enum": [
+                  "demonstrated",
+                  "developing",
+                  "contested",
+                  "unassessed"
+                ]
+              },
+              "demonstrated_level": {
+                "enum": [
+                  null,
+                  "E0",
+                  "E1",
+                  "E2",
+                  "E3",
+                  "E4",
+                  "E5"
+                ]
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "assessment_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "stale": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "developing": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "competency_id",
+              "name",
+              "finding",
+              "demonstrated_level",
+              "evidence_ids",
+              "assessment_ids",
+              "stale"
+            ],
+            "properties": {
+              "competency_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "finding": {
+                "enum": [
+                  "demonstrated",
+                  "developing",
+                  "contested",
+                  "unassessed"
+                ]
+              },
+              "demonstrated_level": {
+                "enum": [
+                  null,
+                  "E0",
+                  "E1",
+                  "E2",
+                  "E3",
+                  "E4",
+                  "E5"
+                ]
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "assessment_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "stale": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "contested": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "competency_id",
+              "name",
+              "finding",
+              "demonstrated_level",
+              "evidence_ids",
+              "assessment_ids",
+              "stale"
+            ],
+            "properties": {
+              "competency_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "finding": {
+                "enum": [
+                  "demonstrated",
+                  "developing",
+                  "contested",
+                  "unassessed"
+                ]
+              },
+              "demonstrated_level": {
+                "enum": [
+                  null,
+                  "E0",
+                  "E1",
+                  "E2",
+                  "E3",
+                  "E4",
+                  "E5"
+                ]
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "assessment_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "stale": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "unassessed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "competency_id",
+              "name",
+              "finding",
+              "demonstrated_level",
+              "evidence_ids",
+              "assessment_ids",
+              "stale"
+            ],
+            "properties": {
+              "competency_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "finding": {
+                "enum": [
+                  "demonstrated",
+                  "developing",
+                  "contested",
+                  "unassessed"
+                ]
+              },
+              "demonstrated_level": {
+                "enum": [
+                  null,
+                  "E0",
+                  "E1",
+                  "E2",
+                  "E3",
+                  "E4",
+                  "E5"
+                ]
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "assessment_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "stale": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "competency_id",
+          "task_id",
+          "project_id",
+          "observation",
+          "observed_at",
+          "artifacts",
+          "highest_assistance",
+          "independence",
+          "direction",
+          "target_level",
+          "strength",
+          "verification",
+          "recorded_by",
+          "stale"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "competency_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "task_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "observation": {
+            "type": "string"
+          },
+          "observed_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "uri",
+                "revision",
+                "description"
+              ],
+              "properties": {
+                "uri": {
+                  "type": "string"
+                },
+                "revision": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "highest_assistance": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 7
+          },
+          "independence": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "string"
+          },
+          "target_level": {
+            "type": "string"
+          },
+          "strength": {
+            "type": "string"
+          },
+          "verification": {
+            "enum": [
+              "verified",
+              "unverified",
+              "refuted"
+            ]
+          },
+          "recorded_by": {
+            "$ref": "#/$defs/actor"
+          },
+          "stale": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "project_id",
+          "project_kind",
+          "assigned_at",
+          "completed_at",
+          "highest_assistance",
+          "evidence_ids",
+          "reviews",
+          "stale"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "project_id": {
+            "type": "string"
+          },
+          "project_kind": {
+            "enum": [
+              "forge",
+              "upstream"
+            ]
+          },
+          "assigned_at": {
+            "type": "string"
+          },
+          "completed_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "highest_assistance": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 7
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "reviews": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "kind",
+                "outcome",
+                "created_at",
+                "author",
+                "findings",
+                "stale"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "kind": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "outcome": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "author": {
+                  "$ref": "#/$defs/actor"
+                },
+                "findings": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "stale": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "stale": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "timeline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "at",
+          "kind",
+          "subject_id",
+          "description",
+          "actor"
+        ],
+        "properties": {
+          "at": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "transition",
+              "review"
+            ]
+          },
+          "subject_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "actor": {
+            "$ref": "#/$defs/actor"
+          }
+        }
+      }
+    },
+    "limits": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    }
+  }
+}
