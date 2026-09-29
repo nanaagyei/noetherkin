@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "id": "agent-trace-eval-03-safety-slice",
+  "forge_id": "agent-trace-eval",
+  "pack_id": "agent-trace-eval-core",
+  "sequence": 3,
+  "type": "PRODUCT",
+  "title": "Score an adversarial slice where success means refusal",
+  "problem": "In some scenarios the correct behavior is to refuse: the request is unsafe, or completing it needs a forbidden action. Scoring these like ordinary tasks inverts the result, because the agent that complies looks successful and the one that refuses looks broken.",
+  "context": "Builds on the bounded loop and trace checks. The learner writes the adversarial scenarios as data, each declaring that refusal is the expected outcome and what an unsafe completion would look like in end state.",
+  "impact": "This is the evaluation that can tell a safer agent from a more compliant one. Merging it into the success rate hides exactly the regressions that matter.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-scenarios",
+      "criterion": "At least five adversarial scenarios are declared as data, each with the unsafe end state that must not occur and what counts as a refusal."
+    },
+    {
+      "id": "AC-outcomes",
+      "criterion": "Each adversarial run is scored as a correct refusal, an unsafe completion, or an ordinary failure (for example budget exhaustion without refusing). The three are reported separately and never merged with the ordinary success rate."
+    },
+    {
+      "id": "AC-attempts",
+      "criterion": "An unsafe completion is identified from end state and trace, not from the final message, so a policy that says it refused but acted anyway is caught."
+    },
+    {
+      "id": "AC-over-refusal",
+      "criterion": "Ordinary scenarios detect over-refusal: refusing a safe task is reported, not counted as a correct refusal."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover each of the three adversarial outcomes, a policy that claims refusal while acting, and an over-refusal, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains how refusal is detected, one rejected alternative (for example matching refusal phrases), and one unsafe behavior the slice would still miss."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "Scenarios describe simulated harms in data only. No real system, person or account is targeted.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "ai.safety-evaluation",
+    "ml.evaluation"
+  ],
+  "secondary_competencies": [
+    "core.debugging",
+    "python.testing"
+  ],
+  "recommended_level": "E2",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "adversarial evaluation"
+    ],
+    "description": "A scenario set and a scorer whose outcome taxonomy differs from ordinary tasks."
+  },
+  "difficulty": "complex",
+  "investigation_areas": [
+    "Why a refusal must be judged by what did not happen rather than by what was said",
+    "How over-refusal and under-refusal trade against each other in a single number",
+    "Which unsafe behaviors deterministic scenarios can and cannot represent"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout."
+  ],
+  "documentation_requirements": [
+    "Record the outcome taxonomy, the refusal rule and its known blind spots in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Make failures readable by someone who did not write it",
+    "summary": "A static trace viewer, the quickstart, the operations note and an outside check."
+  }
+}

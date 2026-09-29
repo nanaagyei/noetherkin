@@ -200,8 +200,8 @@
     {
       "source": "catalog/competencies.yaml",
       "target": "references/competencies.yaml",
-      "source_sha256": "1b02b0d123fff1bd4d11d55b8e57786846eb4db31828b0deac73604b5d82e8f0",
-      "bundled_sha256": "1b02b0d123fff1bd4d11d55b8e57786846eb4db31828b0deac73604b5d82e8f0"
+      "source_sha256": "0dec33cce4dde896bff65b9ad2e4da4f94dcfe01c8c45031d955afbfc534a390",
+      "bundled_sha256": "0dec33cce4dde896bff65b9ad2e4da4f94dcfe01c8c45031d955afbfc534a390"
     },
     {
       "source": "catalog/levels.yaml",

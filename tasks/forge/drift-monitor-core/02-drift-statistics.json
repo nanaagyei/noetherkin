@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "id": "drift-monitor-02-drift-statistics",
+  "forge_id": "drift-monitor",
+  "pack_id": "drift-monitor-core",
+  "sequence": 2,
+  "type": "PRODUCT",
+  "title": "Compute per-feature drift against the reference window",
+  "problem": "Inputs change gradually and a model rarely fails all at once. Without a per-feature comparison to a reference window, the first sign of drift is a complaint. A statistic applied without thought, though, alerts on noise from small batches or misses shifts in the tails.",
+  "context": "Builds on validated batches. The learner chooses the drift statistic, for example population stability index or a two-sample Kolmogorov-Smirnov statistic, and justifies it for this data. Thresholds live in a data file.",
+  "impact": "This is the earliest signal the monitor gives. If it is noisy, people learn to ignore it; if it is blind, it is useless.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-statistic",
+      "criterion": "Each numeric feature and the prediction distribution get a drift statistic against the reference window. The choice and its binning or other parameters are justified in the design."
+    },
+    {
+      "id": "AC-thresholds",
+      "criterion": "Thresholds per feature are declared in a data file. Changing a threshold changes verdicts with no code change."
+    },
+    {
+      "id": "AC-small-batch",
+      "criterion": "A batch below the declared minimum size is reported as not evaluated with the reason, and raises no drift verdict."
+    },
+    {
+      "id": "AC-attribution",
+      "criterion": "When one synthetic feature is shifted, that feature crosses its threshold and unshifted features do not, over repeated seeds."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests check the statistic against hand-computed values on a small example, the small-batch rule, and single-feature attribution, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains why this statistic fits the data, one rejected alternative, and one kind of real change it would fail to detect."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only. No statistics package.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "Do not implement label tracking or alerting yet.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "data.quality",
+    "ml.data-pipelines"
+  ],
+  "secondary_competencies": [
+    "python.testing",
+    "core.implementation"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "drift statistics"
+    ],
+    "description": "A statistic per feature, data-driven thresholds and an evaluability rule."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "How the chosen statistic behaves on small batches and on shifts confined to the tails",
+    "How thresholds are chosen without tuning them to the synthetic incident",
+    "What the reference window must contain to be a fair baseline"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout."
+  ],
+  "documentation_requirements": [
+    "Record the statistic, its parameters, the threshold rationale and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Track performance as delayed labels arrive",
+    "summary": "Performance over labeled predictions only, label coverage beside it, and \"no labels yet\" kept distinct from \"healthy\"."
+  }
+}

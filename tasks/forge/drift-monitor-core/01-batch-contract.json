@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "id": "drift-monitor-01-batch-contract",
+  "forge_id": "drift-monitor",
+  "pack_id": "drift-monitor-core",
+  "sequence": 1,
+  "type": "PRODUCT",
+  "title": "Declare the batch schema and refuse malformed batches",
+  "problem": "Drift statistics computed over a malformed batch look exactly like drift. A missing column, a unit change or a string in a numeric field will move every distribution, and the monitor will report a model problem that is really a pipeline problem.",
+  "context": "This is the first task of a learner-authored forge project. No source exists yet. The learner creates the repository, chooses its structure, and owns every design decision inside the specification's constraints.",
+  "impact": "Every later statistic assumes the batch is well formed. If malformed data can reach the drift computation, the monitor cannot tell a pipeline fault from real drift.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-schema",
+      "criterion": "The reference window and live batches share a schema declared as data: columns, types and allowed domains, plus the prediction column and a batch identity."
+    },
+    {
+      "id": "AC-reject",
+      "criterion": "A batch with a missing or extra column, a wrong type, or out-of-domain values is refused. The error names the column and the first offending rows."
+    },
+    {
+      "id": "AC-identity",
+      "criterion": "Each batch has an identity, and resubmitting the same batch is detected."
+    },
+    {
+      "id": "AC-generator",
+      "criterion": "A synthetic batch generator produces reference and live batches from a seed, so every later test is reproducible."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover a valid batch and at least three distinct malformed ones, plus a duplicate submission, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the schema choices, one rejected alternative, and what breaks first if an upstream system silently changes a unit."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only. No dataframe or schema library for this task.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "Do not compute drift or performance yet. This task ends at validated, identified batches.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "ml.data-pipelines",
+    "python.language"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.git"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "batch validation",
+      "synthetic data generator"
+    ],
+    "description": "One input boundary, its validation, identity and a reproducible generator."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "Which malformations would look like drift if they reached the statistics",
+    "What identifies a batch so a duplicate is caught",
+    "How a seeded generator makes every later result reproducible"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout."
+  ],
+  "documentation_requirements": [
+    "Record the schema, the batch identity scheme and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Compute per-feature drift against the reference window",
+    "summary": "A drift statistic you choose and justify, thresholds declared as data, and batches too small to judge reported as not evaluated."
+  }
+}

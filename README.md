@@ -40,7 +40,7 @@ Noetherkin currently includes:
 - a frozen V1 product foundation with wire protocol 3.0;
 - a deterministic, recoverable local state publisher;
 - 21 portable [Agent Skills](docs/skills.md);
-- 34 versioned learning tracks, 87 project catalog entries, and four draft forge specifications (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest) that E0 to E2 learners build from empty;
+- 34 versioned learning tracks, 87 project catalog entries, and seven draft forge specifications (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest, RAG Eval Harness, Agent Trace Eval, Drift Monitor) that E0 to E2 learners build from empty;
 - an advisory competency graph and a map-first context budget;
 - generic, Codex, and Claude Code capability adapters, and Codex or Claude Code role adapters;
 - evidence, assistance, review, and promotion semantics designed to resist fabricated progress.
@@ -97,7 +97,7 @@ noetherkin next                  # prints the exact next command to run
 
 Commands find the nearest workspace above the current directory; pass `--workspace <dir>` to choose another. Initialization and other consent steps need you at a terminal. Commands that need a role judgment use the first working agent CLI (Codex, then Claude Code); choose one with `--role-adapter claude` or `NOETHERKIN_ROLE_ADAPTER=claude`. A track guides recommendations but never owns skills, evidence, or promotion decisions. `next` also shows an advisory block naming which competencies to look at first and which forge or project exercises them; it is derived, not evidence, and gates nothing. Every command supports `--json` and `--help`; see the [CLI and recovery guide](docs/cli.md).
 
-Twelve tracks have a runnable path today: forge projects you build from an empty directory (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest, all still `draft`) and the curated Spring PetClinic task. The other tracks use the portable task-assignment skill on any attachable catalog project.
+Thirteen tracks have a runnable path today: forge projects you build from an empty directory (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest, RAG Eval Harness, Agent Trace Eval and Drift Monitor, all still `draft`) and the curated Spring PetClinic task. The other tracks use the portable task-assignment skill on any attachable catalog project.
 
 ## Where everything lives
 

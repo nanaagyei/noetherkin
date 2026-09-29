@@ -1,5 +1,9 @@
 # Foundation changelog
 
+## Catalog content: ML and AI forges, 2026-09-29 (America/Chicago)
+
+Three draft forges (`rag-eval-harness`, `agent-trace-eval`, `drift-monitor`) are added to forge catalog 1.0 under the ACP-015 rules, with no schema or rule change. Graph extension (ACP-013 edges, flagged for owner review): `ai.retrieval-augmentation`, `ai.safety-evaluation` and `ml.model-lifecycle` require `ml.evaluation`, and `ai.agent-design` requires `core.implementation`. No ID was renamed, no behavior reworded, no core flag flipped, and no core competency gained a non-core prerequisite. The catalog stays 4.0 for the reasons in ADR-016: edges never reach a judgment (FR-36), and a 4.0 workspace sees them in advisory output only. Migration: none.
+
 ## Phase 15 Windows publication, 2026-09-28 (America/Chicago)
 
 ### ACP-018: canonical publication on Windows, adopted

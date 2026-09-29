@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "id": "agent-trace-eval-04-trace-viewer",
+  "forge_id": "agent-trace-eval",
+  "pack_id": "agent-trace-eval-core",
+  "sequence": 4,
+  "type": "PRODUCT",
+  "title": "Make failures readable by someone who did not write it",
+  "problem": "A failing check says that something went wrong, not what. To act on it, a reader has to see the trace, find the step the check points at, and distinguish a wrong tool from a loop from a denied unsafe attempt. Today only the author can do that, by reading raw JSON.",
+  "context": "Final task of the pack. The viewer is static HTML generated from traces and check results with the standard library. This is where the evaluator becomes usable by someone investigating a failure, and where production readiness has something real to assess.",
+  "impact": "An evaluation only its author can interpret does not change anyone's decision. This task is the difference.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-viewer",
+      "criterion": "A static HTML file generated from one trace shows every step with tool, arguments and result or error, and marks the step each failing check points at."
+    },
+    {
+      "id": "AC-diagnose",
+      "criterion": "The view makes the competing explanations distinguishable: a wrong tool, budget exhaustion, a denied forbidden attempt and an unsafe completion each look different and are labeled."
+    },
+    {
+      "id": "AC-summary",
+      "criterion": "Each scenario run prints a one-line summary with counts of successes, failures, budget exhaustions, forbidden attempts, correct refusals and unsafe completions."
+    },
+    {
+      "id": "AC-quickstart",
+      "criterion": "A person with only the README can run the scenarios and open a failed trace in the viewer in under a minute."
+    },
+    {
+      "id": "AC-docs",
+      "criterion": "The trace format and checks are documented as a stable contract, and an operations note covers a non-terminating policy, an unknown tool and a denied forbidden attempt."
+    },
+    {
+      "id": "AC-outside-check",
+      "criterion": "Someone other than the learner opens a failed trace in the viewer and explains which step failed and why, using only the README and the view. The result is recorded, including where they hesitated."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests check that the generated view marks the failing step for each failure kind and escapes trace content safely, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains how the view separates the competing explanations for a failure, one rejected layout, and what breaks first when traces reach hundreds of steps."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only. No web framework and no JavaScript dependency.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "AC-outside-check requires a real person. A simulated or model-performed walkthrough does not satisfy it, and recording one as satisfied is fabricated evidence.",
+    "Do not push to a remote, publish a package or deploy anything as part of this task."
+  ],
+  "primary_competencies": [
+    "production.observability",
+    "core.technical-communication"
+  ],
+  "secondary_competencies": [
+    "core.ownership",
+    "core.testing"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "trace viewer",
+      "documentation"
+    ],
+    "description": "Readability and operability of the evaluator, not a new check."
+  },
+  "difficulty": "moderate",
+  "investigation_areas": [
+    "What a reader needs to see first to find the failing step",
+    "How trace content is rendered without letting it inject markup into the page",
+    "Where a first-time reader actually gets stuck, discovered by watching one"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout.",
+    "Perform the quickstart on a clean clone before claiming AC-quickstart."
+  ],
+  "documentation_requirements": [
+    "README quickstart, trace format contract and the operations note.",
+    "Record the outside walkthrough result verbatim, including where the person hesitated."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "attested_criteria": [
+    "AC-outside-check"
+  ],
+  "next_task_preview": null
+}

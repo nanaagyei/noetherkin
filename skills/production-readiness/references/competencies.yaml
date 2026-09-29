@@ -570,7 +570,10 @@
       "domain": "ml",
       "name": "model lifecycle",
       "observable_behavior": "Manage model versions and detect degradation across release stages.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "ml.evaluation"
+      ]
     },
     {
       "id": "ml.serving",
@@ -759,21 +762,30 @@
       "domain": "ai",
       "name": "retrieval augmentation",
       "observable_behavior": "Design and evaluate retrieval, grounding and citation behavior against realistic queries.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "ml.evaluation"
+      ]
     },
     {
       "id": "ai.agent-design",
       "domain": "ai",
       "name": "agent design",
       "observable_behavior": "Bound an agent loop with explicit tools, state, termination and failure behavior.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "core.implementation"
+      ]
     },
     {
       "id": "ai.safety-evaluation",
       "domain": "ai",
       "name": "AI safety evaluation",
       "observable_behavior": "Test an AI system for concrete misuse, unsafe output and control failures relevant to its deployment.",
-      "required_core": false
+      "required_core": false,
+      "prerequisites": [
+        "ml.evaluation"
+      ]
     },
     {
       "id": "product.requirements-discovery",

@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "id": "agent-trace-eval-01-trace-format",
+  "forge_id": "agent-trace-eval",
+  "pack_id": "agent-trace-eval-core",
+  "sequence": 1,
+  "type": "PRODUCT",
+  "title": "Define the trace format and refuse malformed traces",
+  "problem": "Every later check reads traces. If a trace can omit a tool result, reorder steps or lose its termination reason, the checks will pass or fail for reasons that have nothing to do with the agent.",
+  "context": "This is the first task of a learner-authored forge project. No source exists yet. The learner creates the repository, chooses its structure, and owns every design decision inside the specification's constraints.",
+  "impact": "The trace is the only evidence of what the agent did. A loose format makes every judgment built on it unreliable.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-format",
+      "criterion": "A trace records ordered steps, each with the tool requested, its arguments, and either a result or an error, plus the scenario ID and a termination reason. The format is declared in data or a documented schema."
+    },
+    {
+      "id": "AC-reject",
+      "criterion": "A trace with a result that has no matching call, out-of-order steps, a missing termination reason, or an unknown field is refused. The error names the step and what is wrong."
+    },
+    {
+      "id": "AC-roundtrip",
+      "criterion": "A valid trace written and read back is identical."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover one valid trace and at least three distinct malformed ones, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains why each field exists, one field considered and rejected, and what breaks first if a denied tool call is recorded the same way as a successful one."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "Do not implement the agent loop or any checks yet. This task ends at a validated trace format.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "core.implementation",
+    "python.language"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.git"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "trace format and loader"
+    ],
+    "description": "One data format, its validation and serialization."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "What a reader must be able to reconstruct from a trace alone",
+    "How a denied call, an erroring call and an unknown tool differ in the record",
+    "Which malformations would silently change a check's verdict"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout."
+  ],
+  "documentation_requirements": [
+    "Record the trace format, its invariants and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Build a bounded agent loop and check each trace",
+    "summary": "A deterministic loop with a tool registry, step budget and termination, and per-trace checks for success, budget and forbidden attempts."
+  }
+}

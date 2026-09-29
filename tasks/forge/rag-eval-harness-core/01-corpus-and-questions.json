@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "id": "rag-eval-harness-01-corpus-and-questions",
+  "forge_id": "rag-eval-harness",
+  "pack_id": "rag-eval-harness-core",
+  "sequence": 1,
+  "type": "PRODUCT",
+  "title": "Declare the corpus and question set as data and refuse an inconsistent one",
+  "problem": "Every retrieval score is computed against gold passages. If a question points at a passage that does not exist, or two passages share an ID, the scores silently measure the wrong thing, and nobody notices because the harness still prints numbers.",
+  "context": "This is the first task of a learner-authored forge project. No source exists yet. The learner creates the repository, chooses its structure, and owns every design decision inside the specification's constraints.",
+  "impact": "The corpus and question set are the population every later measurement is taken over. An inconsistent set makes every later score meaningless.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-declarative",
+      "criterion": "The corpus (passages with stable IDs and text) and the question set (question text with one or more gold passage IDs) are declared in data files. Adding a question or passage needs no source change."
+    },
+    {
+      "id": "AC-reject",
+      "criterion": "A question set referencing an unknown passage ID, a duplicate passage or question ID, or a question with no gold passage is refused before anything runs. The error names the offending entry and what is wrong."
+    },
+    {
+      "id": "AC-identity",
+      "criterion": "The loaded corpus has an identity (for example a content digest) that changes when any passage changes and not when files are merely reordered."
+    },
+    {
+      "id": "AC-no-partial",
+      "criterion": "A refused set produces no run record and no partial output."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Automated tests cover one valid set and at least three distinct invalid ones, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the chosen passage and question identity schemes, one rejected alternative, and what breaks first if a passage is edited after gold labels were written against it."
+    }
+  ],
+  "constraints": [
+    "Standard library plus a test runner only.",
+    "No network access and no model API. Every input is synthetic and generated or checked in by the learner.",
+    "Do not implement retrieval, answering or scoring yet. This task ends at a validated, loaded corpus and question set.",
+    "Do not push to a remote or open a pull request as part of this task."
+  ],
+  "primary_competencies": [
+    "core.implementation",
+    "python.language"
+  ],
+  "secondary_competencies": [
+    "core.testing",
+    "core.git"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "corpus and question loading"
+    ],
+    "description": "One input boundary, its validation and its identity."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "What makes a passage ID stable when the corpus is edited",
+    "Which inconsistencies invalidate scores and which are harmless",
+    "What the corpus identity must be sensitive to, and what it must ignore"
+  ],
+  "testing_expectations": [
+    "Run the project's own test suite. State the exact command in the design; the learner chooses the runner and the layout."
+  ],
+  "documentation_requirements": [
+    "Record the data formats, the identity scheme and the rejected alternative in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [],
+    "required_fragments": []
+  },
+  "next_task_preview": {
+    "title": "Score retrieval per question and record each run immutably",
+    "summary": "Run a pluggable retriever over every question, compute recall@k and reciprocal rank, and write a record a later run cannot overwrite."
+  }
+}
