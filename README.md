@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img alt="Release status: pre-release" src="https://img.shields.io/badge/status-pre--release-f59e0b">
+  <a href="https://github.com/nanaagyei/noetherkin/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/nanaagyei/noetherkin?label=release&color=12C48B"></a>
   <a href="https://github.com/nanaagyei/noetherkin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/nanaagyei/noetherkin/actions/workflows/ci.yml/badge.svg?branch=main"></a>
   <a href="https://github.com/nanaagyei/noetherkin/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://github.com/nanaagyei/noetherkin/actions/workflows/codeql.yml/badge.svg?branch=main"></a>
   <img alt="Node.js 24 or newer" src="https://img.shields.io/badge/node-%3E%3D24-339933?logo=nodedotjs&logoColor=white">
@@ -23,7 +23,7 @@
 </p>
 
 > [!NOTE]
-> Noetherkin is currently in pre-release.
+> Noetherkin v0.2.0 is released. It is early (0.x) software: the protocol is versioned and every change is recorded in the [changelog](CHANGELOG.md), but all seven forge specifications still ship as `draft`, and commands may change between minor versions.
 
 ## What is Noetherkin?
 
@@ -31,7 +31,7 @@
   <img src="docs/assets/noetherkin-demo.gif" alt="A terminal session: installing Noetherkin, running setup (skills, workspace, the frontend-engineering track, onboarding), selecting the Accessible Data Table forge, noetherkin next assigning and starting the first task with its advisory block, and a learner design reviewed by a simulated team lead." width="880">
 </p>
 
-<p align="center"><sub>A real 82-second session, recorded with <a href="docs/demo/setup.tape">VHS</a> from a build of the unreleased <code>release/dev</code> branch. The onboarding baseline and the design review are genuine model judgments through Claude Code; the team lead who gives them is a simulated role, not a person. The learner, Ada, and her design are written for the demo.</sub></p>
+<p align="center"><sub>A real 79-second session, recorded with <a href="docs/demo/setup.tape">VHS</a> from the published v0.2.0 release. The onboarding baseline and the design review are genuine model judgments through Claude Code; the team lead who gives them is a simulated role, not a person. The learner, Ada, and her design are written for the demo.</sub></p>
 
 Noetherkin is an agent-agnostic apprenticeship protocol and local CLI for practicing engineering through real open-source systems. It surrounds learner-authored work with onboarding, investigation, task assignment, progressive assistance, design review, code review, evidence capture, performance review, and promotion discipline.
 
