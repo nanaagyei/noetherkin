@@ -18,7 +18,8 @@ export function writeProgram(file: string, source: string): string {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `#!${process.execPath}\n${source}`, { mode: 0o755 });
   if (!isWindows) return file;
-  fs.writeFileSync(`${file}.cmd`, `@"${process.execPath}" "${file}" %*\r\n`);
+  // %~dp0 is the shim's own directory, so a path containing % or ! is never re-expanded inside the batch file.
+  fs.writeFileSync(`${file}.cmd`, `@"${process.execPath}" "%~dp0${path.basename(file)}" %*\r\n`);
   return `${file}.cmd`;
 }
 

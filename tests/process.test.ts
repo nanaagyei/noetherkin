@@ -38,6 +38,17 @@ test('the asynchronous form pipes stdin and passes the same arguments', async t 
   assert.deepEqual(JSON.parse(stdout), { args: hostile, input: 'prompt text' });
 });
 
+test('a program whose path contains cmd metacharacters still starts with its arguments intact', t => {
+  // Every character here is legal in a Windows directory name and special to cmd.exe, so the program path itself must
+  // be escaped, not just the arguments.
+  const parent = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'noetherkin-process-')));
+  t.after(() => fs.rmSync(parent, { recursive: true, force: true }));
+  const program = writeProgram(path.join(parent, 'a&b (c) %PATH% !x! ^d;e,f=g', 'echo-args'), "process.stdout.write(JSON.stringify(process.argv.slice(2)));\n");
+  const run = spawnCommandSync(program, hostile, { encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  assert.deepEqual(JSON.parse(run.stdout), hostile);
+});
+
 test('a missing program fails to start rather than running something else', () => {
   const run = spawnCommandSync(path.join(os.tmpdir(), 'noetherkin-no-such-program'), ['--version'], { encoding: 'utf8' });
   assert.equal((run.error as NodeJS.ErrnoException | undefined)?.code, 'ENOENT', isWindows ? 'Windows must not fall back to a shell lookup' : undefined);
