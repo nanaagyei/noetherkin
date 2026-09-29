@@ -121,7 +121,8 @@ function renderAdvisory(advisory: ObjectValue | undefined): string {
 }
 
 function renderNext(data: ObjectValue): string {
-  return renderNextBody(data) + renderAdvisory(data.advisory);
+  const log = data.learning_log ? `\n\nLast wrap-up (${data.learning_log.date}, your own words): ${data.learning_log.first_line || '(no text under the heading)'}` : '';
+  return renderNextBody(data) + log + renderAdvisory(data.advisory);
 }
 
 function renderNextBody(data: ObjectValue): string {
