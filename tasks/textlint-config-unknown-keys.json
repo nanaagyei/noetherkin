@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "id": "config-unknown-keys",
+  "project_id": "textlint",
+  "type": "TRAINING",
+  "title": "Reject an unknown top-level key in a textlint configuration",
+  "problem": "textlint's config loader reads only the rules, filters and plugins keys and ignores everything else. A configuration that says rule instead of rules loads successfully with no rules at all, so textlint reports no problems and the user believes their text passed.",
+  "context": "This is a learner-local TRAINING exercise against the pinned v15.8.0 revision of textlint, not an upstream issue or contribution request. Nothing here implies the change would be accepted upstream.",
+  "impact": "A lint tool that silently runs zero rules gives false confidence. An actionable configuration error is the difference between a passing check and a meaningless one.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-reject",
+      "criterion": "Loading a configuration with an unknown top-level key returns a failed result whose error names the key. The learner's design states which keys are accepted and why."
+    },
+    {
+      "id": "AC-hint",
+      "criterion": "When the unknown key is a likely misspelling of a known one (for example rule for rules), the error says which key was probably meant."
+    },
+    {
+      "id": "AC-valid",
+      "criterion": "Configurations that use only known keys load exactly as before, including existing snapshot fixtures."
+    },
+    {
+      "id": "AC-tests",
+      "criterion": "Focused automated tests cover a valid configuration, an unknown key, and a misspelled key, and pass at the submitted revision."
+    },
+    {
+      "id": "AC-explanation",
+      "criterion": "The learner explains the chosen failure contract, one rejected alternative (for example a warning that still loads), and what breaks first for users whose configuration carries an extra key today."
+    }
+  ],
+  "constraints": [
+    "Keep the change inside packages/@textlint/config-loader.",
+    "Do not change how rules, filters or plugins are resolved or loaded.",
+    "Do not push, open an upstream pull request, or publish a package as part of this task."
+  ],
+  "primary_competencies": [
+    "core.implementation",
+    "quality.automation"
+  ],
+  "secondary_competencies": [
+    "core.codebase-navigation",
+    "core.testing"
+  ],
+  "recommended_level": "E1",
+  "scope": {
+    "classification": "component",
+    "components": [
+      "@textlint/config-loader"
+    ],
+    "description": "One configuration boundary, its error result and focused tests."
+  },
+  "difficulty": "bounded",
+  "investigation_areas": [
+    "How the raw configuration is read and passed to package loading",
+    "The shape of a failed loader result and how callers report it",
+    "Existing config-loader tests and snapshot fixtures"
+  ],
+  "investigation_paths": [
+    "packages/@textlint/config-loader/src/**",
+    "packages/@textlint/config-loader/test/**"
+  ],
+  "testing_expectations": [
+    "From the repository root, once: pnpm install --frozen-lockfile, then pnpm --filter \"@textlint/config-loader...\" run build to build the package's workspace dependencies. Then run pnpm --filter @textlint/config-loader test."
+  ],
+  "focused_test": {
+    "program": "pnpm",
+    "args": [
+      "--filter",
+      "@textlint/config-loader",
+      "test"
+    ]
+  },
+  "investigation_prompt": "Write a textlint configuration that misspells rules as rule, predict what loading it returns, and check. Then trace where the raw configuration becomes loaded packages and decide what an unknown key should do. Do not change code until your design is reviewed.",
+  "documentation_requirements": [
+    "Record the accepted keys, the failure contract, the rejected alternative, and the first likely failure case in the learner design."
+  ],
+  "design_required": true,
+  "code_review_required": true,
+  "compatibility": {
+    "required_files": [
+      "pnpm-workspace.yaml",
+      "packages/@textlint/config-loader/package.json",
+      "packages/@textlint/config-loader/src/config-loader.ts",
+      "packages/@textlint/config-loader/src/TextlintRcConfig.ts"
+    ],
+    "required_fragments": [
+      "export const loadPackagesFromRawConfig",
+      "rawConfig.rules",
+      "rawConfig.filters",
+      "rawConfig.plugins",
+      "\"name\": \"@textlint/config-loader\""
+    ]
+  },
+  "next_task_preview": {
+    "title": "Surface the configuration error clearly in the textlint CLI",
+    "summary": "Trace how a failed loader result reaches the command line and make the message actionable, without changing the first task's contract."
+  }
+}

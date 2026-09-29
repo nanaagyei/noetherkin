@@ -97,7 +97,7 @@ noetherkin next                  # prints the exact next command to run
 
 Commands find the nearest workspace above the current directory; pass `--workspace <dir>` to choose another. Initialization and other consent steps need you at a terminal. Commands that need a role judgment use the first working agent CLI (Codex, then Claude Code); choose one with `--role-adapter claude` or `NOETHERKIN_ROLE_ADAPTER=claude`. A track guides recommendations but never owns skills, evidence, or promotion decisions. `next` also shows an advisory block naming which competencies to look at first and which forge or project exercises them; it is derived, not evidence, and gates nothing. Every command supports `--json` and `--help`; see the [CLI and recovery guide](docs/cli.md).
 
-Thirteen tracks have a runnable path today: forge projects you build from an empty directory (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest, RAG Eval Harness, Agent Trace Eval and Drift Monitor, all still `draft`) and the curated Spring PetClinic task. The other tracks use the portable task-assignment skill on any attachable catalog project.
+Sixteen tracks have a runnable path today: forge projects you build from an empty directory (Eval Ledger, Accessible Data Table, SLO Burn Report, Batch Ingest, RAG Eval Harness, Agent Trace Eval and Drift Monitor, all still `draft`) and curated tasks on pinned upstream projects (Spring PetClinic, pytest and textlint). The other tracks use the portable task-assignment skill on any attachable catalog project.
 
 ## Where everything lives
 
@@ -119,7 +119,7 @@ You never install Noetherkin into a project, including an open-source repository
 ```
 
 - **Forge projects.** You build these from nothing. `noetherkin project select accessible-data-table --source accessible-data-table` binds an empty folder in the workspace. You run `git init` there and write every line yourself. Nothing is cloned.
-- **Open-source projects.** `noetherkin project select <project-id> --clone-to <folder>` clones a catalog project into the workspace after you confirm. `--source <folder>` attaches a clean clone you already put there. Noetherkin pins the commit and never pushes, and your clone stays free of Noetherkin files. Spring PetClinic has a curated task pack. Other attachable projects get their tasks from the portable task-assignment skill.
+- **Open-source projects.** `noetherkin project select <project-id> --clone-to <folder>` clones a catalog project into the workspace after you confirm. `--source <folder>` attaches a clean clone you already put there. Noetherkin pins the commit and never pushes, and your clone stays free of Noetherkin files. Spring PetClinic, pytest and textlint have curated task packs, each checked against a pinned release. Other attachable projects get their tasks from the portable task-assignment skill.
 
 One workspace follows one learner through tracks and projects. A later project goes into the same workspace, so your evidence and history carry forward.
 

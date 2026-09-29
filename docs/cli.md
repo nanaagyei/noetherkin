@@ -27,7 +27,7 @@ The executable requires Node.js 24+. Install it with `npm install -g https://git
 | `project select <project-id> --source <path>` | Attach any attachable catalog project after origin, cleanliness, revision and path checks. |
 | `project select <project-id> --clone-to <path>` | Explicitly clone and attach a catalog project after interactive consent. |
 | `map init`, `map check`, `map status` | Create a project-derived template, check the learner-authored map, and report read-only whether this exact map was checked at the current source revision (`absent`, `incomplete`, `unchecked`, `checked`) with the paths it cites. |
-| `task assign`, `task begin` | Assign the next task from the bound project's curated pack (`pet-type-integrity` for PetClinic, or the next forge task in sequence), then start it. |
+| `task assign`, `task begin` | Assign the next task from the bound project's curated pack (for example `pet-type-integrity` for PetClinic or `deselect-unmatched` for pytest, or the next forge task in sequence), then start it. |
 | `task attest --criterion <id> --file <notes>` | Record a check only another person can perform, such as an outside quickstart, against the exact submitted work revision. Task review requires it for criteria the pack marks. |
 | `forges [--track <id>]`, `project select <forge-id> --source <dir>` | List forge specifications, optionally only those aligned to a track, and bind one to a new or empty learner-authored directory. Nothing is cloned. |
 | `forge new <id> [<dir>] --track <id>`, `forge check <dir>` | Authoring, no workspace needed. `forge new` scaffolds `catalog/forge/<id>.yaml` and a first task template under `tasks/forge/<id>-core/`, never overwriting. `forge check` applies the catalog's forge rules to that layout and reports every problem at once, each with a `Try:` line; any error exits 1. The authoring guide is `docs/forge-authoring.md` in the repository. |
@@ -73,7 +73,7 @@ The handoff token binds the proposal to the resolved workspace and expected cano
 
 Initialization writes only `.apprenticeship/` records and transaction artifacts. It does not edit AGENTS.md, clone a repository, create evidence or choose a project. Repeating intact commands returns no-change where the lifecycle already records the result. Conflicting identities, inputs, revisions or operation IDs are errors. Later state is never reset by init.
 
-The focused test command comes from the task pack: the PetClinic pack fixes it to `./mvnw -pl spring-petclinic-customers-service test`, and a forge task takes the command the learner declares with `task test --command`. Its exact output, exit status, timestamps, selected base commit or snapshot and submitted change revision are retained under `apprenticeship-artifacts/test-runs/`. Docker Compose and full-stack startup are outside the PetClinic task.
+The focused test command comes from the task pack: the PetClinic pack fixes it to `./mvnw -pl spring-petclinic-customers-service test`, the pytest pack to `python -m pytest testing/test_session.py testing/test_main.py`, and the textlint pack to `pnpm --filter @textlint/config-loader test`. A program given as a path, such as `./mvnw`, runs from the checkout; a bare name, such as `python` or `pnpm`, runs from the learner's `PATH`, so the learner prepares that environment (a virtual environment, or `pnpm install`) as the pack's testing expectations say. A forge task takes the command the learner declares with `task test --command`. Its exact output, exit status, timestamps, selected base commit or snapshot and submitted change revision are retained under `apprenticeship-artifacts/test-runs/`. Docker Compose and full-stack startup are outside the PetClinic task.
 
 A rework outcome from `task submit-design`, `task test`, `review code` or `review task` adds a `remediation` list: the prerequisite competencies of the task's primary competencies to revisit, from the competency graph ([selection model](architecture/selection-model.md)). It is advisory and records nothing.
 
@@ -92,7 +92,7 @@ JSON output is one object on stdout with `command`, `outcome`, `coverage`, `data
 
 `coverage: simulation` applies to the supported PetClinic journey. It checks publication history, role permissions, immutable task fields, legal transitions, design/review revision binding, assistance attribution, content-addressed artifacts, evidence verification and completion gates. Standing is read from the validated cache; Phase 6 remains administrative E0/all-unassessed because one task does not automatically create a longitudinal assessment.
 
-`coverage: catalog` identifies bundled catalog browsing only. Candidate metadata gaps are displayed rather than inferred, and no opaque fit score is calculated. PetClinic remains the only bundled curated task pack; other attached projects hand off to portable task assignment and never expose PetClinic commands.
+`coverage: catalog` identifies bundled catalog browsing only. Candidate metadata gaps are displayed rather than inferred, and no opaque fit score is calculated. PetClinic, pytest and textlint have bundled curated task packs; other attached projects hand off to portable task assignment and never expose PetClinic commands.
 
 ## Recovery
 

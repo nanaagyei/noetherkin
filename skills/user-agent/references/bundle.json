@@ -32,8 +32,8 @@
     {
       "source": "docs/cli.md",
       "target": "references/cli.md",
-      "source_sha256": "f422f277644deef18c15c3de8ed423584cb979855d1bbfcc99dc206b26d9a230",
-      "bundled_sha256": "1990c92b5017b0537b3a9819423d76f79bd098a7d0ef434dd3196ca0fa37e418"
+      "source_sha256": "781c2ad782c1b21a1bd6685259e13dd7f459c0f887659d6a85b2224de964bd30",
+      "bundled_sha256": "4b60bb06f08e01bef8f3c7b5c303d310ed4256867f48a3d2eddb568a0019aefd"
     },
     {
       "source": "docs/architecture/overview.md",
@@ -212,8 +212,8 @@
     {
       "source": "skill-pack/runtime.md",
       "target": "references/runtime.md",
-      "source_sha256": "70e36fd8974897d8e85015252b0164d7576d00503f5fcad9f3e09f01b94ea6a9",
-      "bundled_sha256": "4d5057aef0507bc358c2877127b052e35338b3624b96d7d53c5955d3d5515672"
+      "source_sha256": "bb8f9b92b86ad32c53c0d9cf06b89690c561dd3be456bfab1b46ad6eb2e6ddad",
+      "bundled_sha256": "d0dcf0544e2ca7cba4fdf5e5b2b4d70d27eba5ade8f22d145aaa5e7b8ed602af"
     },
     {
       "source": "skill-pack/proposals.md",
