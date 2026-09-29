@@ -3,7 +3,7 @@ import { parseArgs } from 'node:util';
 import { createInterface, type Interface } from 'node:readline/promises';
 import { stdin, stderr } from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { realpathSync } from 'node:fs';
+import { existsSync, readFileSync, realpathSync, renameSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { diagnostic, Failure, requireThat, shellQuote, validId, type ObjectValue, type Result } from '../core/common.js';
@@ -24,6 +24,8 @@ import { competencyGraph, competencyNeighbourhood } from '../core/graph.js';
 import { catalogs } from '../core/validation.js';
 import { forgePack, upstreamPack } from '../core/packs.js';
 import { checkForgeDirectory, scaffoldForge } from '../core/authoring.js';
+import { buildReport } from '../core/report.js';
+import { generatorMarker, renderReportHtml, renderReportMarkdown } from './report-render.js';
 import { advisoryFile, refreshAdvisory, taskRemediation } from '../core/advisory.js';
 import { parse } from '../core/parsing.js';
 import { commandNames, overview, usageOf } from './help.js';
@@ -50,6 +52,7 @@ function shapeOk(command: string, p: string[], v: Values): boolean {
   switch (command) {
     case 'init': case 'onboard': case 'status': case 'validate': case 'next': case 'tracks': case 'projects': case 'setup': case 'doctor': return one;
     case 'forges': return one;
+    case 'report': return one && [undefined, 'html', 'md', 'json'].includes(v.format);
     case 'forge': return (p[1] === 'check' && p.length === 3) || (p[1] === 'new' && (p.length === 3 || p.length === 4) && typeof v.track === 'string');
     case 'adapter-handoff': return one && v.handoff !== undefined;
     case 'migrate': return one && v.to === '3.0';
@@ -75,11 +78,31 @@ function shapeOk(command: string, p: string[], v: Values): boolean {
 
 /** Options that belong to one command only. Anything else is rejected with that command's usage. */
 const ownedOptions: Record<string, string[]> = {
-  init: ['name', 'goal', 'assistance-max', 'operation-id'], doctor: ['recover'], skills: ['host', 'skill', 'global'], 'adapter-handoff': ['handoff']
+  init: ['name', 'goal', 'assistance-max', 'operation-id'], doctor: ['recover'], report: ['out', 'format', 'include-drafts'], skills: ['host', 'skill', 'global'], 'adapter-handoff': ['handoff']
 };
 function optionsOk(command: string, values: Values): boolean {
   for (const [owner, keys] of Object.entries(ownedOptions)) if (owner !== command && keys.some(key => key in values)) return false;
   return !('target' in values) || ['skills', 'setup'].includes(command);
+}
+
+/**
+ * Writes the derived progress report to one file outside `.apprenticeship/`. It replaces only a file that an earlier
+ * report wrote, recognized by its generator marker, so a mistyped --out never clobbers the learner's own file.
+ */
+function writeReport(root: string, values: Values): Result {
+  const format = (values.format ?? 'html') as 'html' | 'md' | 'json';
+  const report = buildReport(root, { includeDrafts: values['include-drafts'] ?? false });
+  const out = path.resolve(values.out ?? `noetherkin-report.${format}`);
+  const parent = realpathSync(path.dirname(out));
+  const state = path.join(root, '.apprenticeship');
+  const inside = (base: string) => { const relative = path.relative(base, path.join(parent, path.basename(out))); return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative)); };
+  requireThat(!inside(state) && !inside(`${state}.lock`) && !inside(`${state}.reclaim`), 'UNSAFE_PATH', out, 'The report is a derived export and is never written inside the workspace state. Choose an --out path outside .apprenticeship/.');
+  if (existsSync(out)) requireThat(readFileSync(out, 'utf8').slice(0, 2_000).includes(generatorMarker) || readFileSync(out, 'utf8').slice(0, 200).includes('"report_version"'), 'OUTPUT_EXISTS', out, 'A file that Noetherkin did not write already exists here. Choose another --out path.');
+  const body = format === 'json' ? `${JSON.stringify(report, null, 2)}\n` : format === 'md' ? renderReportMarkdown(report) : renderReportHtml(report);
+  const temporary = `${out}.${process.pid}.tmp`;
+  writeFileSync(temporary, body, { flag: 'wx' }); renameSync(temporary, out);
+  const counts = Object.fromEntries(Object.entries(report.competencies).map(([finding, items]) => [finding, items.length]));
+  return { command: 'report', outcome: 'success', coverage: 'simulation', data: { out, format, fixture: report.workspace.fixture, valid: report.workspace.validation.valid, competencies: counts, evidence: report.evidence.length, tasks: report.tasks.length, summary: `Wrote ${out}${report.workspace.fixture ? ' (fixture workspace)' : ''}: ${Object.entries(counts).map(([finding, count]) => `${count} ${finding}`).join(', ')}; ${report.evidence.length} evidence record(s), ${report.tasks.length} completed task(s).${report.workspace.validation.valid ? '' : ' The workspace has validation problems; the report lists them under Limits.'}` }, diagnostics: [] };
 }
 
 function capabilityHosts(): Record<string, () => GenericCapabilityHostAdapter> {
@@ -122,7 +145,8 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
         constraint: { type: 'string', multiple: true }, source: { type: 'string' }, 'clone-to': { type: 'string' }, revision: { type: 'string' },
         track: { type: 'string' }, stage: { type: 'string' }, to: { type: 'string' }, 'dry-run': { type: 'boolean' },
         file: { type: 'string' }, prediction: { type: 'string' }, question: { type: 'string' }, model: { type: 'string' }, 'codex-bin': { type: 'string' }, 'claude-bin': { type: 'string' }, 'role-adapter': { type: 'string' },
-        handoff: { type: 'string' }, command: { type: 'string' }, criterion: { type: 'string' }, host: { type: 'string' }, skill: { type: 'string', multiple: true }, target: { type: 'string' }, global: { type: 'boolean' }
+        handoff: { type: 'string' }, command: { type: 'string' }, criterion: { type: 'string' }, host: { type: 'string' }, skill: { type: 'string', multiple: true }, target: { type: 'string' }, global: { type: 'boolean' },
+        out: { type: 'string' }, format: { type: 'string' }, 'include-drafts': { type: 'boolean' }
       }, allowPositionals: true, strict: true });
     } catch (error) {
       const known = commandNames.includes(command) ? command : 'help';
@@ -229,6 +253,7 @@ export async function main(args = process.argv.slice(2)): Promise<void> {
       } finally { rl.close(); }
     }
 
+    if (command === 'report') { emit(writeReport(root, values)); return; }
     if (command === 'init') { emit(await initFlow(root, values, interactive)); return; }
     if (command === 'onboard') { emit(await onboardFlow(root, values.constraint ?? [], interactive, adapter)); return; }
     if (command === 'track' && positionals[1] === 'select') { emit(await trackSelectFlow(root, positionals[2]!, interactive)); return; }
