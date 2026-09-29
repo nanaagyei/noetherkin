@@ -1,6 +1,6 @@
 # Runtime boundary for this skill release
 
-Read this guide and the skill's contract before acting. Load other bundled references only for the current workflow. Frozen documents remain authoritative. The current release supports two kinds of canonical journey: a curated task pack on an upstream checkout (Spring PetClinic Microservices), and forge projects the learner builds from empty from a shipped specification and task pack. Run `forges` to see which forges exist and which tracks they serve. Other projects and protocol operations remain proposal-only.
+Read this guide and the skill's contract before acting. Load other bundled references only for the current workflow. Frozen documents remain authoritative. The current release supports two kinds of canonical journey: a curated task pack on a pinned upstream checkout (Spring PetClinic Microservices, pytest or textlint), and forge projects the learner builds from empty from a shipped specification and task pack. Run `forges` to see which forges exist and which tracks they serve. Other projects and protocol operations remain proposal-only.
 
 ## Locate and inspect
 

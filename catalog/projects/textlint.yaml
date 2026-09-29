@@ -32,10 +32,13 @@
   "contribution_readiness": {
     "status": "verified",
     "signals": [
-      "The upstream contribution guide recommends good-first issues to new contributors."
+      "The upstream contribution guide recommends good-first issues to new contributors.",
+      "Bundled project-specific task pack provides a checked local entry surface.",
+      "Bundled task pack config-unknown-keys was checked on 2026-09-29 against release v15.8.0 (commit 4ba5bfedb27e86ffc12558743e5840eb57d13302): its compatibility probes pass and its focused test (pnpm --filter @textlint/config-loader test) runs in about 1 second after pnpm install and a 6-second build of the package's workspace dependencies."
     ],
     "limitations": [
-      "Issue suitability and maintainer availability can change after the catalog check."
+      "Issue suitability and maintainer availability can change after the catalog check.",
+      "The task pack is pinned to one revision; upstream changes can remove its task surface, which its compatibility probes then report as TASK_INCOMPATIBLE. It is a training exercise, not an upstream contribution."
     ]
   },
   "onboarding_areas": [
@@ -73,15 +76,22 @@
       "uri": "https://github.com/textlint/textlint/blob/master/docs/CONTRIBUTING.md",
       "description": "The upstream contribution guide recommends good-first issues to new contributors.",
       "revision": "catalog-observation-2026-09-17"
+    },
+    {
+      "uri": "https://github.com/textlint/textlint/tree/4ba5bfedb27e86ffc12558743e5840eb57d13302",
+      "description": "Pinned revision (v15.8.0) the config-unknown-keys task pack was checked against.",
+      "revision": "4ba5bfedb27e86ffc12558743e5840eb57d13302"
     }
   ],
-  "checked_at": "2026-09-17T12:00:00Z",
+  "checked_at": "2026-09-29T00:00:00Z",
   "metadata_gaps": [
     "deployment",
     "contribution"
   ],
   "support": {
     "attachable": true,
-    "task_packs": []
+    "task_packs": [
+      "config-unknown-keys"
+    ]
   }
 }

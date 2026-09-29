@@ -403,9 +403,10 @@ export function testTask(root: string, prediction: string, rt: Runtime = runtime
   const fixed = templateForTask(root, task, rt).focused_test;
   requireThat(fixed ? command === undefined : typeof command === 'string' && command.trim().length > 0, 'INPUT_REQUIRED', 'command', fixed ? 'This curated task fixes its focused test command.' : 'Declare the test command your design names with --command.');
   const started = rt.now();
-  // A fixed program such as ./mvnw resolves to its .cmd twin on Windows. A declared command runs in the platform
-  // shell: /bin/sh on macOS and Linux, cmd.exe on Windows.
-  const run = fixed ? spawnCommandSync(path.join(source, fixed.program), fixed.args, { cwd: source, encoding: 'utf8', timeout: 900_000, maxBuffer: 20 * 1024 * 1024 })
+  // A fixed program with a path, such as ./mvnw, is the checkout's own wrapper and resolves inside the source (to its
+  // .cmd twin on Windows). A bare name such as python or pnpm is the learner's installed tool and resolves on PATH.
+  // A declared command runs in the platform shell: /bin/sh on macOS and Linux, cmd.exe on Windows.
+  const run = fixed ? spawnCommandSync(/[\\/]/.test(fixed.program) ? path.join(source, fixed.program) : fixed.program, fixed.args, { cwd: source, encoding: 'utf8', timeout: 900_000, maxBuffer: 20 * 1024 * 1024 })
     : spawnSync(command!, { cwd: source, encoding: 'utf8', timeout: 900_000, maxBuffer: 20 * 1024 * 1024, shell: true });
   const observed = { task_id: task.id, work_revision: task.work_artifact.revision, base_revision: selection.source_revision, command: fixed ? [fixed.program, ...fixed.args].join(' ') : command, prediction, started_at: started, completed_at: rt.now(), exit_code: run.status, signal: run.signal, stdout: run.stdout, stderr: run.stderr };
   const testArtifact = writeArtifact(root, 'test-runs', encode(observed), 'Observed focused test run', rt);
