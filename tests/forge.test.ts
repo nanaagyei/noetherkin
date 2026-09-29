@@ -80,6 +80,8 @@ for (const forge of catalogs().forges) test(`CF-43 and CF-45: the whole ${forge.
     assert.equal(task.project_id, forge.id); assert.equal(task.title, template.title);
     for (const key of ['forge_id', 'pack_id', 'sequence', 'attested_criteria', 'compatibility']) assert.ok(!(key in task), `${key} is pack-only`);
     beginTask(root); await submitDesign(root, design, adapter);
+    const designed = currentTask(root)!;
+    assert.ok(designed.design_artifact.description.includes(template.title), 'the design artifact names this task, not another project');
     fs.writeFileSync(path.join(source, `step_${index + 1}.py`), `STEP = ${index + 1}\n`);
     submitChange(root);
     assert.throws(() => testTask(root, 'Tests pass.'), { code: 'INPUT_REQUIRED' }, 'a forge task declares its own test command');

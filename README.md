@@ -27,6 +27,12 @@
 
 ## What is Noetherkin?
 
+<p align="center">
+  <img src="docs/assets/noetherkin-demo.gif" alt="A terminal session: installing Noetherkin, running setup (skills, workspace, the frontend-engineering track, onboarding), selecting the Accessible Data Table forge, noetherkin next assigning and starting the first task with its advisory block, and a learner design reviewed by a simulated team lead." width="880">
+</p>
+
+<p align="center"><sub>A real 82-second session, recorded with <a href="docs/demo/setup.tape">VHS</a> from a build of the unreleased <code>release/dev</code> branch. The onboarding baseline and the design review are genuine model judgments through Claude Code; the team lead who gives them is a simulated role, not a person. The learner, Ada, and her design are written for the demo.</sub></p>
+
 Noetherkin is an agent-agnostic apprenticeship protocol and local CLI for practicing engineering through real open-source systems. It surrounds learner-authored work with onboarding, investigation, task assignment, progressive assistance, design review, code review, evidence capture, performance review, and promotion discipline.
 
 The name combines Emmy Noether's mathematical legacy with *kin*: people learning and building as a community.

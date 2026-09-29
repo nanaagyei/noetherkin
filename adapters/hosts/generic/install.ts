@@ -11,8 +11,9 @@ export interface InstallReport { host: string; target: string; capabilities: Ins
 // and any differing file, directory or symlink in the way fails the whole install before a single byte is written.
 export function installCapabilities(adapter: CapabilityHostAdapter, target: string, capabilityIds: string[]): InstallReport {
   requireThat(capabilityIds.length > 0, 'INPUT_REQUIRED', 'skill', 'Name at least one capability to install.');
+  // Checked before resolving, so a missing target reports this rather than a raw ENOENT.
+  requireThat(fs.existsSync(path.resolve(target)) && fs.statSync(path.resolve(target)).isDirectory(), 'NOT_DIRECTORY', target, 'Install target must be an existing directory.');
   const root = fs.realpathSync(path.resolve(target));
-  requireThat(fs.statSync(root).isDirectory(), 'NOT_DIRECTORY', target, 'Install target must be an existing directory.');
   const projections = [...new Set(capabilityIds)].map(id => adapter.project(id));
   const plan: { destination: string; source: string; sha256: string; write: boolean; capability: string }[] = [];
   const conflicts: string[] = [];

@@ -317,7 +317,7 @@ export async function submitDesign(root: string, designInput: string, adapter: R
   const relative = path.relative(root, fs.realpathSync(path.resolve(root, designInput))).split(path.sep).join('/');
   requireThat(relative && !relative.startsWith('../'), 'UNSAFE_PATH', designInput, 'Design artifact must be inside the workspace.');
   const bytes = fs.readFileSync(path.join(root, relative));
-  const designArtifact = writeArtifact(root, 'designs', encode({ source_path: relative, content: bytes.toString('utf8') }), 'Immutable learner-authored design for the pet-type integrity task', rt);
+  const designArtifact = writeArtifact(root, 'designs', encode({ source_path: relative, content: bytes.toString('utf8') }), `Immutable learner-authored design for task "${task.title}"`, rt);
   const existing = task.design_assessment_id ? record(root, `assessments/${task.design_assessment_id}.yaml`, rt) : undefined;
   let decision: string; let rationale: string; let risks: unknown[]; let reviewPublication: ObjectValue | undefined;
   if (existing && canonical(existing.design?.artifact) === canonical(designArtifact)) {

@@ -91,6 +91,33 @@ function renderForgeCheck(data: ObjectValue): string {
   return `${lines.length ? `${lines.join('\n')}\n\n` : ''}${checked}: ${count('error')} error(s), ${count('warning')} warning(s).${count('error') ? '' : ' Ready for review.'}`;
 }
 
+/** Wraps prose at a readable terminal width, indenting every line. */
+function wrap(text: string, indent: string, width = 96): string {
+  const lines: string[] = []; let line = '';
+  for (const word of String(text).split(/\s+/).filter(Boolean)) {
+    if (line && indent.length + line.length + 1 + word.length > width) { lines.push(indent + line); line = word; } else line = line ? `${line} ${word}` : word;
+  }
+  if (line) lines.push(indent + line);
+  return lines.join('\n');
+}
+
+function renderSelection(data: ObjectValue): string {
+  const selection = data.selection;
+  const pin = selection.source_revision ? `, pinned to ${String(selection.source_revision).slice(0, 12)}` : '';
+  const lines = [`${data.outcome === 'no-change' ? 'Already selected' : 'Selected'} ${selection.project_id} (${selection.kind === 'forge' ? 'forge: you build it from an empty directory' : 'upstream checkout'}) at ${selection.source_path}${pin}.`];
+  if (data.status_note) lines.push(wrap(data.status_note, '  '));
+  return lines.join('\n');
+}
+
+function renderDesignGate(data: ObjectValue): string {
+  const verdict = data.decision === 'approve' ? 'approved' : data.decision;
+  const lines = [`Design review by the simulated team lead: ${verdict}`, wrap(data.rationale, '  ')];
+  if (data.risks?.length) { lines.push('', 'Risks to address:'); for (const risk of data.risks as string[]) lines.push(wrap(risk, '    ').replace(/^ {4}/, '  - ')); }
+  // The verdict closes the output too, because a long review scrolls its first line out of view.
+  lines.push('', data.decision === 'approve' ? 'Design approved by the simulated team lead. Implement the change, then: noetherkin task submit-change' : `The simulated team lead asked for ${data.decision}. Revise the design and resubmit: noetherkin task submit-design --file <path>`);
+  return lines.join('\n');
+}
+
 function renderSkills(data: ObjectValue): string {
   if (data.skills) return `${data.skills.map((skill: ObjectValue) => `${skill.name.padEnd(28)} ${skill.description.split('. ')[0]}.`).join('\n')}\n\nInstall: noetherkin skills install --global`;
   const reports = (data.installs ?? [data]) as ObjectValue[];
@@ -154,6 +181,8 @@ export function render(result: Result): string {
   else if (command === 'forge' && data.problems) body = renderForgeCheck(data);
   else if (command === 'forge' && data.files) body = `Wrote ${data.files.join(' and ')} under ${data.directory}.\nReplace every TODO marker, then run: ${data.next}`;
   else if (command === 'report') body = data.summary;
+  else if (command === 'project' && data.selection?.project_id) body = renderSelection(data);
+  else if (command === 'task' && typeof data.decision === 'string') body = renderDesignGate(data);
   else if (command === 'skills') body = renderSkills(data);
   else if (command === 'next') body = renderNext(data);
   else { const { next_action: _next, summary: _summary, ...rest } = data; body = stringify(rest, { lineWidth: 0 }).trimEnd(); }
